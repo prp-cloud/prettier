@@ -48,9 +48,9 @@ function printCallArguments(path, options, print) {
   }
 
   // useEffect(() => { ... }, [foo, bar, baz])
-  if (isReactHookCallWithDepsArray(args)) {
+  /*if (isReactHookCallWithDepsArray(args)) {
     return ["(", print(["arguments", 0]), ", ", print(["arguments", 1]), ")"];
-  }
+  }*/
 
   let anyArgEmptyLine = false;
   const lastArgIndex = args.length - 1;
@@ -235,7 +235,7 @@ function shouldExpandLastArg(args, argDocs, options) {
     couldExpandArg(lastArg) &&
     // If the last two arguments are of the same type,
     // disable last element expansion.
-    (!penultimateArg || penultimateArg.type !== lastArg.type) &&
+    (!penultimateArg /*|| penultimateArg.type !== lastArg.type*/) &&
     // useMemo(() => func(), [foo, bar, baz])
     (args.length !== 2 ||
       penultimateArg.type !== "ArrowFunctionExpression" ||
@@ -244,7 +244,7 @@ function shouldExpandLastArg(args, argDocs, options) {
   );
 }
 
-function shouldExpandFirstArg(args) {
+function shouldExpandFirstArg(args) { return false;
   if (args.length !== 2) {
     return false;
   }

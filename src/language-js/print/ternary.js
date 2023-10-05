@@ -235,11 +235,12 @@ function printTernary(path, options, print) {
   const lastConditionalParent = previousParent;
 
   if (
-    isConditionalExpression &&
+    false
+    /*isConditionalExpression &&
     (isJsxElement(node[testNodePropertyNames[0]]) ||
       isJsxElement(consequentNode) ||
       isJsxElement(alternateNode) ||
-      conditionalExpressionChainContainsJsx(lastConditionalParent))
+      conditionalExpressionChainContainsJsx(lastConditionalParent))*/
   ) {
     jsxMode = true;
     forceNoIndent = true;
@@ -278,9 +279,9 @@ function printTernary(path, options, print) {
     const part = [
       line,
       "? ",
-      consequentNode.type === node.type ? ifBreak("", "(") : "",
+      //consequentNode.type === node.type ? ifBreak("", "(") : "",
       align(2, print(consequentNodePropertyName)),
-      consequentNode.type === node.type ? ifBreak("", ")") : "",
+      //consequentNode.type === node.type ? ifBreak("", ")") : "",
       line,
       ": ",
       align(2, print(alternateNodePropertyName)),

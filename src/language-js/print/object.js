@@ -92,19 +92,19 @@ function printObject(path, options, print) {
           property.value &&
           (property.value.type === "ObjectPattern" ||
             property.value.type === "ArrayPattern"),
-      )) ||
+      ))/* ||
     (node.type !== "ObjectPattern" &&
       propsAndLoc.length > 0 &&
       hasNewlineInRange(
         options.originalText,
         locStart(node),
         propsAndLoc[0].loc,
-      ));
+      ))*/;
 
   const separator = isFlowInterfaceLikeBody
     ? ";"
     : node.type === "TSInterfaceBody" || node.type === "TSTypeLiteral"
-    ? ifBreak(semi, ";")
+    ? ifBreak("", ",")
     : ",";
   const leftBrace =
     node.type === "RecordExpression" ? "#{" : node.exact ? "{|" : "{";

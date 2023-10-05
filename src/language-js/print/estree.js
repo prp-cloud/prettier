@@ -519,7 +519,7 @@ function printEstree(path, options, print, args) {
       return [
         "try ",
         print("block"),
-        node.handler ? [" ", print("handler")] : "",
+        node.handler ? [line, print("handler")] : "",
         node.finalizer ? [" finally ", print("finalizer")] : "",
       ];
     case "CatchClause":

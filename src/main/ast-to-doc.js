@@ -51,7 +51,7 @@ async function printAstToDoc(ast, options) {
 
   ensureAllCommentsPrinted(options);
 
-  return doc;
+  return doc.slice(0, -1);
 
   function mainPrint(selector, args) {
     if (selector === undefined || selector === path) {

@@ -254,7 +254,7 @@ function printMemberChain(path, options, print) {
   // letter or just a sequence of _$. The rationale is that they are
   // likely to be factories.
   function isFactory(name) {
-    return /^[A-Z]|^[$_]+$/.test(name);
+    return //^[A-Z]|^[$_]+$/.test(name);
   }
 
   // In case the Identifier is shorter than tab width, we can keep the
@@ -316,7 +316,7 @@ function printMemberChain(path, options, print) {
   const printedGroups = groups.map(printGroup);
   const oneLine = printedGroups;
 
-  const cutoff = shouldMerge ? 3 : 2;
+  const cutoff = shouldMerge ? 3 : 1;
   const flatGroups = groups.flat();
 
   const nodeHasComment =

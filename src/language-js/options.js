@@ -7,7 +7,7 @@ const options = {
   arrowParens: {
     category: CATEGORY_JAVASCRIPT,
     type: "choice",
-    default: "always",
+    default: "avoid",
     description: "Include parentheses around a sole arrow function parameter.",
     choices: [
       {
@@ -40,7 +40,7 @@ const options = {
   jsxSingleQuote: {
     category: CATEGORY_JAVASCRIPT,
     type: "boolean",
-    default: false,
+    default: true,
     description: "Use single quotes in JSX.",
   },
   quoteProps: {
@@ -67,7 +67,7 @@ const options = {
   trailingComma: {
     category: CATEGORY_JAVASCRIPT,
     type: "choice",
-    default: "all",
+    default: "none",
     description: "Print trailing commas wherever possible when multi-line.",
     choices: [
       {

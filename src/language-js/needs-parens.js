@@ -341,7 +341,7 @@ function needsParens(path, options) {
           return !isBinaryCastExpression(node);
 
         case "ConditionalExpression":
-          return isBinaryCastExpression(node);
+          return false;//isBinaryCastExpression(node);
 
         case "CallExpression":
         case "NewExpression":
@@ -355,8 +355,8 @@ function needsParens(path, options) {
         case "TSTypeAssertion":
         case "TaggedTemplateExpression":
         case "UnaryExpression":
-        case "JSXSpreadAttribute":
-        case "SpreadElement":
+        /*case "JSXSpreadAttribute":
+        case "SpreadElement":*/
         case "BindExpression":
         case "AwaitExpression":
         case "TSNonNullExpression":
@@ -376,14 +376,14 @@ function needsParens(path, options) {
 
         case "LogicalExpression":
           if (node.type === "LogicalExpression") {
-            return parent.operator !== node.operator;
+            return parent.operator === "&&" && node.operator === "||";
           }
         // else fallthrough
 
         case "BinaryExpression": {
           const { operator, type } = node;
           if (!operator && type !== "TSTypeAssertion") {
-            return true;
+            return key === "right";
           }
 
           const precedence = getPrecedence(operator);
@@ -457,10 +457,10 @@ function needsParens(path, options) {
       switch (parent.type) {
         case "TaggedTemplateExpression":
         case "UnaryExpression":
-        case "LogicalExpression":
+        /*case "LogicalExpression":
         case "SpreadElement":
         case "TSAsExpression":
-        case "TSSatisfiesExpression":
+        case "TSSatisfiesExpression":*/
         case "TSNonNullExpression":
         case "AsExpression":
         case "AsConstExpression":
@@ -560,7 +560,7 @@ function needsParens(path, options) {
       );
     case "TSTypeQuery":
       return (
-        (key === "objectType" && parent.type === "TSIndexedAccessType") ||
+        //(key === "objectType" && parent.type === "TSIndexedAccessType") ||
         (key === "elementType" && parent.type === "TSArrayType")
       );
     // Same as `TSTypeQuery`, but for Flow syntax
@@ -700,7 +700,7 @@ function needsParens(path, options) {
       const grandParent = path.grandparent;
 
       if (key === "body" && parent.type === "ArrowFunctionExpression") {
-        return true;
+        return false;
       }
 
       if (
@@ -748,7 +748,7 @@ function needsParens(path, options) {
         return false;
       }
 
-      if (parent.type === "NGChainedExpression") {
+      if (["NGChainedExpression", "ArrayExpression", "ObjectExpression", "CallExpression", "ReturnStatement"].includes(parent.type)) {
         return false;
       }
 
@@ -758,13 +758,13 @@ function needsParens(path, options) {
       switch (parent.type) {
         case "TaggedTemplateExpression":
         case "UnaryExpression":
-        case "SpreadElement":
+        //case "SpreadElement":
         case "BinaryExpression":
         case "LogicalExpression":
         case "NGPipeExpression":
         case "ExportDefaultDeclaration":
         case "AwaitExpression":
-        case "JSXSpreadAttribute":
+        //case "JSXSpreadAttribute":
         case "TSTypeAssertion":
         case "TypeCastExpression":
         case "TSAsExpression":

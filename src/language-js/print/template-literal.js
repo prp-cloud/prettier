@@ -84,16 +84,16 @@ function printTemplateLiteral(path, print, options) {
       const expression = node[expressionsKey][index];
       // Breaks at the template element boundaries (${ and }) are preferred to breaking
       // in the middle of a MemberExpression
-      if (
+      /*if (
         hasComment(expression) ||
         isMemberExpression(expression) ||
         expression.type === "ConditionalExpression" ||
         expression.type === "SequenceExpression" ||
         isBinaryCastExpression(expression) ||
         isBinaryish(expression)
-      ) {
+      ) {*/
         expressionDoc = [indent([softline, expressionDoc]), softline];
-      }
+      //}
     }
 
     const aligned =

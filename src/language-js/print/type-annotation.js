@@ -116,14 +116,14 @@ function printTypeAlias(path, options, print) {
 function printIntersectionType(path, options, print) {
   let wasIndented = false;
   return group(
-    path.map(({ isFirst, previous, node, index }) => {
+    [ifBreak(indent(line)), ...path.map(({ isFirst, previous, node, index }) => {
       const doc = print();
       if (isFirst) {
         return doc;
       }
 
-      const currentIsObjectType = isObjectType(node);
-      const previousIsObjectType = isObjectType(previous);
+      const currentIsObjectType = false; // isObjectType(node);
+      const previousIsObjectType = false; // isObjectType(previous);
 
       // If both are objects, don't indent
       if (previousIsObjectType && currentIsObjectType) {
@@ -141,7 +141,7 @@ function printIntersectionType(path, options, print) {
       }
 
       return [" & ", index > 1 ? indent(doc) : doc];
-    }, "types"),
+    }, "types")],
   );
 }
 
@@ -205,8 +205,8 @@ function printUnionType(path, options, print) {
     shouldIndent && !hasLeadingOwnLineComment(options.originalText, node);
 
   const code = [
-    ifBreak([shouldAddStartLine ? line : "", "| "]),
-    join([line, "| "], printed),
+    ifBreak([shouldAddStartLine ? line : ""]),
+    join([" |", line], printed),
   ];
 
   if (pathNeedsParens(path, options)) {
