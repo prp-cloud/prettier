@@ -254,7 +254,7 @@ function printMemberChain(path, options, print) {
   // letter or just a sequence of _$. The rationale is that they are
   // likely to be factories.
   function isFactory(name) {
-    return //^[A-Z]|^[$_]+$/.test(name);
+    return; //^[A-Z]|^[$_]+$/.test(name);
   }
 
   // In case the Identifier is shorter than tab width, we can keep the
@@ -275,10 +275,10 @@ function printMemberChain(path, options, print) {
       const firstNode = groups[0][0].node;
       return (
         firstNode.type === "ThisExpression" ||
-        (firstNode.type === "Identifier" &&
+        /*(*/ firstNode.type === "Identifier" /*&&
           (isFactory(firstNode.name) ||
             (isExpressionStatement && isShort(firstNode.name)) ||
-            hasComputed))
+            hasComputed))*/
       );
     }
 

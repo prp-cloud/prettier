@@ -19,7 +19,6 @@
 .DS_Store
 /coverage
 .idea
-package-lock.json
 **/.yarn/*
 !.yarn/releases
 !.yarn/plugins

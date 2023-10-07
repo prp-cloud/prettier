@@ -201,8 +201,8 @@ function printTernary(path, options, print) {
   const testNodePropertyNames = isConditionalExpression
     ? ["test"]
     : ["checkType", "extendsType"];
-  const consequentNode = node[consequentNodePropertyName];
-  const alternateNode = node[alternateNodePropertyName];
+  /*const consequentNode = node[consequentNodePropertyName];
+  const alternateNode = node[alternateNodePropertyName];*/
   const parts = [];
 
   // We print a ConditionalExpression in either "JSX mode" or "normal mode".
@@ -232,15 +232,14 @@ function printTernary(path, options, print) {
     )
   );
   const firstNonConditionalParent = currentParent || parent;
-  const lastConditionalParent = previousParent;
+  // const lastConditionalParent = previousParent;
 
-  if (
-    false
-    /*isConditionalExpression &&
+  /*if (
+    isConditionalExpression &&
     (isJsxElement(node[testNodePropertyNames[0]]) ||
       isJsxElement(consequentNode) ||
       isJsxElement(alternateNode) ||
-      conditionalExpressionChainContainsJsx(lastConditionalParent))*/
+      conditionalExpressionChainContainsJsx(lastConditionalParent))
   ) {
     jsxMode = true;
     forceNoIndent = true;
@@ -274,28 +273,28 @@ function printTernary(path, options, print) {
         ? print(alternateNodePropertyName)
         : wrap(print(alternateNodePropertyName)),
     );
-  } else {
-    // normal mode
-    const part = [
-      line,
-      "? ",
-      //consequentNode.type === node.type ? ifBreak("", "(") : "",
-      align(2, print(consequentNodePropertyName)),
-      //consequentNode.type === node.type ? ifBreak("", ")") : "",
-      line,
-      ": ",
-      align(2, print(alternateNodePropertyName)),
-    ];
-    parts.push(
-      parent.type !== node.type ||
-        parent[alternateNodePropertyName] === node ||
-        isParentTest
-        ? part
-        : options.useTabs
-        ? dedent(indent(part))
-        : align(Math.max(0, options.tabWidth - 2), part),
-    );
-  }
+  } else {*/
+  // normal mode
+  const part = [
+    line,
+    "? ",
+    //consequentNode.type === node.type ? ifBreak("", "(") : "",
+    align(2, print(consequentNodePropertyName)),
+    //consequentNode.type === node.type ? ifBreak("", ")") : "",
+    line,
+    ": ",
+    align(2, print(alternateNodePropertyName)),
+  ];
+  parts.push(
+    parent.type !== node.type ||
+      parent[alternateNodePropertyName] === node ||
+      isParentTest
+      ? part
+      : options.useTabs
+      ? dedent(indent(part))
+      : align(Math.max(0, options.tabWidth - 2), part),
+  );
+  //}
 
   // We want a whole chain of ConditionalExpressions to all
   // break if any of them break. That means we should only group around the
