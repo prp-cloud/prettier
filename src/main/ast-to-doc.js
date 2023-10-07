@@ -51,7 +51,29 @@ async function printAstToDoc(ast, options) {
 
   ensureAllCommentsPrinted(options);
 
-  return doc.slice(0, -1);
+  if (options.filepath === "package-lock.json") {
+    return doc;
+  }
+
+  const findAndRemoveLastLinebreak = (doc) => {
+    for (const [i, item] of [...doc.entries()].toReversed()) {
+      const { contents } = item;
+      if (contents) {
+        if (findAndRemoveLastLinebreak(contents)) {
+          return true;
+        }
+      } else if (
+        [item, [{ type: "line", hard: true }, { type: "break-parent" }]]
+          .map(JSON.stringify)
+          .reduce((a, b) => a === b)
+      ) {
+        doc.splice(i, 1);
+        return true;
+      }
+    }
+  };
+  if (options.filepath !== "package-lock.json") findAndRemoveLastLinebreak(doc);
+  return doc;
 
   function mainPrint(selector, args) {
     if (selector === undefined || selector === path) {
