@@ -51,7 +51,7 @@ async function printAstToDoc(ast, options) {
 
   ensureAllCommentsPrinted(options);
 
-  if (options.filepath === "package-lock.json") {
+  if (options.filepath.split("/").at(-1) === "package-lock.json") {
     return doc;
   }
 
