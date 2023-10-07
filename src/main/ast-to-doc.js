@@ -56,7 +56,7 @@ async function printAstToDoc(ast, options) {
   }
 
   const findAndRemoveLastLinebreak = (doc) => {
-    for (const [i, item] of [...doc.entries()].toReversed()) {
+    for (const [i, item] of [...doc.entries()].reverse()) {
       const { contents } = item;
       if (contents) {
         if (findAndRemoveLastLinebreak(contents)) {
@@ -72,7 +72,9 @@ async function printAstToDoc(ast, options) {
       }
     }
   };
-  if (options.filepath !== "package-lock.json") findAndRemoveLastLinebreak(doc);
+  if (options.filepath !== "package-lock.json") {
+    findAndRemoveLastLinebreak(doc);
+  }
   return doc;
 
   function mainPrint(selector, args) {
