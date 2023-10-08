@@ -253,9 +253,9 @@ function printMemberChain(path, options, print) {
   // node is an identifier with the name starting with a capital
   // letter or just a sequence of _$. The rationale is that they are
   // likely to be factories.
-  /*function isFactory(name) {
+  function isFactory(name) {
     return /^[A-Z]|^[$_]+$/.test(name);
-  }*/
+  }
 
   // In case the Identifier is shorter than tab width, we can keep the
   // first call in a single line, if it's an ExpressionStatement.
@@ -275,10 +275,10 @@ function printMemberChain(path, options, print) {
       const firstNode = groups[0][0].node;
       return (
         firstNode.type === "ThisExpression" ||
-        /*(*/ firstNode.type === "Identifier" /*&&
+        (firstNode.type === "Identifier" &&
           (isFactory(firstNode.name) ||
             (isExpressionStatement && isShort(firstNode.name)) ||
-            hasComputed))*/
+            hasComputed))
       );
     }
 
@@ -286,14 +286,13 @@ function printMemberChain(path, options, print) {
     return (
       isMemberExpression(lastNode) &&
       lastNode.property.type === "Identifier" &&
-      /*(isFactory(lastNode.property.name) ||*/ hasComputed //)
+      (isFactory(lastNode.property.name) || hasComputed)
     );
   }
 
-  const shouldMerge =
-    groups.length >= 2 &&
+  const shouldMerge = /*groups.length >= 2 &&
     !hasComment(groups[1][0].node) &&
-    shouldNotWrap(groups);
+    shouldNotWrap(groups)*/ false;
 
   function printGroup(printedGroup) {
     const printed = printedGroup.map((tuple) => tuple.printed);
@@ -378,10 +377,10 @@ function printMemberChain(path, options, print) {
   //  * the last call's arguments have a hard line and other calls have non-trivial arguments.
   if (
     nodeHasComment ||
-    (callExpressions.length > 2 &&
+    /*(callExpressions.length > 2 &&
       callExpressions.some(
         (expr) => !expr.arguments.every((arg) => isSimpleCallArgument(arg)),
-      )) ||
+      )) ||*/
     printedGroups.slice(0, -1).some(willBreak) ||
     lastGroupWillBreakAndOtherCallsHaveFunctionArguments()
   ) {
