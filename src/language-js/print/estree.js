@@ -338,10 +338,10 @@ function printEstree(path, options, print, args) {
       let firstVariable;
       if (printed.length === 1 && !hasComment(node.declarations[0])) {
         firstVariable = printed[0];
-      } else if (printed.length > 0) {
+      } /* else if (printed.length > 0) {
         // Indent first var to comply with eslint one-var rule
         firstVariable = indent(printed[0]);
-      }
+      }*/
 
       parts = [
         printDeclareToken(path),
@@ -349,9 +349,9 @@ function printEstree(path, options, print, args) {
         firstVariable ? [" ", firstVariable] : "",
         indent(
           printed
-            .slice(1)
-            .map((p) => [
-              ",",
+            .filter((p) => p !== firstVariable) //.slice(1)
+            .map((p, i) => [
+              i ? "," : "",
               hasValue && !isParentForLoop ? hardline : line,
               p,
             ]),

@@ -253,9 +253,9 @@ function printMemberChain(path, options, print) {
   // node is an identifier with the name starting with a capital
   // letter or just a sequence of _$. The rationale is that they are
   // likely to be factories.
-  function isFactory(name) {
-    return; //^[A-Z]|^[$_]+$/.test(name);
-  }
+  /*function isFactory(name) {
+    return /^[A-Z]|^[$_]+$/.test(name);
+  }*/
 
   // In case the Identifier is shorter than tab width, we can keep the
   // first call in a single line, if it's an ExpressionStatement.
@@ -286,7 +286,7 @@ function printMemberChain(path, options, print) {
     return (
       isMemberExpression(lastNode) &&
       lastNode.property.type === "Identifier" &&
-      (isFactory(lastNode.property.name) || hasComputed)
+      /*(isFactory(lastNode.property.name) ||*/ hasComputed //)
     );
   }
 
