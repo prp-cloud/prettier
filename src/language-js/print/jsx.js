@@ -533,11 +533,11 @@ function printJsxExpressionContainer(path, options, print) {
         (node.type === "ChainExpression" &&
           isCallExpression(node.expression)) ||
         node.type === "FunctionExpression" ||
-        node.type === "TemplateLiteral" ||
-        node.type === "TaggedTemplateExpression" ||
-        node.type === "DoExpression"/* ||
+        /*node.type === "TemplateLiteral" ||
+        node.type === "TaggedTemplateExpression" ||*/
+        node.type === "DoExpression") /* ||
         (isJsxElement(parent) &&
-          (node.type === "ConditionalExpression" || isBinaryish(node)))*/));
+          (node.type === "ConditionalExpression" || isBinaryish(node)))*/);
   if (shouldInline(node.expression, path.parent)) {
     return group(["{", print("expression"), lineSuffixBoundary, "}"]);
   }
