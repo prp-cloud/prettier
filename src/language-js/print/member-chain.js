@@ -315,7 +315,7 @@ function printMemberChain(path, options, print) {
   const printedGroups = groups.map(printGroup);
   const oneLine = printedGroups;
 
-  const cutoff = shouldMerge ? 3 : 1;
+  const cutoff = shouldMerge ? 3 : 2;
   const flatGroups = groups.flat();
 
   const nodeHasComment =
