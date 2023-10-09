@@ -199,7 +199,7 @@ function printTernary(path, options, print, args) {
   );
   const firstNonConditionalParent = currentParent || parent;
 
-	const isOnSameLineAsAssignment =
+  const isOnSameLineAsAssignment =
     args &&
     args.assignmentLayout &&
     args.assignmentLayout !== "break-after-operator" &&
@@ -226,7 +226,7 @@ function printTernary(path, options, print, args) {
 
   const fillTab = !isBigTabs
     ? ""
-      : options.useTabs
+    : options.useTabs
     ? "\t"
     : " ".repeat(options.tabWidth - 1);
 

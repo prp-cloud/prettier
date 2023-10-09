@@ -234,7 +234,7 @@ function printTernaryOld(path, options, print) {
   const firstNonConditionalParent = currentParent || parent;
   const lastConditionalParent = previousParent;
 
-  if (
+  /*if (
     isConditionalExpression &&
     (isJsxElement(node[testNodePropertyNames[0]]) ||
       isJsxElement(consequentNode) ||
@@ -273,28 +273,28 @@ function printTernaryOld(path, options, print) {
         ? print(alternateNodePropertyName)
         : wrap(print(alternateNodePropertyName)),
     );
-  } else {
-    // normal mode
-    const part = [
-      line,
-      "? ",
-      consequentNode.type === node.type ? ifBreak("", "(") : "",
-      align(2, print(consequentNodePropertyName)),
-      consequentNode.type === node.type ? ifBreak("", ")") : "",
-      line,
-      ": ",
-      align(2, print(alternateNodePropertyName)),
-    ];
-    parts.push(
-      parent.type !== node.type ||
-        parent[alternateNodePropertyName] === node ||
-        isParentTest
-        ? part
-        : options.useTabs
-        ? dedent(indent(part))
-        : align(Math.max(0, options.tabWidth - 2), part),
-    );
-  }
+  } else {*/
+  // normal mode
+  const part = [
+    line,
+    "? ",
+    //consequentNode.type === node.type ? ifBreak("", "(") : "",
+    align(2, print(consequentNodePropertyName)),
+    //consequentNode.type === node.type ? ifBreak("", ")") : "",
+    line,
+    ": ",
+    align(2, print(alternateNodePropertyName)),
+  ];
+  parts.push(
+    parent.type !== node.type ||
+      parent[alternateNodePropertyName] === node ||
+      isParentTest
+      ? part
+      : options.useTabs
+      ? dedent(indent(part))
+      : align(Math.max(0, options.tabWidth - 2), part),
+  );
+  //}
 
   // We want a whole chain of ConditionalExpressions to all
   // break if any of them break. That means we should only group around the
