@@ -64,7 +64,10 @@ async function printAstToDoc(ast, options) {
         doc.splice(i, 1);
         return true;
       }
-      if (findAndRemoveLastLinebreak(item.contents ?? item)) {
+      if (
+        typeof item === "object" &&
+        findAndRemoveLastLinebreak(item.contents ?? item)
+      ) {
         return true;
       }
     }
