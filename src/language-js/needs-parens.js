@@ -398,14 +398,14 @@ function needsParens(path, options) {
             return true;
           }
 
-          if (
+          /*if (
             parentPrecedence === precedence &&
             !shouldFlatten(parentOperator, operator)
           ) {
             return true;
           }
 
-          /*if (parentPrecedence < precedence && operator === "%") {
+          if (parentPrecedence < precedence && operator === "%") {
             return parentOperator === "+" || parentOperator === "-";
           }*/
 
