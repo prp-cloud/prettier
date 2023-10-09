@@ -341,7 +341,7 @@ function needsParens(path, options) {
           return !isBinaryCastExpression(node);
 
         case "ConditionalExpression":
-          return false;//isBinaryCastExpression(node);
+          return false; //isBinaryCastExpression(node);
 
         case "CallExpression":
         case "NewExpression":
@@ -405,9 +405,9 @@ function needsParens(path, options) {
             return true;
           }
 
-          if (parentPrecedence < precedence && operator === "%") {
+          /*if (parentPrecedence < precedence && operator === "%") {
             return parentOperator === "+" || parentOperator === "-";
-          }
+          }*/
 
           // Add parenthesis when working with bitwise operators
           // It's not strictly needed but helps with code understanding
@@ -561,7 +561,7 @@ function needsParens(path, options) {
     case "TSTypeQuery":
       return (
         //(key === "objectType" && parent.type === "TSIndexedAccessType") ||
-        (key === "elementType" && parent.type === "TSArrayType")
+        key === "elementType" && parent.type === "TSArrayType"
       );
     // Same as `TSTypeQuery`, but for Flow syntax
     case "TypeofTypeAnnotation":
@@ -748,7 +748,15 @@ function needsParens(path, options) {
         return false;
       }
 
-      if (["NGChainedExpression", "ArrayExpression", "ObjectExpression", "CallExpression", "ReturnStatement"].includes(parent.type)) {
+      if (
+        [
+          "NGChainedExpression",
+          "ArrayExpression",
+          "ObjectExpression",
+          "CallExpression",
+          "ReturnStatement",
+        ].includes(parent.type)
+      ) {
         return false;
       }
 
