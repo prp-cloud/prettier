@@ -254,6 +254,7 @@ function printMemberChain(path, options, print) {
   // letter or just a sequence of _$. The rationale is that they are
   // likely to be factories.
   function isFactory(name) {
+    return false;
     return /^[A-Z]|^[$_]+$/.test(name);
   }
 
@@ -276,7 +277,7 @@ function printMemberChain(path, options, print) {
       return (
         firstNode.type === "ThisExpression" ||
         (firstNode.type === "Identifier" &&
-          (isFactory(firstNode.name) ||
+          (groups.length === 2 /*isFactory(firstNode.name)*/ ||
             (isExpressionStatement && isShort(firstNode.name)) ||
             hasComputed))
       );
@@ -290,9 +291,10 @@ function printMemberChain(path, options, print) {
     );
   }
 
-  const shouldMerge = /*groups.length >= 2 &&
+  const shouldMerge =
+    groups.length >= 2 &&
     !hasComment(groups[1][0].node) &&
-    shouldNotWrap(groups)*/ false;
+    shouldNotWrap(groups);
 
   function printGroup(printedGroup) {
     const printed = printedGroup.map((tuple) => tuple.printed);
@@ -315,7 +317,7 @@ function printMemberChain(path, options, print) {
   const printedGroups = groups.map(printGroup);
   const oneLine = printedGroups;
 
-  const cutoff = shouldMerge ? 3 : 2;
+  const cutoff = shouldMerge ? 3 : 1;
   const flatGroups = groups.flat();
 
   const nodeHasComment =
