@@ -1,3 +1,4 @@
+import { inspect } from "node:util";
 import { printComments } from "../../main/comments/print.js";
 import isNextLineEmptyAfterIndex from "../../utils/is-next-line-empty.js";
 import getNextNonSpaceNonCommentCharacterIndex from "../../utils/get-next-non-space-non-comment-character-index.js";
@@ -354,6 +355,7 @@ function printMemberChain(path, options, print) {
   ];
 
   const callExpressions = printedNodes
+    .slice(1)
     .map(({ node }) => node)
     .filter(isCallExpression);
 
@@ -379,12 +381,14 @@ function printMemberChain(path, options, print) {
   //  * the last call's arguments have a hard line and other calls have non-trivial arguments.
   if (
     nodeHasComment ||
-    /*(callExpressions.length > 2 &&
-      callExpressions.some(
+    (callExpressions.length > 1 /*2*/ &&
+      (callExpressions.some(
         (expr) => !expr.arguments.every((arg) => isSimpleCallArgument(arg)),
-      )) ||*/
-    printedGroups.slice(0, -1).some(willBreak) ||
-    lastGroupWillBreakAndOtherCallsHaveFunctionArguments()
+      ) ||
+        printedGroups.some(willBreak))) /*||
+    (callExpressions.length > 1 &&
+      printedGroups.slice(0, -1).some(willBreak)) ||
+    lastGroupWillBreakAndOtherCallsHaveFunctionArguments()*/
   ) {
     result = group(expanded);
   } else {
