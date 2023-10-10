@@ -51,9 +51,6 @@ async function printAstToDoc(ast, options) {
 
   ensureAllCommentsPrinted(options);
 
-  if (options.filepath.split("/").at(-1) === "package-lock.json") {
-    return doc;
-  }
   const findAndRemoveLastLinebreak = (doc) => {
     for (const [i, item] of [...doc.entries()].reverse()) {
       if (
@@ -72,7 +69,8 @@ async function printAstToDoc(ast, options) {
       }
     }
   };
-  if (options.filepath !== "package-lock.json") {
+
+  if (/^package(?:-lock)?\.json$/.test(options.filepath.split("/").at(-1))) {
     findAndRemoveLastLinebreak(doc);
   }
   return doc;
