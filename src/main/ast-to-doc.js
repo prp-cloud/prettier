@@ -70,7 +70,7 @@ async function printAstToDoc(ast, options) {
     }
   };
 
-  if (/(^|\/)package(?:-lock)?\.json$/.test(options.filepath)) {
+  if (!/(?:^|\/)package(?:-lock)?\.json$/.test(options.filepath)) {
     findAndRemoveLastLinebreak(doc);
   }
   return doc;
