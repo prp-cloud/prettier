@@ -125,7 +125,7 @@ function printTernaryTest(path, options, print) {
    *       : e
    */
   if (parent.type === node.type && parent[alternateNodePropertyName] === node) {
-    return align(2, printed);
+    return /*align(2,*/ printed /*)*/;
   }
   return printed;
 }
@@ -279,11 +279,11 @@ function printTernaryOld(path, options, print) {
     line,
     "? ",
     //consequentNode.type === node.type ? ifBreak("", "(") : "",
-    align(2, print(consequentNodePropertyName)),
+    /*align(2, */ print(consequentNodePropertyName) /*)*/,
     //consequentNode.type === node.type ? ifBreak("", ")") : "",
     line,
     ": ",
-    align(2, print(alternateNodePropertyName)),
+    /*align(2, */ print(alternateNodePropertyName) /*)*/,
   ];
   parts.push(
     parent.type !== node.type ||
@@ -292,7 +292,7 @@ function printTernaryOld(path, options, print) {
       ? part
       : options.useTabs
       ? dedent(indent(part))
-      : align(Math.max(0, options.tabWidth - 2), part),
+      : /*align(Math.max(0, options.tabWidth - 2),*/ part /*)*/,
   );
   //}
 
