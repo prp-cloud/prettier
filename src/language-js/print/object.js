@@ -74,8 +74,7 @@ function printObject(path, options, print) {
     (parent.type === "InterfaceDeclaration" ||
       parent.type === "DeclareInterface" ||
       parent.type === "DeclareClass");
-  const shouldBreak =
-    node.type === "TSInterfaceBody" ||
+  const shouldBreak = /*node.type === "TSInterfaceBody" ||
     isEnumBody ||
     isFlowInterfaceLikeBody ||
     (node.type === "ObjectPattern" &&
@@ -92,14 +91,14 @@ function printObject(path, options, print) {
           property.value &&
           (property.value.type === "ObjectPattern" ||
             property.value.type === "ArrayPattern"),
-      ))/* ||
+      )) ||
     (node.type !== "ObjectPattern" &&
       propsAndLoc.length > 0 &&
       hasNewlineInRange(
         options.originalText,
         locStart(node),
         propsAndLoc[0].loc,
-      ))*/;
+      ))*/ false;
 
   const separator = isFlowInterfaceLikeBody
     ? ";"
