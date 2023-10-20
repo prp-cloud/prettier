@@ -556,7 +556,8 @@ function needsParens(path, options) {
       }
     // fallthrough
     case "TSUnionType":
-    case "TSIntersectionType":
+      // Is this correct? Unsure
+      //case "TSIntersectionType":
       if (
         (parent.type === "TSUnionType" ||
           parent.type === "TSIntersectionType") &&
