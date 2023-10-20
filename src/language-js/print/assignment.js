@@ -142,7 +142,7 @@ function chooseLayout(path, options, print, leftDoc, rightPropertyName) {
   }
 
   if (
-    isComplexDestructuring(node) ||
+    // isComplexDestructuring(node) ||
     isComplexTypeAliasParams(node) ||
     hasComplexTypeAnnotation(node) ||
     (isArrowFunctionVariableDeclarator(node) && canBreak(leftDoc))
