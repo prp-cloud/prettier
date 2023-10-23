@@ -479,8 +479,8 @@ function needsParens(path, options) {
     case "AwaitExpression":
       switch (parent.type) {
         case "TaggedTemplateExpression":
-        case "UnaryExpression":
-        /*case "LogicalExpression":
+        /*case "UnaryExpression":
+        case "LogicalExpression":
         case "SpreadElement":
         case "TSAsExpression":
         case "TSSatisfiesExpression":*/
