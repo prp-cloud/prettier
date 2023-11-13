@@ -696,8 +696,8 @@ function printJsxOpeningClosingFragment(path, options /*, print*/) {
       hasOwnLineComment
         ? hardline
         : nodeHasComment && !isOpeningFragment
-        ? " "
-        : "",
+          ? " "
+          : "",
       printDanglingComments(path, options),
     ]),
     hasOwnLineComment ? hardline : "",

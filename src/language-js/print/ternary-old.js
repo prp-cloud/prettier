@@ -320,8 +320,8 @@ function printTernaryOld(path, options, print) {
     parent === firstNonConditionalParent
       ? group(doc, { shouldBreak })
       : shouldBreak
-      ? [doc, breakParent]
-      : doc;
+        ? [doc, breakParent]
+        : doc;
 
   // Break the closing paren to keep the chain right after it:
   // (a

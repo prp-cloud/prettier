@@ -42,8 +42,8 @@ function printObject(path, options, print) {
     node.type === "TSTypeLiteral" || isEnumBody
       ? "members"
       : node.type === "TSInterfaceBody"
-      ? "body"
-      : "properties",
+        ? "body"
+        : "properties",
   ];
   if (isTypeAnnotation) {
     fields.push("indexers", "callProperties", "internalSlots");
@@ -104,7 +104,7 @@ function printObject(path, options, print) {
     ? ";"
     : node.type === "TSInterfaceBody" || node.type === "TSTypeLiteral"
     ? ifBreak("", ",")
-    : ",";
+      : ",";
   const leftBrace =
     node.type === "RecordExpression" ? "#{" : node.exact ? "{|" : "{";
   const rightBrace = node.exact ? "|}" : "}";
