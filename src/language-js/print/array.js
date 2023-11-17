@@ -85,8 +85,7 @@ function printArray(path, options, print) {
 
     const groupId = Symbol("array");
 
-    const shouldBreak =
-      !options.__inJestEach &&
+    const shouldBreak = /*!options.__inJestEach &&
       elements.length > 1 &&
       elements.every((element, i, elements) => {
         const elementType = element?.type;
@@ -107,7 +106,7 @@ function printArray(path, options, print) {
           : "properties";
 
         return element[itemsKey] && element[itemsKey].length > 1;
-      });
+      })*/ false;
 
     const shouldUseConciseFormatting = isConciselyPrintedArray(node, options);
 
