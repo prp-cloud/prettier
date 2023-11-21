@@ -115,34 +115,59 @@ function printTypeAlias(path, options, print) {
 // `TSIntersectionType` and `IntersectionTypeAnnotation`
 function printIntersectionType(path, options, print) {
   let wasIndented = false;
-  return group(
-    [ifBreak(indent(line)), ...path.map(({ isFirst, previous, node, index }) => {
-      const doc = print();
-      if (isFirst) {
-        return doc;
-      }
+  const printed = path.map(({ isFirst, previous, node, index }) => {
+    const doc = print();
+    if (isFirst) {
+      return doc;
+    }
 
-      const currentIsObjectType = false; // isObjectType(node);
-      const previousIsObjectType = false; // isObjectType(previous);
+    const currentIsObjectType = false; // isObjectType(node);
+    const previousIsObjectType = false; // isObjectType(previous);
 
-      // If both are objects, don't indent
-      if (previousIsObjectType && currentIsObjectType) {
-        return [" & ", wasIndented ? indent(doc) : doc];
-      }
+    // If both are objects, don't indent
+    if (previousIsObjectType && currentIsObjectType) {
+      return [" & ", wasIndented ? indent(doc) : doc];
+    }
 
-      // If no object is involved, go to the next line if it breaks
-      if (!previousIsObjectType && !currentIsObjectType) {
-        return indent([" &", line, doc]);
-      }
+    // If no object is involved, go to the next line if it breaks
+    if (!previousIsObjectType && !currentIsObjectType) {
+      return /*indent(*/ [" &", line, doc] /*)*/;
+    }
 
-      // If you go from object to non-object or vis-versa, then inline it
-      if (index > 1) {
-        wasIndented = true;
-      }
+    // If you go from object to non-object or vis-versa, then inline it
+    if (index > 1) {
+      wasIndented = true;
+    }
 
-      return [" & ", index > 1 ? indent(doc) : doc];
-    }, "types")],
-  );
+    return [" & ", index > 1 ? indent(doc) : doc];
+  }, "types");
+  const { node, parent } = path;
+  const shouldIndent =
+    parent.type !== "TypeParameterInstantiation" &&
+    (parent.type !== "TSConditionalType" || !options.experimentalTernaries) &&
+    (parent.type !== "ConditionalTypeAnnotation" ||
+      !options.experimentalTernaries) &&
+    parent.type !== "TSTypeParameterInstantiation" &&
+    parent.type !== "GenericTypeAnnotation" &&
+    parent.type !== "TSTypeReference" &&
+    parent.type !== "TSTypeAssertion" &&
+    parent.type !== "TupleTypeAnnotation" &&
+    parent.type !== "TSTupleType" &&
+    !(
+      parent.type === "FunctionTypeParam" &&
+      !parent.name &&
+      path.grandparent.this !== parent
+    ) &&
+    !(
+      (parent.type === "TypeAlias" ||
+        parent.type === "VariableDeclarator" ||
+        parent.type === "TSTypeAliasDeclaration") &&
+      hasLeadingOwnLineComment(options.originalText, node)
+    );
+  const shouldAddStartLine =
+    shouldIndent && !hasLeadingOwnLineComment(options.originalText, node);
+  const code = [ifBreak([shouldAddStartLine ? line : ""]), printed];
+  return group(shouldIndent ? indent(code) : code);
 }
 
 // `TSUnionType` and `UnionTypeAnnotation`
@@ -186,7 +211,7 @@ function printUnionType(path, options, print) {
   //   a: string
   // } | null | void
   // should be inlined and not be printed in the multi-line variant
-  const shouldHug = shouldHugType(node);
+  const shouldHug = false; /*shouldHugType(node)*/
 
   // We want to align the children but without its comment, so it looks like
   // | child1
