@@ -32,7 +32,7 @@
   "dependencies": {
     "@angular/compiler": "17.0.2",
     "@babel/code-frame": "7.22.13",
-    "@babel/parser": "7.23.3",
+    "@babel/parser": "7.23.4",
     "@babel/types": "7.23.3",
     "@glimmer/syntax": "0.85.13",
     "@iarna/toml": "2.2.5",
@@ -79,7 +79,7 @@
     "lines-and-columns": "2.0.4",
     "linguist-languages": "7.27.0",
     "mem": "9.0.2",
-    "meriyah": "4.3.8",
+    "meriyah": "4.3.9",
     "micromatch": "4.0.5",
     "minimist": "1.2.8",
     "n-readlines": "1.0.1",
