@@ -275,7 +275,7 @@ function printTernaryOld(path, options, print) {
         : wrap(print(alternateNodePropertyName)),
     );
   } else {*/
-	/*
+  /*
     This does not mean to indent, but make the doc aligned with the first character after `? ` or `: `,
     so we use `2` instead of `options.tabWidth` here.
 
@@ -297,10 +297,10 @@ function printTernaryOld(path, options, print) {
      : alternate
     ```
     */
-	const printBranch = (nodePropertyName) =>
-		options.useTabs
-			? indent(print(nodePropertyName))
-			: align(2, print(nodePropertyName));
+  const printBranch = (nodePropertyName) =>
+    options.useTabs
+      ? indent(print(nodePropertyName))
+      : align(2, print(nodePropertyName));
   // normal mode
   const part = [
     line,
@@ -310,7 +310,7 @@ function printTernaryOld(path, options, print) {
     //consequentNode.type === node.type ? ifBreak("", ")") : "",
     line,
     ": ",
-      printBranch(alternateNodePropertyName),
+    printBranch(alternateNodePropertyName),
   ];
   parts.push(
     parent.type !== node.type ||
@@ -318,8 +318,8 @@ function printTernaryOld(path, options, print) {
       isParentTest
       ? part
       : options.useTabs
-      ? dedent(indent(part))
-      : align(Math.max(0, options.tabWidth - 2), part),
+        ? dedent(indent(part))
+        : align(Math.max(0, options.tabWidth - 2), part),
   );
   //}
 
