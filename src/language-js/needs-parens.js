@@ -399,7 +399,10 @@ function needsParens(path, options) {
 
         case "LogicalExpression":
           if (node.type === "LogicalExpression") {
-            return parent.operator === "&&" && node.operator === "||";
+            return (
+              getPrecedence(node.operator) < getPrecedence(parent.operator) ||
+              [node, parent].some(({ operator }) => operator === "??")
+            );
           }
         // else fallthrough
 
