@@ -301,7 +301,7 @@ function printTernaryOld(path, options, print) {
   const printBranch = (nodePropertyName) =>
     /*options.useTabs
       ? indent(print(nodePropertyName))
-      : align(2, print(nodePropertyName))*/ print(nodePropertyName);
+      :*/ align(2, print(nodePropertyName));
   // normal mode
   const part = [
     line,
