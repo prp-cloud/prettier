@@ -214,7 +214,7 @@ function printTernaryOld(path, options, print) {
   const isParentTest =
     parent.type === node.type &&
     testNodePropertyNames.some((prop) => parent[prop] === node);
-  let forceNoIndent = parent.type === node.type && !isParentTest;
+  let forceNoIndent = /*parent.type === node.type && !isParentTest*/ false;
 
   // Find the outermost non-ConditionalExpression parent, and the outermost
   // ConditionalExpression parent. We'll use these to determine if we should
