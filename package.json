@@ -207,5 +207,8 @@
     "not op_mini all"
   ],
   "preferUnplugged": true,
-  "packageManager": "yarn@4.0.2"
+  "packageManager": "yarn@4.0.2",
+  "overrides": {
+    "jest": "30.0.0-alpha.2"
+  }
 }
