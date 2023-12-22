@@ -33,6 +33,7 @@ import {
   isStringLiteral,
   rawText,
 } from "../utils/index.js";
+import { isJSXElement } from "@babel/types";
 
 /*
 Only the following are treated as whitespace inside JSX.
@@ -535,9 +536,9 @@ function printJsxExpressionContainer(path, options, print) {
         node.type === "FunctionExpression" ||
         node.type === "TemplateLiteral" ||
         node.type === "TaggedTemplateExpression" ||
-        node.type === "DoExpression")) /* ||
+        node.type === "DoExpression")); /* ||
         (isJsxElement(parent) &&
-          (node.type === "ConditionalExpression" || isBinaryish(node)))*/;
+          (node.type === "ConditionalExpression" || isBinaryish(node)))*/
   if (shouldInline(node.expression, path.parent)) {
     return group(["{", print("expression"), lineSuffixBoundary, "}"]);
   }
@@ -545,7 +546,11 @@ function printJsxExpressionContainer(path, options, print) {
   return group([
     "{",
     indent([softline, print("expression")]),
-    softline,
+    isJsxElement(path.parent) &&
+    isBinaryish(node.expression) &&
+    isJsxElement(node.expression.right)
+      ? []
+      : softline,
     lineSuffixBoundary,
     "}",
   ]);
