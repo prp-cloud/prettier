@@ -782,6 +782,9 @@ function needsParens(path, options) {
           "CallExpression",
           "ReturnStatement",
           "TemplateLiteral",
+          "IfStatement",
+          "WhileStatement",
+          "VariableDeclarator",
         ].includes(parent.type)
       ) {
         return false;
