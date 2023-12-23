@@ -279,8 +279,6 @@ function needsParens(path, options) {
       break;
   }
 
-  console.log({ node: node.type, parent: parent.type });
-
   switch (node.type) {
     case "UpdateExpression":
       if (parent.type === "UnaryExpression") {
