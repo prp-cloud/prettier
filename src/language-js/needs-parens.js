@@ -781,6 +781,7 @@ function needsParens(path, options) {
           "ObjectExpression",
           "CallExpression",
           "ReturnStatement",
+          "TemplateLiteral",
         ].includes(parent.type)
       ) {
         return false;
