@@ -279,6 +279,8 @@ function needsParens(path, options) {
       break;
   }
 
+  console.log({ node: node.type, parent: parent.type });
+
   switch (node.type) {
     case "UpdateExpression":
       if (parent.type === "UnaryExpression") {
@@ -507,11 +509,11 @@ function needsParens(path, options) {
           return key === "test";
 
         case "BinaryExpression":
-          if (!node.argument && parent.operator === "|>") {
-            return false;
-          }
+          //if (!node.argument && parent.operator === "|>") {
+          return false;
+        /*}
 
-          return true;
+          return true;*/
 
         default:
           return false;
