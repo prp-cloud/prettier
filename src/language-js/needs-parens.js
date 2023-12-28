@@ -723,6 +723,11 @@ function needsParens(path, options) {
       );
 
     case "AssignmentExpression": {
+      return (
+        (key === "callee" && parent.type === "CallExpression") ||
+        (key === "object" && parent.type === "MemberExpression")
+      );
+
       const grandParent = path.grandparent;
 
       if (key === "body" && parent.type === "ArrowFunctionExpression") {
@@ -778,7 +783,7 @@ function needsParens(path, options) {
         return false;
       }
 
-      return key === "callee" && parent.type === "CallExpression";
+      return true;
     }
     case "ConditionalExpression":
       switch (parent.type) {
