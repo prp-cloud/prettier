@@ -723,10 +723,11 @@ function needsParens(path, options) {
       );
 
     case "AssignmentExpression": {
-      console.log(parent.type, key);
       return (
         (key === "callee" && parent.type === "CallExpression") ||
         (key === "test" && parent.type === "ConditionalExpression") ||
+        (parent.type === "ExpressionStatement" &&
+          node.left.type === "ObjectPattern") ||
         (key === "object" && parent.type === "MemberExpression") ||
         [
           "AwaitExpression",
