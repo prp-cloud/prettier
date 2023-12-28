@@ -731,7 +731,7 @@ function needsParens(path, options) {
       const grandParent = path.grandparent;
 
       if (key === "body" && parent.type === "ArrowFunctionExpression") {
-        return false;
+        return true;
       }
 
       if (
