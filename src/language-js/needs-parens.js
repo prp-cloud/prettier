@@ -728,9 +728,12 @@ function needsParens(path, options) {
         (key === "callee" && parent.type === "CallExpression") ||
         (key === "test" && parent.type === "ConditionalExpression") ||
         (key === "object" && parent.type === "MemberExpression") ||
-        ["AwaitExpression", "BinaryExpression", "LogicalExpression"].includes(
-          parent.type,
-        )
+        [
+          "AwaitExpression",
+          "BinaryExpression",
+          "LogicalExpression",
+          "UnaryExpression",
+        ].includes(parent.type)
       );
 
       const grandParent = path.grandparent;
