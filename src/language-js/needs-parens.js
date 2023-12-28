@@ -774,23 +774,11 @@ function needsParens(path, options) {
         return false;
       }
 
-      if (
-        [
-          "NGChainedExpression",
-          "ArrayExpression",
-          "ObjectExpression",
-          "CallExpression",
-          "ReturnStatement",
-          "TemplateLiteral",
-          "IfStatement",
-          "WhileStatement",
-          "VariableDeclarator",
-        ].includes(parent.type)
-      ) {
+      if (parent.type === "NGChainedExpression") {
         return false;
       }
 
-      return true;
+      return key === "callee" && parent.type === "CallExpression";
     }
     case "ConditionalExpression":
       switch (parent.type) {
