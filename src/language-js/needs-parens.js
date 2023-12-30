@@ -437,9 +437,9 @@ function needsParens(path, options) {
 
           // Add parenthesis when working with bitwise operators
           // It's not strictly needed but helps with code understanding
-          if (isBitwiseOperator(parentOperator)) {
+          /*if (isBitwiseOperator(parentOperator)) {
             return true;
-          }
+          }*/
 
           return false;
         }
