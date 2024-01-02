@@ -361,7 +361,9 @@ function needsParens(path, options) {
           //   foo satisfies unknown satisfies Bar
           //   foo satisfies unknown as Bar
           //   foo as unknown satisfies Bar
-          return !isBinaryCastExpression(node);
+          return (
+            !isBinaryCastExpression(node) && node.type !== "BinaryExpression"
+          );
 
         case "ConditionalExpression":
           return false; //isBinaryCastExpression(node);
@@ -409,7 +411,14 @@ function needsParens(path, options) {
         case "BinaryExpression": {
           const { operator, type } = node;
           if (!operator && type !== "TSTypeAssertion") {
-            return key === "right";
+            const precedence = getPrecedence(parent.operator);
+            const parentPrecedence = getPrecedence(path.grandparent.operator);
+            return (
+              (key === "right" && parent.type === "BinaryExpression") ||
+              (path.grandparent.type === "BinaryExpression" &&
+                parentPrecedence < precedence &&
+                path.grandparent.right === parent)
+            );
           }
 
           const precedence = getPrecedence(operator);
