@@ -2563,16 +2563,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"browserslist-to-esbuild@npm:2.0.0":
-  version: 2.0.0
-  resolution: "browserslist-to-esbuild@npm:2.0.0"
+"browserslist-to-esbuild@npm:2.1.0":
+  version: 2.1.0
+  resolution: "browserslist-to-esbuild@npm:2.1.0"
   dependencies:
     meow: "npm:^13.0.0"
   peerDependencies:
     browserslist: "*"
   bin:
     browserslist-to-esbuild: cli/index.js
-  checksum: 9f0e6de8cd56a19f00c21e34867d6c8b359ab0d150372e4263c510789de1e13b7cb90f4984010322f996c2d0191a1c1f5b44b934692115b707f325356f148c41
+  checksum: 67a710fb24c44540e46507a41278617be7d848d1fc4a815ce5dc025e2cd113af63cf117784a74df24e019f9d1c64190498853813e0259cd89b6ab517214f1c60
   languageName: node
   linkType: hard
 
@@ -7270,14 +7270,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss@npm:8.4.32":
-  version: 8.4.32
-  resolution: "postcss@npm:8.4.32"
+"postcss@npm:8.4.33":
+  version: 8.4.33
+  resolution: "postcss@npm:8.4.33"
   dependencies:
     nanoid: "npm:^3.3.7"
     picocolors: "npm:^1.0.0"
     source-map-js: "npm:^1.0.2"
-  checksum: 28084864122f29148e1f632261c408444f5ead0e0b9ea9bd9729d0468818ebe73fe5dc0075acd50c1365dbe639b46a79cba27d355ec857723a24bc9af0f18525
+  checksum: e22a4594c255f26117f38419fb494d7ecab0f596cd409f7aadc8a6173abf180ed7ea970cd13fd366ab12b5840be901d2a09b25197700c2ebcb5a8077326bf519
   languageName: node
   linkType: hard
 
@@ -7325,7 +7325,7 @@ __metadata:
     angular-html-parser: "npm:5.2.0"
     benchmark: "npm:2.1.4"
     browserslist: "npm:4.22.2"
-    browserslist-to-esbuild: "npm:2.0.0"
+    browserslist-to-esbuild: "npm:2.1.0"
     c8: "npm:9.0.0"
     camelcase: "npm:8.0.0"
     chalk: "npm:5.3.0"
@@ -7394,7 +7394,7 @@ __metadata:
     outdent: "npm:0.8.0"
     parse-json: "npm:8.1.0"
     please-upgrade-node: "npm:3.2.0"
-    postcss: "npm:8.4.32"
+    postcss: "npm:8.4.33"
     postcss-less: "npm:6.0.0"
     postcss-media-query-parser: "npm:0.2.3"
     postcss-scss: "npm:4.0.9"
