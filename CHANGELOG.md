@@ -1,3 +1,70 @@
+# 3.2.4
+
+[diff](https://github.com/prettier/prettier/compare/3.2.3...3.2.4)
+
+#### Fix incorrect parser inference ([#15947](https://github.com/prettier/prettier/pull/15947) by [@fisker](https://github.com/fisker))
+
+Files like `.eslintrc.json` were incorrectly formatted as JSONC files.
+
+<!-- prettier-ignore -->
+```jsx
+// Input
+prettier --file-info .eslintrc.json
+{ "ignored": false, "inferredParser": "jsonc" }
+
+// Prettier 3.2.4
+prettier --file-info .eslintrc.json
+{ "ignored": false, "inferredParser": "json" }
+```
+
+# 3.2.3
+
+[diff](https://github.com/prettier/prettier/compare/3.2.2...3.2.3)
+
+#### Throw errors for invalid code ([#15881](https://github.com/prettier/prettier/pull/15881) by [@fisker](https://github.com/fisker), [@Josh-Cena](https://github.com/Josh-Cena), [@auvred](https://github.com/auvred))
+
+<!-- prettier-ignore -->
+```ts
+// Input
+1++;
+
+// Prettier 3.2.2
+1++;
+
+// Prettier 3.2.3
+SyntaxError: Invalid left-hand side expression in unary operation (1:1)
+> 1 | 1++;
+    | ^
+```
+
+<!-- prettier-ignore -->
+```ts
+// Input
+try {} catch (error = 1){}
+
+// Prettier 3.2.2
+try {
+} catch (error) {}
+
+// Prettier 3.2.3
+SyntaxError: Catch clause variable cannot have an initializer. (1:23)
+> 1 | try {} catch (error = 1){}
+    |                       ^
+```
+
+#### Fix parser inference ([#15927](https://github.com/prettier/prettier/pull/15927) by [@fisker](https://github.com/fisker))
+
+<!-- prettier-ignore -->
+```console
+// Prettier 3.2.2
+prettier --file-info tsconfig.json
+{ "ignored": false, "inferredParser": "json" }
+
+// Prettier 3.2.3
+prettier --file-info tsconfig.json
+{ "ignored": false, "inferredParser": "jsonc" }
+```
+
 # 3.2.2
 
 [diff](https://github.com/prettier/prettier/compare/3.2.1...3.2.2)
