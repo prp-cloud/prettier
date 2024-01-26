@@ -27,7 +27,8 @@
     "index.js",
     "standalone.js",
     "src",
-    "bin"
+    "bin",
+    "scripts/build/shims/array-find-last.js"
   ],
   "dependencies": {
     "@angular/compiler": "17.0.2",
