@@ -1,23 +1,24 @@
-import hasNewlineInRange from "../../utils/has-newline-in-range.js";
 import {
-  isJsxElement,
-  isCallExpression,
-  isMemberExpression,
-  isBinaryCastExpression,
-  hasComment,
-} from "../utils/index.js";
-import { locStart, locEnd } from "../loc.js";
-import isBlockComment from "../utils/is-block-comment.js";
-import {
+  breakParent,
+  dedent,
+  group,
+  ifBreak,
+  indent,
   line,
   softline,
-  group,
-  indent,
-  align,
-  ifBreak,
-  dedent,
-  breakParent,
 } from "../../document/builders.js";
+import hasNewlineInRange from "../../utils/has-newline-in-range.js";
+import { locEnd, locStart } from "../loc.js";
+import {
+  hasComment,
+  isBinaryCastExpression,
+  isCallExpression,
+  isJsxElement,
+  isMemberExpression,
+} from "../utils/index.js";
+import isBlockComment from "../utils/is-block-comment.js";
+
+const align = (_, doc) => group(doc);
 
 /**
  * @typedef {import("../../document/builders.js").Doc} Doc
@@ -137,6 +138,7 @@ const ancestorNameMap = new Map([
   ["ThrowStatement", "argument"],
   ["UnaryExpression", "argument"],
   ["YieldExpression", "argument"],
+  ["AwaitExpression", "argument"],
 ]);
 function shouldExtraIndentForConditionalExpression(path) {
   const { node } = path;
@@ -212,7 +214,7 @@ function printTernaryOld(path, options, print) {
   const isParentTest =
     parent.type === node.type &&
     testNodePropertyNames.some((prop) => parent[prop] === node);
-  let forceNoIndent = parent.type === node.type && !isParentTest;
+  let forceNoIndent = /*parent.type === node.type && !isParentTest*/ false;
 
   // Find the outermost non-ConditionalExpression parent, and the outermost
   // ConditionalExpression parent. We'll use these to determine if we should
@@ -274,16 +276,42 @@ function printTernaryOld(path, options, print) {
         : wrap(print(alternateNodePropertyName)),
     );
   } else {*/
+  /*
+    This does not mean to indent, but make the doc aligned with the first character after `? ` or `: `,
+    so we use `2` instead of `options.tabWidth` here.
+
+    ```js
+    test
+     ? {
+         consequent
+       }
+     : alternate
+    ```
+
+    instead of
+
+    ```js
+    test
+     ? {
+       consequent
+     }
+     : alternate
+    ```
+    */
+  const printBranch = (nodePropertyName) =>
+    /*options.useTabs
+      ? indent(print(nodePropertyName))
+      :*/ align(2, print(nodePropertyName));
   // normal mode
   const part = [
     line,
     "? ",
     //consequentNode.type === node.type ? ifBreak("", "(") : "",
-    align(2, print(consequentNodePropertyName)),
+    printBranch(consequentNodePropertyName),
     //consequentNode.type === node.type ? ifBreak("", ")") : "",
     line,
     ": ",
-    align(2, print(alternateNodePropertyName)),
+    printBranch(alternateNodePropertyName),
   ];
   parts.push(
     parent.type !== node.type ||
@@ -291,8 +319,8 @@ function printTernaryOld(path, options, print) {
       isParentTest
       ? part
       : options.useTabs
-      ? dedent(indent(part))
-      : align(Math.max(0, options.tabWidth - 2), part),
+        ? dedent(indent(part))
+        : align(Math.max(0, options.tabWidth - 2), part),
   );
   //}
 
@@ -319,8 +347,8 @@ function printTernaryOld(path, options, print) {
     parent === firstNonConditionalParent
       ? group(doc, { shouldBreak })
       : shouldBreak
-      ? [doc, breakParent]
-      : doc;
+        ? [doc, breakParent]
+        : doc;
 
   // Break the closing paren to keep the chain right after it:
   // (a

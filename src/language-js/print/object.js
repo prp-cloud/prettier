@@ -1,28 +1,27 @@
-import { printDanglingComments } from "../../main/comments/print.js";
 import {
+  group,
+  hardline,
+  ifBreak,
+  indent,
   line,
   softline,
-  group,
-  indent,
-  ifBreak,
-  hardline,
 } from "../../document/builders.js";
-import hasNewlineInRange from "../../utils/has-newline-in-range.js";
+import { printDanglingComments } from "../../main/comments/print.js";
 import hasNewline from "../../utils/has-newline.js";
+import hasNewlineInRange from "../../utils/has-newline-in-range.js";
 import isNonEmptyArray from "../../utils/is-non-empty-array.js";
+import { locEnd, locStart } from "../loc.js";
 import {
-  shouldPrintComma,
-  hasComment,
-  getComments,
   CommentCheckFlags,
+  getComments,
+  hasComment,
   isNextLineEmpty,
   isObjectType,
+  shouldPrintComma,
 } from "../utils/index.js";
-import { locStart, locEnd } from "../loc.js";
-
-import { printOptionalToken } from "./misc.js";
-import { shouldHugTheOnlyFunctionParameter } from "./function-parameters.js";
 import { printHardlineAfterHeritage } from "./class.js";
+import { shouldHugTheOnlyFunctionParameter } from "./function-parameters.js";
+import { printOptionalToken } from "./misc.js";
 import { printTypeAnnotationProperty } from "./type-annotation.js";
 
 /** @typedef {import("../../document/builders.js").Doc} Doc */
@@ -42,8 +41,8 @@ function printObject(path, options, print) {
     node.type === "TSTypeLiteral" || isEnumBody
       ? "members"
       : node.type === "TSInterfaceBody"
-      ? "body"
-      : "properties",
+        ? "body"
+        : "properties",
   ];
   if (isTypeAnnotation) {
     fields.push("indexers", "callProperties", "internalSlots");
@@ -74,8 +73,7 @@ function printObject(path, options, print) {
     (parent.type === "InterfaceDeclaration" ||
       parent.type === "DeclareInterface" ||
       parent.type === "DeclareClass");
-  const shouldBreak =
-    node.type === "TSInterfaceBody" ||
+  const shouldBreak = /*node.type === "TSInterfaceBody" ||
     isEnumBody ||
     isFlowInterfaceLikeBody ||
     (node.type === "ObjectPattern" &&
@@ -92,20 +90,20 @@ function printObject(path, options, print) {
           property.value &&
           (property.value.type === "ObjectPattern" ||
             property.value.type === "ArrayPattern"),
-      ))/* ||
+      )) ||
     (node.type !== "ObjectPattern" &&
       propsAndLoc.length > 0 &&
       hasNewlineInRange(
         options.originalText,
         locStart(node),
         propsAndLoc[0].loc,
-      ))*/;
+      ))*/ false;
 
   const separator = isFlowInterfaceLikeBody
     ? ";"
     : node.type === "TSInterfaceBody" || node.type === "TSTypeLiteral"
     ? ifBreak("", ",")
-    : ",";
+      : ",";
   const leftBrace =
     node.type === "RecordExpression" ? "#{" : node.exact ? "{|" : "{";
   const rightBrace = node.exact ? "|}" : "}";

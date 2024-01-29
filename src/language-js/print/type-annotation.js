@@ -1,22 +1,24 @@
-import { printComments } from "../../main/comments/print.js";
 import {
+  align,
   group,
+  ifBreak,
+  indent,
   join,
   line,
   softline,
-  indent,
-  align,
-  ifBreak,
 } from "../../document/builders.js";
-import pathNeedsParens from "../needs-parens.js";
+import { printComments } from "../../main/comments/print.js";
 import { hasSameLocStart } from "../loc.js";
+import pathNeedsParens from "../needs-parens.js";
 import {
-  isSimpleType,
-  isObjectType,
-  hasLeadingOwnLineComment,
-  isObjectTypePropertyAFunction,
-  hasComment,
   CommentCheckFlags,
+  createTypeCheckFunction,
+  hasComment,
+  hasLeadingOwnLineComment,
+  isObjectType,
+  isObjectTypePropertyAFunction,
+  isSimpleType,
+  isUnionType,
 } from "../utils/index.js";
 import { printAssignment } from "./assignment.js";
 import {
@@ -24,43 +26,51 @@ import {
   shouldGroupFunctionParameters,
 } from "./function-parameters.js";
 import {
-  printOptionalToken,
-  printDeclareToken,
   printAbstractToken,
+  printDeclareToken,
+  printOptionalToken,
 } from "./misc.js";
 
 /**
  * @typedef {import("../../document/builders.js").Doc} Doc
  */
 
+const isVoidType = createTypeCheckFunction([
+  "VoidTypeAnnotation",
+  "TSVoidKeyword",
+  "NullLiteralTypeAnnotation",
+  "TSNullKeyword",
+]);
+
+const isObjectLikeType = createTypeCheckFunction([
+  "ObjectTypeAnnotation",
+  "TSTypeLiteral",
+  // This is a bit aggressive but captures Array<{x}>
+  "GenericTypeAnnotation",
+  "TSTypeReference",
+]);
+
+function shouldHugUnionType(node) {
+  const { types } = node;
+  if (types.some((node) => hasComment(node))) {
+    return false;
+  }
+
+  const objectType = types.find((node) => isObjectLikeType(node));
+  if (!objectType) {
+    return false;
+  }
+
+  return types.every((node) => node === objectType || isVoidType(node));
+}
+
 function shouldHugType(node) {
   if (isSimpleType(node) || isObjectType(node)) {
     return true;
   }
 
-  if (node.type === "UnionTypeAnnotation" || node.type === "TSUnionType") {
-    const voidCount = node.types.filter(
-      (node) =>
-        node.type === "VoidTypeAnnotation" ||
-        node.type === "TSVoidKeyword" ||
-        node.type === "NullLiteralTypeAnnotation" ||
-        node.type === "TSNullKeyword",
-    ).length;
-
-    const hasObject = node.types.some(
-      (node) =>
-        node.type === "ObjectTypeAnnotation" ||
-        node.type === "TSTypeLiteral" ||
-        // This is a bit aggressive but captures Array<{x}>
-        node.type === "GenericTypeAnnotation" ||
-        node.type === "TSTypeReference",
-    );
-
-    const hasComments = node.types.some((node) => hasComment(node));
-
-    if (node.types.length - 1 === voidCount && hasObject && !hasComments) {
-      return true;
-    }
+  if (isUnionType(node)) {
+    return shouldHugUnionType(node);
   }
 
   return false;
@@ -115,34 +125,59 @@ function printTypeAlias(path, options, print) {
 // `TSIntersectionType` and `IntersectionTypeAnnotation`
 function printIntersectionType(path, options, print) {
   let wasIndented = false;
-  return group(
-    [ifBreak(indent(line)), ...path.map(({ isFirst, previous, node, index }) => {
-      const doc = print();
-      if (isFirst) {
-        return doc;
-      }
+  const printed = path.map(({ isFirst, previous, node, index }) => {
+    const doc = print();
+    if (isFirst) {
+      return doc;
+    }
 
-      const currentIsObjectType = false; // isObjectType(node);
-      const previousIsObjectType = false; // isObjectType(previous);
+    const currentIsObjectType = false; // isObjectType(node);
+    const previousIsObjectType = false; // isObjectType(previous);
 
-      // If both are objects, don't indent
-      if (previousIsObjectType && currentIsObjectType) {
-        return [" & ", wasIndented ? indent(doc) : doc];
-      }
+    // If both are objects, don't indent
+    if (previousIsObjectType && currentIsObjectType) {
+      return [" & ", wasIndented ? indent(doc) : doc];
+    }
 
-      // If no object is involved, go to the next line if it breaks
-      if (!previousIsObjectType && !currentIsObjectType) {
-        return indent([" &", line, doc]);
-      }
+    // If no object is involved, go to the next line if it breaks
+    if (!previousIsObjectType && !currentIsObjectType) {
+      return /*indent(*/ [" &", line, doc] /*)*/;
+    }
 
-      // If you go from object to non-object or vis-versa, then inline it
-      if (index > 1) {
-        wasIndented = true;
-      }
+    // If you go from object to non-object or vis-versa, then inline it
+    if (index > 1) {
+      wasIndented = true;
+    }
 
-      return [" & ", index > 1 ? indent(doc) : doc];
-    }, "types")],
-  );
+    return [" & ", index > 1 ? indent(doc) : doc];
+  }, "types");
+  const { node, parent } = path;
+  const shouldIndent =
+    parent.type !== "TypeParameterInstantiation" &&
+    (parent.type !== "TSConditionalType" || !options.experimentalTernaries) &&
+    (parent.type !== "ConditionalTypeAnnotation" ||
+      !options.experimentalTernaries) &&
+    parent.type !== "TSTypeParameterInstantiation" &&
+    parent.type !== "GenericTypeAnnotation" &&
+    parent.type !== "TSTypeReference" &&
+    parent.type !== "TSTypeAssertion" &&
+    parent.type !== "TupleTypeAnnotation" &&
+    parent.type !== "TSTupleType" &&
+    !(
+      parent.type === "FunctionTypeParam" &&
+      !parent.name &&
+      path.grandparent.this !== parent
+    ) &&
+    !(
+      (parent.type === "TypeAlias" ||
+        parent.type === "VariableDeclarator" ||
+        parent.type === "TSTypeAliasDeclaration") &&
+      hasLeadingOwnLineComment(options.originalText, node)
+    );
+  const shouldAddStartLine =
+    shouldIndent && !hasLeadingOwnLineComment(options.originalText, node);
+  const code = [ifBreak([shouldAddStartLine ? line : ""]), printed];
+  return group(shouldIndent ? indent(code) : code);
 }
 
 // `TSUnionType` and `UnionTypeAnnotation`
@@ -186,7 +221,7 @@ function printUnionType(path, options, print) {
   //   a: string
   // } | null | void
   // should be inlined and not be printed in the multi-line variant
-  const shouldHug = shouldHugType(node);
+  const shouldHug = false; /*shouldHugType(node)*/
 
   // We want to align the children but without its comment, so it looks like
   // | child1
@@ -543,20 +578,20 @@ function printTypePredicate(path, print) {
 }
 
 export {
-  printOpaqueType,
-  printTypeAlias,
-  printIntersectionType,
-  printUnionType,
+  printArrayType,
   printFunctionType,
   printIndexedAccessType,
   printInferType,
-  shouldHugType,
+  printIntersectionType,
   printJSDocType,
-  printRestType,
   printNamedTupleMember,
-  printTypeAnnotationProperty,
+  printOpaqueType,
+  printRestType,
+  printTypeAlias,
   printTypeAnnotation,
-  printArrayType,
-  printTypeQuery,
+  printTypeAnnotationProperty,
   printTypePredicate,
+  printTypeQuery,
+  printUnionType,
+  shouldHugType,
 };

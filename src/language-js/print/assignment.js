@@ -1,27 +1,33 @@
-import isNonEmptyArray from "../../utils/is-non-empty-array.js";
-import getStringWidth from "../../utils/get-string-width.js";
 import {
-  line,
   group,
   indent,
   indentIfBreak,
+  line,
   lineSuffixBoundary,
 } from "../../document/builders.js";
-import { cleanDoc, willBreak, canBreak } from "../../document/utils.js";
+import { canBreak, cleanDoc, willBreak } from "../../document/utils.js";
+import getStringWidth from "../../utils/get-string-width.js";
+import isNonEmptyArray from "../../utils/is-non-empty-array.js";
 import {
+  createTypeCheckFunction,
+  getCallArguments,
   hasLeadingOwnLineComment,
   isBinaryish,
-  isStringLiteral,
-  isNumericLiteral,
   isCallExpression,
-  isMemberExpression,
-  getCallArguments,
+  isIntersectionType,
   isLoneShortArgument,
+  isMemberExpression,
+  isNumericLiteral,
   isObjectProperty,
-  createTypeCheckFunction,
+  isStringLiteral,
+  isUnionType,
 } from "../utils/index.js";
 import { shouldInlineLogicalExpression } from "./binaryish.js";
 import { printCallExpression } from "./call-expression.js";
+
+/**
+ * @typedef {import("../../common/ast-path.js").default} AstPath
+ */
 
 function printAssignment(
   path,
@@ -118,9 +124,9 @@ function chooseLayout(path, options, print, leftDoc, rightPropertyName) {
     return !isTail
       ? "chain"
       : rightNode.type === "ArrowFunctionExpression" &&
-        rightNode.body.type === "ArrowFunctionExpression"
-      ? "chain-tail-arrow-chain"
-      : "chain-tail";
+          rightNode.body.type === "ArrowFunctionExpression"
+        ? "chain-tail-arrow-chain"
+        : "chain-tail";
   }
   const isHeadOfLongChain = !isTail && isAssignment(rightNode.right);
 
@@ -136,16 +142,18 @@ function chooseLayout(path, options, print, leftDoc, rightPropertyName) {
       rightNode.callee.name === "require") ||
     // do not put values on a separate line from the key in json
     options.parser === "json5" ||
+    options.parser === "jsonc" ||
     options.parser === "json"
   ) {
     return "never-break-after-operator";
   }
 
+  const canBreakLeftDoc = canBreak(leftDoc);
+
   if (
     isComplexDestructuring(node) ||
-    isComplexTypeAliasParams(node) ||
     hasComplexTypeAnnotation(node) ||
-    (isArrowFunctionVariableDeclarator(node) && canBreak(leftDoc))
+    (isArrowFunctionVariableDeclarator(node) && canBreakLeftDoc)
   ) {
     return "break-lhs";
   }
@@ -162,13 +170,18 @@ function chooseLayout(path, options, print, leftDoc, rightPropertyName) {
     return "break-after-operator";
   }
 
+  if (isComplexTypeAliasParams(node)) {
+    return "break-lhs";
+  }
+
   if (
-    hasShortKey ||
-    rightNode.type === "TemplateLiteral" ||
-    rightNode.type === "TaggedTemplateExpression" ||
-    rightNode.type === "BooleanLiteral" ||
-    isNumericLiteral(rightNode) ||
-    rightNode.type === "ClassExpression"
+    !canBreakLeftDoc &&
+    (hasShortKey ||
+      rightNode.type === "TemplateLiteral" ||
+      rightNode.type === "TaggedTemplateExpression" ||
+      rightNode.type === "BooleanLiteral" ||
+      isNumericLiteral(rightNode) ||
+      rightNode.type === "ClassExpression")
   ) {
     return "never-break-after-operator";
   }
@@ -189,7 +202,10 @@ function shouldBreakAfterOperator(path, options, print, hasShortKey) {
       return true;
     case "TSConditionalType":
     case "ConditionalTypeAnnotation":
-      if (!options.experimentalTernaries) {
+      if (
+        !options.experimentalTernaries &&
+        !shouldBreakBeforeConditionalType(rightNode)
+      ) {
         break;
       }
       return true;
@@ -408,10 +424,8 @@ function isCallExpressionWithComplexTypeArguments(node, print) {
     if (typeArgs.length === 1) {
       const firstArg = typeArgs[0];
       if (
-        firstArg.type === "TSUnionType" ||
-        firstArg.type === "UnionTypeAnnotation" ||
-        firstArg.type === "TSIntersectionType" ||
-        firstArg.type === "IntersectionTypeAnnotation" ||
+        isUnionType(firstArg) ||
+        isIntersectionType(firstArg) ||
         firstArg.type === "TSTypeLiteral" ||
         firstArg.type === "ObjectTypeAnnotation"
       ) {
@@ -432,9 +446,25 @@ function getTypeArgumentsFromCallExpression(node) {
   return (node.typeParameters ?? node.typeArguments)?.params;
 }
 
+function shouldBreakBeforeConditionalType(node) {
+  function isGeneric(subNode) {
+    switch (subNode.type) {
+      case "FunctionTypeAnnotation":
+      case "GenericTypeAnnotation":
+      case "TSFunctionType":
+      case "TSTypeReference":
+        return Boolean(subNode.typeParameters);
+      default:
+        return false;
+    }
+  }
+
+  return isGeneric(node.checkType) || isGeneric(node.extendsType);
+}
+
 export {
-  printVariableDeclarator,
-  printAssignmentExpression,
-  printAssignment,
   isArrowFunctionVariableDeclarator,
+  printAssignment,
+  printAssignmentExpression,
+  printVariableDeclarator,
 };

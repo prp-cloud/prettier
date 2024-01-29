@@ -1,15 +1,17 @@
 import isEs5IdentifierName from "@prettier/is-es5-identifier-name";
+
 import { hasDescendant } from "../../utils/ast-utils.js";
-import hasNewline from "../../utils/has-newline.js";
-import isNonEmptyArray from "../../utils/is-non-empty-array.js";
-import isNextLineEmptyAfterIndex from "../../utils/is-next-line-empty.js";
 import getStringWidth from "../../utils/get-string-width.js";
-import { locStart, locEnd, hasSameLocStart } from "../loc.js";
+import hasNewline from "../../utils/has-newline.js";
+import isNextLineEmptyAfterIndex from "../../utils/is-next-line-empty.js";
+import isNonEmptyArray from "../../utils/is-non-empty-array.js";
+import printString from "../../utils/print-string.js";
+import { hasSameLocStart, locEnd, locStart } from "../loc.js";
 import getVisitorKeys from "../traverse/get-visitor-keys.js";
 import createTypeCheckFunction from "./create-type-check-function.js";
 import isBlockComment from "./is-block-comment.js";
-import isNodeMatches from "./is-node-matches.js";
 import isFlowKeywordType from "./is-flow-keyword-type.js";
+import isNodeMatches from "./is-node-matches.js";
 import isTsKeywordType from "./is-ts-keyword-type.js";
 
 /**
@@ -122,10 +124,6 @@ const isLineComment = createTypeCheckFunction([
   "InterpreterDirective",
 ]);
 
-/**
- * @param {Node} node
- * @returns {boolean}
- */
 const isExportDeclaration = createTypeCheckFunction([
   "ExportDefaultDeclaration",
   "DeclareExportDeclaration",
@@ -134,19 +132,11 @@ const isExportDeclaration = createTypeCheckFunction([
   "DeclareExportAllDeclaration",
 ]);
 
-/**
- * @param {Node} node
- * @returns {boolean}
- */
 const isArrayOrTupleExpression = createTypeCheckFunction([
   "ArrayExpression",
   "TupleExpression",
 ]);
 
-/**
- * @param {Node} node
- * @returns {boolean}
- */
 const isObjectOrRecordExpression = createTypeCheckFunction([
   "ObjectExpression",
   "RecordExpression",
@@ -189,10 +179,6 @@ function isRegExpLiteral(node) {
   );
 }
 
-/**
- * @param {Node} node
- * @returns {boolean}
- */
 const isLiteral = createTypeCheckFunction([
   "Literal",
   "BooleanLiteral",
@@ -205,10 +191,6 @@ const isLiteral = createTypeCheckFunction([
   "StringLiteral",
 ]);
 
-/**
- * @param {Node} node
- * @returns {boolean}
- */
 const isSingleWordType = createTypeCheckFunction([
   "Identifier",
   "ThisExpression",
@@ -218,20 +200,12 @@ const isSingleWordType = createTypeCheckFunction([
   "Import",
 ]);
 
-/**
- * @param {Node} node
- * @returns {boolean}
- */
 const isObjectType = createTypeCheckFunction([
   "ObjectTypeAnnotation",
   "TSTypeLiteral",
   "TSMappedType",
 ]);
 
-/**
- * @param {Node} node
- * @returns {boolean}
- */
 const isFunctionOrArrowExpression = createTypeCheckFunction([
   "FunctionExpression",
   "ArrowFunctionExpression",
@@ -267,10 +241,6 @@ function isAngularTestWrapper(node) {
   );
 }
 
-/**
- * @param {Node} node
- * @returns {boolean}
- */
 const isJsxElement = createTypeCheckFunction(["JSXElement", "JSXFragment"]);
 
 function isGetterOrSetter(node) {
@@ -312,10 +282,6 @@ function isTypeAnnotationAFunction(node) {
   );
 }
 
-/**
- * @param {Node} node
- * @returns {boolean}
- */
 const isBinaryish = createTypeCheckFunction([
   "BinaryExpression",
   "LogicalExpression",
@@ -436,23 +402,22 @@ function isTestCall(node, parent) {
   return false;
 }
 
-/**
- * @param {Node} node
- * @returns {boolean}
- */
-const isCallExpression = createTypeCheckFunction([
-  "CallExpression",
-  "OptionalCallExpression",
-]);
+/** @return {(node: Node) => boolean} */
+const skipChainExpression = (fn) => (node) => {
+  if (node?.type === "ChainExpression") {
+    node = node.expression;
+  }
 
-/**
- * @param {Node} node
- * @returns {boolean}
- */
-const isMemberExpression = createTypeCheckFunction([
-  "MemberExpression",
-  "OptionalMemberExpression",
-]);
+  return fn(node);
+};
+
+const isCallExpression = skipChainExpression(
+  createTypeCheckFunction(["CallExpression", "OptionalCallExpression"]),
+);
+
+const isMemberExpression = skipChainExpression(
+  createTypeCheckFunction(["MemberExpression", "OptionalMemberExpression"]),
+);
 
 /**
  *
@@ -544,7 +509,9 @@ function getExpressionInnerNodeCount(node, maxCount) {
 }
 
 const LONE_SHORT_ARGUMENT_THRESHOLD_RATE = 0.25;
-function isLoneShortArgument(node, { printWidth }) {
+function isLoneShortArgument(node, options) {
+  const { printWidth } = options;
+
   if (hasComment(node)) {
     return false;
   }
@@ -568,7 +535,7 @@ function isLoneShortArgument(node, { printWidth }) {
   }
 
   if (isStringLiteral(node)) {
-    return rawText(node).length <= threshold;
+    return printString(rawText(node), options).length <= threshold;
   }
 
   if (node.type === "TemplateLiteral") {
@@ -638,6 +605,7 @@ function hasLeadingOwnLineComment(text, node) {
 function isStringPropSafeToUnquote(node, options) {
   return (
     options.parser !== "json" &&
+    options.parser !== "jsonc" &&
     isStringLiteral(node.key) &&
     rawText(node.key).slice(1, -1) === node.key.value &&
     ((isEs5IdentifierName(node.key.value) &&
@@ -713,7 +681,7 @@ function isFunctionCompositionArgs(args) {
         return true;
       }
     } else if (isCallExpression(arg)) {
-      for (const childArg of arg.arguments) {
+      for (const childArg of getCallArguments(arg)) {
         if (isFunctionOrArrowExpression(childArg)) {
           return true;
         }
@@ -754,6 +722,10 @@ const simpleCallArgumentUnaryOperators = new Set(["!", "-", "+", "~"]);
 function isSimpleCallArgument(node, depth = 2) {
   if (depth <= 0) {
     return false;
+  }
+
+  if (node.type === "ChainExpression" || node.type === "TSNonNullExpression") {
+    return isSimpleCallArgument(node.expression, depth);
   }
 
   const isChildSimple = (child) => isSimpleCallArgument(child, depth - 1);
@@ -812,10 +784,6 @@ function isSimpleCallArgument(node, depth = 2) {
     node.type === "UpdateExpression"
   ) {
     return isSimpleCallArgument(node.argument, depth);
-  }
-
-  if (node.type === "TSNonNullExpression") {
-    return isSimpleCallArgument(node.expression, depth);
   }
 
   return false;
@@ -1046,6 +1014,10 @@ function getCallArguments(node) {
     return callArgumentsCache.get(node);
   }
 
+  if (node.type === "ChainExpression") {
+    return getCallArguments(node.expression);
+  }
+
   let args = node.arguments;
   if (node.type === "ImportExpression") {
     args = [node.source];
@@ -1067,6 +1039,14 @@ function getCallArguments(node) {
 
 function iterateCallArgumentsPath(path, iteratee) {
   const { node } = path;
+
+  if (node.type === "ChainExpression") {
+    return path.call(
+      () => iterateCallArgumentsPath(path, iteratee),
+      "expression",
+    );
+  }
+
   if (node.type === "ImportExpression") {
     path.call((sourcePath) => iteratee(sourcePath, 0), "source");
 
@@ -1085,17 +1065,22 @@ function iterateCallArgumentsPath(path, iteratee) {
 }
 
 function getCallArgumentSelector(node, index) {
+  const selectors = [];
+  if (node.type === "ChainExpression") {
+    selectors.push("expression");
+  }
+
   if (node.type === "ImportExpression") {
     if (index === 0 || index === (node.attributes || node.options ? -2 : -1)) {
-      return "source";
+      return [...selectors, "source"];
     }
     // import attributes
     if (node.attributes && (index === 1 || index === -1)) {
-      return "attributes";
+      return [...selectors, "attributes"];
     }
     // deprecated import assertions
     if (node.options && (index === 1 || index === -1)) {
-      return "options";
+      return [...selectors, "options"];
     }
     throw new RangeError("Invalid argument index");
   }
@@ -1106,7 +1091,7 @@ function getCallArgumentSelector(node, index) {
   if (index < 0 || index >= node.arguments.length) {
     throw new RangeError("Invalid argument index");
   }
-  return ["arguments", index];
+  return [...selectors, "arguments", index];
 }
 
 function isPrettierIgnoreComment(comment) {
@@ -1212,13 +1197,6 @@ function isObjectProperty(node) {
   );
 }
 
-/**
- * This is used as a marker for dangling comments.
- */
-const markerForIfWithoutBlockAndSameLineComment = Symbol(
-  "ifWithoutBlockAndSameLineComment",
-);
-
 const isBinaryCastExpression = createTypeCheckFunction([
   // TS
   "TSAsExpression",
@@ -1229,68 +1207,79 @@ const isBinaryCastExpression = createTypeCheckFunction([
   "SatisfiesExpression",
 ]);
 
+const isUnionType = createTypeCheckFunction([
+  "UnionTypeAnnotation",
+  "TSUnionType",
+]);
+
+const isIntersectionType = createTypeCheckFunction([
+  "IntersectionTypeAnnotation",
+  "TSIntersectionType",
+]);
+
 export {
-  getFunctionParameters,
-  iterateFunctionParametersPath,
+  CommentCheckFlags,
+  createTypeCheckFunction,
   getCallArguments,
-  iterateCallArgumentsPath,
   getCallArgumentSelector,
-  hasRestParameter,
+  getComments,
+  getFunctionParameters,
   getLeftSide,
   getLeftSidePathName,
+  getPrecedence,
+  hasComment,
   hasLeadingOwnLineComment,
   hasNakedLeftSide,
   hasNode,
   hasNodeIgnoreComment,
+  hasRestParameter,
   identity,
+  isArrayOrTupleExpression,
+  isBinaryCastExpression,
   isBinaryish,
-  isCallLikeExpression,
-  isLineComment,
-  isPrettierIgnoreComment,
+  isBitwiseOperator,
   isCallExpression,
-  isMemberExpression,
+  isCallLikeExpression,
   isExportDeclaration,
   isFunctionCompositionArgs,
   isFunctionNotation,
   isFunctionOrArrowExpression,
   isGetterOrSetter,
+  isIntersectionType,
   isJsxElement,
+  isLineComment,
+  isLiteral,
+  isLoneShortArgument,
   isLongCurriedCallExpression,
-  isSimpleCallArgument,
+  isMemberExpression,
   isMemberish,
+  isNextLineEmpty,
   isNumericLiteral,
-  isSignedNumericLiteral,
+  isObjectOrRecordExpression,
   isObjectProperty,
   isObjectType,
   isObjectTypePropertyAFunction,
+  isPrettierIgnoreComment,
   isRegExpLiteral,
-  isSimpleType,
-  isSimpleNumber,
+  isSignedNumericLiteral,
   isSimpleAtomicExpression,
-  isSimpleMemberExpression,
-  isSimpleTemplateLiteral,
+  isSimpleCallArgument,
   isSimpleExpressionByNodeCount,
-  isLoneShortArgument,
+  isSimpleMemberExpression,
+  isSimpleNumber,
+  isSimpleTemplateLiteral,
+  isSimpleType,
   isStringLiteral,
-  isLiteral,
   isStringPropSafeToUnquote,
   isTemplateOnItsOwnLine,
   isTestCall,
   isTypeAnnotationAFunction,
-  isNextLineEmpty,
+  isUnionType,
+  iterateCallArgumentsPath,
+  iterateFunctionParametersPath,
   needsHardlineAfterDanglingComment,
   rawText,
-  shouldPrintComma,
-  isBitwiseOperator,
   shouldFlatten,
+  shouldPrintComma,
   startsWithNoLookaheadToken,
-  getPrecedence,
-  hasComment,
-  getComments,
-  CommentCheckFlags,
-  markerForIfWithoutBlockAndSameLineComment,
-  isBinaryCastExpression,
-  isArrayOrTupleExpression,
-  isObjectOrRecordExpression,
-  createTypeCheckFunction,
 };

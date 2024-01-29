@@ -1,38 +1,39 @@
 import {
+  conditionalGroup,
+  cursor,
+  fill,
+  group,
+  hardline,
+  ifBreak,
+  indent,
+  join,
+  line,
+  lineSuffixBoundary,
+  softline,
+} from "../../document/builders.js";
+import { replaceEndOfLine, willBreak } from "../../document/utils.js";
+import {
   printComments,
   printDanglingComments,
 } from "../../main/comments/print.js";
-import {
-  line,
-  hardline,
-  softline,
-  group,
-  indent,
-  conditionalGroup,
-  fill,
-  ifBreak,
-  lineSuffixBoundary,
-  join,
-  cursor,
-} from "../../document/builders.js";
-import { willBreak, replaceEndOfLine } from "../../document/utils.js";
-import UnexpectedNodeError from "../../utils/unexpected-node-error.js";
 import getPreferredQuote from "../../utils/get-preferred-quote.js";
+import UnexpectedNodeError from "../../utils/unexpected-node-error.js";
 import WhitespaceUtils from "../../utils/whitespace-utils.js";
+import { willPrintOwnComments } from "../comments/printer-methods.js";
+import pathNeedsParens from "../needs-parens.js";
 import {
-  isJsxElement,
-  rawText,
-  isCallExpression,
-  isStringLiteral,
-  isBinaryish,
-  hasComment,
   CommentCheckFlags,
+  hasComment,
   hasNodeIgnoreComment,
   isArrayOrTupleExpression,
+  isBinaryish,
+  isCallExpression,
+  isJsxElement,
   isObjectOrRecordExpression,
+  isStringLiteral,
+  rawText,
 } from "../utils/index.js";
-import pathNeedsParens from "../needs-parens.js";
-import { willPrintOwnComments } from "../comments/printer-methods.js";
+import { isJSXElement } from "@babel/types";
 
 /*
 Only the following are treated as whitespace inside JSX.
@@ -533,11 +534,11 @@ function printJsxExpressionContainer(path, options, print) {
         (node.type === "ChainExpression" &&
           isCallExpression(node.expression)) ||
         node.type === "FunctionExpression" ||
-        /*node.type === "TemplateLiteral" ||
-        node.type === "TaggedTemplateExpression" ||*/
-        node.type === "DoExpression") /* ||
+        node.type === "TemplateLiteral" ||
+        node.type === "TaggedTemplateExpression" ||
+        node.type === "DoExpression")); /* ||
         (isJsxElement(parent) &&
-          (node.type === "ConditionalExpression" || isBinaryish(node)))*/);
+          (node.type === "ConditionalExpression" || isBinaryish(node)))*/
   if (shouldInline(node.expression, path.parent)) {
     return group(["{", print("expression"), lineSuffixBoundary, "}"]);
   }
@@ -545,7 +546,11 @@ function printJsxExpressionContainer(path, options, print) {
   return group([
     "{",
     indent([softline, print("expression")]),
-    softline,
+    isJsxElement(path.parent) &&
+    isBinaryish(node.expression) &&
+    isJsxElement(node.expression.right)
+      ? []
+      : softline,
     lineSuffixBoundary,
     "}",
   ]);
@@ -696,8 +701,8 @@ function printJsxOpeningClosingFragment(path, options /*, print*/) {
       hasOwnLineComment
         ? hardline
         : nodeHasComment && !isOpeningFragment
-        ? " "
-        : "",
+          ? " "
+          : "",
       printDanglingComments(path, options),
     ]),
     hasOwnLineComment ? hardline : "",
@@ -841,7 +846,6 @@ function hasJsxIgnoreComment(path) {
     return false;
   }
 
-  // TODO: Use `Array#findLast` when we drop support for Node.js<18
   // Lookup the previous sibling, ignoring any empty JSXText elements
   const { index, siblings } = path;
   let prevSibling;

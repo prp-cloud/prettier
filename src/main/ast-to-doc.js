@@ -2,9 +2,9 @@ import AstPath from "../common/ast-path.js";
 import { cursor } from "../document/builders.js";
 import { inheritLabel } from "../document/utils.js";
 import { attachComments } from "./comments/attach.js";
-import { printComments, ensureAllCommentsPrinted } from "./comments/print.js";
-import { printEmbeddedLanguages } from "./multiparser.js";
+import { ensureAllCommentsPrinted, printComments } from "./comments/print.js";
 import createPrintPreCheckFunction from "./create-print-pre-check-function.js";
+import { printEmbeddedLanguages } from "./multiparser.js";
 import printIgnored from "./print-ignored.js";
 
 /**
@@ -51,9 +51,6 @@ async function printAstToDoc(ast, options) {
 
   ensureAllCommentsPrinted(options);
 
-  if (options.filepath.split("/").at(-1) === "package-lock.json") {
-    return doc;
-  }
   const findAndRemoveLastLinebreak = (doc) => {
     for (const [i, item] of [...doc.entries()].reverse()) {
       if (
@@ -72,7 +69,8 @@ async function printAstToDoc(ast, options) {
       }
     }
   };
-  if (options.filepath !== "package-lock.json") {
+
+  if (!/(?:^|\/)package(?:-lock)?\.json$/.test(options.filepath)) {
     findAndRemoveLastLinebreak(doc);
   }
   return doc;
@@ -167,4 +165,4 @@ async function prepareToPrint(ast, options) {
   return { ast, comments };
 }
 
-export { printAstToDoc, prepareToPrint };
+export { prepareToPrint, printAstToDoc };

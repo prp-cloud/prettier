@@ -1,20 +1,20 @@
 import isNonEmptyArray from "../utils/is-non-empty-array.js";
 import {
+  createTypeCheckFunction,
   getFunctionParameters,
   getLeftSidePathName,
+  getPrecedence,
   hasNakedLeftSide,
   hasNode,
+  isArrayOrTupleExpression,
+  isBinaryCastExpression,
   isBitwiseOperator,
-  startsWithNoLookaheadToken,
-  shouldFlatten,
-  getPrecedence,
   isCallExpression,
   isMemberExpression,
-  isObjectProperty,
-  isBinaryCastExpression,
-  isArrayOrTupleExpression,
   isObjectOrRecordExpression,
-  createTypeCheckFunction,
+  isObjectProperty,
+  shouldFlatten,
+  startsWithNoLookaheadToken,
 } from "./utils/index.js";
 
 function needsParens(path, options) {
@@ -95,10 +95,10 @@ function needsParens(path, options) {
       const expression = !statement
         ? undefined
         : statement.type === "ExpressionStatement"
-        ? statement.expression
-        : statement.type === "ForStatement"
-        ? statement.init
-        : statement.left;
+          ? statement.expression
+          : statement.type === "ForStatement"
+            ? statement.init
+            : statement.left;
       if (
         expression &&
         startsWithNoLookaheadToken(
@@ -107,6 +107,29 @@ function needsParens(path, options) {
         )
       ) {
         return true;
+      }
+    }
+
+    // `(type) satisfies never;` and similar cases
+    if (key === "expression") {
+      switch (node.name) {
+        case "await":
+        case "interface":
+        case "module":
+        case "using":
+        case "yield":
+        case "let":
+        case "type": {
+          const ancestorNeitherAsNorSatisfies = path.findAncestor(
+            (node) => !isBinaryCastExpression(node),
+          );
+          if (
+            ancestorNeitherAsNorSatisfies !== parent &&
+            ancestorNeitherAsNorSatisfies.type === "ExpressionStatement"
+          ) {
+            return true;
+          }
+        }
       }
     }
 
@@ -338,7 +361,9 @@ function needsParens(path, options) {
           //   foo satisfies unknown satisfies Bar
           //   foo satisfies unknown as Bar
           //   foo as unknown satisfies Bar
-          return !isBinaryCastExpression(node);
+          return (
+            !isBinaryCastExpression(node) && node.type !== "BinaryExpression"
+          );
 
         case "ConditionalExpression":
           return false; //isBinaryCastExpression(node);
@@ -376,14 +401,24 @@ function needsParens(path, options) {
 
         case "LogicalExpression":
           if (node.type === "LogicalExpression") {
-            return parent.operator === "&&" && node.operator === "||";
+            return (
+              getPrecedence(node.operator) < getPrecedence(parent.operator) ||
+              [node, parent].some(({ operator }) => operator === "??")
+            );
           }
         // else fallthrough
 
         case "BinaryExpression": {
           const { operator, type } = node;
           if (!operator && type !== "TSTypeAssertion") {
-            return key === "right";
+            const precedence = getPrecedence(parent.operator);
+            const parentPrecedence = getPrecedence(path.grandparent.operator);
+            return (
+              (key === "right" && parent.type === "BinaryExpression") ||
+              (path.grandparent.type === "BinaryExpression" &&
+                parentPrecedence < precedence &&
+                path.grandparent.right === parent)
+            );
           }
 
           const precedence = getPrecedence(operator);
@@ -411,9 +446,9 @@ function needsParens(path, options) {
 
           // Add parenthesis when working with bitwise operators
           // It's not strictly needed but helps with code understanding
-          if (isBitwiseOperator(parentOperator)) {
+          /*if (isBitwiseOperator(parentOperator)) {
             return true;
-          }
+          }*/
 
           return false;
         }
@@ -456,8 +491,8 @@ function needsParens(path, options) {
     case "AwaitExpression":
       switch (parent.type) {
         case "TaggedTemplateExpression":
-        case "UnaryExpression":
-        /*case "LogicalExpression":
+        /*case "UnaryExpression":
+        case "LogicalExpression":
         case "SpreadElement":
         case "TSAsExpression":
         case "TSSatisfiesExpression":*/
@@ -481,11 +516,11 @@ function needsParens(path, options) {
           return key === "test";
 
         case "BinaryExpression":
-          if (!node.argument && parent.operator === "|>") {
-            return false;
-          }
+          //if (!node.argument && parent.operator === "|>") {
+          return false;
+        /*}
 
-          return true;
+          return true;*/
 
         default:
           return false;
@@ -533,7 +568,6 @@ function needsParens(path, options) {
       }
     // fallthrough
     case "TSUnionType":
-    case "TSIntersectionType":
       if (
         (parent.type === "TSUnionType" ||
           parent.type === "TSIntersectionType") &&
@@ -543,6 +577,7 @@ function needsParens(path, options) {
         return true;
       }
     // fallthrough
+    case "TSIntersectionType": // is this correct? unsure
     case "TSInferType":
       if (node.type === "TSInferType" && parent.type === "TSRestType") {
         return false;
@@ -697,10 +732,24 @@ function needsParens(path, options) {
       );
 
     case "AssignmentExpression": {
+      return (
+        (key === "callee" && parent.type === "CallExpression") ||
+        (key === "test" && parent.type === "ConditionalExpression") ||
+        (parent.type === "ExpressionStatement" &&
+          node.left.type === "ObjectPattern") ||
+        (key === "object" && parent.type === "MemberExpression") ||
+        [
+          "AwaitExpression",
+          "BinaryExpression",
+          "LogicalExpression",
+          "UnaryExpression",
+        ].includes(parent.type)
+      );
+
       const grandParent = path.grandparent;
 
       if (key === "body" && parent.type === "ArrowFunctionExpression") {
-        return false;
+        return true;
       }
 
       if (
@@ -748,15 +797,7 @@ function needsParens(path, options) {
         return false;
       }
 
-      if (
-        [
-          "NGChainedExpression",
-          "ArrayExpression",
-          "ObjectExpression",
-          "CallExpression",
-          "ReturnStatement",
-        ].includes(parent.type)
-      ) {
+      if (parent.type === "NGChainedExpression") {
         return false;
       }
 

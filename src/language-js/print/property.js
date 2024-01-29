@@ -1,6 +1,6 @@
 import { printComments } from "../../main/comments/print.js";
-import printString from "../../utils/print-string.js";
 import printNumber from "../../utils/print-number.js";
+import printString from "../../utils/print-string.js";
 import {
   isNumericLiteral,
   isSimpleNumber,
@@ -47,6 +47,7 @@ function printPropertyKey(path, options, print) {
         // mentioned in `isStringPropSafeToUnquote`).
         !(options.parser === "typescript" || options.parser === "babel-ts"))) &&
     (options.parser === "json" ||
+      options.parser === "jsonc" ||
       (options.quoteProps === "consistent" && needsQuoteProps.get(parent)))
   ) {
     // a -> "a"

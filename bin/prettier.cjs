@@ -2,10 +2,10 @@
 
 "use strict";
 
-var pleaseUpgradeNode = require("please-upgrade-node");
+/*var pleaseUpgradeNode = require("please-upgrade-node");
 var packageJson = require("../package.json");
 
-pleaseUpgradeNode(packageJson);
+pleaseUpgradeNode(packageJson);*/
 
 function runCli(cli) {
   return cli.run();
