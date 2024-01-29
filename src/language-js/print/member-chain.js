@@ -6,6 +6,7 @@ import {
   indent,
   join,
   label,
+  softline,
 } from "../../document/builders.js";
 import { willBreak } from "../../document/utils.js";
 import { printComments } from "../../main/comments/print.js";
@@ -332,7 +333,7 @@ function printMemberChain(path, options, print) {
     if (groups.length === 0) {
       return "";
     }
-    return indent([hardline, join(hardline, groups.map(printGroup))]);
+    return indent([softline, join(softline, groups.map(printGroup))]);
   }
 
   const printedGroups = groups.map(printGroup);
