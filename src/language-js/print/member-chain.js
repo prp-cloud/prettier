@@ -6,6 +6,7 @@ import {
   indent,
   join,
   label,
+  softline,
 } from "../../document/builders.js";
 import { willBreak } from "../../document/utils.js";
 import { printComments } from "../../main/comments/print.js";
@@ -332,7 +333,7 @@ function printMemberChain(path, options, print) {
     if (groups.length === 0) {
       return "";
     }
-    return indent([hardline, join(hardline, groups.map(printGroup))]);
+    return indent([softline, join(softline, groups.map(printGroup))]);
   }
 
   const printedGroups = groups.map(printGroup);
@@ -379,6 +380,7 @@ function printMemberChain(path, options, print) {
   ];
 
   const callExpressions = printedNodes
+    .slice(1)
     .map(({ node }) => node)
     .filter(isCallExpression);
 
@@ -404,12 +406,14 @@ function printMemberChain(path, options, print) {
   //  * the last call's arguments have a hard line and other calls have non-trivial arguments.
   if (
     nodeHasComment ||
-    /*(callExpressions.length > 2 &&
-      callExpressions.some(
+    (callExpressions.length > 1 /*2*/ &&
+      (callExpressions.some(
         (expr) => !expr.arguments.every((arg) => isSimpleCallArgument(arg)),
-      )) ||*/
-    printedGroups.slice(0, -1).some(willBreak) ||
-    lastGroupWillBreakAndOtherCallsHaveFunctionArguments()
+      ) ||
+        printedGroups.some(willBreak))) /*||
+    (callExpressions.length > 1 &&
+      printedGroups.slice(0, -1).some(willBreak)) ||
+    lastGroupWillBreakAndOtherCallsHaveFunctionArguments()*/
   ) {
     result = group(expanded);
   } else {
