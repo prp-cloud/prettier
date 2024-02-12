@@ -1030,6 +1030,7 @@ const isStatement = createTypeCheckFunction([
   "DeclareInterface",
   "DeclareModule",
   "DeclareModuleExports",
+  "DeclareNamespace",
   "DeclareVariable",
   "DeclareEnum",
   "DoWhileStatement",
