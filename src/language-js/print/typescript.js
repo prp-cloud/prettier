@@ -148,7 +148,7 @@ function printTypescript(path, options, print) {
       return printBinaryCastExpression(path, options, print);
 
     case "TSArrayType":
-      return printArrayType(print);
+      return printArrayType(path, print);
     case "TSPropertySignature":
       return [
         node.readonly ? "readonly " : "",

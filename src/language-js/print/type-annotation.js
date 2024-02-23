@@ -550,8 +550,15 @@ function printTypeAnnotation(path, options, print) {
 - `TSArrayType`
 - `ArrayTypeAnnotation`
 */
-function printArrayType(print) {
-  return [print("elementType"), "[]"];
+function printArrayType({ node }, print) {
+  const needsParens =
+    ["TSUnionType", "TSIntersectionType"].includes(node.elementType.type) || "";
+  return group([
+    needsParens && "(",
+    print("elementType"),
+    needsParens && [softline, ")"],
+    "[]",
+  ]);
 }
 
 /*

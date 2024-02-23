@@ -131,7 +131,7 @@ function printFlow(path, options, print) {
     case "ExistsTypeAnnotation":
       return "*";
     case "ArrayTypeAnnotation":
-      return printArrayType(print);
+      return printArrayType(path, print);
 
     case "DeclareEnum":
     case "EnumDeclaration":
