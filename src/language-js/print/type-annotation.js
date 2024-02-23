@@ -177,6 +177,9 @@ function printIntersectionType(path, options, print) {
   const shouldAddStartLine =
     shouldIndent && !hasLeadingOwnLineComment(options.originalText, node);
   const code = [ifBreak([shouldAddStartLine ? line : ""]), printed];
+  if (pathNeedsParens(path, options)) {
+    return group([indent(code), softline]);
+  }
   return group(shouldIndent ? indent(code) : code);
 }
 
@@ -550,15 +553,8 @@ function printTypeAnnotation(path, options, print) {
 - `TSArrayType`
 - `ArrayTypeAnnotation`
 */
-function printArrayType({ node }, print) {
-  const needsParens =
-    ["TSUnionType", "TSIntersectionType"].includes(node.elementType.type) || "";
-  return group([
-    needsParens && "(",
-    print("elementType"),
-    needsParens && [softline, ")"],
-    "[]",
-  ]);
+function printArrayType(print) {
+  return [print("elementType"), "[]"];
 }
 
 /*

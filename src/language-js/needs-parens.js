@@ -597,8 +597,7 @@ function needsParens(path, options) {
     // fallthrough
     case "TSTypeOperator":
       return (
-        (parent.type === "TSArrayType" &&
-          !["TSUnionType", "TSIntersectionType"].includes(node.type)) ||
+        parent.type === "TSArrayType" ||
         parent.type === "TSOptionalType" ||
         parent.type === "TSRestType" ||
         (key === "objectType" && parent.type === "TSIndexedAccessType") ||
