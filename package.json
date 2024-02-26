@@ -214,6 +214,6 @@
   "preferUnplugged": true,
   "packageManager": "yarn@4.1.0",
   "overrides": {
-    "jest": "30.0.0-alpha.2"
+    "jest": "$jest"
   }
 }
