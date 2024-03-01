@@ -118,7 +118,7 @@ function printTemplateLiteral(path, print, options) {
           isBinaryCastExpression(expression) ||
           isBinaryish(expression))
       ) {*/
-        expressionDoc = [indent([softline, expressionDoc]), softline];
+      expressionDoc = [indent([softline, expressionDoc]), softline];
       //}
     }
 

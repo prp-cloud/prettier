@@ -102,7 +102,7 @@ function printObject(path, options, print) {
   const separator = isFlowInterfaceLikeBody
     ? ";"
     : node.type === "TSInterfaceBody" || node.type === "TSTypeLiteral"
-    ? ifBreak("", ",")
+      ? ifBreak("", ",")
       : ",";
   const leftBrace =
     node.type === "RecordExpression" ? "#{" : node.exact ? "{|" : "{";
