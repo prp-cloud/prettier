@@ -278,7 +278,7 @@ function modifyTypescriptModule(text) {
   );
 
   // `pnp`
-  source.removeModule("src/compiler/pnp.ts");
+  // source.removeModule("src/compiler/pnp.ts");
 
   /* spell-checker: disable */
   // `ts.createParenthesizerRules`
