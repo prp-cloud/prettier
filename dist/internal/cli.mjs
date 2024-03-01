@@ -4660,20 +4660,6 @@ var require_wcwidth = __commonJS({
   }
 });
 
-// scripts/build/shims/array-find-last.js
-var arrayFindLast = (isOptionalObject, array2, callback) => {
-  if (isOptionalObject && (array2 === void 0 || array2 === null)) {
-    return;
-  }
-  for (let index = array2.length - 1; index >= 0; index--) {
-    const element = array2[index];
-    if (callback(element, index, array2)) {
-      return element;
-    }
-  }
-};
-var array_find_last_default = arrayFindLast;
-
 // src/cli/index.js
 import * as prettier2 from "../index.mjs";
 
@@ -7056,11 +7042,6 @@ Default: ${createDefaultValueDisplay(optionDefaultValue)}` : "";
 }
 
 // src/cli/index.js
-if (!Array.prototype.findLast) {
-  Array.prototype.findLast = function(callback) {
-    return array_find_last_default(false, this, callback);
-  };
-}
 async function run(rawArguments = process.argv.slice(2)) {
   let logger = logger_default();
   try {

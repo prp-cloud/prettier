@@ -33,7 +33,6 @@ import {
   isStringLiteral,
   rawText,
 } from "../utils/index.js";
-import { isJSXElement } from "@babel/types";
 
 /*
 Only the following are treated as whitespace inside JSX.

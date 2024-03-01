@@ -22013,6 +22013,9 @@ var arrayFindLast = (isOptionalObject, array2, callback) => {
   if (isOptionalObject && (array2 === void 0 || array2 === null)) {
     return;
   }
+  if (array2.findLast) {
+    return array2.findLast(callback);
+  }
   for (let index = array2.length - 1; index >= 0; index--) {
     const element = array2[index];
     if (callback(element, index, array2)) {
