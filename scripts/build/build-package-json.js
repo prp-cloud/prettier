@@ -24,14 +24,14 @@ const keysToKeep = [
 async function buildPackageJson({ file, files }) {
   const packageJson = await readJson(path.join(PROJECT_ROOT, file.input));
 
-  const bin = files.find(
+  /*const bin = files.find(
     (file) =>
       path.join(PROJECT_ROOT, packageJson.bin) ===
       path.join(PROJECT_ROOT, file.input),
-  ).output.file;
+  ).output.file;*/
 
   const overrides = {
-    bin: `./${bin}`,
+    // bin: `./${bin}`,
     main: "./index.cjs",
     engines: {
       ...packageJson.engines,
