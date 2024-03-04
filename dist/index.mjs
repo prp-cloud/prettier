@@ -21684,7 +21684,9 @@ var core_options_evaluate_default = {
     "array": true,
     "default": [
       {
-        "value": []
+        "value": [
+          "prettier-plugin-tailwindcss"
+        ]
       }
     ],
     "category": "Global",
