@@ -9,14 +9,14 @@
   "author": "James Long",
   "type": "module",
   "license": "MIT",
-  "main": "./src/index.cjs",
+  "main": "./dist/index.cjs",
   "browser": "./standalone.js",
   "unpkg": "./standalone.js",
   "exports": {
     ".": {
-      "types": "./src/index.d.ts",
-      "require": "./src/index.cjs",
-      "default": "./src/index.js"
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.cjs",
+      "default": "./dist/index.js"
     },
     "./*": "./*"
   },
