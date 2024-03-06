@@ -128,7 +128,7 @@
     "postcss-selector-parser": "2.2.3",
     "postcss-values-parser": "2.0.1",
     "prettier": "3.2.5",
-    "prettier-plugin-tailwindcss": "^0.5.11",
+    "prettier-plugin-tailwindcss": "^0.5.12",
     "pretty-bytes": "6.1.1",
     "regexp-util": "2.0.0",
     "remark-footnotes": "2.0.0",
