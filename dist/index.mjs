@@ -69,6 +69,546 @@ var __privateMethod = (obj, member, method) => {
   return method;
 };
 
+// node_modules/diff/lib/diff/base.js
+var require_base = __commonJS({
+  "node_modules/diff/lib/diff/base.js"(exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", {
+      value: true
+    });
+    exports["default"] = Diff;
+    function Diff() {
+    }
+    Diff.prototype = {
+      /*istanbul ignore start*/
+      /*istanbul ignore end*/
+      diff: function diff(oldString, newString) {
+        var _options$timeout;
+        var options8 = arguments.length > 2 && arguments[2] !== void 0 ? arguments[2] : {};
+        var callback = options8.callback;
+        if (typeof options8 === "function") {
+          callback = options8;
+          options8 = {};
+        }
+        this.options = options8;
+        var self = this;
+        function done(value) {
+          if (callback) {
+            setTimeout(function() {
+              callback(void 0, value);
+            }, 0);
+            return true;
+          } else {
+            return value;
+          }
+        }
+        oldString = this.castInput(oldString);
+        newString = this.castInput(newString);
+        oldString = this.removeEmpty(this.tokenize(oldString));
+        newString = this.removeEmpty(this.tokenize(newString));
+        var newLen = newString.length, oldLen = oldString.length;
+        var editLength = 1;
+        var maxEditLength = newLen + oldLen;
+        if (options8.maxEditLength) {
+          maxEditLength = Math.min(maxEditLength, options8.maxEditLength);
+        }
+        var maxExecutionTime = (
+          /*istanbul ignore start*/
+          (_options$timeout = /*istanbul ignore end*/
+          options8.timeout) !== null && _options$timeout !== void 0 ? _options$timeout : Infinity
+        );
+        var abortAfterTimestamp = Date.now() + maxExecutionTime;
+        var bestPath = [{
+          oldPos: -1,
+          lastComponent: void 0
+        }];
+        var newPos = this.extractCommon(bestPath[0], newString, oldString, 0);
+        if (bestPath[0].oldPos + 1 >= oldLen && newPos + 1 >= newLen) {
+          return done([{
+            value: this.join(newString),
+            count: newString.length
+          }]);
+        }
+        var minDiagonalToConsider = -Infinity, maxDiagonalToConsider = Infinity;
+        function execEditLength() {
+          for (var diagonalPath = Math.max(minDiagonalToConsider, -editLength); diagonalPath <= Math.min(maxDiagonalToConsider, editLength); diagonalPath += 2) {
+            var basePath = (
+              /*istanbul ignore start*/
+              void 0
+            );
+            var removePath = bestPath[diagonalPath - 1], addPath = bestPath[diagonalPath + 1];
+            if (removePath) {
+              bestPath[diagonalPath - 1] = void 0;
+            }
+            var canAdd = false;
+            if (addPath) {
+              var addPathNewPos = addPath.oldPos - diagonalPath;
+              canAdd = addPath && 0 <= addPathNewPos && addPathNewPos < newLen;
+            }
+            var canRemove = removePath && removePath.oldPos + 1 < oldLen;
+            if (!canAdd && !canRemove) {
+              bestPath[diagonalPath] = void 0;
+              continue;
+            }
+            if (!canRemove || canAdd && removePath.oldPos + 1 < addPath.oldPos) {
+              basePath = self.addToPath(addPath, true, void 0, 0);
+            } else {
+              basePath = self.addToPath(removePath, void 0, true, 1);
+            }
+            newPos = self.extractCommon(basePath, newString, oldString, diagonalPath);
+            if (basePath.oldPos + 1 >= oldLen && newPos + 1 >= newLen) {
+              return done(buildValues(self, basePath.lastComponent, newString, oldString, self.useLongestToken));
+            } else {
+              bestPath[diagonalPath] = basePath;
+              if (basePath.oldPos + 1 >= oldLen) {
+                maxDiagonalToConsider = Math.min(maxDiagonalToConsider, diagonalPath - 1);
+              }
+              if (newPos + 1 >= newLen) {
+                minDiagonalToConsider = Math.max(minDiagonalToConsider, diagonalPath + 1);
+              }
+            }
+          }
+          editLength++;
+        }
+        if (callback) {
+          (function exec() {
+            setTimeout(function() {
+              if (editLength > maxEditLength || Date.now() > abortAfterTimestamp) {
+                return callback();
+              }
+              if (!execEditLength()) {
+                exec();
+              }
+            }, 0);
+          })();
+        } else {
+          while (editLength <= maxEditLength && Date.now() <= abortAfterTimestamp) {
+            var ret = execEditLength();
+            if (ret) {
+              return ret;
+            }
+          }
+        }
+      },
+      /*istanbul ignore start*/
+      /*istanbul ignore end*/
+      addToPath: function addToPath(path13, added, removed, oldPosInc) {
+        var last = path13.lastComponent;
+        if (last && last.added === added && last.removed === removed) {
+          return {
+            oldPos: path13.oldPos + oldPosInc,
+            lastComponent: {
+              count: last.count + 1,
+              added,
+              removed,
+              previousComponent: last.previousComponent
+            }
+          };
+        } else {
+          return {
+            oldPos: path13.oldPos + oldPosInc,
+            lastComponent: {
+              count: 1,
+              added,
+              removed,
+              previousComponent: last
+            }
+          };
+        }
+      },
+      /*istanbul ignore start*/
+      /*istanbul ignore end*/
+      extractCommon: function extractCommon(basePath, newString, oldString, diagonalPath) {
+        var newLen = newString.length, oldLen = oldString.length, oldPos = basePath.oldPos, newPos = oldPos - diagonalPath, commonCount = 0;
+        while (newPos + 1 < newLen && oldPos + 1 < oldLen && this.equals(newString[newPos + 1], oldString[oldPos + 1])) {
+          newPos++;
+          oldPos++;
+          commonCount++;
+        }
+        if (commonCount) {
+          basePath.lastComponent = {
+            count: commonCount,
+            previousComponent: basePath.lastComponent
+          };
+        }
+        basePath.oldPos = oldPos;
+        return newPos;
+      },
+      /*istanbul ignore start*/
+      /*istanbul ignore end*/
+      equals: function equals(left, right) {
+        if (this.options.comparator) {
+          return this.options.comparator(left, right);
+        } else {
+          return left === right || this.options.ignoreCase && left.toLowerCase() === right.toLowerCase();
+        }
+      },
+      /*istanbul ignore start*/
+      /*istanbul ignore end*/
+      removeEmpty: function removeEmpty(array2) {
+        var ret = [];
+        for (var i = 0; i < array2.length; i++) {
+          if (array2[i]) {
+            ret.push(array2[i]);
+          }
+        }
+        return ret;
+      },
+      /*istanbul ignore start*/
+      /*istanbul ignore end*/
+      castInput: function castInput(value) {
+        return value;
+      },
+      /*istanbul ignore start*/
+      /*istanbul ignore end*/
+      tokenize: function tokenize(value) {
+        return value.split("");
+      },
+      /*istanbul ignore start*/
+      /*istanbul ignore end*/
+      join: function join2(chars) {
+        return chars.join("");
+      }
+    };
+    function buildValues(diff, lastComponent, newString, oldString, useLongestToken) {
+      var components = [];
+      var nextComponent;
+      while (lastComponent) {
+        components.push(lastComponent);
+        nextComponent = lastComponent.previousComponent;
+        delete lastComponent.previousComponent;
+        lastComponent = nextComponent;
+      }
+      components.reverse();
+      var componentPos = 0, componentLen = components.length, newPos = 0, oldPos = 0;
+      for (; componentPos < componentLen; componentPos++) {
+        var component = components[componentPos];
+        if (!component.removed) {
+          if (!component.added && useLongestToken) {
+            var value = newString.slice(newPos, newPos + component.count);
+            value = value.map(function(value2, i) {
+              var oldValue = oldString[oldPos + i];
+              return oldValue.length > value2.length ? oldValue : value2;
+            });
+            component.value = diff.join(value);
+          } else {
+            component.value = diff.join(newString.slice(newPos, newPos + component.count));
+          }
+          newPos += component.count;
+          if (!component.added) {
+            oldPos += component.count;
+          }
+        } else {
+          component.value = diff.join(oldString.slice(oldPos, oldPos + component.count));
+          oldPos += component.count;
+          if (componentPos && components[componentPos - 1].added) {
+            var tmp = components[componentPos - 1];
+            components[componentPos - 1] = components[componentPos];
+            components[componentPos] = tmp;
+          }
+        }
+      }
+      var finalComponent = components[componentLen - 1];
+      if (componentLen > 1 && typeof finalComponent.value === "string" && (finalComponent.added || finalComponent.removed) && diff.equals("", finalComponent.value)) {
+        components[componentLen - 2].value += finalComponent.value;
+        components.pop();
+      }
+      return components;
+    }
+  }
+});
+
+// node_modules/diff/lib/util/params.js
+var require_params = __commonJS({
+  "node_modules/diff/lib/util/params.js"(exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", {
+      value: true
+    });
+    exports.generateOptions = generateOptions;
+    function generateOptions(options8, defaults) {
+      if (typeof options8 === "function") {
+        defaults.callback = options8;
+      } else if (options8) {
+        for (var name in options8) {
+          if (options8.hasOwnProperty(name)) {
+            defaults[name] = options8[name];
+          }
+        }
+      }
+      return defaults;
+    }
+  }
+});
+
+// node_modules/diff/lib/diff/line.js
+var require_line = __commonJS({
+  "node_modules/diff/lib/diff/line.js"(exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", {
+      value: true
+    });
+    exports.diffLines = diffLines;
+    exports.diffTrimmedLines = diffTrimmedLines;
+    exports.lineDiff = void 0;
+    var _base = _interopRequireDefault(require_base());
+    var _params = require_params();
+    function _interopRequireDefault(obj) {
+      return obj && obj.__esModule ? obj : { "default": obj };
+    }
+    var lineDiff = new /*istanbul ignore start*/
+    _base[
+      /*istanbul ignore start*/
+      "default"
+      /*istanbul ignore end*/
+    ]();
+    exports.lineDiff = lineDiff;
+    lineDiff.tokenize = function(value) {
+      if (this.options.stripTrailingCr) {
+        value = value.replace(/\r\n/g, "\n");
+      }
+      var retLines = [], linesAndNewlines = value.split(/(\n|\r\n)/);
+      if (!linesAndNewlines[linesAndNewlines.length - 1]) {
+        linesAndNewlines.pop();
+      }
+      for (var i = 0; i < linesAndNewlines.length; i++) {
+        var line3 = linesAndNewlines[i];
+        if (i % 2 && !this.options.newlineIsToken) {
+          retLines[retLines.length - 1] += line3;
+        } else {
+          if (this.options.ignoreWhitespace) {
+            line3 = line3.trim();
+          }
+          retLines.push(line3);
+        }
+      }
+      return retLines;
+    };
+    function diffLines(oldStr, newStr, callback) {
+      return lineDiff.diff(oldStr, newStr, callback);
+    }
+    function diffTrimmedLines(oldStr, newStr, callback) {
+      var options8 = (
+        /*istanbul ignore start*/
+        (0, /*istanbul ignore end*/
+        /*istanbul ignore start*/
+        _params.generateOptions)(callback, {
+          ignoreWhitespace: true
+        })
+      );
+      return lineDiff.diff(oldStr, newStr, options8);
+    }
+  }
+});
+
+// node_modules/diff/lib/patch/create.js
+var require_create = __commonJS({
+  "node_modules/diff/lib/patch/create.js"(exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", {
+      value: true
+    });
+    exports.structuredPatch = structuredPatch;
+    exports.formatPatch = formatPatch;
+    exports.createTwoFilesPatch = createTwoFilesPatch2;
+    exports.createPatch = createPatch;
+    var _line = require_line();
+    function _toConsumableArray(arr) {
+      return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread();
+    }
+    function _nonIterableSpread() {
+      throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+    }
+    function _unsupportedIterableToArray(o, minLen) {
+      if (!o)
+        return;
+      if (typeof o === "string")
+        return _arrayLikeToArray(o, minLen);
+      var n = Object.prototype.toString.call(o).slice(8, -1);
+      if (n === "Object" && o.constructor)
+        n = o.constructor.name;
+      if (n === "Map" || n === "Set")
+        return Array.from(o);
+      if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n))
+        return _arrayLikeToArray(o, minLen);
+    }
+    function _iterableToArray(iter) {
+      if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter))
+        return Array.from(iter);
+    }
+    function _arrayWithoutHoles(arr) {
+      if (Array.isArray(arr))
+        return _arrayLikeToArray(arr);
+    }
+    function _arrayLikeToArray(arr, len) {
+      if (len == null || len > arr.length)
+        len = arr.length;
+      for (var i = 0, arr2 = new Array(len); i < len; i++) {
+        arr2[i] = arr[i];
+      }
+      return arr2;
+    }
+    function structuredPatch(oldFileName, newFileName, oldStr, newStr, oldHeader, newHeader, options8) {
+      if (!options8) {
+        options8 = {};
+      }
+      if (typeof options8.context === "undefined") {
+        options8.context = 4;
+      }
+      var diff = (
+        /*istanbul ignore start*/
+        (0, /*istanbul ignore end*/
+        /*istanbul ignore start*/
+        _line.diffLines)(oldStr, newStr, options8)
+      );
+      if (!diff) {
+        return;
+      }
+      diff.push({
+        value: "",
+        lines: []
+      });
+      function contextLines(lines) {
+        return lines.map(function(entry) {
+          return " " + entry;
+        });
+      }
+      var hunks = [];
+      var oldRangeStart = 0, newRangeStart = 0, curRange = [], oldLine = 1, newLine = 1;
+      var _loop = function _loop2(i2) {
+        var current = diff[i2], lines = current.lines || current.value.replace(/\n$/, "").split("\n");
+        current.lines = lines;
+        if (current.added || current.removed) {
+          var _curRange;
+          if (!oldRangeStart) {
+            var prev = diff[i2 - 1];
+            oldRangeStart = oldLine;
+            newRangeStart = newLine;
+            if (prev) {
+              curRange = options8.context > 0 ? contextLines(prev.lines.slice(-options8.context)) : [];
+              oldRangeStart -= curRange.length;
+              newRangeStart -= curRange.length;
+            }
+          }
+          (_curRange = /*istanbul ignore end*/
+          curRange).push.apply(
+            /*istanbul ignore start*/
+            _curRange,
+            /*istanbul ignore start*/
+            _toConsumableArray(
+              /*istanbul ignore end*/
+              lines.map(function(entry) {
+                return (current.added ? "+" : "-") + entry;
+              })
+            )
+          );
+          if (current.added) {
+            newLine += lines.length;
+          } else {
+            oldLine += lines.length;
+          }
+        } else {
+          if (oldRangeStart) {
+            if (lines.length <= options8.context * 2 && i2 < diff.length - 2) {
+              var _curRange2;
+              (_curRange2 = /*istanbul ignore end*/
+              curRange).push.apply(
+                /*istanbul ignore start*/
+                _curRange2,
+                /*istanbul ignore start*/
+                _toConsumableArray(
+                  /*istanbul ignore end*/
+                  contextLines(lines)
+                )
+              );
+            } else {
+              var _curRange3;
+              var contextSize = Math.min(lines.length, options8.context);
+              (_curRange3 = /*istanbul ignore end*/
+              curRange).push.apply(
+                /*istanbul ignore start*/
+                _curRange3,
+                /*istanbul ignore start*/
+                _toConsumableArray(
+                  /*istanbul ignore end*/
+                  contextLines(lines.slice(0, contextSize))
+                )
+              );
+              var hunk = {
+                oldStart: oldRangeStart,
+                oldLines: oldLine - oldRangeStart + contextSize,
+                newStart: newRangeStart,
+                newLines: newLine - newRangeStart + contextSize,
+                lines: curRange
+              };
+              if (i2 >= diff.length - 2 && lines.length <= options8.context) {
+                var oldEOFNewline = /\n$/.test(oldStr);
+                var newEOFNewline = /\n$/.test(newStr);
+                var noNlBeforeAdds = lines.length == 0 && curRange.length > hunk.oldLines;
+                if (!oldEOFNewline && noNlBeforeAdds && oldStr.length > 0) {
+                  curRange.splice(hunk.oldLines, 0, "\\ No newline at end of file");
+                }
+                if (!oldEOFNewline && !noNlBeforeAdds || !newEOFNewline) {
+                  curRange.push("\\ No newline at end of file");
+                }
+              }
+              hunks.push(hunk);
+              oldRangeStart = 0;
+              newRangeStart = 0;
+              curRange = [];
+            }
+          }
+          oldLine += lines.length;
+          newLine += lines.length;
+        }
+      };
+      for (var i = 0; i < diff.length; i++) {
+        _loop(
+          /*istanbul ignore end*/
+          i
+        );
+      }
+      return {
+        oldFileName,
+        newFileName,
+        oldHeader,
+        newHeader,
+        hunks
+      };
+    }
+    function formatPatch(diff) {
+      if (Array.isArray(diff)) {
+        return diff.map(formatPatch).join("\n");
+      }
+      var ret = [];
+      if (diff.oldFileName == diff.newFileName) {
+        ret.push("Index: " + diff.oldFileName);
+      }
+      ret.push("===================================================================");
+      ret.push("--- " + diff.oldFileName + (typeof diff.oldHeader === "undefined" ? "" : "	" + diff.oldHeader));
+      ret.push("+++ " + diff.newFileName + (typeof diff.newHeader === "undefined" ? "" : "	" + diff.newHeader));
+      for (var i = 0; i < diff.hunks.length; i++) {
+        var hunk = diff.hunks[i];
+        if (hunk.oldLines === 0) {
+          hunk.oldStart -= 1;
+        }
+        if (hunk.newLines === 0) {
+          hunk.newStart -= 1;
+        }
+        ret.push("@@ -" + hunk.oldStart + "," + hunk.oldLines + " +" + hunk.newStart + "," + hunk.newLines + " @@");
+        ret.push.apply(ret, hunk.lines);
+      }
+      return ret.join("\n") + "\n";
+    }
+    function createTwoFilesPatch2(oldFileName, newFileName, oldStr, newStr, oldHeader, newHeader, options8) {
+      return formatPatch(structuredPatch(oldFileName, newFileName, oldStr, newStr, oldHeader, newHeader, options8));
+    }
+    function createPatch(fileName, oldStr, newStr, oldHeader, newHeader, options8) {
+      return createTwoFilesPatch2(fileName, fileName, oldStr, newStr, oldHeader, newHeader, options8);
+    }
+  }
+});
+
 // node_modules/fast-glob/out/utils/array.js
 var require_array = __commonJS({
   "node_modules/fast-glob/out/utils/array.js"(exports) {
@@ -12691,255 +13231,6 @@ var require_readlines = __commonJS({
   }
 });
 
-// node_modules/diff/lib/diff/base.js
-var require_base = __commonJS({
-  "node_modules/diff/lib/diff/base.js"(exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", {
-      value: true
-    });
-    exports["default"] = Diff;
-    function Diff() {
-    }
-    Diff.prototype = {
-      /*istanbul ignore start*/
-      /*istanbul ignore end*/
-      diff: function diff(oldString, newString) {
-        var _options$timeout;
-        var options8 = arguments.length > 2 && arguments[2] !== void 0 ? arguments[2] : {};
-        var callback = options8.callback;
-        if (typeof options8 === "function") {
-          callback = options8;
-          options8 = {};
-        }
-        this.options = options8;
-        var self = this;
-        function done(value) {
-          if (callback) {
-            setTimeout(function() {
-              callback(void 0, value);
-            }, 0);
-            return true;
-          } else {
-            return value;
-          }
-        }
-        oldString = this.castInput(oldString);
-        newString = this.castInput(newString);
-        oldString = this.removeEmpty(this.tokenize(oldString));
-        newString = this.removeEmpty(this.tokenize(newString));
-        var newLen = newString.length, oldLen = oldString.length;
-        var editLength = 1;
-        var maxEditLength = newLen + oldLen;
-        if (options8.maxEditLength) {
-          maxEditLength = Math.min(maxEditLength, options8.maxEditLength);
-        }
-        var maxExecutionTime = (
-          /*istanbul ignore start*/
-          (_options$timeout = /*istanbul ignore end*/
-          options8.timeout) !== null && _options$timeout !== void 0 ? _options$timeout : Infinity
-        );
-        var abortAfterTimestamp = Date.now() + maxExecutionTime;
-        var bestPath = [{
-          oldPos: -1,
-          lastComponent: void 0
-        }];
-        var newPos = this.extractCommon(bestPath[0], newString, oldString, 0);
-        if (bestPath[0].oldPos + 1 >= oldLen && newPos + 1 >= newLen) {
-          return done([{
-            value: this.join(newString),
-            count: newString.length
-          }]);
-        }
-        var minDiagonalToConsider = -Infinity, maxDiagonalToConsider = Infinity;
-        function execEditLength() {
-          for (var diagonalPath = Math.max(minDiagonalToConsider, -editLength); diagonalPath <= Math.min(maxDiagonalToConsider, editLength); diagonalPath += 2) {
-            var basePath = (
-              /*istanbul ignore start*/
-              void 0
-            );
-            var removePath = bestPath[diagonalPath - 1], addPath = bestPath[diagonalPath + 1];
-            if (removePath) {
-              bestPath[diagonalPath - 1] = void 0;
-            }
-            var canAdd = false;
-            if (addPath) {
-              var addPathNewPos = addPath.oldPos - diagonalPath;
-              canAdd = addPath && 0 <= addPathNewPos && addPathNewPos < newLen;
-            }
-            var canRemove = removePath && removePath.oldPos + 1 < oldLen;
-            if (!canAdd && !canRemove) {
-              bestPath[diagonalPath] = void 0;
-              continue;
-            }
-            if (!canRemove || canAdd && removePath.oldPos + 1 < addPath.oldPos) {
-              basePath = self.addToPath(addPath, true, void 0, 0);
-            } else {
-              basePath = self.addToPath(removePath, void 0, true, 1);
-            }
-            newPos = self.extractCommon(basePath, newString, oldString, diagonalPath);
-            if (basePath.oldPos + 1 >= oldLen && newPos + 1 >= newLen) {
-              return done(buildValues(self, basePath.lastComponent, newString, oldString, self.useLongestToken));
-            } else {
-              bestPath[diagonalPath] = basePath;
-              if (basePath.oldPos + 1 >= oldLen) {
-                maxDiagonalToConsider = Math.min(maxDiagonalToConsider, diagonalPath - 1);
-              }
-              if (newPos + 1 >= newLen) {
-                minDiagonalToConsider = Math.max(minDiagonalToConsider, diagonalPath + 1);
-              }
-            }
-          }
-          editLength++;
-        }
-        if (callback) {
-          (function exec() {
-            setTimeout(function() {
-              if (editLength > maxEditLength || Date.now() > abortAfterTimestamp) {
-                return callback();
-              }
-              if (!execEditLength()) {
-                exec();
-              }
-            }, 0);
-          })();
-        } else {
-          while (editLength <= maxEditLength && Date.now() <= abortAfterTimestamp) {
-            var ret = execEditLength();
-            if (ret) {
-              return ret;
-            }
-          }
-        }
-      },
-      /*istanbul ignore start*/
-      /*istanbul ignore end*/
-      addToPath: function addToPath(path13, added, removed, oldPosInc) {
-        var last = path13.lastComponent;
-        if (last && last.added === added && last.removed === removed) {
-          return {
-            oldPos: path13.oldPos + oldPosInc,
-            lastComponent: {
-              count: last.count + 1,
-              added,
-              removed,
-              previousComponent: last.previousComponent
-            }
-          };
-        } else {
-          return {
-            oldPos: path13.oldPos + oldPosInc,
-            lastComponent: {
-              count: 1,
-              added,
-              removed,
-              previousComponent: last
-            }
-          };
-        }
-      },
-      /*istanbul ignore start*/
-      /*istanbul ignore end*/
-      extractCommon: function extractCommon(basePath, newString, oldString, diagonalPath) {
-        var newLen = newString.length, oldLen = oldString.length, oldPos = basePath.oldPos, newPos = oldPos - diagonalPath, commonCount = 0;
-        while (newPos + 1 < newLen && oldPos + 1 < oldLen && this.equals(newString[newPos + 1], oldString[oldPos + 1])) {
-          newPos++;
-          oldPos++;
-          commonCount++;
-        }
-        if (commonCount) {
-          basePath.lastComponent = {
-            count: commonCount,
-            previousComponent: basePath.lastComponent
-          };
-        }
-        basePath.oldPos = oldPos;
-        return newPos;
-      },
-      /*istanbul ignore start*/
-      /*istanbul ignore end*/
-      equals: function equals(left, right) {
-        if (this.options.comparator) {
-          return this.options.comparator(left, right);
-        } else {
-          return left === right || this.options.ignoreCase && left.toLowerCase() === right.toLowerCase();
-        }
-      },
-      /*istanbul ignore start*/
-      /*istanbul ignore end*/
-      removeEmpty: function removeEmpty(array2) {
-        var ret = [];
-        for (var i = 0; i < array2.length; i++) {
-          if (array2[i]) {
-            ret.push(array2[i]);
-          }
-        }
-        return ret;
-      },
-      /*istanbul ignore start*/
-      /*istanbul ignore end*/
-      castInput: function castInput(value) {
-        return value;
-      },
-      /*istanbul ignore start*/
-      /*istanbul ignore end*/
-      tokenize: function tokenize(value) {
-        return value.split("");
-      },
-      /*istanbul ignore start*/
-      /*istanbul ignore end*/
-      join: function join2(chars) {
-        return chars.join("");
-      }
-    };
-    function buildValues(diff, lastComponent, newString, oldString, useLongestToken) {
-      var components = [];
-      var nextComponent;
-      while (lastComponent) {
-        components.push(lastComponent);
-        nextComponent = lastComponent.previousComponent;
-        delete lastComponent.previousComponent;
-        lastComponent = nextComponent;
-      }
-      components.reverse();
-      var componentPos = 0, componentLen = components.length, newPos = 0, oldPos = 0;
-      for (; componentPos < componentLen; componentPos++) {
-        var component = components[componentPos];
-        if (!component.removed) {
-          if (!component.added && useLongestToken) {
-            var value = newString.slice(newPos, newPos + component.count);
-            value = value.map(function(value2, i) {
-              var oldValue = oldString[oldPos + i];
-              return oldValue.length > value2.length ? oldValue : value2;
-            });
-            component.value = diff.join(value);
-          } else {
-            component.value = diff.join(newString.slice(newPos, newPos + component.count));
-          }
-          newPos += component.count;
-          if (!component.added) {
-            oldPos += component.count;
-          }
-        } else {
-          component.value = diff.join(oldString.slice(oldPos, oldPos + component.count));
-          oldPos += component.count;
-          if (componentPos && components[componentPos - 1].added) {
-            var tmp = components[componentPos - 1];
-            components[componentPos - 1] = components[componentPos];
-            components[componentPos] = tmp;
-          }
-        }
-      }
-      var finalComponent = components[componentLen - 1];
-      if (componentLen > 1 && typeof finalComponent.value === "string" && (finalComponent.added || finalComponent.removed) && diff.equals("", finalComponent.value)) {
-        components[componentLen - 2].value += finalComponent.value;
-        components.pop();
-      }
-      return components;
-    }
-  }
-});
-
 // node_modules/diff/lib/diff/array.js
 var require_array2 = __commonJS({
   "node_modules/diff/lib/diff/array.js"(exports) {
@@ -12989,6 +13280,7 @@ __export(src_exports, {
   util: () => public_exports,
   version: () => version_evaluate_default
 });
+var import_create = __toESM(require_create(), 1);
 var import_fast_glob = __toESM(require_out4(), 1);
 
 // node_modules/vnopts/lib/descriptors/api.js
@@ -19347,7 +19639,7 @@ async function getParser(file, options8) {
 var get_file_info_default = getFileInfo;
 
 // src/main/core.js
-var import_diff = __toESM(require_array2(), 1);
+var import_array = __toESM(require_array2(), 1);
 
 // src/common/end-of-line.js
 function guessEndOfLine(text) {
@@ -22707,7 +22999,7 @@ async function coreFormat(originalText, opts, addAlignmentSize = 0) {
     const oldCursorNodeCharArray = oldCursorNodeText.split("");
     oldCursorNodeCharArray.splice(cursorOffsetRelativeToOldCursorNode, 0, CURSOR);
     const newCursorNodeCharArray = newCursorNodeText.split("");
-    const cursorNodeDiff = (0, import_diff.diffArrays)(oldCursorNodeCharArray, newCursorNodeCharArray);
+    const cursorNodeDiff = (0, import_array.diffArrays)(oldCursorNodeCharArray, newCursorNodeCharArray);
     let cursorOffset = newCursorNodeStart;
     for (const entry of cursorNodeDiff) {
       if (entry.removed) {
@@ -24276,6 +24568,7 @@ var sharedWithCli = {
     apiDescriptor
   },
   fastGlob: import_fast_glob.default,
+  createTwoFilesPatch: import_create.createTwoFilesPatch,
   utils: {
     isNonEmptyArray: is_non_empty_array_default,
     partition: partition_default,
