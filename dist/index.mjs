@@ -10872,6 +10872,55 @@ var require_lib = __commonJS({
   }
 });
 
+// node_modules/picocolors/picocolors.js
+var require_picocolors = __commonJS({
+  "node_modules/picocolors/picocolors.js"(exports, module) {
+    var tty2 = __require("tty");
+    var isColorSupported = !("NO_COLOR" in process.env || process.argv.includes("--no-color")) && ("FORCE_COLOR" in process.env || process.argv.includes("--color") || process.platform === "win32" || tty2.isatty(1) && process.env.TERM !== "dumb" || "CI" in process.env);
+    var formatter = (open, close, replace = open) => (input) => {
+      let string = "" + input;
+      let index = string.indexOf(close, open.length);
+      return ~index ? open + replaceClose(string, close, replace, index) + close : open + string + close;
+    };
+    var replaceClose = (string, close, replace, index) => {
+      let start = string.substring(0, index) + replace;
+      let end = string.substring(index + close.length);
+      let nextIndex = end.indexOf(close);
+      return ~nextIndex ? start + replaceClose(end, close, replace, nextIndex) : start + end;
+    };
+    var createColors = (enabled = isColorSupported) => ({
+      isColorSupported: enabled,
+      reset: enabled ? (s) => `\x1B[0m${s}\x1B[0m` : String,
+      bold: enabled ? formatter("\x1B[1m", "\x1B[22m", "\x1B[22m\x1B[1m") : String,
+      dim: enabled ? formatter("\x1B[2m", "\x1B[22m", "\x1B[22m\x1B[2m") : String,
+      italic: enabled ? formatter("\x1B[3m", "\x1B[23m") : String,
+      underline: enabled ? formatter("\x1B[4m", "\x1B[24m") : String,
+      inverse: enabled ? formatter("\x1B[7m", "\x1B[27m") : String,
+      hidden: enabled ? formatter("\x1B[8m", "\x1B[28m") : String,
+      strikethrough: enabled ? formatter("\x1B[9m", "\x1B[29m") : String,
+      black: enabled ? formatter("\x1B[30m", "\x1B[39m") : String,
+      red: enabled ? formatter("\x1B[31m", "\x1B[39m") : String,
+      green: enabled ? formatter("\x1B[32m", "\x1B[39m") : String,
+      yellow: enabled ? formatter("\x1B[33m", "\x1B[39m") : String,
+      blue: enabled ? formatter("\x1B[34m", "\x1B[39m") : String,
+      magenta: enabled ? formatter("\x1B[35m", "\x1B[39m") : String,
+      cyan: enabled ? formatter("\x1B[36m", "\x1B[39m") : String,
+      white: enabled ? formatter("\x1B[37m", "\x1B[39m") : String,
+      gray: enabled ? formatter("\x1B[90m", "\x1B[39m") : String,
+      bgBlack: enabled ? formatter("\x1B[40m", "\x1B[49m") : String,
+      bgRed: enabled ? formatter("\x1B[41m", "\x1B[49m") : String,
+      bgGreen: enabled ? formatter("\x1B[42m", "\x1B[49m") : String,
+      bgYellow: enabled ? formatter("\x1B[43m", "\x1B[49m") : String,
+      bgBlue: enabled ? formatter("\x1B[44m", "\x1B[49m") : String,
+      bgMagenta: enabled ? formatter("\x1B[45m", "\x1B[49m") : String,
+      bgCyan: enabled ? formatter("\x1B[46m", "\x1B[49m") : String,
+      bgWhite: enabled ? formatter("\x1B[47m", "\x1B[49m") : String
+    });
+    module.exports = createColors();
+    module.exports.createColors = createColors;
+  }
+});
+
 // node_modules/@babel/code-frame/node_modules/escape-string-regexp/index.js
 var require_escape_string_regexp = __commonJS({
   "node_modules/@babel/code-frame/node_modules/escape-string-regexp/index.js"(exports, module) {
@@ -12426,7 +12475,7 @@ var require_lib2 = __commonJS({
     exports.shouldHighlight = shouldHighlight;
     var _jsTokens = require_js_tokens();
     var _helperValidatorIdentifier = require_lib();
-    var _chalk = _interopRequireWildcard(require_chalk(), true);
+    var _picocolors = _interopRequireWildcard(require_picocolors(), true);
     function _getRequireWildcardCache(e) {
       if ("function" != typeof WeakMap)
         return null;
@@ -12451,18 +12500,20 @@ var require_lib2 = __commonJS({
         }
       return n.default = e, t && t.set(e, n), n;
     }
+    var colors = typeof process === "object" && (process.env.FORCE_COLOR === "0" || process.env.FORCE_COLOR === "false") ? (0, _picocolors.createColors)(false) : _picocolors.default;
+    var compose = (f, g) => (v) => f(g(v));
     var sometimesKeywords = /* @__PURE__ */ new Set(["as", "async", "from", "get", "of", "set"]);
-    function getDefs(chalk2) {
+    function getDefs(colors2) {
       return {
-        keyword: chalk2.cyan,
-        capitalized: chalk2.yellow,
-        jsxIdentifier: chalk2.yellow,
-        punctuator: chalk2.yellow,
-        number: chalk2.magenta,
-        string: chalk2.green,
-        regex: chalk2.magenta,
-        comment: chalk2.grey,
-        invalid: chalk2.white.bgRed.bold
+        keyword: colors2.cyan,
+        capitalized: colors2.yellow,
+        jsxIdentifier: colors2.yellow,
+        punctuator: colors2.yellow,
+        number: colors2.magenta,
+        string: colors2.green,
+        regex: colors2.magenta,
+        comment: colors2.gray,
+        invalid: compose(compose(colors2.white, colors2.bgRed), colors2.bold)
       };
     }
     var NEWLINE = /\r\n|[\n\r\u2028\u2029]/;
@@ -12517,30 +12568,42 @@ var require_lib2 = __commonJS({
       return highlighted;
     }
     function shouldHighlight(options8) {
-      return _chalk.default.level > 0 || options8.forceColor;
+      return colors.isColorSupported || options8.forceColor;
     }
-    var chalkWithForcedColor = void 0;
-    function getChalk(forceColor) {
+    var pcWithForcedColor = void 0;
+    function getColors(forceColor) {
       if (forceColor) {
-        var _chalkWithForcedColor;
-        (_chalkWithForcedColor = chalkWithForcedColor) != null ? _chalkWithForcedColor : chalkWithForcedColor = new _chalk.default.constructor({
-          enabled: true,
-          level: 1
-        });
-        return chalkWithForcedColor;
+        var _pcWithForcedColor;
+        (_pcWithForcedColor = pcWithForcedColor) != null ? _pcWithForcedColor : pcWithForcedColor = (0, _picocolors.createColors)(true);
+        return pcWithForcedColor;
       }
-      return _chalk.default;
-    }
-    {
-      exports.getChalk = (options8) => getChalk(options8.forceColor);
+      return colors;
     }
     function highlight(code, options8 = {}) {
       if (code !== "" && shouldHighlight(options8)) {
-        const defs = getDefs(getChalk(options8.forceColor));
+        const defs = getDefs(getColors(options8.forceColor));
         return highlightTokens(defs, code);
       } else {
         return code;
       }
+    }
+    {
+      let chalk2, chalkWithForcedColor;
+      exports.getChalk = ({
+        forceColor
+      }) => {
+        var _chalk;
+        (_chalk = chalk2) != null ? _chalk : chalk2 = require_chalk();
+        if (forceColor) {
+          var _chalkWithForcedColor;
+          (_chalkWithForcedColor = chalkWithForcedColor) != null ? _chalkWithForcedColor : chalkWithForcedColor = new chalk2.constructor({
+            enabled: true,
+            level: 1
+          });
+          return chalkWithForcedColor;
+        }
+        return chalk2;
+      };
     }
   }
 });
