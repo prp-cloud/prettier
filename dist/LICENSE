@@ -17,7 +17,7 @@ MIT, ISC, BSD-2-Clause, BSD-3-Clause, Apache-2.0
 
 ## Bundled dependencies
 
-### @angular/compiler@v17.2.1
+### @angular/compiler@v17.3.2
 
 > Angular - the compiler library
 
@@ -454,11 +454,12 @@ Author: Alex Bell <alex@bellandwhistle.net>
 
 ----------------------------------------
 
-### @typescript-eslint/types@v7.1.0
+### @typescript-eslint/types@v7.5.0
 
 > Types for the TypeScript-ESTree AST spec
 
 License: MIT
+Homepage: <https://typescript-eslint.io>
 Repository: <https://github.com/typescript-eslint/typescript-eslint.git>
 
 > MIT License
@@ -485,11 +486,12 @@ Repository: <https://github.com/typescript-eslint/typescript-eslint.git>
 
 ----------------------------------------
 
-### @typescript-eslint/typescript-estree@v7.1.0
+### @typescript-eslint/typescript-estree@v7.5.0
 
 > A parser that converts TypeScript source code into an ESTree compatible form
 
 License: BSD-2-Clause
+Homepage: <https://typescript-eslint.io/packages/typescript-estree>
 Repository: <https://github.com/typescript-eslint/typescript-eslint.git>
 
 > TypeScript ESTree
@@ -2887,7 +2889,7 @@ Repository: <git@github.com:teambition/merge2.git>
 
 ----------------------------------------
 
-### meriyah@v4.3.9
+### meriyah@v4.4.1
 
 > A 100% compliant, self-hosted javascript parser with high focus on both performance and stability
 
