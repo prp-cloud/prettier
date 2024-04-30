@@ -11487,7 +11487,7 @@ var require_lib2 = __commonJS({
         return t.get(e);
       var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor;
       for (var u in e)
-        if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) {
+        if ("default" !== u && {}.hasOwnProperty.call(e, u)) {
           var i = a ? Object.getOwnPropertyDescriptor(e, u) : null;
           i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u];
         }
@@ -11519,7 +11519,7 @@ var require_lib2 = __commonJS({
           if ((0, _helperValidatorIdentifier.isKeyword)(token2.value) || (0, _helperValidatorIdentifier.isStrictReservedWord)(token2.value, true) || sometimesKeywords.has(token2.value)) {
             return "keyword";
           }
-          if (JSX_TAG.test(token2.value) && (text[offset - 1] === "<" || text.slice(offset - 2, offset) == "</")) {
+          if (JSX_TAG.test(token2.value) && (text[offset - 1] === "<" || text.slice(offset - 2, offset) === "</")) {
             return "jsxIdentifier";
           }
           if (token2.value[0] !== token2.value[0].toLowerCase()) {
