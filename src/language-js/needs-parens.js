@@ -518,7 +518,7 @@ function needsParens(path, options) {
           return key === "callee";
 
         case "ConditionalExpression":
-          return key === "test";
+          return /*key === "test"*/ false;
 
         case "BinaryExpression":
           //if (!node.argument && parent.operator === "|>") {
