@@ -128,7 +128,7 @@ Author: The Babel Team (https://babel.dev/team)
 
 ----------------------------------------
 
-### @babel/parser@v7.24.4
+### @babel/parser@v7.24.5
 
 > A JavaScript parser
 
@@ -187,7 +187,9 @@ License: MIT
 
 ----------------------------------------
 
-### @glimmer/syntax@v0.88.1
+### @glimmer/syntax@v0.92.0
+
+License: MIT
 
 > Copyright (c) 2015 Tilde, Inc.
 >
@@ -211,7 +213,7 @@ License: MIT
 
 ----------------------------------------
 
-### @glimmer/util@v0.88.1
+### @glimmer/util@v0.92.0
 
 > Common utilities used in Glimmer
 
@@ -239,7 +241,7 @@ License: MIT
 
 ----------------------------------------
 
-### @glimmer/wire-format@v0.88.1
+### @glimmer/wire-format@v0.92.0
 
 License: MIT
 
@@ -454,7 +456,7 @@ Author: Alex Bell <alex@bellandwhistle.net>
 
 ----------------------------------------
 
-### @typescript-eslint/types@v7.6.0
+### @typescript-eslint/types@v7.8.0
 
 > Types for the TypeScript-ESTree AST spec
 
@@ -486,7 +488,7 @@ Repository: <https://github.com/typescript-eslint/typescript-eslint.git>
 
 ----------------------------------------
 
-### @typescript-eslint/typescript-estree@v7.6.0
+### @typescript-eslint/typescript-estree@v7.8.0
 
 > A parser that converts TypeScript source code into an ESTree compatible form
 
@@ -1848,7 +1850,7 @@ Author: kael
 
 ----------------------------------------
 
-### import-meta-resolve@v4.0.0
+### import-meta-resolve@v4.1.0
 
 > Resolve things like Node.js — ponyfill for `import.meta.resolve`
 
