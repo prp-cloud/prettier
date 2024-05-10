@@ -3639,12 +3639,12 @@ Author: Sindre Sorhus <sindresorhus@gmail.com> (https://sindresorhus.com)
 
 ----------------------------------------
 
-### semver@v7.6.0
+### semver@v7.6.2
 
 > The semantic version parser used by npm.
 
 License: ISC
-Repository: <https://github.com/npm/node-semver.git>
+Repository: <git+https://github.com/npm/node-semver.git>
 Author: GitHub Inc.
 
 > The ISC License

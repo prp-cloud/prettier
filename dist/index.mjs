@@ -6931,7 +6931,7 @@ var require_semver = __commonJS({
         do {
           const a = this.build[i];
           const b = other.build[i];
-          debug("prerelease compare", i, a, b);
+          debug("build compare", i, a, b);
           if (a === void 0 && b === void 0) {
             return 0;
           } else if (b === void 0) {
@@ -16379,6 +16379,10 @@ async function loadConfigFromPackageJson(file) {
   const { prettier } = await readJson(file);
   return prettier;
 }
+async function loadConfigFromPackageYaml(file) {
+  const { prettier } = await loadYaml(file);
+  return prettier;
+}
 async function loadYaml(file) {
   const content = await read_file_default(file);
   try {
@@ -16424,6 +16428,7 @@ var loaders_default = loaders;
 // src/config/prettier-config/config-searcher.js
 var CONFIG_FILE_NAMES = [
   "package.json",
+  "package.yaml",
   ".prettierrc",
   ".prettierrc.json",
   ".prettierrc.yaml",
@@ -16444,6 +16449,13 @@ async function filter({ name, path: file }) {
   if (name === "package.json") {
     try {
       return Boolean(await loadConfigFromPackageJson(file));
+    } catch {
+      return false;
+    }
+  }
+  if (name === "package.yaml") {
+    try {
+      return Boolean(await loadConfigFromPackageYaml(file));
     } catch {
       return false;
     }
@@ -17905,7 +17917,7 @@ var load_external_config_default = loadExternalConfig;
 // src/config/prettier-config/load-config.js
 async function loadConfig(configFile) {
   const { base: fileName, ext: extension } = path7.parse(configFile);
-  const load2 = fileName === "package.json" ? loadConfigFromPackageJson : loaders_default[extension];
+  const load2 = fileName === "package.json" ? loadConfigFromPackageJson : fileName === "package.yaml" ? loadConfigFromPackageYaml : loaders_default[extension];
   if (!load2) {
     throw new Error(
       `No loader specified for extension "${extension || "noExt"}"`
