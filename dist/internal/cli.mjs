@@ -11,11 +11,13 @@ var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
 var __getProtoOf = Object.getPrototypeOf;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __typeError = (msg) => {
+  throw TypeError(msg);
+};
 var __require = /* @__PURE__ */ ((x) => typeof require !== "undefined" ? require : typeof Proxy !== "undefined" ? new Proxy(x, {
   get: (a, b) => (typeof require !== "undefined" ? require : a)[b]
 }) : x)(function(x) {
-  if (typeof require !== "undefined")
-    return require.apply(this, arguments);
+  if (typeof require !== "undefined") return require.apply(this, arguments);
   throw Error('Dynamic require of "' + x + '" is not supported');
 });
 var __commonJS = (cb, mod) => function __require2() {
@@ -37,32 +39,17 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
   isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
   mod
 ));
-var __accessCheck = (obj, member, msg) => {
-  if (!member.has(obj))
-    throw TypeError("Cannot " + msg);
-};
-var __privateGet = (obj, member, getter) => {
-  __accessCheck(obj, member, "read from private field");
-  return getter ? getter.call(obj) : member.get(obj);
-};
-var __privateAdd = (obj, member, value) => {
-  if (member.has(obj))
-    throw TypeError("Cannot add the same private member more than once");
-  member instanceof WeakSet ? member.add(obj) : member.set(obj, value);
-};
-var __privateSet = (obj, member, value, setter) => {
-  __accessCheck(obj, member, "write to private field");
-  setter ? setter.call(obj, value) : member.set(obj, value);
-  return value;
-};
+var __accessCheck = (obj, member, msg) => member.has(obj) || __typeError("Cannot " + msg);
+var __privateGet = (obj, member, getter) => (__accessCheck(obj, member, "read from private field"), getter ? getter.call(obj) : member.get(obj));
+var __privateAdd = (obj, member, value) => member.has(obj) ? __typeError("Cannot add the same private member more than once") : member instanceof WeakSet ? member.add(obj) : member.set(obj, value);
+var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "write to private field"), setter ? setter.call(obj, value) : member.set(obj, value), value);
 
 // node_modules/dashify/index.js
 var require_dashify = __commonJS({
   "node_modules/dashify/index.js"(exports, module) {
     "use strict";
     module.exports = (str, options) => {
-      if (typeof str !== "string")
-        throw new TypeError("expected a string");
+      if (typeof str !== "string") throw new TypeError("expected a string");
       return str.trim().replace(/([a-z])([A-Z])/g, "$1-$2").replace(/\W/g, (m) => /[À-ž]/.test(m) ? m : "-").replace(/^-+|-+$/g, "").replace(/-{2,}/g, (m) => options && options.condense ? "-" : m).toLowerCase();
     };
   }
@@ -295,10 +282,8 @@ var require_fast_json_stable_stringify = __commonJS({
   "node_modules/fast-json-stable-stringify/index.js"(exports, module) {
     "use strict";
     module.exports = function(data, opts) {
-      if (!opts)
-        opts = {};
-      if (typeof opts === "function")
-        opts = { cmp: opts };
+      if (!opts) opts = {};
+      if (typeof opts === "function") opts = { cmp: opts };
       var cycles = typeof opts.cycles === "boolean" ? opts.cycles : false;
       var cmp = opts.cmp && /* @__PURE__ */ function(f) {
         return function(node) {
@@ -314,27 +299,21 @@ var require_fast_json_stable_stringify = __commonJS({
         if (node && node.toJSON && typeof node.toJSON === "function") {
           node = node.toJSON();
         }
-        if (node === void 0)
-          return;
-        if (typeof node == "number")
-          return isFinite(node) ? "" + node : "null";
-        if (typeof node !== "object")
-          return JSON.stringify(node);
+        if (node === void 0) return;
+        if (typeof node == "number") return isFinite(node) ? "" + node : "null";
+        if (typeof node !== "object") return JSON.stringify(node);
         var i, out;
         if (Array.isArray(node)) {
           out = "[";
           for (i = 0; i < node.length; i++) {
-            if (i)
-              out += ",";
+            if (i) out += ",";
             out += stringify4(node[i]) || "null";
           }
           return out + "]";
         }
-        if (node === null)
-          return "null";
+        if (node === null) return "null";
         if (seen.indexOf(node) !== -1) {
-          if (cycles)
-            return JSON.stringify("__cycle__");
+          if (cycles) return JSON.stringify("__cycle__");
           throw new TypeError("Converting circular structure to JSON");
         }
         var seenIndex = seen.push(node) - 1;
@@ -343,10 +322,8 @@ var require_fast_json_stable_stringify = __commonJS({
         for (i = 0; i < keys.length; i++) {
           var key = keys[i];
           var value = stringify4(node[key]);
-          if (!value)
-            continue;
-          if (out)
-            out += ",";
+          if (!value) continue;
+          if (out) out += ",";
           out += JSON.stringify(key) + ":" + value;
         }
         seen.splice(seenIndex, 1);
@@ -364,15 +341,13 @@ var require_common_path_prefix = __commonJS({
     var determineSeparator = (paths) => {
       for (const path10 of paths) {
         const match = /(\/|\\)/.exec(path10);
-        if (match !== null)
-          return match[0];
+        if (match !== null) return match[0];
       }
       return DEFAULT_SEPARATOR;
     };
     module.exports = function commonPathPrefix2(paths, sep = determineSeparator(paths)) {
       const [first = "", ...remaining] = paths;
-      if (first === "" || remaining.length === 0)
-        return "";
+      if (first === "" || remaining.length === 0) return "";
       const parts = first.split(sep);
       let endOfPrefix = parts.length;
       for (const path10 of remaining) {
@@ -382,8 +357,7 @@ var require_common_path_prefix = __commonJS({
             endOfPrefix = i;
           }
         }
-        if (endOfPrefix === 0)
-          return "";
+        if (endOfPrefix === 0) return "";
       }
       const prefix = parts.slice(0, endOfPrefix).join(sep);
       return prefix.endsWith(sep) ? prefix : prefix + sep;
@@ -395,8 +369,7 @@ var require_common_path_prefix = __commonJS({
 var require_json_buffer = __commonJS({
   "node_modules/json-buffer/index.js"(exports) {
     exports.stringify = function stringify4(o) {
-      if ("undefined" == typeof o)
-        return o;
+      if ("undefined" == typeof o) return o;
       if (o && Buffer.isBuffer(o))
         return JSON.stringify(":base64:" + o.toString("base64"));
       if (o && o.toJSON)
@@ -713,8 +686,7 @@ var require_cjs = __commonJS({
         const after = $.call(this, key, value2);
         switch (typeof after) {
           case object:
-            if (after === null)
-              return after;
+            if (after === null) return after;
           case primitive:
             return known.get(after) || set(known, input, after);
         }
@@ -867,8 +839,7 @@ var require_old = __commonJS({
           var stat = fs6.lstatSync(base);
           if (!stat.isSymbolicLink()) {
             knownHard[base] = true;
-            if (cache)
-              cache[base] = base;
+            if (cache) cache[base] = base;
             continue;
           }
           var linkTarget = null;
@@ -883,16 +854,13 @@ var require_old = __commonJS({
             linkTarget = fs6.readlinkSync(base);
           }
           resolvedLink = pathModule.resolve(previous, linkTarget);
-          if (cache)
-            cache[base] = resolvedLink;
-          if (!isWindows)
-            seenLinks[id] = linkTarget;
+          if (cache) cache[base] = resolvedLink;
+          if (!isWindows) seenLinks[id] = linkTarget;
         }
         p = pathModule.resolve(resolvedLink, p.slice(pos));
         start();
       }
-      if (cache)
-        cache[original] = p;
+      if (cache) cache[original] = p;
       return p;
     };
     exports.realpath = function realpath(p, cache, cb) {
@@ -918,8 +886,7 @@ var require_old = __commonJS({
         previous = "";
         if (isWindows && !knownHard[base]) {
           fs6.lstat(base, function(err) {
-            if (err)
-              return cb(err);
+            if (err) return cb(err);
             knownHard[base] = true;
             LOOP();
           });
@@ -929,8 +896,7 @@ var require_old = __commonJS({
       }
       function LOOP() {
         if (pos >= p.length) {
-          if (cache)
-            cache[original] = p;
+          if (cache) cache[original] = p;
           return cb(null, p);
         }
         nextPartRe.lastIndex = pos;
@@ -948,12 +914,10 @@ var require_old = __commonJS({
         return fs6.lstat(base, gotStat);
       }
       function gotStat(err, stat) {
-        if (err)
-          return cb(err);
+        if (err) return cb(err);
         if (!stat.isSymbolicLink()) {
           knownHard[base] = true;
-          if (cache)
-            cache[base] = base;
+          if (cache) cache[base] = base;
           return process.nextTick(LOOP);
         }
         if (!isWindows) {
@@ -963,21 +927,17 @@ var require_old = __commonJS({
           }
         }
         fs6.stat(base, function(err2) {
-          if (err2)
-            return cb(err2);
+          if (err2) return cb(err2);
           fs6.readlink(base, function(err3, target) {
-            if (!isWindows)
-              seenLinks[id] = target;
+            if (!isWindows) seenLinks[id] = target;
             gotTarget(err3, target);
           });
         });
       }
       function gotTarget(err, target, base2) {
-        if (err)
-          return cb(err);
+        if (err) return cb(err);
         var resolvedLink = pathModule.resolve(previous, target);
-        if (cache)
-          cache[base2] = resolvedLink;
+        if (cache) cache[base2] = resolvedLink;
         gotResolvedLink(resolvedLink);
       }
       function gotResolvedLink(resolvedLink) {
@@ -1054,10 +1014,8 @@ var require_concat_map = __commonJS({
       var res = [];
       for (var i = 0; i < xs.length; i++) {
         var x = fn(xs[i], i);
-        if (isArray(x))
-          res.push.apply(res, x);
-        else
-          res.push(x);
+        if (isArray(x)) res.push.apply(res, x);
+        else res.push(x);
       }
       return res;
     };
@@ -1073,10 +1031,8 @@ var require_balanced_match = __commonJS({
     "use strict";
     module.exports = balanced;
     function balanced(a, b, str) {
-      if (a instanceof RegExp)
-        a = maybeMatch(a, str);
-      if (b instanceof RegExp)
-        b = maybeMatch(b, str);
+      if (a instanceof RegExp) a = maybeMatch(a, str);
+      if (b instanceof RegExp) b = maybeMatch(b, str);
       var r = range(a, b, str);
       return r && {
         start: r[0],
@@ -1190,8 +1146,7 @@ var require_brace_expansion = __commonJS({
     function expand(str, isTop) {
       var expansions = [];
       var m = balanced("{", "}", str);
-      if (!m || /\$$/.test(m.pre))
-        return [str];
+      if (!m || /\$$/.test(m.pre)) return [str];
       var isNumericSequence = /^-?\d+\.\.-?\d+(?:\.\.-?\d+)?$/.test(m.body);
       var isAlphaSequence = /^[a-zA-Z]\.\.[a-zA-Z](?:\.\.-?\d+)?$/.test(m.body);
       var isSequence = isNumericSequence || isAlphaSequence;
@@ -1361,8 +1316,7 @@ var require_minimatch = __commonJS({
     };
     function minimatch(p, pattern, options) {
       assertValidPattern(pattern);
-      if (!options)
-        options = {};
+      if (!options) options = {};
       if (!options.nocomment && pattern.charAt(0) === "#") {
         return false;
       }
@@ -1373,8 +1327,7 @@ var require_minimatch = __commonJS({
         return new Minimatch(pattern, options);
       }
       assertValidPattern(pattern);
-      if (!options)
-        options = {};
+      if (!options) options = {};
       pattern = pattern.trim();
       if (!options.allowWindowsEscape && path10.sep !== "/") {
         pattern = pattern.split(path10.sep).join("/");
@@ -1405,10 +1358,9 @@ var require_minimatch = __commonJS({
       }
       this.parseNegate();
       var set = this.globSet = this.braceExpand();
-      if (options.debug)
-        this.debug = function debug() {
-          console.error.apply(console, arguments);
-        };
+      if (options.debug) this.debug = function debug() {
+        console.error.apply(console, arguments);
+      };
       this.debug(this.pattern, set);
       set = this.globParts = set.map(function(s) {
         return s.split(slashSplit);
@@ -1430,14 +1382,12 @@ var require_minimatch = __commonJS({
       var negate = false;
       var options = this.options;
       var negateOffset = 0;
-      if (options.nonegate)
-        return;
+      if (options.nonegate) return;
       for (var i = 0, l = pattern.length; i < l && pattern.charAt(i) === "!"; i++) {
         negate = !negate;
         negateOffset++;
       }
-      if (negateOffset)
-        this.pattern = pattern.substr(negateOffset);
+      if (negateOffset) this.pattern = pattern.substr(negateOffset);
       this.negate = negate;
     }
     minimatch.braceExpand = function(pattern, options) {
@@ -1479,8 +1429,7 @@ var require_minimatch = __commonJS({
         else
           pattern = "*";
       }
-      if (pattern === "")
-        return "";
+      if (pattern === "") return "";
       var re = "";
       var hasMagic = !!options.nocase;
       var escaping = false;
@@ -1534,16 +1483,14 @@ var require_minimatch = __commonJS({
             this.debug("%s	%s %s %j <-- stateChar", pattern, i, re, c);
             if (inClass) {
               this.debug("  in class");
-              if (c === "!" && i === classStart + 1)
-                c = "^";
+              if (c === "!" && i === classStart + 1) c = "^";
               re += c;
               continue;
             }
             self.debug("call clearStateChar %j", stateChar);
             clearStateChar();
             stateChar = c;
-            if (options.noext)
-              clearStateChar();
+            if (options.noext) clearStateChar();
             continue;
           case "(":
             if (inClass) {
@@ -1707,8 +1654,7 @@ var require_minimatch = __commonJS({
     };
     Minimatch.prototype.makeRe = makeRe;
     function makeRe() {
-      if (this.regexp || this.regexp === false)
-        return this.regexp;
+      if (this.regexp || this.regexp === false) return this.regexp;
       var set = this.set;
       if (!set.length) {
         this.regexp = false;
@@ -1723,8 +1669,7 @@ var require_minimatch = __commonJS({
         }).join("\\/");
       }).join("|");
       re = "^(?:" + re + ")$";
-      if (this.negate)
-        re = "^(?!" + re + ").*$";
+      if (this.negate) re = "^(?!" + re + ").*$";
       try {
         this.regexp = new RegExp(re, flags);
       } catch (ex) {
@@ -1744,15 +1689,11 @@ var require_minimatch = __commonJS({
       return list;
     };
     Minimatch.prototype.match = function match(f, partial) {
-      if (typeof partial === "undefined")
-        partial = this.partial;
+      if (typeof partial === "undefined") partial = this.partial;
       this.debug("match", f, this.pattern);
-      if (this.comment)
-        return false;
-      if (this.empty)
-        return f === "";
-      if (f === "/" && partial)
-        return true;
+      if (this.comment) return false;
+      if (this.empty) return f === "";
+      if (f === "/" && partial) return true;
       var options = this.options;
       if (path10.sep !== "/") {
         f = f.split(path10.sep).join("/");
@@ -1765,8 +1706,7 @@ var require_minimatch = __commonJS({
       var i;
       for (i = f.length - 1; i >= 0; i--) {
         filename = f[i];
-        if (filename)
-          break;
+        if (filename) break;
       }
       for (i = 0; i < set.length; i++) {
         var pattern = set[i];
@@ -1776,13 +1716,11 @@ var require_minimatch = __commonJS({
         }
         var hit = this.matchOne(file, pattern, partial);
         if (hit) {
-          if (options.flipNegate)
-            return true;
+          if (options.flipNegate) return true;
           return !this.negate;
         }
       }
-      if (options.flipNegate)
-        return false;
+      if (options.flipNegate) return false;
       return this.negate;
     };
     Minimatch.prototype.matchOne = function(file, pattern, partial) {
@@ -1797,8 +1735,7 @@ var require_minimatch = __commonJS({
         var p = pattern[pi];
         var f = file[fi];
         this.debug(pattern, p, f);
-        if (p === false)
-          return false;
+        if (p === false) return false;
         if (p === GLOBSTAR) {
           this.debug("GLOBSTAR", [pattern, p, f]);
           var fr = fi;
@@ -1806,8 +1743,7 @@ var require_minimatch = __commonJS({
           if (pr === pl) {
             this.debug("** at the end");
             for (; fi < fl; fi++) {
-              if (file[fi] === "." || file[fi] === ".." || !options.dot && file[fi].charAt(0) === ".")
-                return false;
+              if (file[fi] === "." || file[fi] === ".." || !options.dot && file[fi].charAt(0) === ".") return false;
             }
             return true;
           }
@@ -1828,8 +1764,7 @@ var require_minimatch = __commonJS({
           }
           if (partial) {
             this.debug("\n>>> no match, partial?", file, fr, pattern, pr);
-            if (fr === fl)
-              return true;
+            if (fr === fl) return true;
           }
           return false;
         }
@@ -1841,8 +1776,7 @@ var require_minimatch = __commonJS({
           hit = f.match(p);
           this.debug("pattern match", p, f, hit);
         }
-        if (!hit)
-          return false;
+        if (!hit) return false;
       }
       if (fi === fl && pi === pl) {
         return true;
@@ -1899,8 +1833,7 @@ var require_inherits = __commonJS({
   "node_modules/inherits/inherits.js"(exports, module) {
     try {
       util = __require("util");
-      if (typeof util.inherits !== "function")
-        throw "";
+      if (typeof util.inherits !== "function") throw "";
       module.exports = util.inherits;
     } catch (e) {
       module.exports = require_inherits_browser();
@@ -2480,8 +2413,7 @@ var require_wrappy = __commonJS({
   "node_modules/wrappy/wrappy.js"(exports, module) {
     module.exports = wrappy;
     function wrappy(fn, cb) {
-      if (fn && cb)
-        return wrappy(fn)(cb);
+      if (fn && cb) return wrappy(fn)(cb);
       if (typeof fn !== "function")
         throw new TypeError("need wrapper function");
       Object.keys(fn).forEach(function(k) {
@@ -2528,8 +2460,7 @@ var require_once = __commonJS({
     });
     function once(fn) {
       var f = function() {
-        if (f.called)
-          return f.value;
+        if (f.called) return f.value;
         f.called = true;
         return f.value = fn.apply(this, arguments);
       };
@@ -2591,8 +2522,7 @@ var require_inflight = __commonJS({
     function slice(args) {
       var length = args.length;
       var array2 = [];
-      for (var i = 0; i < length; i++)
-        array2[i] = args[i];
+      for (var i = 0; i < length; i++) array2[i] = args[i];
       return array2;
     }
   }
@@ -2620,10 +2550,8 @@ var require_glob = __commonJS({
     var isIgnored = common.isIgnored;
     var once = require_once();
     function glob(pattern, options, cb) {
-      if (typeof options === "function")
-        cb = options, options = {};
-      if (!options)
-        options = {};
+      if (typeof options === "function") cb = options, options = {};
+      if (!options) options = {};
       if (options.sync) {
         if (cb)
           throw new TypeError("callback provided to sync glob");
@@ -3230,8 +3158,7 @@ var require_rimraf = __commonJS({
               if (er2.code === "EMFILE" && timeout < options.emfileWait) {
                 return setTimeout(() => rimraf_(p2, options, CB), timeout++);
               }
-              if (er2.code === "ENOENT")
-                er2 = null;
+              if (er2.code === "ENOENT") er2 = null;
             }
             timeout = 0;
             next(er2);
@@ -4056,26 +3983,19 @@ var require_wcwidth = __commonJS({
       let min = 0;
       let max = combining.length - 1;
       let mid;
-      if (ucs < combining[0][0] || ucs > combining[max][1])
-        return false;
+      if (ucs < combining[0][0] || ucs > combining[max][1]) return false;
       while (max >= min) {
         mid = Math.floor((min + max) / 2);
-        if (ucs > combining[mid][1])
-          min = mid + 1;
-        else if (ucs < combining[mid][0])
-          max = mid - 1;
-        else
-          return true;
+        if (ucs > combining[mid][1]) min = mid + 1;
+        else if (ucs < combining[mid][0]) max = mid - 1;
+        else return true;
       }
       return false;
     }
     function wcwidth2(ucs, opts) {
-      if (ucs === 0)
-        return opts.nul;
-      if (ucs < 32 || ucs >= 127 && ucs < 160)
-        return opts.control;
-      if (bisearch(ucs))
-        return 0;
+      if (ucs === 0) return opts.nul;
+      if (ucs < 32 || ucs >= 127 && ucs < 160) return opts.control;
+      if (bisearch(ucs)) return 0;
       return 1 + (ucs >= 4352 && (ucs <= 4447 || // Hangul Jamo init. consonants
       ucs == 9001 || ucs == 9002 || ucs >= 11904 && ucs <= 42191 && ucs != 12351 || // CJK ... Yi
       ucs >= 44032 && ucs <= 55203 || // Hangul Syllables
@@ -4090,8 +4010,7 @@ var require_wcwidth = __commonJS({
       let l;
       let s = 0;
       let n;
-      if (typeof str !== "string")
-        return wcwidth2(str, opts);
+      if (typeof str !== "string") return wcwidth2(str, opts);
       for (let i = 0; i < str.length; i++) {
         h = str.charCodeAt(i);
         if (h >= 55296 && h <= 56319) {
@@ -4103,8 +4022,7 @@ var require_wcwidth = __commonJS({
           }
         }
         n = wcwidth2(h, opts);
-        if (n < 0)
-          return -1;
+        if (n < 0) return -1;
         s += n;
       }
       return s;
@@ -5716,7 +5634,7 @@ var FormatResultsCache = class {
    * @param {string} cacheStrategy
    */
   constructor(cacheFileLocation, cacheStrategy) {
-    __privateAdd(this, _fileEntryCache, void 0);
+    __privateAdd(this, _fileEntryCache);
     const useChecksum = cacheStrategy === "content";
     __privateSet(this, _fileEntryCache, import_file_entry_cache.default.create(
       /* cacheId */

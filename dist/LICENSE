@@ -17,7 +17,7 @@ MIT, ISC, BSD-2-Clause, BSD-3-Clause, Apache-2.0
 
 ## Bundled dependencies
 
-### @angular/compiler@v17.3.2
+### @angular/compiler@v17.3.9
 
 > Angular - the compiler library
 
@@ -456,7 +456,7 @@ Author: Alex Bell <alex@bellandwhistle.net>
 
 ----------------------------------------
 
-### @typescript-eslint/types@v7.9.0
+### @typescript-eslint/types@v7.10.0
 
 > Types for the TypeScript-ESTree AST spec
 
@@ -488,7 +488,7 @@ Repository: <https://github.com/typescript-eslint/typescript-eslint.git>
 
 ----------------------------------------
 
-### @typescript-eslint/typescript-estree@v7.9.0
+### @typescript-eslint/typescript-estree@v7.10.0
 
 > A parser that converts TypeScript source code into an ESTree compatible form
 
@@ -587,7 +587,7 @@ Repository: <https://github.com/acornjs/acorn-jsx>
 
 ----------------------------------------
 
-### angular-estree-parser@v10.0.1
+### angular-estree-parser@v10.0.2
 
 > A parser that converts Angular source code into an ESTree-compatible form
 

@@ -11,12 +11,14 @@ var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
 var __getProtoOf = Object.getPrototypeOf;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __typeError = (msg) => {
+  throw TypeError(msg);
+};
 var __defNormalProp = (obj, key2, value) => key2 in obj ? __defProp(obj, key2, { enumerable: true, configurable: true, writable: true, value }) : obj[key2] = value;
 var __require = /* @__PURE__ */ ((x) => typeof require !== "undefined" ? require : typeof Proxy !== "undefined" ? new Proxy(x, {
   get: (a, b) => (typeof require !== "undefined" ? require : a)[b]
 }) : x)(function(x) {
-  if (typeof require !== "undefined")
-    return require.apply(this, arguments);
+  if (typeof require !== "undefined") return require.apply(this, arguments);
   throw Error('Dynamic require of "' + x + '" is not supported');
 });
 var __esm = (fn, res) => function __init() {
@@ -46,32 +48,12 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
   mod
 ));
 var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
-var __publicField = (obj, key2, value) => {
-  __defNormalProp(obj, typeof key2 !== "symbol" ? key2 + "" : key2, value);
-  return value;
-};
-var __accessCheck = (obj, member, msg) => {
-  if (!member.has(obj))
-    throw TypeError("Cannot " + msg);
-};
-var __privateGet = (obj, member, getter) => {
-  __accessCheck(obj, member, "read from private field");
-  return getter ? getter.call(obj) : member.get(obj);
-};
-var __privateAdd = (obj, member, value) => {
-  if (member.has(obj))
-    throw TypeError("Cannot add the same private member more than once");
-  member instanceof WeakSet ? member.add(obj) : member.set(obj, value);
-};
-var __privateSet = (obj, member, value, setter) => {
-  __accessCheck(obj, member, "write to private field");
-  setter ? setter.call(obj, value) : member.set(obj, value);
-  return value;
-};
-var __privateMethod = (obj, member, method) => {
-  __accessCheck(obj, member, "access private method");
-  return method;
-};
+var __publicField = (obj, key2, value) => __defNormalProp(obj, typeof key2 !== "symbol" ? key2 + "" : key2, value);
+var __accessCheck = (obj, member, msg) => member.has(obj) || __typeError("Cannot " + msg);
+var __privateGet = (obj, member, getter) => (__accessCheck(obj, member, "read from private field"), getter ? getter.call(obj) : member.get(obj));
+var __privateAdd = (obj, member, value) => member.has(obj) ? __typeError("Cannot add the same private member more than once") : member instanceof WeakSet ? member.add(obj) : member.set(obj, value);
+var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "write to private field"), setter ? setter.call(obj, value) : member.set(obj, value), value);
+var __privateMethod = (obj, member, method) => (__accessCheck(obj, member, "access private method"), method);
 
 // node_modules/diff/lib/diff/base.js
 var require_base = __commonJS({
@@ -424,29 +406,21 @@ var require_create = __commonJS({
       throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
     }
     function _unsupportedIterableToArray(o, minLen) {
-      if (!o)
-        return;
-      if (typeof o === "string")
-        return _arrayLikeToArray(o, minLen);
+      if (!o) return;
+      if (typeof o === "string") return _arrayLikeToArray(o, minLen);
       var n = Object.prototype.toString.call(o).slice(8, -1);
-      if (n === "Object" && o.constructor)
-        n = o.constructor.name;
-      if (n === "Map" || n === "Set")
-        return Array.from(o);
-      if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n))
-        return _arrayLikeToArray(o, minLen);
+      if (n === "Object" && o.constructor) n = o.constructor.name;
+      if (n === "Map" || n === "Set") return Array.from(o);
+      if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);
     }
     function _iterableToArray(iter) {
-      if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter))
-        return Array.from(iter);
+      if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter);
     }
     function _arrayWithoutHoles(arr) {
-      if (Array.isArray(arr))
-        return _arrayLikeToArray(arr);
+      if (Array.isArray(arr)) return _arrayLikeToArray(arr);
     }
     function _arrayLikeToArray(arr, len) {
-      if (len == null || len > arr.length)
-        len = arr.length;
+      if (len == null || len > arr.length) len = arr.length;
       for (var i = 0, arr2 = new Array(len); i < len; i++) {
         arr2[i] = arr[i];
       }
@@ -740,8 +714,7 @@ var require_is_extglob = __commonJS({
       }
       var match;
       while (match = /(\\).|([@?!+*]\(.*\))/g.exec(str2)) {
-        if (match[2])
-          return true;
+        if (match[2]) return true;
         str2 = str2.slice(match.index + match[0].length);
       }
       return false;
@@ -924,16 +897,13 @@ var require_utils = __commonJS({
     };
     exports.find = (node, type2) => node.nodes.find((node2) => node2.type === type2);
     exports.exceedsLimit = (min, max, step = 1, limit) => {
-      if (limit === false)
-        return false;
-      if (!exports.isInteger(min) || !exports.isInteger(max))
-        return false;
+      if (limit === false) return false;
+      if (!exports.isInteger(min) || !exports.isInteger(max)) return false;
       return (Number(max) - Number(min)) / Number(step) >= limit;
     };
     exports.escapeNode = (block, n = 0, type2) => {
       const node = block.nodes[n];
-      if (!node)
-        return;
+      if (!node) return;
       if (type2 && node.type === type2 || node.type === "open" || node.type === "close") {
         if (node.escaped !== true) {
           node.value = "\\" + node.value;
@@ -942,8 +912,7 @@ var require_utils = __commonJS({
       }
     };
     exports.encloseBrace = (node) => {
-      if (node.type !== "brace")
-        return false;
+      if (node.type !== "brace") return false;
       if (node.commas >> 0 + node.ranges >> 0 === 0) {
         node.invalid = true;
         return true;
@@ -951,10 +920,8 @@ var require_utils = __commonJS({
       return false;
     };
     exports.isInvalidBrace = (block) => {
-      if (block.type !== "brace")
-        return false;
-      if (block.invalid === true || block.dollar)
-        return true;
+      if (block.type !== "brace") return false;
+      if (block.invalid === true || block.dollar) return true;
       if (block.commas >> 0 + block.ranges >> 0 === 0) {
         block.invalid = true;
         return true;
@@ -972,10 +939,8 @@ var require_utils = __commonJS({
       return node.open === true || node.close === true;
     };
     exports.reduce = (nodes) => nodes.reduce((acc, node) => {
-      if (node.type === "text")
-        acc.push(node.value);
-      if (node.type === "range")
-        node.type = "text";
+      if (node.type === "text") acc.push(node.value);
+      if (node.type === "range") node.type = "text";
       return acc;
     }, []);
     exports.flatten = (...args) => {
@@ -1205,8 +1170,7 @@ var require_to_regex_range = __commonJS({
     }
     function zip(a, b) {
       let arr = [];
-      for (let i = 0; i < a.length; i++)
-        arr.push([a[i], b[i]]);
+      for (let i = 0; i < a.length; i++) arr.push([a[i], b[i]]);
       return arr;
     }
     function compare(a, b) {
@@ -1275,12 +1239,9 @@ var require_fill_range = __commonJS({
     var zeros = (input) => {
       let value = `${input}`;
       let index = -1;
-      if (value[0] === "-")
-        value = value.slice(1);
-      if (value === "0")
-        return false;
-      while (value[++index] === "0")
-        ;
+      if (value[0] === "-") value = value.slice(1);
+      if (value === "0") return false;
+      while (value[++index] === "0") ;
       return index > 0;
     };
     var stringify = (start, end, options8) => {
@@ -1292,8 +1253,7 @@ var require_fill_range = __commonJS({
     var pad = (input, maxLength, toNumber) => {
       if (maxLength > 0) {
         let dash = input[0] === "-" ? "-" : "";
-        if (dash)
-          input = input.slice(1);
+        if (dash) input = input.slice(1);
         input = dash + input.padStart(dash ? maxLength - 1 : maxLength, "0");
       }
       if (toNumber === false) {
@@ -1307,8 +1267,7 @@ var require_fill_range = __commonJS({
         input = input.slice(1);
         maxLength--;
       }
-      while (input.length < maxLength)
-        input = "0" + input;
+      while (input.length < maxLength) input = "0" + input;
       return negative ? "-" + input : input;
     };
     var toSequence = (parts, options8, maxLen) => {
@@ -1339,8 +1298,7 @@ var require_fill_range = __commonJS({
         return toRegexRange(a, b, { wrap: false, ...options8 });
       }
       let start = String.fromCharCode(a);
-      if (a === b)
-        return start;
+      if (a === b) return start;
       let stop = String.fromCharCode(b);
       return `[${start}-${stop}]`;
     };
@@ -1356,8 +1314,7 @@ var require_fill_range = __commonJS({
       return new RangeError("Invalid range arguments: " + util2.inspect(...args));
     };
     var invalidRange = (start, end, options8) => {
-      if (options8.strictRanges === true)
-        throw rangeError([start, end]);
+      if (options8.strictRanges === true) throw rangeError([start, end]);
       return [];
     };
     var invalidStep = (step, options8) => {
@@ -1370,14 +1327,11 @@ var require_fill_range = __commonJS({
       let a = Number(start);
       let b = Number(end);
       if (!Number.isInteger(a) || !Number.isInteger(b)) {
-        if (options8.strictRanges === true)
-          throw rangeError([start, end]);
+        if (options8.strictRanges === true) throw rangeError([start, end]);
         return [];
       }
-      if (a === 0)
-        a = 0;
-      if (b === 0)
-        b = 0;
+      if (a === 0) a = 0;
+      if (b === 0) b = 0;
       let descending = a > b;
       let startString = String(start);
       let endString = String(end);
@@ -1447,12 +1401,10 @@ var require_fill_range = __commonJS({
         return fill2(start, end, 0, step);
       }
       let opts = { ...options8 };
-      if (opts.capture === true)
-        opts.wrap = true;
+      if (opts.capture === true) opts.wrap = true;
       step = step || opts.step || 1;
       if (!isNumber(step)) {
-        if (step != null && !isObject3(step))
-          return invalidStep(step, opts);
+        if (step != null && !isObject3(step)) return invalidStep(step, opts);
         return fill2(start, end, 1, step);
       }
       if (isNumber(start) && isNumber(end)) {
@@ -1527,8 +1479,7 @@ var require_expand = __commonJS({
       const result = [];
       queue = [].concat(queue);
       stash = [].concat(stash);
-      if (!stash.length)
-        return queue;
+      if (!stash.length) return queue;
       if (!queue.length) {
         return enclose ? utils.flatten(stash).map((ele) => `{${ele}}`) : stash;
       }
@@ -1539,8 +1490,7 @@ var require_expand = __commonJS({
           }
         } else {
           for (let ele of stash) {
-            if (enclose === true && typeof ele === "string")
-              ele = `{${ele}}`;
+            if (enclose === true && typeof ele === "string") ele = `{${ele}}`;
             result.push(Array.isArray(ele) ? append(item, ele, enclose) : item + ele);
           }
         }
@@ -1588,8 +1538,7 @@ var require_expand = __commonJS({
         for (let i = 0; i < node.nodes.length; i++) {
           const child = node.nodes[i];
           if (child.type === "comma" && node.type === "brace") {
-            if (i === 1)
-              queue.push("");
+            if (i === 1) queue.push("");
             queue.push("");
             continue;
           }
@@ -1847,8 +1796,7 @@ var require_parse = __commonJS({
               continue;
             }
             if (next === open) {
-              if (options8.keepQuotes === true)
-                value += next;
+              if (options8.keepQuotes === true) value += next;
               break;
             }
             value += next;
@@ -1935,12 +1883,9 @@ var require_parse = __commonJS({
         if (block.type !== "root") {
           block.nodes.forEach((node) => {
             if (!node.nodes) {
-              if (node.type === "open")
-                node.isOpen = true;
-              if (node.type === "close")
-                node.isClose = true;
-              if (!node.nodes)
-                node.type = "text";
+              if (node.type === "open") node.isOpen = true;
+              if (node.type === "close") node.isClose = true;
+              if (!node.nodes) node.type = "text";
               node.invalid = true;
             }
           });
@@ -2253,10 +2198,8 @@ var require_utils2 = __commonJS({
     };
     exports.escapeLast = (input, char, lastIdx) => {
       const idx = input.lastIndexOf(char, lastIdx);
-      if (idx === -1)
-        return input;
-      if (input[idx - 1] === "\\")
-        return exports.escapeLast(input, char, idx - 1);
+      if (idx === -1) return input;
+      if (input[idx - 1] === "\\") return exports.escapeLast(input, char, idx - 1);
       return `${input.slice(0, idx)}\\${input.slice(idx)}`;
     };
     exports.removePrefix = (input, state = {}) => {
@@ -2415,8 +2358,7 @@ var require_scan = __commonJS({
           slashes.push(index);
           tokens.push(token2);
           token2 = { value: "", depth: 0, isGlob: false };
-          if (finished === true)
-            continue;
+          if (finished === true) continue;
           if (prev === CHAR_DOT && index === start + 1) {
             start += 2;
             continue;
@@ -2452,8 +2394,7 @@ var require_scan = __commonJS({
           }
         }
         if (code === CHAR_ASTERISK) {
-          if (prev === CHAR_ASTERISK)
-            isGlobstar = token2.isGlobstar = true;
+          if (prev === CHAR_ASTERISK) isGlobstar = token2.isGlobstar = true;
           isGlob = token2.isGlob = true;
           finished = true;
           if (scanToEnd === true) {
@@ -2546,8 +2487,7 @@ var require_scan = __commonJS({
         }
       }
       if (opts.unescape === true) {
-        if (glob)
-          glob = utils.removeBackslashes(glob);
+        if (glob) glob = utils.removeBackslashes(glob);
         if (base && backslashes === true) {
           base = utils.removeBackslashes(base);
         }
@@ -2757,8 +2697,7 @@ var require_parse2 = __commonJS({
         if (extglobs.length && tok.type !== "paren") {
           extglobs[extglobs.length - 1].inner += tok.value;
         }
-        if (tok.value || tok.output)
-          append(tok);
+        if (tok.value || tok.output) append(tok);
         if (prev && prev.type === "text" && tok.type === "text") {
           prev.value += tok.value;
           prev.output = (prev.output || "") + tok.value;
@@ -3073,8 +3012,7 @@ var require_parse2 = __commonJS({
         }
         if (value === ".") {
           if (state.braces > 0 && prev.type === "dot") {
-            if (prev.value === ".")
-              prev.output = DOT_LITERAL;
+            if (prev.value === ".") prev.output = DOT_LITERAL;
             const brace = braces[braces.length - 1];
             prev.type = "dots";
             prev.output += value;
@@ -3289,20 +3227,17 @@ var require_parse2 = __commonJS({
         push2(token2);
       }
       while (state.brackets > 0) {
-        if (opts.strictBrackets === true)
-          throw new SyntaxError(syntaxError2("closing", "]"));
+        if (opts.strictBrackets === true) throw new SyntaxError(syntaxError2("closing", "]"));
         state.output = utils.escapeLast(state.output, "[");
         decrement("brackets");
       }
       while (state.parens > 0) {
-        if (opts.strictBrackets === true)
-          throw new SyntaxError(syntaxError2("closing", ")"));
+        if (opts.strictBrackets === true) throw new SyntaxError(syntaxError2("closing", ")"));
         state.output = utils.escapeLast(state.output, "(");
         decrement("parens");
       }
       while (state.braces > 0) {
-        if (opts.strictBrackets === true)
-          throw new SyntaxError(syntaxError2("closing", "}"));
+        if (opts.strictBrackets === true) throw new SyntaxError(syntaxError2("closing", "}"));
         state.output = utils.escapeLast(state.output, "{");
         decrement("braces");
       }
@@ -3349,8 +3284,7 @@ var require_parse2 = __commonJS({
         star = `(${star})`;
       }
       const globstar = (opts2) => {
-        if (opts2.noglobstar === true)
-          return star;
+        if (opts2.noglobstar === true) return star;
         return `(${capture}(?:(?!${START_ANCHOR}${opts2.dot ? DOTS_SLASH : DOT_LITERAL}).)*?)`;
       };
       const create = (str2) => {
@@ -3373,11 +3307,9 @@ var require_parse2 = __commonJS({
             return `(?:${nodot}${globstar(opts)}${SLASH_LITERAL})?${DOT_LITERAL}${ONE_CHAR}${star}`;
           default: {
             const match = /^(.*?)\.(\w+)$/.exec(str2);
-            if (!match)
-              return;
+            if (!match) return;
             const source3 = create(match[1]);
-            if (!source3)
-              return;
+            if (!source3) return;
             return source3 + DOT_LITERAL + match[2];
           }
         }
@@ -3409,8 +3341,7 @@ var require_picomatch = __commonJS({
         const arrayMatcher = (str2) => {
           for (const isMatch of fns) {
             const state2 = isMatch(str2);
-            if (state2)
-              return state2;
+            if (state2) return state2;
           }
           return false;
         };
@@ -3487,8 +3418,7 @@ var require_picomatch = __commonJS({
     };
     picomatch.isMatch = (str2, patterns, options8) => picomatch(patterns, options8)(str2);
     picomatch.parse = (pattern, options8) => {
-      if (Array.isArray(pattern))
-        return pattern.map((p) => picomatch.parse(p, options8));
+      if (Array.isArray(pattern)) return pattern.map((p) => picomatch.parse(p, options8));
       return parse6(pattern, { ...options8, fastpaths: false });
     };
     picomatch.scan = (input, options8) => scan(input, options8);
@@ -3527,8 +3457,7 @@ var require_picomatch = __commonJS({
         const opts = options8 || {};
         return new RegExp(source2, opts.flags || (opts.nocase ? "i" : ""));
       } catch (err) {
-        if (options8 && options8.debug === true)
-          throw err;
+        if (options8 && options8.debug === true) throw err;
         return /$^/;
       }
     };
@@ -3570,13 +3499,11 @@ var require_micromatch = __commonJS({
       for (let i = 0; i < patterns.length; i++) {
         let isMatch = picomatch(String(patterns[i]), { ...options8, onResult }, true);
         let negated = isMatch.state.negated || isMatch.state.negatedExtglob;
-        if (negated)
-          negatives++;
+        if (negated) negatives++;
         for (let item of list) {
           let matched = isMatch(item, true);
           let match = negated ? !matched.isMatch : matched.isMatch;
-          if (!match)
-            continue;
+          if (!match) continue;
           if (negated) {
             omit2.add(matched.output);
           } else {
@@ -3606,8 +3533,7 @@ var require_micromatch = __commonJS({
       let result = /* @__PURE__ */ new Set();
       let items = [];
       let onResult = (state) => {
-        if (options8.onResult)
-          options8.onResult(state);
+        if (options8.onResult) options8.onResult(state);
         items.push(state.output);
       };
       let matches = new Set(micromatch2(list, patterns, { ...options8, onResult }));
@@ -3641,8 +3567,7 @@ var require_micromatch = __commonJS({
       }
       let keys = micromatch2(Object.keys(obj), patterns, options8);
       let res = {};
-      for (let key2 of keys)
-        res[key2] = obj[key2];
+      for (let key2 of keys) res[key2] = obj[key2];
       return res;
     };
     micromatch2.some = (list, patterns, options8) => {
@@ -3691,16 +3616,14 @@ var require_micromatch = __commonJS({
       return res;
     };
     micromatch2.braces = (pattern, options8) => {
-      if (typeof pattern !== "string")
-        throw new TypeError("Expected a string");
+      if (typeof pattern !== "string") throw new TypeError("Expected a string");
       if (options8 && options8.nobrace === true || !/\{.*\}/.test(pattern)) {
         return [pattern];
       }
       return braces(pattern, options8);
     };
     micromatch2.braceExpand = (pattern, options8) => {
-      if (typeof pattern !== "string")
-        throw new TypeError("Expected a string");
+      if (typeof pattern !== "string") throw new TypeError("Expected a string");
       return micromatch2.braces(pattern, { ...options8, expand: true });
     };
     module.exports = micromatch2;
@@ -4308,14 +4231,11 @@ var require_run_parallel = __commonJS({
       }
       function done(err) {
         function end() {
-          if (cb)
-            cb(err, results);
+          if (cb) cb(err, results);
           cb = null;
         }
-        if (isSync)
-          queueMicrotask2(end);
-        else
-          end();
+        if (isSync) queueMicrotask2(end);
+        else end();
       }
       function each(i, err, result) {
         results[i] = result;
@@ -4735,8 +4655,7 @@ var require_queue = __commonJS({
             throw new Error("fastqueue concurrency must be equal to or greater than 1");
           }
           _concurrency = value;
-          if (self.paused)
-            return;
+          if (self.paused) return;
           for (; queueHead && _running < _concurrency; ) {
             _running++;
             release();
@@ -4779,8 +4698,7 @@ var require_queue = __commonJS({
         return tasks;
       }
       function resume() {
-        if (!self.paused)
-          return;
+        if (!self.paused) return;
         self.paused = false;
         if (queueHead === null) {
           _running++;
@@ -7791,8 +7709,7 @@ var require_lru_cache = __commonJS({
       return true;
     };
     LRUCache.prototype.has = function(key2) {
-      if (!this[CACHE].has(key2))
-        return false;
+      if (!this[CACHE].has(key2)) return false;
       var hit = this[CACHE].get(key2).value;
       if (isStale(this, hit)) {
         return false;
@@ -7807,8 +7724,7 @@ var require_lru_cache = __commonJS({
     };
     LRUCache.prototype.pop = function() {
       var node = this[LRU_LIST].tail;
-      if (!node)
-        return null;
+      if (!node) return null;
       del(this, node);
       return node.value;
     };
@@ -7843,15 +7759,13 @@ var require_lru_cache = __commonJS({
         var hit = node.value;
         if (isStale(self, hit)) {
           del(self, node);
-          if (!self[ALLOW_STALE])
-            hit = void 0;
+          if (!self[ALLOW_STALE]) hit = void 0;
         } else {
           if (doUse) {
             self[LRU_LIST].unshiftNode(node);
           }
         }
-        if (hit)
-          hit = hit.value;
+        if (hit) hit = hit.value;
       }
       return hit;
     }
@@ -7908,8 +7822,7 @@ var require_sigmund = __commonJS({
       var analysis = "";
       var RE = RegExp;
       function psychoAnalyze(subject2, session) {
-        if (session > maxSessions)
-          return;
+        if (session > maxSessions) return;
         if (typeof subject2 === "function" || typeof subject2 === "undefined") {
           return;
         }
@@ -7917,16 +7830,13 @@ var require_sigmund = __commonJS({
           analysis += subject2;
           return;
         }
-        if (notes.indexOf(subject2) !== -1 || session === maxSessions)
-          return;
+        if (notes.indexOf(subject2) !== -1 || session === maxSessions) return;
         notes.push(subject2);
         analysis += "{";
         Object.keys(subject2).forEach(function(issue, _, __) {
-          if (issue.charAt(0) === "_")
-            return;
+          if (issue.charAt(0) === "_") return;
           var to = typeof subject2[issue];
-          if (to === "function" || to === "undefined")
-            return;
+          if (to === "function" || to === "undefined") return;
           analysis += issue;
           psychoAnalyze(subject2[issue], session + 1);
         });
@@ -7941,10 +7851,8 @@ var require_sigmund = __commonJS({
 var require_fnmatch = __commonJS({
   "node_modules/editorconfig/src/lib/fnmatch.js"(exports, module) {
     var platform = typeof process === "object" ? process.platform : "win32";
-    if (module)
-      module.exports = minimatch;
-    else
-      exports.minimatch = minimatch;
+    if (module) module.exports = minimatch;
+    else exports.minimatch = minimatch;
     minimatch.Minimatch = Minimatch;
     var LRU = require_lru_cache();
     var cache3 = minimatch.cache = new LRU({ max: 100 });
@@ -7968,8 +7876,7 @@ var require_fnmatch = __commonJS({
       var desc = Object.getOwnPropertyDescriptor(String.prototype, "match");
       var orig = desc.value;
       desc.value = function(p) {
-        if (p instanceof Minimatch)
-          return p.match(this);
+        if (p instanceof Minimatch) return p.match(this);
         return orig.call(this, p);
       };
       Object.defineProperty(String.prototype, desc);
@@ -7994,8 +7901,7 @@ var require_fnmatch = __commonJS({
       return t;
     }
     minimatch.defaults = function(def) {
-      if (!def || !Object.keys(def).length)
-        return minimatch;
+      if (!def || !Object.keys(def).length) return minimatch;
       var orig = minimatch;
       var m = function minimatch2(p, pattern, options8) {
         return orig.minimatch(p, pattern, ext(def, options8));
@@ -8006,21 +7912,18 @@ var require_fnmatch = __commonJS({
       return m;
     };
     Minimatch.defaults = function(def) {
-      if (!def || !Object.keys(def).length)
-        return Minimatch;
+      if (!def || !Object.keys(def).length) return Minimatch;
       return minimatch.defaults(def).Minimatch;
     };
     function minimatch(p, pattern, options8) {
       if (typeof pattern !== "string") {
         throw new TypeError("glob pattern string required");
       }
-      if (!options8)
-        options8 = {};
+      if (!options8) options8 = {};
       if (!options8.nocomment && pattern.charAt(0) === "#") {
         return false;
       }
-      if (pattern.trim() === "")
-        return p === "";
+      if (pattern.trim() === "") return p === "";
       return new Minimatch(pattern, options8).match(p);
     }
     function Minimatch(pattern, options8) {
@@ -8030,15 +7933,13 @@ var require_fnmatch = __commonJS({
       if (typeof pattern !== "string") {
         throw new TypeError("glob pattern string required");
       }
-      if (!options8)
-        options8 = {};
+      if (!options8) options8 = {};
       if (platform === "win32") {
         pattern = pattern.split("\\").join("/");
       }
       var cacheKey = pattern + "\n" + sigmund(options8);
       var cached = minimatch.cache.get(cacheKey);
-      if (cached)
-        return cached;
+      if (cached) return cached;
       minimatch.cache.set(cacheKey, this);
       this.options = options8;
       this.set = [];
@@ -8051,8 +7952,7 @@ var require_fnmatch = __commonJS({
     }
     Minimatch.prototype.make = make;
     function make() {
-      if (this._made)
-        return;
+      if (this._made) return;
       var pattern = this.pattern;
       var options8 = this.options;
       if (!options8.nocomment && pattern.charAt(0) === "#") {
@@ -8065,36 +7965,30 @@ var require_fnmatch = __commonJS({
       }
       this.parseNegate();
       var set2 = this.globSet = this.braceExpand();
-      if (options8.debug)
-        console.error(this.pattern, set2);
+      if (options8.debug) console.error(this.pattern, set2);
       set2 = this.globParts = set2.map(function(s) {
         return s.split(slashSplit);
       });
-      if (options8.debug)
-        console.error(this.pattern, set2);
+      if (options8.debug) console.error(this.pattern, set2);
       set2 = set2.map(function(s, si, set3) {
         return s.map(this.parse, this);
       }, this);
-      if (options8.debug)
-        console.error(this.pattern, set2);
+      if (options8.debug) console.error(this.pattern, set2);
       set2 = set2.filter(function(s) {
         return -1 === s.indexOf(false);
       });
-      if (options8.debug)
-        console.error(this.pattern, set2);
+      if (options8.debug) console.error(this.pattern, set2);
       this.set = set2;
     }
     Minimatch.prototype.parseNegate = parseNegate;
     function parseNegate() {
       var pattern = this.pattern, negate = false, options8 = this.options, negateOffset = 0;
-      if (options8.nonegate)
-        return;
+      if (options8.nonegate) return;
       for (var i = 0, l = pattern.length; i < l && pattern.charAt(i) === "!"; i++) {
         negate = !negate;
         negateOffset++;
       }
-      if (negateOffset)
-        this.pattern = pattern.substr(negateOffset);
+      if (negateOffset) this.pattern = pattern.substr(negateOffset);
       this.negate = negate;
     }
     minimatch.braceExpand = function(pattern, options8) {
@@ -8145,44 +8039,43 @@ var require_fnmatch = __commonJS({
         set2.push(member);
         member = "";
       }
-      FOR:
-        for (i = 1, l = pattern.length; i < l; i++) {
-          var c2 = pattern.charAt(i);
-          if (escaping) {
-            escaping = false;
-            member += "\\" + c2;
-          } else {
-            switch (c2) {
-              case "\\":
-                escaping = true;
-                continue;
-              case "{":
-                depth++;
-                member += "{";
-                continue;
-              case "}":
-                depth--;
-                if (depth === 0) {
-                  addMember();
-                  i++;
-                  break FOR;
-                } else {
-                  member += c2;
-                  continue;
-                }
-              case ",":
-                if (depth === 1) {
-                  addMember();
-                } else {
-                  member += c2;
-                }
-                continue;
-              default:
+      FOR: for (i = 1, l = pattern.length; i < l; i++) {
+        var c2 = pattern.charAt(i);
+        if (escaping) {
+          escaping = false;
+          member += "\\" + c2;
+        } else {
+          switch (c2) {
+            case "\\":
+              escaping = true;
+              continue;
+            case "{":
+              depth++;
+              member += "{";
+              continue;
+            case "}":
+              depth--;
+              if (depth === 0) {
+                addMember();
+                i++;
+                break FOR;
+              } else {
                 member += c2;
                 continue;
-            }
+              }
+            case ",":
+              if (depth === 1) {
+                addMember();
+              } else {
+                member += c2;
+              }
+              continue;
+            default:
+              member += c2;
+              continue;
           }
         }
+      }
       if (depth !== 0) {
         return braceExpand("\\" + pattern, options8);
       }
@@ -8211,10 +8104,8 @@ var require_fnmatch = __commonJS({
     var SUBPARSE = {};
     function parse6(pattern, isSub) {
       var options8 = this.options;
-      if (!options8.noglobstar && pattern === "**")
-        return GLOBSTAR;
-      if (pattern === "")
-        return "";
+      if (!options8.noglobstar && pattern === "**") return GLOBSTAR;
+      if (pattern === "") return "";
       var re = "", hasMagic = !!options8.nocase, escaping = false, patternListStack = [], plType, stateChar, inClass = false, reClassStart = -1, classStart = -1, patternStart = pattern.charAt(0) === "." ? "" : options8.dot ? "(?!(?:^|\\/)\\.{1,2}(?:$|\\/))" : "(?!\\.)";
       function clearStateChar() {
         if (stateChar) {
@@ -8243,109 +8134,106 @@ var require_fnmatch = __commonJS({
           escaping = false;
           continue;
         }
-        SWITCH:
-          switch (c2) {
-            case "/":
-              return false;
-            case "\\":
-              clearStateChar();
-              escaping = true;
-              continue;
-            case "?":
-            case "*":
-            case "+":
-            case "@":
-            case "!":
-              if (options8.debug) {
-                console.error("%s	%s %s %j <-- stateChar", pattern, i, re, c2);
-              }
-              if (inClass) {
-                if (c2 === "!" && i === classStart + 1)
-                  c2 = "^";
-                re += c2;
-                continue;
-              }
-              clearStateChar();
-              stateChar = c2;
-              if (options8.noext)
-                clearStateChar();
-              continue;
-            case "(":
-              if (inClass) {
-                re += "(";
-                continue;
-              }
-              if (!stateChar) {
-                re += "\\(";
-                continue;
-              }
-              plType = stateChar;
-              patternListStack.push({
-                type: plType,
-                start: i - 1,
-                reStart: re.length
-              });
-              re += stateChar === "!" ? "(?:(?!" : "(?:";
-              stateChar = false;
-              continue;
-            case ")":
-              if (inClass || !patternListStack.length) {
-                re += "\\)";
-                continue;
-              }
-              hasMagic = true;
-              re += ")";
-              plType = patternListStack.pop().type;
-              switch (plType) {
-                case "!":
-                  re += "[^/]*?)";
-                  break;
-                case "?":
-                case "+":
-                case "*":
-                  re += plType;
-                case "@":
-                  break;
-              }
-              continue;
-            case "|":
-              if (inClass || !patternListStack.length || escaping) {
-                re += "\\|";
-                escaping = false;
-                continue;
-              }
-              re += "|";
-              continue;
-            case "[":
-              clearStateChar();
-              if (inClass) {
-                re += "\\" + c2;
-                continue;
-              }
-              inClass = true;
-              classStart = i;
-              reClassStart = re.length;
+        SWITCH: switch (c2) {
+          case "/":
+            return false;
+          case "\\":
+            clearStateChar();
+            escaping = true;
+            continue;
+          case "?":
+          case "*":
+          case "+":
+          case "@":
+          case "!":
+            if (options8.debug) {
+              console.error("%s	%s %s %j <-- stateChar", pattern, i, re, c2);
+            }
+            if (inClass) {
+              if (c2 === "!" && i === classStart + 1) c2 = "^";
               re += c2;
               continue;
-            case "]":
-              if (i === classStart + 1 || !inClass) {
-                re += "\\" + c2;
-                escaping = false;
-                continue;
-              }
-              hasMagic = true;
-              inClass = false;
-              re += c2;
+            }
+            clearStateChar();
+            stateChar = c2;
+            if (options8.noext) clearStateChar();
+            continue;
+          case "(":
+            if (inClass) {
+              re += "(";
               continue;
-            default:
-              clearStateChar();
-              if (escaping) {
-                escaping = false;
-              } else if (reSpecials[c2] && !(c2 === "^" && inClass)) {
-                re += "\\";
-              }
-              re += c2;
-          }
+            }
+            if (!stateChar) {
+              re += "\\(";
+              continue;
+            }
+            plType = stateChar;
+            patternListStack.push({
+              type: plType,
+              start: i - 1,
+              reStart: re.length
+            });
+            re += stateChar === "!" ? "(?:(?!" : "(?:";
+            stateChar = false;
+            continue;
+          case ")":
+            if (inClass || !patternListStack.length) {
+              re += "\\)";
+              continue;
+            }
+            hasMagic = true;
+            re += ")";
+            plType = patternListStack.pop().type;
+            switch (plType) {
+              case "!":
+                re += "[^/]*?)";
+                break;
+              case "?":
+              case "+":
+              case "*":
+                re += plType;
+              case "@":
+                break;
+            }
+            continue;
+          case "|":
+            if (inClass || !patternListStack.length || escaping) {
+              re += "\\|";
+              escaping = false;
+              continue;
+            }
+            re += "|";
+            continue;
+          case "[":
+            clearStateChar();
+            if (inClass) {
+              re += "\\" + c2;
+              continue;
+            }
+            inClass = true;
+            classStart = i;
+            reClassStart = re.length;
+            re += c2;
+            continue;
+          case "]":
+            if (i === classStart + 1 || !inClass) {
+              re += "\\" + c2;
+              escaping = false;
+              continue;
+            }
+            hasMagic = true;
+            inClass = false;
+            re += c2;
+            continue;
+          default:
+            clearStateChar();
+            if (escaping) {
+              escaping = false;
+            } else if (reSpecials[c2] && !(c2 === "^" && inClass)) {
+              re += "\\";
+            }
+            re += c2;
+        }
       }
       if (inClass) {
         var cs = pattern.substr(classStart + 1), sp = this.parse(cs, SUBPARSE);
@@ -8376,10 +8264,8 @@ var require_fnmatch = __commonJS({
         case "(":
           addPatternStart = true;
       }
-      if (re !== "" && hasMagic)
-        re = "(?=.)" + re;
-      if (addPatternStart)
-        re = patternStart + re;
+      if (re !== "" && hasMagic) re = "(?=.)" + re;
+      if (addPatternStart) re = patternStart + re;
       if (isSub === SUBPARSE) {
         return [re, hasMagic];
       }
@@ -8396,11 +8282,9 @@ var require_fnmatch = __commonJS({
     };
     Minimatch.prototype.makeRe = makeRe;
     function makeRe() {
-      if (this.regexp || this.regexp === false)
-        return this.regexp;
+      if (this.regexp || this.regexp === false) return this.regexp;
       var set2 = this.set;
-      if (!set2.length)
-        return this.regexp = false;
+      if (!set2.length) return this.regexp = false;
       var options8 = this.options;
       var twoStar = options8.noglobstar ? star : options8.dot ? twoStarDot : twoStarNoDot, flags = options8.nocase ? "i" : "";
       var re = set2.map(function(pattern) {
@@ -8409,8 +8293,7 @@ var require_fnmatch = __commonJS({
         }).join("\\/");
       }).join("|");
       re = "^(?:" + re + ")$";
-      if (this.negate)
-        re = "^(?!" + re + ").*$";
+      if (this.negate) re = "^(?!" + re + ").*$";
       try {
         return this.regexp = new RegExp(re, flags);
       } catch (ex) {
@@ -8429,12 +8312,9 @@ var require_fnmatch = __commonJS({
     };
     Minimatch.prototype.match = match;
     function match(f, partial) {
-      if (this.comment)
-        return false;
-      if (this.empty)
-        return f === "";
-      if (f === "/" && partial)
-        return true;
+      if (this.comment) return false;
+      if (this.empty) return f === "";
+      if (f === "/" && partial) return true;
       var options8 = this.options;
       if (platform === "win32") {
         f = f.split("\\").join("/");
@@ -8448,13 +8328,11 @@ var require_fnmatch = __commonJS({
         var pattern = set2[i];
         var hit = this.matchOne(f, pattern, partial);
         if (hit) {
-          if (options8.flipNegate)
-            return true;
+          if (options8.flipNegate) return true;
           return !this.negate;
         }
       }
-      if (options8.flipNegate)
-        return false;
+      if (options8.flipNegate) return false;
       return this.negate;
     }
     Minimatch.prototype.matchOne = function(file, pattern, partial) {
@@ -8483,8 +8361,7 @@ var require_fnmatch = __commonJS({
         if (options8.debug) {
           console.error(pattern, p, f);
         }
-        if (p === false)
-          return false;
+        if (p === false) return false;
         if (p === GLOBSTAR) {
           if (options8.debug)
             console.error("GLOBSTAR", [pattern, p, f]);
@@ -8493,42 +8370,39 @@ var require_fnmatch = __commonJS({
             if (options8.debug)
               console.error("** at the end");
             for (; fi < fl; fi++) {
-              if (file[fi] === "." || file[fi] === ".." || !options8.dot && file[fi].charAt(0) === ".")
-                return false;
+              if (file[fi] === "." || file[fi] === ".." || !options8.dot && file[fi].charAt(0) === ".") return false;
             }
             return true;
           }
-          WHILE:
-            while (fr < fl) {
-              var swallowee = file[fr];
-              if (options8.debug) {
-                console.error(
-                  "\nglobstar while",
-                  file,
-                  fr,
-                  pattern,
-                  pr,
-                  swallowee
-                );
-              }
-              if (this.matchOne(file.slice(fr), pattern.slice(pr), partial)) {
-                if (options8.debug)
-                  console.error("globstar found match!", fr, fl, swallowee);
-                return true;
-              } else {
-                if (swallowee === "." || swallowee === ".." || !options8.dot && swallowee.charAt(0) === ".") {
-                  if (options8.debug)
-                    console.error("dot detected!", file, fr, pattern, pr);
-                  break WHILE;
-                }
-                if (options8.debug)
-                  console.error("globstar swallow a segment, and continue");
-                fr++;
-              }
+          WHILE: while (fr < fl) {
+            var swallowee = file[fr];
+            if (options8.debug) {
+              console.error(
+                "\nglobstar while",
+                file,
+                fr,
+                pattern,
+                pr,
+                swallowee
+              );
             }
-          if (partial) {
-            if (fr === fl)
+            if (this.matchOne(file.slice(fr), pattern.slice(pr), partial)) {
+              if (options8.debug)
+                console.error("globstar found match!", fr, fl, swallowee);
               return true;
+            } else {
+              if (swallowee === "." || swallowee === ".." || !options8.dot && swallowee.charAt(0) === ".") {
+                if (options8.debug)
+                  console.error("dot detected!", file, fr, pattern, pr);
+                break WHILE;
+              }
+              if (options8.debug)
+                console.error("globstar swallow a segment, and continue");
+              fr++;
+            }
+          }
+          if (partial) {
+            if (fr === fl) return true;
           }
           return false;
         }
@@ -8548,8 +8422,7 @@ var require_fnmatch = __commonJS({
             console.error("pattern match", p, f, hit);
           }
         }
-        if (!hit)
-          return false;
+        if (!hit) return false;
       }
       if (fi === fl && pi === pl) {
         return true;
@@ -8600,8 +8473,7 @@ var require_ini = __commonJS({
     };
     var __generator = exports && exports.__generator || function(thisArg, body) {
       var _ = { label: 0, sent: function() {
-        if (t[0] & 1)
-          throw t[1];
+        if (t[0] & 1) throw t[1];
         return t[1];
       }, trys: [], ops: [] }, f, y, t, g;
       return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() {
@@ -8613,75 +8485,66 @@ var require_ini = __commonJS({
         };
       }
       function step(op) {
-        if (f)
-          throw new TypeError("Generator is already executing.");
-        while (_)
-          try {
-            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done)
-              return t;
-            if (y = 0, t)
-              op = [op[0] & 2, t.value];
-            switch (op[0]) {
-              case 0:
-              case 1:
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+          if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+          if (y = 0, t) op = [op[0] & 2, t.value];
+          switch (op[0]) {
+            case 0:
+            case 1:
+              t = op;
+              break;
+            case 4:
+              _.label++;
+              return { value: op[1], done: false };
+            case 5:
+              _.label++;
+              y = op[1];
+              op = [0];
+              continue;
+            case 7:
+              op = _.ops.pop();
+              _.trys.pop();
+              continue;
+            default:
+              if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) {
+                _ = 0;
+                continue;
+              }
+              if (op[0] === 3 && (!t || op[1] > t[0] && op[1] < t[3])) {
+                _.label = op[1];
+                break;
+              }
+              if (op[0] === 6 && _.label < t[1]) {
+                _.label = t[1];
                 t = op;
                 break;
-              case 4:
-                _.label++;
-                return { value: op[1], done: false };
-              case 5:
-                _.label++;
-                y = op[1];
-                op = [0];
-                continue;
-              case 7:
-                op = _.ops.pop();
-                _.trys.pop();
-                continue;
-              default:
-                if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) {
-                  _ = 0;
-                  continue;
-                }
-                if (op[0] === 3 && (!t || op[1] > t[0] && op[1] < t[3])) {
-                  _.label = op[1];
-                  break;
-                }
-                if (op[0] === 6 && _.label < t[1]) {
-                  _.label = t[1];
-                  t = op;
-                  break;
-                }
-                if (t && _.label < t[2]) {
-                  _.label = t[2];
-                  _.ops.push(op);
-                  break;
-                }
-                if (t[2])
-                  _.ops.pop();
-                _.trys.pop();
-                continue;
-            }
-            op = body.call(thisArg, _);
-          } catch (e) {
-            op = [6, e];
-            y = 0;
-          } finally {
-            f = t = 0;
+              }
+              if (t && _.label < t[2]) {
+                _.label = t[2];
+                _.ops.push(op);
+                break;
+              }
+              if (t[2]) _.ops.pop();
+              _.trys.pop();
+              continue;
           }
-        if (op[0] & 5)
-          throw op[1];
+          op = body.call(thisArg, _);
+        } catch (e) {
+          op = [6, e];
+          y = 0;
+        } finally {
+          f = t = 0;
+        }
+        if (op[0] & 5) throw op[1];
         return { value: op[0] ? op[1] : void 0, done: true };
       }
     };
     var __importStar = exports && exports.__importStar || function(mod) {
-      if (mod && mod.__esModule)
-        return mod;
+      if (mod && mod.__esModule) return mod;
       var result = {};
       if (mod != null) {
-        for (var k in mod)
-          if (Object.hasOwnProperty.call(mod, k))
-            result[k] = mod[k];
+        for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
       }
       result["default"] = mod;
       return result;
@@ -8834,8 +8697,7 @@ var require_src = __commonJS({
     };
     var __generator = exports && exports.__generator || function(thisArg, body) {
       var _ = { label: 0, sent: function() {
-        if (t[0] & 1)
-          throw t[1];
+        if (t[0] & 1) throw t[1];
         return t[1];
       }, trys: [], ops: [] }, f, y, t, g;
       return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() {
@@ -8847,75 +8709,66 @@ var require_src = __commonJS({
         };
       }
       function step(op) {
-        if (f)
-          throw new TypeError("Generator is already executing.");
-        while (_)
-          try {
-            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done)
-              return t;
-            if (y = 0, t)
-              op = [op[0] & 2, t.value];
-            switch (op[0]) {
-              case 0:
-              case 1:
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+          if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+          if (y = 0, t) op = [op[0] & 2, t.value];
+          switch (op[0]) {
+            case 0:
+            case 1:
+              t = op;
+              break;
+            case 4:
+              _.label++;
+              return { value: op[1], done: false };
+            case 5:
+              _.label++;
+              y = op[1];
+              op = [0];
+              continue;
+            case 7:
+              op = _.ops.pop();
+              _.trys.pop();
+              continue;
+            default:
+              if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) {
+                _ = 0;
+                continue;
+              }
+              if (op[0] === 3 && (!t || op[1] > t[0] && op[1] < t[3])) {
+                _.label = op[1];
+                break;
+              }
+              if (op[0] === 6 && _.label < t[1]) {
+                _.label = t[1];
                 t = op;
                 break;
-              case 4:
-                _.label++;
-                return { value: op[1], done: false };
-              case 5:
-                _.label++;
-                y = op[1];
-                op = [0];
-                continue;
-              case 7:
-                op = _.ops.pop();
-                _.trys.pop();
-                continue;
-              default:
-                if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) {
-                  _ = 0;
-                  continue;
-                }
-                if (op[0] === 3 && (!t || op[1] > t[0] && op[1] < t[3])) {
-                  _.label = op[1];
-                  break;
-                }
-                if (op[0] === 6 && _.label < t[1]) {
-                  _.label = t[1];
-                  t = op;
-                  break;
-                }
-                if (t && _.label < t[2]) {
-                  _.label = t[2];
-                  _.ops.push(op);
-                  break;
-                }
-                if (t[2])
-                  _.ops.pop();
-                _.trys.pop();
-                continue;
-            }
-            op = body.call(thisArg, _);
-          } catch (e) {
-            op = [6, e];
-            y = 0;
-          } finally {
-            f = t = 0;
+              }
+              if (t && _.label < t[2]) {
+                _.label = t[2];
+                _.ops.push(op);
+                break;
+              }
+              if (t[2]) _.ops.pop();
+              _.trys.pop();
+              continue;
           }
-        if (op[0] & 5)
-          throw op[1];
+          op = body.call(thisArg, _);
+        } catch (e) {
+          op = [6, e];
+          y = 0;
+        } finally {
+          f = t = 0;
+        }
+        if (op[0] & 5) throw op[1];
         return { value: op[0] ? op[1] : void 0, done: true };
       }
     };
     var __importStar = exports && exports.__importStar || function(mod) {
-      if (mod && mod.__esModule)
-        return mod;
+      if (mod && mod.__esModule) return mod;
       var result = {};
       if (mod != null) {
-        for (var k in mod)
-          if (Object.hasOwnProperty.call(mod, k))
-            result[k] = mod[k];
+        for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
       }
       result["default"] = mod;
       return result;
@@ -9541,8 +9394,7 @@ var require_ci_info = __commonJS({
     env2.RUN_ID || // TaskCluster, dsari
     exports.name || false));
     function checkEnv(obj) {
-      if (typeof obj === "string")
-        return !!env2[obj];
+      if (typeof obj === "string") return !!env2[obj];
       if ("env" in obj) {
         return env2[obj.env] && env2[obj.env].includes(obj.includes);
       }
@@ -9569,8 +9421,7 @@ var require_parser = __commonJS({
         super("[ParserError] " + msg, filename, linenumber);
         this.name = "ParserError";
         this.code = "ParserError";
-        if (Error.captureStackTrace)
-          Error.captureStackTrace(this, _ParserError);
+        if (Error.captureStackTrace) Error.captureStackTrace(this, _ParserError);
       }
     };
     var State = class {
@@ -9597,8 +9448,7 @@ var require_parser = __commonJS({
         this.state = new State(this.parseStart);
       }
       parse(str2) {
-        if (str2.length === 0 || str2.length == null)
-          return;
+        if (str2.length === 0 || str2.length == null) return;
         this._buf = String(str2);
         this.ii = -1;
         this.char = -1;
@@ -9638,8 +9488,7 @@ var require_parser = __commonJS({
         return this.obj;
       }
       next(fn) {
-        if (typeof fn !== "function")
-          throw new ParserError("Tried to set state to non-existent state: " + JSON.stringify(fn));
+        if (typeof fn !== "function") throw new ParserError("Tried to set state to non-existent state: " + JSON.stringify(fn));
         this.state.parser = fn;
       }
       goto(fn) {
@@ -9647,8 +9496,7 @@ var require_parser = __commonJS({
         return this.runOne();
       }
       call(fn, returnWith) {
-        if (returnWith)
-          this.next(returnWith);
+        if (returnWith) this.next(returnWith);
         this.stack.push(this.state);
         this.state = new State(fn);
       }
@@ -9657,10 +9505,8 @@ var require_parser = __commonJS({
         return this.runOne();
       }
       return(value) {
-        if (this.stack.length === 0)
-          throw this.error(new ParserError("Stack underflow"));
-        if (value === void 0)
-          value = this.state.buf;
+        if (this.stack.length === 0) throw this.error(new ParserError("Stack underflow"));
+        if (value === void 0) value = this.state.buf;
         this.state = this.stack.pop();
         this.state.returned = value;
       }
@@ -9669,8 +9515,7 @@ var require_parser = __commonJS({
         return this.runOne();
       }
       consume() {
-        if (this.char === ParserEND)
-          throw this.error(new ParserError("Unexpected end-of-buffer"));
+        if (this.char === ParserEND) throw this.error(new ParserError("Unexpected end-of-buffer"));
         this.state.buf += this._buf[this.ii];
       }
       error(err) {
@@ -9711,8 +9556,7 @@ var require_format_num = __commonJS({
     "use strict";
     module.exports = (d, num) => {
       num = String(num);
-      while (num.length < d)
-        num = "0" + num;
+      while (num.length < d) num = "0" + num;
       return num;
     };
   }
@@ -9806,8 +9650,7 @@ var require_toml_parser = __commonJS({
       constructor(msg) {
         super(msg);
         this.name = "TomlError";
-        if (Error.captureStackTrace)
-          Error.captureStackTrace(this, _TomlError);
+        if (Error.captureStackTrace) Error.captureStackTrace(this, _TomlError);
         this.fromTOML = true;
         this.wrapped = null;
       }
@@ -9903,10 +9746,8 @@ var require_toml_parser = __commonJS({
     var defineProperty = Object.defineProperty;
     var descriptor = { configurable: true, enumerable: true, writable: true, value: void 0 };
     function hasKey(obj, key2) {
-      if (hasOwnProperty3.call(obj, key2))
-        return true;
-      if (key2 === "__proto__")
-        defineProperty(obj, "__proto__", descriptor);
+      if (hasOwnProperty3.call(obj, key2)) return true;
+      if (key2 === "__proto__") defineProperty(obj, "__proto__", descriptor);
       return false;
     }
     var INLINE_TABLE = Symbol("inline-table");
@@ -9916,8 +9757,7 @@ var require_toml_parser = __commonJS({
       });
     }
     function isInlineTable(obj) {
-      if (obj === null || typeof obj !== "object")
-        return false;
+      if (obj === null || typeof obj !== "object") return false;
       return obj[_type] === INLINE_TABLE;
     }
     var TABLE = Symbol("table");
@@ -9928,8 +9768,7 @@ var require_toml_parser = __commonJS({
       });
     }
     function isTable(obj) {
-      if (obj === null || typeof obj !== "object")
-        return false;
+      if (obj === null || typeof obj !== "object") return false;
       return obj[_type] === TABLE;
     }
     var _contentType = Symbol("content-type");
@@ -9941,8 +9780,7 @@ var require_toml_parser = __commonJS({
       });
     }
     function isInlineList(obj) {
-      if (obj === null || typeof obj !== "object")
-        return false;
+      if (obj === null || typeof obj !== "object") return false;
       return obj[_type] === INLINE_LIST;
     }
     var LIST = Symbol("list");
@@ -9952,8 +9790,7 @@ var require_toml_parser = __commonJS({
       });
     }
     function isList(obj) {
-      if (obj === null || typeof obj !== "object")
-        return false;
+      if (obj === null || typeof obj !== "object") return false;
       return obj[_type] === LIST;
     }
     var _custom;
@@ -9990,8 +9827,7 @@ var require_toml_parser = __commonJS({
     var INTEGER = Symbol("integer");
     function Integer(value) {
       let num = Number(value);
-      if (Object.is(num, -0))
-        num = 0;
+      if (Object.is(num, -0)) num = 0;
       if (global.BigInt && !Number.isSafeInteger(num)) {
         return new BoxedBigInt(value);
       } else {
@@ -10005,8 +9841,7 @@ var require_toml_parser = __commonJS({
       }
     }
     function isInteger2(obj) {
-      if (obj === null || typeof obj !== "object")
-        return false;
+      if (obj === null || typeof obj !== "object") return false;
       return obj[_type] === INTEGER;
     }
     var FLOAT = Symbol("float");
@@ -10017,17 +9852,14 @@ var require_toml_parser = __commonJS({
       });
     }
     function isFloat2(obj) {
-      if (obj === null || typeof obj !== "object")
-        return false;
+      if (obj === null || typeof obj !== "object") return false;
       return obj[_type] === FLOAT;
     }
     function tomlType(value) {
       const type2 = typeof value;
       if (type2 === "object") {
-        if (value === null)
-          return "null";
-        if (value instanceof Date)
-          return "datetime";
+        if (value === null) return "null";
+        if (value instanceof Date) return "datetime";
         if (_type in value) {
           switch (value[_type]) {
             case INLINE_TABLE:
@@ -10551,8 +10383,7 @@ var require_toml_parser = __commonJS({
             throw this.error(new TomlError("Invalid character in unicode sequence, expected hex"));
           } else {
             this.consume();
-            if (this.state.buf.length >= 4)
-              return this.return();
+            if (this.state.buf.length >= 4) return this.return();
           }
         }
         parseLargeUnicode() {
@@ -10560,8 +10391,7 @@ var require_toml_parser = __commonJS({
             throw this.error(new TomlError("Invalid character in unicode sequence, expected hex"));
           } else {
             this.consume();
-            if (this.state.buf.length >= 8)
-              return this.return();
+            if (this.state.buf.length >= 8) return this.return();
           }
         }
         /* NUMBERS */
@@ -10678,8 +10508,7 @@ var require_toml_parser = __commonJS({
             return this.call(this.parseNoUnder, this.parseNumberInteger);
           } else if (isDigit(this.char)) {
             this.consume();
-            if (this.state.buf.length > 4)
-              this.next(this.parseNumberInteger);
+            if (this.state.buf.length > 4) this.next(this.parseNumberInteger);
           } else if (this.char === CHAR_E || this.char === CHAR_e) {
             this.consume();
             return this.next(this.parseNumberExponentSign);
@@ -10900,8 +10729,7 @@ var require_toml_parser = __commonJS({
           if (isDigit(this.char)) {
             this.consume();
           } else if (this.atEndOfWord()) {
-            if (this.state.buf.length === 0)
-              throw this.error(new TomlError("Expected digit in milliseconds"));
+            if (this.state.buf.length === 0) throw this.error(new TomlError("Expected digit in milliseconds"));
             return this.returnNow(createTime(this.state.result + "." + this.state.buf));
           } else {
             throw this.error(new TomlError("Unexpected character in datetime, expected period (.), minus (-), plus (+) or Z"));
@@ -10943,8 +10771,7 @@ var require_toml_parser = __commonJS({
         parseTimeZoneHour() {
           if (isDigit(this.char)) {
             this.consume();
-            if (/\d\d$/.test(this.state.buf))
-              return this.next(this.parseTimeZoneSep);
+            if (/\d\d$/.test(this.state.buf)) return this.next(this.parseTimeZoneSep);
           } else {
             throw this.error(new TomlError("Unexpected character in datetime, expected digit"));
           }
@@ -10960,8 +10787,7 @@ var require_toml_parser = __commonJS({
         parseTimeZoneMin() {
           if (isDigit(this.char)) {
             this.consume();
-            if (/\d\d$/.test(this.state.buf))
-              return this.return(createDateTime(this.state.result + this.state.buf));
+            if (/\d\d$/.test(this.state.buf)) return this.return(createDateTime(this.state.result + this.state.buf));
           } else {
             throw this.error(new TomlError("Unexpected character in datetime, expected digit"));
           }
@@ -11083,8 +10909,7 @@ var require_toml_parser = __commonJS({
           } else if (this.char === CHAR_RCUB) {
             return this.return(this.state.resultTable || InlineTable());
           } else {
-            if (!this.state.resultTable)
-              this.state.resultTable = InlineTable();
+            if (!this.state.resultTable) this.state.resultTable = InlineTable();
             return this.callNow(this.parseAssign, this.recordInlineTableValue);
           }
         }
@@ -11132,8 +10957,7 @@ var require_parse_pretty_error = __commonJS({
     "use strict";
     module.exports = prettyError;
     function prettyError(err, buf) {
-      if (err.pos == null || err.line == null)
-        return err;
+      if (err.pos == null || err.line == null) return err;
       let msg = err.message;
       msg += ` at row ${err.line + 1}, col ${err.col + 1}, pos ${err.pos}:
 `;
@@ -11141,12 +10965,10 @@ var require_parse_pretty_error = __commonJS({
         const lines = buf.split(/\n/);
         const lineNumWidth = String(Math.min(lines.length, err.line + 3)).length;
         let linePadding = " ";
-        while (linePadding.length < lineNumWidth)
-          linePadding += " ";
+        while (linePadding.length < lineNumWidth) linePadding += " ";
         for (let ii = Math.max(0, err.line - 1); ii < Math.min(lines.length, err.line + 2); ++ii) {
           let lineNum = String(ii + 1);
-          if (lineNum.length < lineNumWidth)
-            lineNum = " " + lineNum;
+          if (lineNum.length < lineNumWidth) lineNum = " " + lineNum;
           if (err.line === ii) {
             msg += lineNum + "> " + lines[ii] + "\n";
             msg += linePadding + "  ";
@@ -11173,8 +10995,7 @@ var require_parse_async = __commonJS({
     var TOMLParser = require_toml_parser();
     var prettyError = require_parse_pretty_error();
     function parseAsync(str2, opts) {
-      if (!opts)
-        opts = {};
+      if (!opts) opts = {};
       const index = 0;
       const blocksize = opts.blocksize || 40960;
       const parser = new TOMLParser();
@@ -11209,22 +11030,14 @@ var require_js_tokens = __commonJS({
     exports.default = /((['"])(?:(?!\2|\\).|\\(?:\r\n|[\s\S]))*(\2)?|`(?:[^`\\$]|\\[\s\S]|\$(?!\{)|\$\{(?:[^{}]|\{[^}]*\}?)*\}?)*(`)?)|(\/\/.*)|(\/\*(?:[^*]|\*(?!\/))*(\*\/)?)|(\/(?!\*)(?:\[(?:(?![\]\\]).|\\.)*\]|(?![\/\]\\]).|\\.)+\/(?:(?!\s*(?:\b|[\u0080-\uFFFF$\\'"~({]|[+\-!](?!=)|\.?\d))|[gmiyus]{1,6}\b(?![\u0080-\uFFFF$\\]|\s*(?:[+\-*%&|^<>!=?({]|\/(?![\/*])))))|(0[xX][\da-fA-F]+|0[oO][0-7]+|0[bB][01]+|(?:\d*\.\d+|\d+\.?)(?:[eE][+-]?\d+)?)|((?!\d)(?:(?!\s)[$\w\u0080-\uFFFF]|\\u[\da-fA-F]{4}|\\u\{[\da-fA-F]+\})+)|(--|\+\+|&&|\|\||=>|\.{3}|(?:[+\-\/%&|^]|\*{1,2}|<{1,2}|>{1,3}|!=?|={1,2})=?|[?~.,:;[\](){}])|(\s+)|(^$|[\s\S])/g;
     exports.matchToToken = function(match) {
       var token2 = { type: "invalid", value: match[0], closed: void 0 };
-      if (match[1])
-        token2.type = "string", token2.closed = !!(match[3] || match[4]);
-      else if (match[5])
-        token2.type = "comment";
-      else if (match[6])
-        token2.type = "comment", token2.closed = !!match[7];
-      else if (match[8])
-        token2.type = "regex";
-      else if (match[9])
-        token2.type = "number";
-      else if (match[10])
-        token2.type = "name";
-      else if (match[11])
-        token2.type = "punctuator";
-      else if (match[12])
-        token2.type = "whitespace";
+      if (match[1]) token2.type = "string", token2.closed = !!(match[3] || match[4]);
+      else if (match[5]) token2.type = "comment";
+      else if (match[6]) token2.type = "comment", token2.closed = !!match[7];
+      else if (match[8]) token2.type = "regex";
+      else if (match[9]) token2.type = "number";
+      else if (match[10]) token2.type = "name";
+      else if (match[11]) token2.type = "punctuator";
+      else if (match[12]) token2.type = "whitespace";
       return token2;
     };
   }
@@ -11251,41 +11064,29 @@ var require_identifier = __commonJS({
       let pos2 = 65536;
       for (let i = 0, length = set2.length; i < length; i += 2) {
         pos2 += set2[i];
-        if (pos2 > code)
-          return false;
+        if (pos2 > code) return false;
         pos2 += set2[i + 1];
-        if (pos2 >= code)
-          return true;
+        if (pos2 >= code) return true;
       }
       return false;
     }
     function isIdentifierStart(code) {
-      if (code < 65)
-        return code === 36;
-      if (code <= 90)
-        return true;
-      if (code < 97)
-        return code === 95;
-      if (code <= 122)
-        return true;
+      if (code < 65) return code === 36;
+      if (code <= 90) return true;
+      if (code < 97) return code === 95;
+      if (code <= 122) return true;
       if (code <= 65535) {
         return code >= 170 && nonASCIIidentifierStart.test(String.fromCharCode(code));
       }
       return isInAstralSet(code, astralIdentifierStartCodes);
     }
     function isIdentifierChar(code) {
-      if (code < 48)
-        return code === 36;
-      if (code < 58)
-        return true;
-      if (code < 65)
-        return false;
-      if (code <= 90)
-        return true;
-      if (code < 97)
-        return code === 95;
-      if (code <= 122)
-        return true;
+      if (code < 48) return code === 36;
+      if (code < 58) return true;
+      if (code < 65) return false;
+      if (code <= 90) return true;
+      if (code < 97) return code === 95;
+      if (code <= 122) return true;
       if (code <= 65535) {
         return code >= 170 && nonASCIIidentifier.test(String.fromCharCode(code));
       }
@@ -11483,27 +11284,22 @@ var require_lib2 = __commonJS({
     var _helperValidatorIdentifier = require_lib();
     var _picocolors = _interopRequireWildcard(require_picocolors(), true);
     function _getRequireWildcardCache(e) {
-      if ("function" != typeof WeakMap)
-        return null;
+      if ("function" != typeof WeakMap) return null;
       var r = /* @__PURE__ */ new WeakMap(), t = /* @__PURE__ */ new WeakMap();
       return (_getRequireWildcardCache = function(e2) {
         return e2 ? t : r;
       })(e);
     }
     function _interopRequireWildcard(e, r) {
-      if (!r && e && e.__esModule)
-        return e;
-      if (null === e || "object" != typeof e && "function" != typeof e)
-        return { default: e };
+      if (!r && e && e.__esModule) return e;
+      if (null === e || "object" != typeof e && "function" != typeof e) return { default: e };
       var t = _getRequireWildcardCache(r);
-      if (t && t.has(e))
-        return t.get(e);
+      if (t && t.has(e)) return t.get(e);
       var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor;
-      for (var u in e)
-        if ("default" !== u && {}.hasOwnProperty.call(e, u)) {
-          var i = a ? Object.getOwnPropertyDescriptor(e, u) : null;
-          i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u];
-        }
+      for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) {
+        var i = a ? Object.getOwnPropertyDescriptor(e, u) : null;
+        i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u];
+      }
       return n.default = e, t && t.set(e, n), n;
     }
     var colors = typeof process === "object" && (process.env.FORCE_COLOR === "0" || process.env.FORCE_COLOR === "false") ? (0, _picocolors.createColors)(false) : _picocolors.default;
@@ -11626,27 +11422,22 @@ var require_lib3 = __commonJS({
     var _highlight = require_lib2();
     var _picocolors = _interopRequireWildcard(require_picocolors(), true);
     function _getRequireWildcardCache(e) {
-      if ("function" != typeof WeakMap)
-        return null;
+      if ("function" != typeof WeakMap) return null;
       var r = /* @__PURE__ */ new WeakMap(), t = /* @__PURE__ */ new WeakMap();
       return (_getRequireWildcardCache = function(e2) {
         return e2 ? t : r;
       })(e);
     }
     function _interopRequireWildcard(e, r) {
-      if (!r && e && e.__esModule)
-        return e;
-      if (null === e || "object" != typeof e && "function" != typeof e)
-        return { default: e };
+      if (!r && e && e.__esModule) return e;
+      if (null === e || "object" != typeof e && "function" != typeof e) return { default: e };
       var t = _getRequireWildcardCache(r);
-      if (t && t.has(e))
-        return t.get(e);
+      if (t && t.has(e)) return t.get(e);
       var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor;
-      for (var u in e)
-        if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) {
-          var i = a ? Object.getOwnPropertyDescriptor(e, u) : null;
-          i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u];
-        }
+      for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) {
+        var i = a ? Object.getOwnPropertyDescriptor(e, u) : null;
+        i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u];
+      }
       return n.default = e, t && t.set(e, n), n;
     }
     var colors = typeof process === "object" && (process.env.FORCE_COLOR === "0" || process.env.FORCE_COLOR === "false") ? (0, _picocolors.createColors)(false) : _picocolors.default;
@@ -12184,8 +11975,7 @@ var require_readlines = __commonJS({
     var LineByLine = class {
       constructor(file, options8) {
         options8 = options8 || {};
-        if (!options8.readChunk)
-          options8.readChunk = 1024;
+        if (!options8.readChunk) options8.readChunk = 1024;
         if (!options8.newLineCharacter) {
           options8.newLineCharacter = 10;
         } else {
@@ -12266,8 +12056,7 @@ var require_readlines = __commonJS({
         return totalBytesRead;
       }
       next() {
-        if (!this.fd)
-          return false;
+        if (!this.fd) return false;
         let line3 = false;
         if (this.eofReached && this.linesCache.length === 0) {
           return line3;
@@ -13124,7 +12913,7 @@ function* iterateDirectoryUp(from, to) {
 var iterate_directory_up_default = iterateDirectoryUp;
 
 // src/config/searcher.js
-var _names, _filter, _stopDirectory, _cache, _searchInDirectory, searchInDirectory_fn;
+var _names, _filter, _stopDirectory, _cache, _Searcher_instances, searchInDirectory_fn;
 var Searcher = class {
   /**
    * @param {{
@@ -13134,10 +12923,10 @@ var Searcher = class {
    * }} param0
    */
   constructor({ names, filter: filter2, stopDirectory }) {
-    __privateAdd(this, _searchInDirectory);
-    __privateAdd(this, _names, void 0);
-    __privateAdd(this, _filter, void 0);
-    __privateAdd(this, _stopDirectory, void 0);
+    __privateAdd(this, _Searcher_instances);
+    __privateAdd(this, _names);
+    __privateAdd(this, _filter);
+    __privateAdd(this, _stopDirectory);
     __privateAdd(this, _cache, /* @__PURE__ */ new Map());
     __privateSet(this, _names, names);
     __privateSet(this, _filter, filter2);
@@ -13155,7 +12944,7 @@ var Searcher = class {
       __privateGet(this, _stopDirectory)
     )) {
       searchedDirectories.push(directory);
-      result = await __privateMethod(this, _searchInDirectory, searchInDirectory_fn).call(this, directory, shouldCache);
+      result = await __privateMethod(this, _Searcher_instances, searchInDirectory_fn).call(this, directory, shouldCache);
       if (result) {
         break;
       }
@@ -13173,7 +12962,7 @@ _names = new WeakMap();
 _filter = new WeakMap();
 _stopDirectory = new WeakMap();
 _cache = new WeakMap();
-_searchInDirectory = new WeakSet();
+_Searcher_instances = new WeakSet();
 searchInDirectory_fn = async function(directory, shouldCache) {
   const cache3 = __privateGet(this, _cache);
   if (shouldCache && cache3.has(directory)) {
@@ -13353,10 +13142,8 @@ function isObject(subject) {
   return typeof subject === "object" && subject !== null;
 }
 function toArray(sequence) {
-  if (Array.isArray(sequence))
-    return sequence;
-  else if (isNothing(sequence))
-    return [];
+  if (Array.isArray(sequence)) return sequence;
+  else if (isNothing(sequence)) return [];
   return [sequence];
 }
 function extend(target, source2) {
@@ -13396,8 +13183,7 @@ var common = {
 };
 function formatError(exception2, compact) {
   var where = "", message = exception2.reason || "(unknown reason)";
-  if (!exception2.mark)
-    return message;
+  if (!exception2.mark) return message;
   if (exception2.mark.name) {
     where += 'in "' + exception2.mark.name + '" ';
   }
@@ -13448,16 +13234,11 @@ function padStart(string, max) {
 }
 function makeSnippet(mark, options8) {
   options8 = Object.create(options8 || null);
-  if (!mark.buffer)
-    return null;
-  if (!options8.maxLength)
-    options8.maxLength = 79;
-  if (typeof options8.indent !== "number")
-    options8.indent = 1;
-  if (typeof options8.linesBefore !== "number")
-    options8.linesBefore = 3;
-  if (typeof options8.linesAfter !== "number")
-    options8.linesAfter = 2;
+  if (!mark.buffer) return null;
+  if (!options8.maxLength) options8.maxLength = 79;
+  if (typeof options8.indent !== "number") options8.indent = 1;
+  if (typeof options8.linesBefore !== "number") options8.linesBefore = 3;
+  if (typeof options8.linesAfter !== "number") options8.linesAfter = 2;
   var re = /\r?\n|\r|\0/g;
   var lineStarts = [0];
   var lineEnds = [];
@@ -13470,14 +13251,12 @@ function makeSnippet(mark, options8) {
       foundLineNo = lineStarts.length - 2;
     }
   }
-  if (foundLineNo < 0)
-    foundLineNo = lineStarts.length - 1;
+  if (foundLineNo < 0) foundLineNo = lineStarts.length - 1;
   var result = "", i, line3;
   var lineNoLength = Math.min(mark.line + options8.linesAfter, lineEnds.length).toString().length;
   var maxLineLength = options8.maxLength - (options8.indent + lineNoLength + 3);
   for (i = 1; i <= options8.linesBefore; i++) {
-    if (foundLineNo - i < 0)
-      break;
+    if (foundLineNo - i < 0) break;
     line3 = getLine(
       mark.buffer,
       lineStarts[foundLineNo - i],
@@ -13491,8 +13270,7 @@ function makeSnippet(mark, options8) {
   result += common.repeat(" ", options8.indent) + padStart((mark.line + 1).toString(), lineNoLength) + " | " + line3.str + "\n";
   result += common.repeat("-", options8.indent + lineNoLength + 3 + line3.pos) + "^\n";
   for (i = 1; i <= options8.linesAfter; i++) {
-    if (foundLineNo + i >= lineEnds.length)
-      break;
+    if (foundLineNo + i >= lineEnds.length) break;
     line3 = getLine(
       mark.buffer,
       lineStarts[foundLineNo + i],
@@ -13611,10 +13389,8 @@ Schema$1.prototype.extend = function extend2(definition) {
   } else if (Array.isArray(definition)) {
     explicit = explicit.concat(definition);
   } else if (definition && (Array.isArray(definition.implicit) || Array.isArray(definition.explicit))) {
-    if (definition.implicit)
-      implicit = implicit.concat(definition.implicit);
-    if (definition.explicit)
-      explicit = explicit.concat(definition.explicit);
+    if (definition.implicit) implicit = implicit.concat(definition.implicit);
+    if (definition.explicit) explicit = explicit.concat(definition.explicit);
   } else {
     throw new exception("Schema.extend argument should be a Type, [ Type ], or a schema definition ({ implicit: [...], explicit: [...] })");
   }
@@ -13669,8 +13445,7 @@ var failsafe = new schema({
   ]
 });
 function resolveYamlNull(data) {
-  if (data === null)
-    return true;
+  if (data === null) return true;
   var max = data.length;
   return max === 1 && data === "~" || max === 4 && (data === "null" || data === "Null" || data === "NULL");
 }
@@ -13705,8 +13480,7 @@ var _null = new type("tag:yaml.org,2002:null", {
   defaultStyle: "lowercase"
 });
 function resolveYamlBoolean(data) {
-  if (data === null)
-    return false;
+  if (data === null) return false;
   var max = data.length;
   return max === 4 && (data === "true" || data === "True" || data === "TRUE") || max === 5 && (data === "false" || data === "False" || data === "FALSE");
 }
@@ -13744,27 +13518,22 @@ function isDecCode(c2) {
   return 48 <= c2 && c2 <= 57;
 }
 function resolveYamlInteger(data) {
-  if (data === null)
-    return false;
+  if (data === null) return false;
   var max = data.length, index = 0, hasDigits = false, ch;
-  if (!max)
-    return false;
+  if (!max) return false;
   ch = data[index];
   if (ch === "-" || ch === "+") {
     ch = data[++index];
   }
   if (ch === "0") {
-    if (index + 1 === max)
-      return true;
+    if (index + 1 === max) return true;
     ch = data[++index];
     if (ch === "b") {
       index++;
       for (; index < max; index++) {
         ch = data[index];
-        if (ch === "_")
-          continue;
-        if (ch !== "0" && ch !== "1")
-          return false;
+        if (ch === "_") continue;
+        if (ch !== "0" && ch !== "1") return false;
         hasDigits = true;
       }
       return hasDigits && ch !== "_";
@@ -13773,10 +13542,8 @@ function resolveYamlInteger(data) {
       index++;
       for (; index < max; index++) {
         ch = data[index];
-        if (ch === "_")
-          continue;
-        if (!isHexCode(data.charCodeAt(index)))
-          return false;
+        if (ch === "_") continue;
+        if (!isHexCode(data.charCodeAt(index))) return false;
         hasDigits = true;
       }
       return hasDigits && ch !== "_";
@@ -13785,28 +13552,23 @@ function resolveYamlInteger(data) {
       index++;
       for (; index < max; index++) {
         ch = data[index];
-        if (ch === "_")
-          continue;
-        if (!isOctCode(data.charCodeAt(index)))
-          return false;
+        if (ch === "_") continue;
+        if (!isOctCode(data.charCodeAt(index))) return false;
         hasDigits = true;
       }
       return hasDigits && ch !== "_";
     }
   }
-  if (ch === "_")
-    return false;
+  if (ch === "_") return false;
   for (; index < max; index++) {
     ch = data[index];
-    if (ch === "_")
-      continue;
+    if (ch === "_") continue;
     if (!isDecCode(data.charCodeAt(index))) {
       return false;
     }
     hasDigits = true;
   }
-  if (!hasDigits || ch === "_")
-    return false;
+  if (!hasDigits || ch === "_") return false;
   return true;
 }
 function constructYamlInteger(data) {
@@ -13816,20 +13578,15 @@ function constructYamlInteger(data) {
   }
   ch = value[0];
   if (ch === "-" || ch === "+") {
-    if (ch === "-")
-      sign2 = -1;
+    if (ch === "-") sign2 = -1;
     value = value.slice(1);
     ch = value[0];
   }
-  if (value === "0")
-    return 0;
+  if (value === "0") return 0;
   if (ch === "0") {
-    if (value[1] === "b")
-      return sign2 * parseInt(value.slice(2), 2);
-    if (value[1] === "x")
-      return sign2 * parseInt(value.slice(2), 16);
-    if (value[1] === "o")
-      return sign2 * parseInt(value.slice(2), 8);
+    if (value[1] === "b") return sign2 * parseInt(value.slice(2), 2);
+    if (value[1] === "x") return sign2 * parseInt(value.slice(2), 16);
+    if (value[1] === "o") return sign2 * parseInt(value.slice(2), 8);
   }
   return sign2 * parseInt(value, 10);
 }
@@ -13869,8 +13626,7 @@ var YAML_FLOAT_PATTERN = new RegExp(
   "^(?:[-+]?(?:[0-9][0-9_]*)(?:\\.[0-9_]*)?(?:[eE][-+]?[0-9]+)?|\\.[0-9_]+(?:[eE][-+]?[0-9]+)?|[-+]?\\.(?:inf|Inf|INF)|\\.(?:nan|NaN|NAN))$"
 );
 function resolveYamlFloat(data) {
-  if (data === null)
-    return false;
+  if (data === null) return false;
   if (!YAML_FLOAT_PATTERN.test(data) || // Quick hack to not allow integers end with `_`
   // Probably should update regexp & check speed
   data[data.length - 1] === "_") {
@@ -13955,21 +13711,16 @@ var YAML_TIMESTAMP_REGEXP = new RegExp(
   "^([0-9][0-9][0-9][0-9])-([0-9][0-9]?)-([0-9][0-9]?)(?:[Tt]|[ \\t]+)([0-9][0-9]?):([0-9][0-9]):([0-9][0-9])(?:\\.([0-9]*))?(?:[ \\t]*(Z|([-+])([0-9][0-9]?)(?::([0-9][0-9]))?))?$"
 );
 function resolveYamlTimestamp(data) {
-  if (data === null)
-    return false;
-  if (YAML_DATE_REGEXP.exec(data) !== null)
-    return true;
-  if (YAML_TIMESTAMP_REGEXP.exec(data) !== null)
-    return true;
+  if (data === null) return false;
+  if (YAML_DATE_REGEXP.exec(data) !== null) return true;
+  if (YAML_TIMESTAMP_REGEXP.exec(data) !== null) return true;
   return false;
 }
 function constructYamlTimestamp(data) {
   var match, year, month, day, hour, minute, second, fraction = 0, delta = null, tz_hour, tz_minute, date;
   match = YAML_DATE_REGEXP.exec(data);
-  if (match === null)
-    match = YAML_TIMESTAMP_REGEXP.exec(data);
-  if (match === null)
-    throw new Error("Date resolve error");
+  if (match === null) match = YAML_TIMESTAMP_REGEXP.exec(data);
+  if (match === null) throw new Error("Date resolve error");
   year = +match[1];
   month = +match[2] - 1;
   day = +match[3];
@@ -13990,12 +13741,10 @@ function constructYamlTimestamp(data) {
     tz_hour = +match[10];
     tz_minute = +(match[11] || 0);
     delta = (tz_hour * 60 + tz_minute) * 6e4;
-    if (match[9] === "-")
-      delta = -delta;
+    if (match[9] === "-") delta = -delta;
   }
   date = new Date(Date.UTC(year, month, day, hour, minute, second, fraction));
-  if (delta)
-    date.setTime(date.getTime() - delta);
+  if (delta) date.setTime(date.getTime() - delta);
   return date;
 }
 function representYamlTimestamp(object) {
@@ -14017,15 +13766,12 @@ var merge = new type("tag:yaml.org,2002:merge", {
 });
 var BASE64_MAP = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=\n\r";
 function resolveYamlBinary(data) {
-  if (data === null)
-    return false;
+  if (data === null) return false;
   var code, idx, bitlen = 0, max = data.length, map2 = BASE64_MAP;
   for (idx = 0; idx < max; idx++) {
     code = map2.indexOf(data.charAt(idx));
-    if (code > 64)
-      continue;
-    if (code < 0)
-      return false;
+    if (code > 64) continue;
+    if (code < 0) return false;
     bitlen += 6;
   }
   return bitlen % 8 === 0;
@@ -14096,28 +13842,21 @@ var binary = new type("tag:yaml.org,2002:binary", {
 var _hasOwnProperty$3 = Object.prototype.hasOwnProperty;
 var _toString$2 = Object.prototype.toString;
 function resolveYamlOmap(data) {
-  if (data === null)
-    return true;
+  if (data === null) return true;
   var objectKeys = [], index, length, pair, pairKey, pairHasKey, object = data;
   for (index = 0, length = object.length; index < length; index += 1) {
     pair = object[index];
     pairHasKey = false;
-    if (_toString$2.call(pair) !== "[object Object]")
-      return false;
+    if (_toString$2.call(pair) !== "[object Object]") return false;
     for (pairKey in pair) {
       if (_hasOwnProperty$3.call(pair, pairKey)) {
-        if (!pairHasKey)
-          pairHasKey = true;
-        else
-          return false;
+        if (!pairHasKey) pairHasKey = true;
+        else return false;
       }
     }
-    if (!pairHasKey)
-      return false;
-    if (objectKeys.indexOf(pairKey) === -1)
-      objectKeys.push(pairKey);
-    else
-      return false;
+    if (!pairHasKey) return false;
+    if (objectKeys.indexOf(pairKey) === -1) objectKeys.push(pairKey);
+    else return false;
   }
   return true;
 }
@@ -14131,24 +13870,20 @@ var omap = new type("tag:yaml.org,2002:omap", {
 });
 var _toString$1 = Object.prototype.toString;
 function resolveYamlPairs(data) {
-  if (data === null)
-    return true;
+  if (data === null) return true;
   var index, length, pair, keys, result, object = data;
   result = new Array(object.length);
   for (index = 0, length = object.length; index < length; index += 1) {
     pair = object[index];
-    if (_toString$1.call(pair) !== "[object Object]")
-      return false;
+    if (_toString$1.call(pair) !== "[object Object]") return false;
     keys = Object.keys(pair);
-    if (keys.length !== 1)
-      return false;
+    if (keys.length !== 1) return false;
     result[index] = [keys[0], pair[keys[0]]];
   }
   return true;
 }
 function constructYamlPairs(data) {
-  if (data === null)
-    return [];
+  if (data === null) return [];
   var index, length, pair, keys, result, object = data;
   result = new Array(object.length);
   for (index = 0, length = object.length; index < length; index += 1) {
@@ -14165,13 +13900,11 @@ var pairs = new type("tag:yaml.org,2002:pairs", {
 });
 var _hasOwnProperty$2 = Object.prototype.hasOwnProperty;
 function resolveYamlSet(data) {
-  if (data === null)
-    return true;
+  if (data === null) return true;
   var key2, object = data;
   for (key2 in object) {
     if (_hasOwnProperty$2.call(object, key2)) {
-      if (object[key2] !== null)
-        return false;
+      if (object[key2] !== null) return false;
     }
   }
   return true;
@@ -14832,8 +14565,7 @@ function readBlockScalar(state, nodeIndent) {
 }
 function readBlockSequence(state, nodeIndent) {
   var _line, _tag = state.tag, _anchor = state.anchor, _result = [], following, detected = false, ch;
-  if (state.firstTabInLine !== -1)
-    return false;
+  if (state.firstTabInLine !== -1) return false;
   if (state.anchor !== null) {
     state.anchorMap[state.anchor] = _result;
   }
@@ -14881,8 +14613,7 @@ function readBlockSequence(state, nodeIndent) {
 }
 function readBlockMapping(state, nodeIndent, flowIndent) {
   var following, allowCompact, _line, _keyLine, _keyLineStart, _keyPos, _tag = state.tag, _anchor = state.anchor, _result = {}, overridableKeys = /* @__PURE__ */ Object.create(null), keyTag = null, keyNode = null, valueNode = null, atExplicitKey = false, detected = false, ch;
-  if (state.firstTabInLine !== -1)
-    return false;
+  if (state.firstTabInLine !== -1) return false;
   if (state.anchor !== null) {
     state.anchorMap[state.anchor] = _result;
   }
@@ -14992,8 +14723,7 @@ function readBlockMapping(state, nodeIndent, flowIndent) {
 function readTagProperty(state) {
   var _position, isVerbatim = false, isNamed = false, tagHandle, tagName, ch;
   ch = state.input.charCodeAt(state.position);
-  if (ch !== 33)
-    return false;
+  if (ch !== 33) return false;
   if (state.tag !== null) {
     throwError(state, "duplication of a tag property");
   }
@@ -15064,8 +14794,7 @@ function readTagProperty(state) {
 function readAnchorProperty(state) {
   var _position, ch;
   ch = state.input.charCodeAt(state.position);
-  if (ch !== 38)
-    return false;
+  if (ch !== 38) return false;
   if (state.anchor !== null) {
     throwError(state, "duplication of an anchor property");
   }
@@ -15083,8 +14812,7 @@ function readAnchorProperty(state) {
 function readAlias(state) {
   var _position, alias, ch;
   ch = state.input.charCodeAt(state.position);
-  if (ch !== 42)
-    return false;
+  if (ch !== 42) return false;
   ch = state.input.charCodeAt(++state.position);
   _position = state.position;
   while (ch !== 0 && !is_WS_OR_EOL(ch) && !is_FLOW_INDICATOR(ch)) {
@@ -15260,16 +14988,14 @@ function readDocument(state) {
         } while (ch !== 0 && !is_EOL(ch));
         break;
       }
-      if (is_EOL(ch))
-        break;
+      if (is_EOL(ch)) break;
       _position = state.position;
       while (ch !== 0 && !is_WS_OR_EOL(ch)) {
         ch = state.input.charCodeAt(++state.position);
       }
       directiveArgs.push(state.input.slice(_position, state.position));
     }
-    if (ch !== 0)
-      readLineBreak(state);
+    if (ch !== 0) readLineBreak(state);
     if (_hasOwnProperty$1.call(directiveHandlers, directiveName)) {
       directiveHandlers[directiveName](state, directiveName, directiveArgs);
     } else {
@@ -16285,7 +16011,7 @@ var _JSONError = class _JSONError extends Error {
     __publicField(this, "fileName");
     __publicField(this, "codeFrame");
     __publicField(this, "rawCodeFrame");
-    __privateAdd(this, _message, void 0);
+    __privateAdd(this, _message);
     __privateSet(this, _message, message);
     (_a = Error.captureStackTrace) == null ? void 0 : _a.call(Error, this, _JSONError);
   }
@@ -16579,20 +16305,17 @@ codes.ERR_INVALID_ARG_TYPE = createError(
         types,
         "or"
       )}`;
-      if (instances.length > 0 || other.length > 0)
-        message += " or ";
+      if (instances.length > 0 || other.length > 0) message += " or ";
     }
     if (instances.length > 0) {
       message += `an instance of ${formatList(instances, "or")}`;
-      if (other.length > 0)
-        message += " or ";
+      if (other.length > 0) message += " or ";
     }
     if (other.length > 0) {
       if (other.length > 1) {
         message += `one of ${formatList(other, "or")}`;
       } else {
-        if (other[0].toLowerCase() !== other[0])
-          message += "an ";
+        if (other[0].toLowerCase() !== other[0]) message += "an ";
         message += `${other[0]}`;
       }
     }
@@ -16737,11 +16460,9 @@ function makeNodeErrorWithCode(Base, key2) {
   return NodeError;
   function NodeError(...parameters) {
     const limit = Error.stackTraceLimit;
-    if (isErrorStackTraceLimitWritable())
-      Error.stackTraceLimit = 0;
+    if (isErrorStackTraceLimitWritable()) Error.stackTraceLimit = 0;
     const error = new Base();
-    if (isErrorStackTraceLimitWritable())
-      Error.stackTraceLimit = limit;
+    if (isErrorStackTraceLimitWritable()) Error.stackTraceLimit = limit;
     const message = getMessage(key2, parameters, error);
     Object.defineProperties(error, {
       // Note: no need to implement `kIsNodeError` symbol, would be hard,
@@ -16798,8 +16519,7 @@ var captureLargerStackTrace = hideStackFrames(
       Error.stackTraceLimit = Number.POSITIVE_INFINITY;
     }
     Error.captureStackTrace(error);
-    if (stackTraceLimitIsWritable)
-      Error.stackTraceLimit = userStackTraceLimit;
+    if (stackTraceLimitIsWritable) Error.stackTraceLimit = userStackTraceLimit;
     return error;
   }
 );
@@ -16816,14 +16536,12 @@ function getMessage(key2, parameters, self) {
   }
   const regex = /%[dfijoOs]/g;
   let expectedLength = 0;
-  while (regex.exec(message) !== null)
-    expectedLength++;
+  while (regex.exec(message) !== null) expectedLength++;
   assert2(
     expectedLength === parameters.length,
     `Code: ${key2}; The provided arguments length (${parameters.length}) does not match the required ones (${expectedLength}).`
   );
-  if (parameters.length === 0)
-    return message;
+  if (parameters.length === 0) return message;
   parameters.unshift(message);
   return Reflect.apply(format, null, parameters);
 }
@@ -16959,8 +16677,7 @@ var extensionFormatMap = {
 function mimeToFormat(mime) {
   if (mime && /\s*(text|application)\/javascript\s*(;\s*charset=utf-?8\s*)?/i.test(mime))
     return "module";
-  if (mime === "application/json")
-    return "json";
+  if (mime === "application/json") return "json";
   return null;
 }
 var protocolHandlers = {
@@ -17011,8 +16728,7 @@ function getFileProtocolModuleFormat(url2, _context, ignoreErrors) {
     return "module";
   }
   const format3 = extensionFormatMap[value];
-  if (format3)
-    return format3;
+  if (format3) return format3;
   if (ignoreErrors) {
     return void 0;
   }
@@ -17091,8 +16807,7 @@ function emitLegacyIndexDeprecation(url2, packageJsonUrl, base, main) {
     return;
   }
   const format3 = defaultGetFormatWithoutErrors(url2, { parentURL: base.href });
-  if (format3 !== "module")
-    return;
+  if (format3 !== "module") return;
   const urlPath = fileURLToPath4(url2.href);
   const packagePath = fileURLToPath4(new URL2(".", packageJsonUrl));
   const basePath = fileURLToPath4(base);
@@ -17131,8 +16846,7 @@ function legacyMainResolve(packageJsonUrl, packageConfig, base) {
   let guess;
   if (packageConfig.main !== void 0) {
     guess = new URL2(packageConfig.main, packageJsonUrl);
-    if (fileExists(guess))
-      return guess;
+    if (fileExists(guess)) return guess;
     const tries2 = [
       `./${packageConfig.main}.js`,
       `./${packageConfig.main}.json`,
@@ -17144,8 +16858,7 @@ function legacyMainResolve(packageJsonUrl, packageConfig, base) {
     let i2 = -1;
     while (++i2 < tries2.length) {
       guess = new URL2(tries2[i2], packageJsonUrl);
-      if (fileExists(guess))
-        break;
+      if (fileExists(guess)) break;
       guess = void 0;
     }
     if (guess) {
@@ -17162,8 +16875,7 @@ function legacyMainResolve(packageJsonUrl, packageConfig, base) {
   let i = -1;
   while (++i < tries.length) {
     guess = new URL2(tries[i], packageJsonUrl);
-    if (fileExists(guess))
-      break;
+    if (fileExists(guess)) break;
     guess = void 0;
   }
   if (guess) {
@@ -17303,8 +17015,7 @@ function resolvePackageTargetString(target, subpath, match, packageJsonUrl, base
   const packagePath = new URL2(".", packageJsonUrl).pathname;
   if (!resolvedPath.startsWith(packagePath))
     throw invalidPackageTarget(match, target, packageJsonUrl, internal, base);
-  if (subpath === "")
-    return resolved;
+  if (subpath === "") return resolved;
   if (invalidSegmentRegEx.exec(subpath) !== null) {
     const request = pattern ? match.replace("*", () => subpath) : match + subpath;
     if (deprecatedInvalidSegmentRegEx.exec(subpath) === null) {
@@ -17341,8 +17052,7 @@ function resolvePackageTargetString(target, subpath, match, packageJsonUrl, base
 }
 function isArrayIndex(key2) {
   const keyNumber = Number(key2);
-  if (`${keyNumber}` !== key2)
-    return false;
+  if (`${keyNumber}` !== key2) return false;
   return keyNumber >= 0 && keyNumber < 4294967295;
 }
 function resolvePackageTarget(packageJsonUrl, target, subpath, packageSubpath, base, pattern, internal, isPathMap, conditions) {
@@ -17361,8 +17071,7 @@ function resolvePackageTarget(packageJsonUrl, target, subpath, packageSubpath, b
   }
   if (Array.isArray(target)) {
     const targetList = target;
-    if (targetList.length === 0)
-      return null;
+    if (targetList.length === 0) return null;
     let lastException;
     let i = -1;
     while (++i < targetList.length) {
@@ -17386,12 +17095,10 @@ function resolvePackageTarget(packageJsonUrl, target, subpath, packageSubpath, b
           error
         );
         lastException = exception2;
-        if (exception2.code === "ERR_INVALID_PACKAGE_TARGET")
-          continue;
+        if (exception2.code === "ERR_INVALID_PACKAGE_TARGET") continue;
         throw error;
       }
-      if (resolveResult === void 0)
-        continue;
+      if (resolveResult === void 0) continue;
       if (resolveResult === null) {
         lastException = null;
         continue;
@@ -17435,8 +17142,7 @@ function resolvePackageTarget(packageJsonUrl, target, subpath, packageSubpath, b
           isPathMap,
           conditions
         );
-        if (resolveResult === void 0)
-          continue;
+        if (resolveResult === void 0) continue;
         return resolveResult;
       }
     }
@@ -17454,10 +17160,8 @@ function resolvePackageTarget(packageJsonUrl, target, subpath, packageSubpath, b
   );
 }
 function isConditionalExportsMainSugar(exports, packageJsonUrl, base) {
-  if (typeof exports === "string" || Array.isArray(exports))
-    return true;
-  if (typeof exports !== "object" || exports === null)
-    return false;
+  if (typeof exports === "string" || Array.isArray(exports)) return true;
+  if (typeof exports !== "object" || exports === null) return false;
   const keys = Object.getOwnPropertyNames(exports);
   let isConditionalSugar = false;
   let i = 0;
@@ -17482,8 +17186,7 @@ function emitTrailingSlashPatternDeprecation(match, pjsonUrl, base) {
     return;
   }
   const pjsonPath = fileURLToPath4(pjsonUrl);
-  if (emittedPackageWarnings.has(pjsonPath + "|" + match))
-    return;
+  if (emittedPackageWarnings.has(pjsonPath + "|" + match)) return;
   emittedPackageWarnings.add(pjsonPath + "|" + match);
   process3.emitWarning(
     `Use of deprecated trailing slash pattern mapping "${match}" in the "exports" field module resolution of the package at ${pjsonPath}${base ? ` imported from ${fileURLToPath4(base)}` : ""}. Mapping specifiers ending in "/" is no longer supported.`,
@@ -17567,18 +17270,12 @@ function patternKeyCompare(a, b) {
   const bPatternIndex = b.indexOf("*");
   const baseLengthA = aPatternIndex === -1 ? a.length : aPatternIndex + 1;
   const baseLengthB = bPatternIndex === -1 ? b.length : bPatternIndex + 1;
-  if (baseLengthA > baseLengthB)
-    return -1;
-  if (baseLengthB > baseLengthA)
-    return 1;
-  if (aPatternIndex === -1)
-    return 1;
-  if (bPatternIndex === -1)
-    return -1;
-  if (a.length > b.length)
-    return -1;
-  if (b.length > a.length)
-    return 1;
+  if (baseLengthA > baseLengthB) return -1;
+  if (baseLengthB > baseLengthA) return 1;
+  if (aPatternIndex === -1) return 1;
+  if (bPatternIndex === -1) return -1;
+  if (a.length > b.length) return -1;
+  if (b.length > a.length) return 1;
   return 0;
 }
 function packageImportsResolve(name, base, conditions) {
@@ -17731,8 +17428,7 @@ function packageResolve(specifier, base, conditions) {
 }
 function isRelativeSpecifier(specifier) {
   if (specifier[0] === ".") {
-    if (specifier.length === 1 || specifier[1] === "/")
-      return true;
+    if (specifier.length === 1 || specifier[1] === "/") return true;
     if (specifier[1] === "." && (specifier.length === 2 || specifier[2] === "/")) {
       return true;
     }
@@ -17740,10 +17436,8 @@ function isRelativeSpecifier(specifier) {
   return false;
 }
 function shouldBeTreatedAsRelativeOrAbsolutePath(specifier) {
-  if (specifier === "")
-    return false;
-  if (specifier[0] === "/")
-    return true;
+  if (specifier === "") return false;
+  if (specifier[0] === "/") return true;
   return isRelativeSpecifier(specifier);
 }
 function moduleResolve(specifier, base, conditions, preserveSymlinks) {
@@ -17852,16 +17546,14 @@ function defaultResolve(specifier, context = {}) {
     parsed,
     parsedParentURL
   );
-  if (maybeReturn)
-    return maybeReturn;
+  if (maybeReturn) return maybeReturn;
   if (protocol === void 0 && parsed) {
     protocol = parsed.protocol;
   }
   if (protocol === "node:") {
     return { url: specifier };
   }
-  if (parsed && parsed.protocol === "node:")
-    return { url: specifier };
+  if (parsed && parsed.protocol === "node:") return { url: specifier };
   const conditions = getConditionsSet(context.conditions);
   const url2 = moduleResolve(specifier, new URL2(parentURL), conditions, false);
   return {
@@ -19057,26 +18749,25 @@ function trim(out) {
   let trimCount = 0;
   let cursorCount = 0;
   let outIndex = out.length;
-  outer:
-    while (outIndex--) {
-      const last = out[outIndex];
-      if (last === CURSOR_PLACEHOLDER) {
-        cursorCount++;
-        continue;
-      }
-      if (false) {
-        throw new Error(`Unexpected value in trim: '${typeof last}'`);
-      }
-      for (let charIndex = last.length - 1; charIndex >= 0; charIndex--) {
-        const char = last[charIndex];
-        if (char === " " || char === "	") {
-          trimCount++;
-        } else {
-          out[outIndex] = last.slice(0, charIndex + 1);
-          break outer;
-        }
+  outer: while (outIndex--) {
+    const last = out[outIndex];
+    if (last === CURSOR_PLACEHOLDER) {
+      cursorCount++;
+      continue;
+    }
+    if (false) {
+      throw new Error(`Unexpected value in trim: '${typeof last}'`);
+    }
+    for (let charIndex = last.length - 1; charIndex >= 0; charIndex--) {
+      const char = last[charIndex];
+      if (char === " " || char === "	") {
+        trimCount++;
+      } else {
+        out[outIndex] = last.slice(0, charIndex + 1);
+        break outer;
       }
     }
+  }
   if (trimCount > 0 || cursorCount > 0) {
     out.length = outIndex + 1;
     while (cursorCount-- > 0) {
@@ -19527,11 +19218,10 @@ function getAlignmentSize(text, tabWidth, startIndex = 0) {
 var get_alignment_size_default = getAlignmentSize;
 
 // src/common/ast-path.js
-var _getNodeStackIndex, getNodeStackIndex_fn, _getAncestors, getAncestors_fn;
+var _AstPath_instances, getNodeStackIndex_fn, getAncestors_fn;
 var AstPath = class {
   constructor(value) {
-    __privateAdd(this, _getNodeStackIndex);
-    __privateAdd(this, _getAncestors);
+    __privateAdd(this, _AstPath_instances);
     this.stack = [value];
   }
   /** @type {string | null} */
@@ -19626,7 +19316,7 @@ var AstPath = class {
   }
   /** @type {object[]} */
   get ancestors() {
-    return [...__privateMethod(this, _getAncestors, getAncestors_fn).call(this)];
+    return [...__privateMethod(this, _AstPath_instances, getAncestors_fn).call(this)];
   }
   // The name of the current property is always the penultimate element of
   // this.stack, and always a string/number/symbol.
@@ -19658,7 +19348,7 @@ var AstPath = class {
     );
   }
   getNode(count = 0) {
-    const stackIndex = __privateMethod(this, _getNodeStackIndex, getNodeStackIndex_fn).call(this, count);
+    const stackIndex = __privateMethod(this, _AstPath_instances, getNodeStackIndex_fn).call(this, count);
     return stackIndex === -1 ? null : this.stack[stackIndex];
   }
   getParentNode(count = 0) {
@@ -19693,7 +19383,7 @@ var AstPath = class {
     }
   }
   callParent(callback, count = 0) {
-    const stackIndex = __privateMethod(this, _getNodeStackIndex, getNodeStackIndex_fn).call(this, count + 1);
+    const stackIndex = __privateMethod(this, _AstPath_instances, getNodeStackIndex_fn).call(this, count + 1);
     const parentValues = this.stack.splice(stackIndex + 1);
     try {
       return callback(this);
@@ -19778,7 +19468,7 @@ var AstPath = class {
    * @internal Unstable API. Don't use in plugins for now.
    */
   findAncestor(predicate) {
-    for (const node of __privateMethod(this, _getAncestors, getAncestors_fn).call(this)) {
+    for (const node of __privateMethod(this, _AstPath_instances, getAncestors_fn).call(this)) {
       if (predicate(node)) {
         return node;
       }
@@ -19793,7 +19483,7 @@ var AstPath = class {
    * @internal Unstable API. Don't use in plugins for now.
    */
   hasAncestor(predicate) {
-    for (const node of __privateMethod(this, _getAncestors, getAncestors_fn).call(this)) {
+    for (const node of __privateMethod(this, _AstPath_instances, getAncestors_fn).call(this)) {
       if (predicate(node)) {
         return true;
       }
@@ -19801,7 +19491,7 @@ var AstPath = class {
     return false;
   }
 };
-_getNodeStackIndex = new WeakSet();
+_AstPath_instances = new WeakSet();
 getNodeStackIndex_fn = function(count) {
   const {
     stack: stack2
@@ -19813,7 +19503,6 @@ getNodeStackIndex_fn = function(count) {
   }
   return -1;
 };
-_getAncestors = new WeakSet();
 getAncestors_fn = function* () {
   const {
     stack: stack2

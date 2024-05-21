@@ -821,26 +821,25 @@ Expected it to be ${EXPECTED_TYPE_VALUES}.`;
     let trimCount = 0;
     let cursorCount = 0;
     let outIndex = out.length;
-    outer:
-      while (outIndex--) {
-        const last = out[outIndex];
-        if (last === CURSOR_PLACEHOLDER) {
-          cursorCount++;
-          continue;
-        }
-        if (false) {
-          throw new Error(`Unexpected value in trim: '${typeof last}'`);
-        }
-        for (let charIndex = last.length - 1; charIndex >= 0; charIndex--) {
-          const char = last[charIndex];
-          if (char === " " || char === "	") {
-            trimCount++;
-          } else {
-            out[outIndex] = last.slice(0, charIndex + 1);
-            break outer;
-          }
+    outer: while (outIndex--) {
+      const last = out[outIndex];
+      if (last === CURSOR_PLACEHOLDER) {
+        cursorCount++;
+        continue;
+      }
+      if (false) {
+        throw new Error(`Unexpected value in trim: '${typeof last}'`);
+      }
+      for (let charIndex = last.length - 1; charIndex >= 0; charIndex--) {
+        const char = last[charIndex];
+        if (char === " " || char === "	") {
+          trimCount++;
+        } else {
+          out[outIndex] = last.slice(0, charIndex + 1);
+          break outer;
         }
       }
+    }
     if (trimCount > 0 || cursorCount > 0) {
       out.length = outIndex + 1;
       while (cursorCount-- > 0) {
