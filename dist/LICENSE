@@ -770,7 +770,7 @@ Author: Julian Gruber <mail@juliangruber.com> (http://juliangruber.com)
 
 ----------------------------------------
 
-### braces@v3.0.2
+### braces@v3.0.3
 
 > Bash-like brace expansion, implemented in JavaScript. Safer than other brace expansion libs, with complete support for the Bash 4.3 braces specification, without sacrificing speed.
 
@@ -786,7 +786,7 @@ Contributors:
 
 > The MIT License (MIT)
 >
-> Copyright (c) 2014-2018, Jon Schlinkert.
+> Copyright (c) 2014-present, Jon Schlinkert.
 >
 > Permission is hereby granted, free of charge, to any person obtaining a copy
 > of this software and associated documentation files (the "Software"), to deal
@@ -1453,7 +1453,7 @@ Author: Jared Wray (https://jaredwray.com)
 
 ----------------------------------------
 
-### fill-range@v7.0.1
+### fill-range@v7.1.1
 
 > Fill in a range of numbers or letters, optionally passing an increment or `step` to use, or create a regex-compatible range with `options.toRegex`
 
