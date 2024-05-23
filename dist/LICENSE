@@ -17,7 +17,7 @@ MIT, ISC, BSD-2-Clause, BSD-3-Clause, Apache-2.0
 
 ## Bundled dependencies
 
-### @angular/compiler@v17.3.9
+### @angular/compiler@v18.0.0
 
 > Angular - the compiler library
 
@@ -587,7 +587,7 @@ Repository: <https://github.com/acornjs/acorn-jsx>
 
 ----------------------------------------
 
-### angular-estree-parser@v10.0.2
+### angular-estree-parser@v10.0.3
 
 > A parser that converts Angular source code into an ESTree-compatible form
 
@@ -2793,7 +2793,7 @@ Contributors:
 
 ----------------------------------------
 
-### micromatch@v4.0.5
+### micromatch@v4.0.7
 
 > Glob matching for javascript/node.js. A replacement and faster alternative to minimatch and multimatch.
 
