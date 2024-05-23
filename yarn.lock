@@ -22,17 +22,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@angular/compiler@npm:17.3.9":
-  version: 17.3.9
-  resolution: "@angular/compiler@npm:17.3.9"
+"@angular/compiler@npm:18.0.0":
+  version: 18.0.0
+  resolution: "@angular/compiler@npm:18.0.0"
   dependencies:
     tslib: "npm:^2.3.0"
   peerDependencies:
-    "@angular/core": 17.3.9
+    "@angular/core": 18.0.0
   peerDependenciesMeta:
     "@angular/core":
       optional: true
-  checksum: 10/686c840774de3a53265996a637ca9a3f2bfa2f6234448ad2d94ddc5d495d3abe844249c79ed9562b644e6e013b89a893e00549035d993d64eb820e57bfd95382
+  checksum: 10/07a0bfb72120d29ad7ea667546f33c2544f3019d0ccebdb6b7c58e81fb7cac382d41553f76d4860ac5812c016504320bf9cd5aeeb3e63c2487ddbffac392bbe5
   languageName: node
   linkType: hard
 
@@ -2204,12 +2204,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"angular-estree-parser@npm:10.0.2":
-  version: 10.0.2
-  resolution: "angular-estree-parser@npm:10.0.2"
+"angular-estree-parser@npm:10.0.3":
+  version: 10.0.3
+  resolution: "angular-estree-parser@npm:10.0.3"
   peerDependencies:
-    "@angular/compiler": ^17.3.9
-  checksum: 10/5054a51239dadb64ca25071c1986a0cfb823b14077f0219a6dd7a823046a2e333e5e2faa513c93a960a8dbfc42cde4403b785d26808471ae77490da3803ab8a7
+    "@angular/compiler": ^17.3.9 || ^18.0.0
+  checksum: 10/6289fed62ab056e927e811bc17298108d33bdca893296207f9c6ac362729936d7d6c0abcfa72e78b5b77f3740f4d702937d86c167771aaa57fe04afd39d368da
   languageName: node
   linkType: hard
 
@@ -2599,12 +2599,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"braces@npm:^3.0.2":
-  version: 3.0.2
-  resolution: "braces@npm:3.0.2"
+"braces@npm:^3.0.3":
+  version: 3.0.3
+  resolution: "braces@npm:3.0.3"
   dependencies:
-    fill-range: "npm:^7.0.1"
-  checksum: 10/966b1fb48d193b9d155f810e5efd1790962f2c4e0829f8440b8ad236ba009222c501f70185ef732fef17a4c490bb33a03b90dab0631feafbdf447da91e8165b1
+    fill-range: "npm:^7.1.1"
+  checksum: 10/fad11a0d4697a27162840b02b1fad249c1683cbc510cd5bf1a471f2f8085c046d41094308c577a50a03a579dd99d5a6b3724c4b5e8b14df2c4443844cfcda2c6
   languageName: node
   linkType: hard
 
@@ -3945,9 +3945,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-regexp@npm:2.5.0":
-  version: 2.5.0
-  resolution: "eslint-plugin-regexp@npm:2.5.0"
+"eslint-plugin-regexp@npm:2.6.0":
+  version: 2.6.0
+  resolution: "eslint-plugin-regexp@npm:2.6.0"
   dependencies:
     "@eslint-community/eslint-utils": "npm:^4.2.0"
     "@eslint-community/regexpp": "npm:^4.9.1"
@@ -3958,7 +3958,7 @@ __metadata:
     scslre: "npm:^0.3.0"
   peerDependencies:
     eslint: ">=8.44.0"
-  checksum: 10/8ccceed8c1af1e69a23027154e243f82f214ab45619edb45ae994815a22648334f6fc987a00d682103dbd19932eb8849f592bbda38670281f8de7447cda4319b
+  checksum: 10/24cb5ad02c86dcd60fa6addfa76f2ce3479af6e098e440bbd05ffb6f11f5042c6011b732ab05977be8abdda6bf46c8f2d586bfd7c656456bb72cd27db27c1532
   languageName: node
   linkType: hard
 
@@ -4327,12 +4327,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fill-range@npm:^7.0.1":
-  version: 7.0.1
-  resolution: "fill-range@npm:7.0.1"
+"fill-range@npm:^7.1.1":
+  version: 7.1.1
+  resolution: "fill-range@npm:7.1.1"
   dependencies:
     to-regex-range: "npm:^5.0.1"
-  checksum: 10/e260f7592fd196b4421504d3597cc76f4a1ca7a9488260d533b611fc3cefd61e9a9be1417cb82d3b01ad9f9c0ff2dbf258e1026d2445e26b0cf5148ff4250429
+  checksum: 10/a7095cb39e5bc32fada2aa7c7249d3f6b01bd1ce461a61b0adabacccabd9198500c6fb1f68a7c851a657e273fce2233ba869638897f3d7ed2e87a2d89b4436ea
   languageName: node
   linkType: hard
 
@@ -6508,13 +6508,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"micromatch@npm:4.0.5, micromatch@npm:^4.0.4, micromatch@npm:^4.0.5":
-  version: 4.0.5
-  resolution: "micromatch@npm:4.0.5"
+"micromatch@npm:4.0.7, micromatch@npm:^4.0.4, micromatch@npm:^4.0.5":
+  version: 4.0.7
+  resolution: "micromatch@npm:4.0.7"
   dependencies:
-    braces: "npm:^3.0.2"
+    braces: "npm:^3.0.3"
     picomatch: "npm:^2.3.1"
-  checksum: 10/a749888789fc15cac0e03273844dbd749f9f8e8d64e70c564bcf06a033129554c789bb9e30d7566d7ff6596611a08e58ac12cf2a05f6e3c9c47c50c4c7e12fa2
+  checksum: 10/a11ed1cb67dcbbe9a5fc02c4062cf8bb0157d73bf86956003af8dcfdf9b287f9e15ec0f6d6925ff6b8b5b496202335e497b01de4d95ef6cf06411bc5e5c474a0
   languageName: node
   linkType: hard
 
@@ -7358,7 +7358,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "prettier@workspace:."
   dependencies:
-    "@angular/compiler": "npm:17.3.9"
+    "@angular/compiler": "npm:18.0.0"
     "@babel/code-frame": "npm:7.24.2"
     "@babel/generator": "npm:7.24.5"
     "@babel/parser": "npm:7.24.5"
@@ -7380,7 +7380,7 @@ __metadata:
     "@typescript-eslint/visitor-keys": "npm:7.10.0"
     acorn: "npm:8.11.3"
     acorn-jsx: "npm:5.3.2"
-    angular-estree-parser: "npm:10.0.2"
+    angular-estree-parser: "npm:10.0.3"
     angular-html-parser: "npm:5.2.0"
     benchmark: "npm:2.1.4"
     browserslist: "npm:4.23.0"
@@ -7411,7 +7411,7 @@ __metadata:
     eslint-plugin-jest: "npm:27.9.0"
     eslint-plugin-n: "npm:16.6.2"
     eslint-plugin-react: "npm:7.34.1"
-    eslint-plugin-regexp: "npm:2.5.0"
+    eslint-plugin-regexp: "npm:2.6.0"
     eslint-plugin-simple-import-sort: "npm:12.1.0"
     eslint-plugin-unicorn: "npm:52.0.0"
     esm-utils: "npm:4.3.0"
@@ -7445,7 +7445,7 @@ __metadata:
     linguist-languages: "npm:7.27.0"
     magic-string: "npm:0.30.10"
     meriyah: "npm:4.4.2"
-    micromatch: "npm:4.0.5"
+    micromatch: "npm:4.0.7"
     minimist: "npm:1.2.8"
     n-readlines: "npm:1.0.1"
     npm-run-all2: "npm:6.2.0"
