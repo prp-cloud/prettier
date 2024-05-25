@@ -11434,7 +11434,7 @@ var require_lib3 = __commonJS({
       var t = _getRequireWildcardCache(r);
       if (t && t.has(e)) return t.get(e);
       var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor;
-      for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) {
+      for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) {
         var i = a ? Object.getOwnPropertyDescriptor(e, u) : null;
         i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u];
       }

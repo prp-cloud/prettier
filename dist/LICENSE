@@ -27,7 +27,7 @@ Author: angular
 
 ----------------------------------------
 
-### @babel/code-frame@v7.24.2
+### @babel/code-frame@v7.24.6
 
 > Generate errors that contain a code frame that point to source locations.
 
@@ -128,7 +128,7 @@ Author: The Babel Team (https://babel.dev/team)
 
 ----------------------------------------
 
-### @babel/parser@v7.24.5
+### @babel/parser@v7.24.6
 
 > A JavaScript parser
 
@@ -704,72 +704,6 @@ Contributors:
 
 ----------------------------------------
 
-### balanced-match@v1.0.2
-
-> Match balanced character pairs, like "{" and "}"
-
-License: MIT
-Homepage: <https://github.com/juliangruber/balanced-match>
-Repository: <git://github.com/juliangruber/balanced-match.git>
-Author: Julian Gruber <mail@juliangruber.com> (http://juliangruber.com)
-
-> (MIT)
->
-> Copyright (c) 2013 Julian Gruber &lt;julian@juliangruber.com&gt;
->
-> Permission is hereby granted, free of charge, to any person obtaining a copy of
-> this software and associated documentation files (the "Software"), to deal in
-> the Software without restriction, including without limitation the rights to
-> use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-> of the Software, and to permit persons to whom the Software is furnished to do
-> so, subject to the following conditions:
->
-> The above copyright notice and this permission notice shall be included in all
-> copies or substantial portions of the Software.
->
-> THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-> IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-> FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-> AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-> LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-> OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-> SOFTWARE.
-
-----------------------------------------
-
-### brace-expansion@v1.1.11
-
-> Brace expansion as known from sh/bash
-
-License: MIT
-Homepage: <https://github.com/juliangruber/brace-expansion>
-Repository: <git://github.com/juliangruber/brace-expansion.git>
-Author: Julian Gruber <mail@juliangruber.com> (http://juliangruber.com)
-
-> MIT License
->
-> Copyright (c) 2013 Julian Gruber <julian@juliangruber.com>
->
-> Permission is hereby granted, free of charge, to any person obtaining a copy
-> of this software and associated documentation files (the "Software"), to deal
-> in the Software without restriction, including without limitation the rights
-> to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-> copies of the Software, and to permit persons to whom the Software is
-> furnished to do so, subject to the following conditions:
->
-> The above copyright notice and this permission notice shall be included in all
-> copies or substantial portions of the Software.
->
-> THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-> IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-> FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-> AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-> LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-> OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-> SOFTWARE.
-
-----------------------------------------
-
 ### braces@v3.0.3
 
 > Bash-like brace expansion, implemented in JavaScript. Safer than other brace expansion libs, with complete support for the Bash 4.3 braces specification, without sacrificing speed.
@@ -1070,35 +1004,6 @@ Author: Mark Wubben (https://novemberborn.net/)
 > OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
 > TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF
 > THIS SOFTWARE.
-
-----------------------------------------
-
-### concat-map@v0.0.1
-
-> concatenative mapdashery
-
-License: MIT
-Repository: <git://github.com/substack/node-concat-map.git>
-Author: James Halliday <mail@substack.net> (http://substack.net)
-
-> This software is released under the MIT license:
->
-> Permission is hereby granted, free of charge, to any person obtaining a copy of
-> this software and associated documentation files (the "Software"), to deal in
-> the Software without restriction, including without limitation the rights to
-> use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
-> the Software, and to permit persons to whom the Software is furnished to do so,
-> subject to the following conditions:
->
-> The above copyright notice and this permission notice shall be included in all
-> copies or substantial portions of the Software.
->
-> THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-> IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
-> FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
-> COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
-> IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
-> CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 ----------------------------------------
 
@@ -1422,7 +1327,7 @@ Author: Matteo Collina <hello@matteocollina.com>
 
 ----------------------------------------
 
-### file-entry-cache@v7.0.2
+### file-entry-cache@v9.0.0
 
 > Super simple cache for file metadata, useful for process that work o a given series of files and that only need to repeat the job on the changed ones since the previous run of the process
 
@@ -1530,7 +1435,7 @@ Author: Sindre Sorhus <sindresorhus@gmail.com> (https://sindresorhus.com)
 
 ----------------------------------------
 
-### flat-cache@v3.2.0
+### flat-cache@v5.0.0
 
 > A stupidly simple key/value storage using files to persist some data
 
@@ -1634,60 +1539,6 @@ Author: Flow Team <flow@fb.com>
 
 ----------------------------------------
 
-### fs.realpath@v1.0.0
-
-> Use node's fs.realpath, but fall back to the JS implementation if the native one fails
-
-License: ISC
-Repository: <git+https://github.com/isaacs/fs.realpath.git>
-Author: Isaac Z. Schlueter <i@izs.me> (http://blog.izs.me/)
-
-> The ISC License
->
-> Copyright (c) Isaac Z. Schlueter and Contributors
->
-> Permission to use, copy, modify, and/or distribute this software for any
-> purpose with or without fee is hereby granted, provided that the above
-> copyright notice and this permission notice appear in all copies.
->
-> THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
-> WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
-> MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
-> ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
-> WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
-> ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR
-> IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
->
-> ----
->
-> This library bundles a version of the `fs.realpath` and `fs.realpathSync`
-> methods from Node.js v0.10 under the terms of the Node.js MIT license.
->
-> Node's license follows, also included at the header of `old.js` which contains
-> the licensed code:
->
->   Copyright Joyent, Inc. and other Node contributors.
->
->   Permission is hereby granted, free of charge, to any person obtaining a
->   copy of this software and associated documentation files (the "Software"),
->   to deal in the Software without restriction, including without limitation
->   the rights to use, copy, modify, merge, publish, distribute, sublicense,
->   and/or sell copies of the Software, and to permit persons to whom the
->   Software is furnished to do so, subject to the following conditions:
->
->   The above copyright notice and this permission notice shall be included in
->   all copies or substantial portions of the Software.
->
->   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
->   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
->   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
->   AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
->   LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
->   FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
->   DEALINGS IN THE SOFTWARE.
-
-----------------------------------------
-
 ### get-east-asian-width@v1.2.0
 
 > Determine the East Asian Width of a Unicode character
@@ -1723,38 +1574,6 @@ Author: Sindre Sorhus <sindresorhus@gmail.com> (https://sindresorhus.com)
 > The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 >
 > THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-----------------------------------------
-
-### glob@v7.2.3
-
-> a little globber
-
-License: ISC
-Repository: <git://github.com/isaacs/node-glob.git>
-Author: Isaac Z. Schlueter <i@izs.me> (http://blog.izs.me/)
-
-> The ISC License
->
-> Copyright (c) Isaac Z. Schlueter and Contributors
->
-> Permission to use, copy, modify, and/or distribute this software for any
-> purpose with or without fee is hereby granted, provided that the above
-> copyright notice and this permission notice appear in all copies.
->
-> THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
-> WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
-> MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
-> ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
-> WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
-> ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR
-> IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
->
-> ## Glob Logo
->
-> Glob's logo created by Tanya Brassie <http://tanyabrassie.com/>, licensed
-> under a Creative Commons Attribution-ShareAlike 4.0 International License
-> https://creativecommons.org/licenses/by-sa/4.0/
 
 ----------------------------------------
 
@@ -1986,33 +1805,6 @@ Author: Dominic Tarr <dominic.tarr@gmail.com> (dominictarr.com)
 > ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, 
 > TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
 > SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-----------------------------------------
-
-### inflight@v1.0.6
-
-> Add callbacks to requests in flight to avoid async duplication
-
-License: ISC
-Homepage: <https://github.com/isaacs/inflight>
-Repository: <https://github.com/npm/inflight.git>
-Author: Isaac Z. Schlueter <i@izs.me> (http://blog.izs.me/)
-
-> The ISC License
->
-> Copyright (c) Isaac Z. Schlueter
->
-> Permission to use, copy, modify, and/or distribute this software for any
-> purpose with or without fee is hereby granted, provided that the above
-> copyright notice and this permission notice appear in all copies.
->
-> THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
-> WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
-> MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
-> ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
-> WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
-> ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR
-> IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 ----------------------------------------
 
@@ -2841,32 +2633,6 @@ Contributors:
 
 ----------------------------------------
 
-### minimatch@v3.1.2
-
-> a glob matcher in javascript
-
-License: ISC
-Repository: <git://github.com/isaacs/minimatch.git>
-Author: Isaac Z. Schlueter <i@izs.me> (http://blog.izs.me)
-
-> The ISC License
->
-> Copyright (c) Isaac Z. Schlueter and Contributors
->
-> Permission to use, copy, modify, and/or distribute this software for any
-> purpose with or without fee is hereby granted, provided that the above
-> copyright notice and this permission notice appear in all copies.
->
-> THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
-> WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
-> MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
-> ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
-> WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
-> ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR
-> IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
-
-----------------------------------------
-
 ### minimist@v1.2.8
 
 > parse argument options
@@ -2955,32 +2721,6 @@ Author: Andrey Sitnik <andrey@sitnik.ru>
 > COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
 > IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 > CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-----------------------------------------
-
-### once@v1.4.0
-
-> Run a function exactly one time
-
-License: ISC
-Repository: <git://github.com/isaacs/once>
-Author: Isaac Z. Schlueter <i@izs.me> (http://blog.izs.me/)
-
-> The ISC License
->
-> Copyright (c) Isaac Z. Schlueter and Contributors
->
-> Permission to use, copy, modify, and/or distribute this software for any
-> purpose with or without fee is hereby granted, provided that the above
-> copyright notice and this permission notice appear in all copies.
->
-> THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
-> WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
-> MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
-> ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
-> WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
-> ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR
-> IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 ----------------------------------------
 
@@ -3091,37 +2831,6 @@ Author: Sindre Sorhus <sindresorhus@gmail.com> (https://sindresorhus.com)
 > The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 >
 > THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-----------------------------------------
-
-### path-is-absolute@v1.0.1
-
-> Node.js 0.12 path.isAbsolute() ponyfill
-
-License: MIT
-Author: Sindre Sorhus <sindresorhus@gmail.com> (sindresorhus.com)
-
-> The MIT License (MIT)
->
-> Copyright (c) Sindre Sorhus <sindresorhus@gmail.com> (sindresorhus.com)
->
-> Permission is hereby granted, free of charge, to any person obtaining a copy
-> of this software and associated documentation files (the "Software"), to deal
-> in the Software without restriction, including without limitation the rights
-> to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-> copies of the Software, and to permit persons to whom the Software is
-> furnished to do so, subject to the following conditions:
->
-> The above copyright notice and this permission notice shall be included in
-> all copies or substantial portions of the Software.
->
-> THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-> IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-> FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-> AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-> LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-> OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-> THE SOFTWARE.
 
 ----------------------------------------
 
@@ -3560,31 +3269,6 @@ Author: Matteo Collina <hello@matteocollina.com>
 > LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 > OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 > SOFTWARE.
-
-----------------------------------------
-
-### rimraf@v3.0.2
-
-> A deep deletion module for node (like `rm -rf`)
-
-License: ISC
-Author: Isaac Z. Schlueter <i@izs.me> (http://blog.izs.me/)
-
-> The ISC License
->
-> Copyright (c) Isaac Z. Schlueter and Contributors
->
-> Permission to use, copy, modify, and/or distribute this software for any
-> purpose with or without fee is hereby granted, provided that the above
-> copyright notice and this permission notice appear in all copies.
->
-> THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
-> WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
-> MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
-> ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
-> WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
-> ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR
-> IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 ----------------------------------------
 
@@ -4492,33 +4176,6 @@ Contributors:
 > CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
 > IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
 > OF SUCH DAMAGE.
-
-----------------------------------------
-
-### wrappy@v1.0.2
-
-> Callback wrapping utility
-
-License: ISC
-Homepage: <https://github.com/npm/wrappy>
-Repository: <https://github.com/npm/wrappy>
-Author: Isaac Z. Schlueter <i@izs.me> (http://blog.izs.me/)
-
-> The ISC License
->
-> Copyright (c) Isaac Z. Schlueter and Contributors
->
-> Permission to use, copy, modify, and/or distribute this software for any
-> purpose with or without fee is hereby granted, provided that the above
-> copyright notice and this permission notice appear in all copies.
->
-> THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
-> WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
-> MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
-> ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
-> WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
-> ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR
-> IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 ----------------------------------------
 
