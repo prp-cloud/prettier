@@ -2801,11 +2801,11 @@ function escapePathForGlob(path10) {
         )
         // Workaround for fast-glob#262 (part 1)
       ),
-      "\\!",
+      String.raw`\!`,
       "@(!)"
     ),
     "\0",
-    "@(\\\\)"
+    String.raw`@(\\)`
   );
 }
 var fixWindowsSlashes = normalizeToPosix;
