@@ -585,7 +585,6 @@ Expected it to be ${EXPECTED_TYPE_VALUES}.`;
   }
   function stripTrailingHardlineFromDoc(doc) {
     switch (get_doc_type_default(doc)) {
-      case DOC_TYPE_ALIGN:
       case DOC_TYPE_INDENT:
       case DOC_TYPE_INDENT_IF_BREAK:
       case DOC_TYPE_GROUP:
@@ -612,6 +611,7 @@ Expected it to be ${EXPECTED_TYPE_VALUES}.`;
         return stripTrailingHardlineFromParts(doc);
       case DOC_TYPE_STRING:
         return doc.replace(/[\n\r]*$/, "");
+      case DOC_TYPE_ALIGN:
       case DOC_TYPE_CURSOR:
       case DOC_TYPE_TRIM:
       case DOC_TYPE_LINE_SUFFIX_BOUNDARY:
