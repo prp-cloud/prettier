@@ -21041,7 +21041,7 @@ function findCommonAncestor(startNodeAndParents, endNodeAndParents) {
 }
 function dropRootParents(parents) {
   let lastParentIndex = parents.length - 1;
-  for (; ; ) {
+  while (true) {
     const parent = parents[lastParentIndex];
     if ((parent == null ? void 0 : parent.type) === "Program" || (parent == null ? void 0 : parent.type) === "File") {
       lastParentIndex--;
