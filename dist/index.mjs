@@ -17781,7 +17781,7 @@ import path10 from "path";
 import url from "url";
 var createIgnore = import_ignore.default.default;
 var slash = path10.sep === "\\" ? (filePath) => string_replace_all_default(
-  /* isOptionalObject*/
+  /* isOptionalObject */
   false,
   filePath,
   "\\",
@@ -17973,7 +17973,7 @@ function countEndOfLineChars(text, eol) {
 }
 function normalizeEndOfLine(text) {
   return string_replace_all_default(
-    /* isOptionalObject*/
+    /* isOptionalObject */
     false,
     text,
     /\r\n?/g,
@@ -18448,7 +18448,7 @@ function mapDoc(doc2, cb) {
 function breakParentGroup(groupStack) {
   if (groupStack.length > 0) {
     const parentGroup = at_default(
-      /* isOptionalObject*/
+      /* isOptionalObject */
       false,
       groupStack,
       -1
@@ -18493,12 +18493,12 @@ function propagateBreaks(doc2) {
 function stripTrailingHardlineFromParts(parts) {
   parts = [...parts];
   while (parts.length >= 2 && at_default(
-    /* isOptionalObject*/
+    /* isOptionalObject */
     false,
     parts,
     -2
   ).type === DOC_TYPE_LINE && at_default(
-    /* isOptionalObject*/
+    /* isOptionalObject */
     false,
     parts,
     -1
@@ -18507,7 +18507,7 @@ function stripTrailingHardlineFromParts(parts) {
   }
   if (parts.length > 0) {
     const lastPart = stripTrailingHardlineFromDoc(at_default(
-      /* isOptionalObject*/
+      /* isOptionalObject */
       false,
       parts,
       -1
@@ -18595,7 +18595,7 @@ function cleanDocFn(doc2) {
         }
         const [currentPart, ...restParts] = Array.isArray(part) ? part : [part];
         if (typeof currentPart === "string" && typeof at_default(
-          /* isOptionalObject*/
+          /* isOptionalObject */
           false,
           parts,
           -1
@@ -18830,7 +18830,7 @@ function fits(next, restCommands, width, hasLineSuffix, groupModeMap, mustBeFlat
         }
         const groupMode = doc2.break ? MODE_BREAK : mode;
         const contents = doc2.expandedStates && groupMode === MODE_BREAK ? at_default(
-          /* isOptionalObject*/
+          /* isOptionalObject */
           false,
           doc2.expandedStates,
           -1
@@ -18897,7 +18897,7 @@ function printDocToString(doc2, options8) {
     switch (get_doc_type_default(doc3)) {
       case DOC_TYPE_STRING: {
         const formatted = newLine !== "\n" ? string_replace_all_default(
-          /* isOptionalObject*/
+          /* isOptionalObject */
           false,
           doc3,
           "\n",
@@ -18967,7 +18967,7 @@ function printDocToString(doc2, options8) {
             } else {
               if (doc3.expandedStates) {
                 const mostExpanded = at_default(
-                  /* isOptionalObject*/
+                  /* isOptionalObject */
                   false,
                   doc3.expandedStates,
                   -1
@@ -19015,7 +19015,7 @@ function printDocToString(doc2, options8) {
         }
         if (doc3.id) {
           groupModeMap[doc3.id] = at_default(
-            /* isOptionalObject*/
+            /* isOptionalObject */
             false,
             cmds,
             -1
@@ -19231,7 +19231,7 @@ var AstPath = class {
       siblings
     } = this;
     return at_default(
-      /* isOptionalObject*/
+      /* isOptionalObject */
       false,
       stack2,
       siblings === null ? -2 : -4
@@ -19240,7 +19240,7 @@ var AstPath = class {
   /** @type {number | null} */
   get index() {
     return this.siblings === null ? null : at_default(
-      /* isOptionalObject*/
+      /* isOptionalObject */
       false,
       this.stack,
       -2
@@ -19249,7 +19249,7 @@ var AstPath = class {
   /** @type {object} */
   get node() {
     return at_default(
-      /* isOptionalObject*/
+      /* isOptionalObject */
       false,
       this.stack,
       -1
@@ -19273,7 +19273,7 @@ var AstPath = class {
       stack: stack2
     } = this;
     const maybeArray = at_default(
-      /* isOptionalObject*/
+      /* isOptionalObject */
       false,
       stack2,
       -3
@@ -19329,7 +19329,7 @@ var AstPath = class {
     } = stack2;
     if (length > 1) {
       return at_default(
-        /* isOptionalObject*/
+        /* isOptionalObject */
         false,
         stack2,
         -2
@@ -19341,7 +19341,7 @@ var AstPath = class {
   // this.stack.
   getValue() {
     return at_default(
-      /* isOptionalObject*/
+      /* isOptionalObject */
       false,
       this.stack,
       -1
@@ -19367,7 +19367,7 @@ var AstPath = class {
       length
     } = stack2;
     let value = at_default(
-      /* isOptionalObject*/
+      /* isOptionalObject */
       false,
       stack2,
       -1
@@ -19403,7 +19403,7 @@ var AstPath = class {
       length
     } = stack2;
     let value = at_default(
-      /* isOptionalObject*/
+      /* isOptionalObject */
       false,
       stack2,
       -1
@@ -20415,7 +20415,7 @@ function normalizeOptionSettings(settings) {
     };
     if (Array.isArray(option.default)) {
       option.default = at_default(
-        /* isOptionalObject*/
+        /* isOptionalObject */
         false,
         option.default,
         -1
@@ -20571,7 +20571,7 @@ function optionInfoToSchema(optionInfo, {
   if (isCLI && !optionInfo.array) {
     const originalPreprocess = parameters.preprocess || ((x) => x);
     parameters.preprocess = (value, schema2, utils) => schema2.preprocess(originalPreprocess(Array.isArray(value) ? at_default(
-      /* isOptionalObject*/
+      /* isOptionalObject */
       false,
       value,
       -1
@@ -20614,7 +20614,7 @@ function getParserPluginByParserName(plugins, parserName) {
     throw new Error("parserName is required.");
   }
   const plugin = array_find_last_default(
-    /* isOptionalObject*/
+    /* isOptionalObject */
     false,
     plugins,
     (plugin2) => plugin2.parsers && Object.prototype.hasOwnProperty.call(plugin2.parsers, parserName)
@@ -20633,7 +20633,7 @@ function getPrinterPluginByAstFormat(plugins, astFormat) {
     throw new Error("astFormat is required.");
   }
   const plugin = array_find_last_default(
-    /* isOptionalObject*/
+    /* isOptionalObject */
     false,
     plugins,
     (plugin2) => plugin2.printers && Object.prototype.hasOwnProperty.call(plugin2.printers, astFormat)
@@ -21351,7 +21351,7 @@ async function formatRange(originalText, opts) {
       cursorOffset += countEndOfLineChars(formatted.slice(0, cursorOffset), "\n");
     }
     formatted = string_replace_all_default(
-      /* isOptionalObject*/
+      /* isOptionalObject */
       false,
       formatted,
       "\n",
@@ -22757,7 +22757,7 @@ function makeString(rawText, enclosingQuote, unescapeUnnecessaryEscapes) {
   const otherQuote = enclosingQuote === '"' ? "'" : '"';
   const regex = /\\(.)|(["'])/gs;
   const raw = string_replace_all_default(
-    /* isOptionalObject*/
+    /* isOptionalObject */
     false,
     rawText,
     regex,

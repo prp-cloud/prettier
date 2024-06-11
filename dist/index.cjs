@@ -472,7 +472,7 @@ function makeString(rawText, enclosingQuote, unescapeUnnecessaryEscapes) {
   const otherQuote = enclosingQuote === '"' ? "'" : '"';
   const regex = /\\(.)|(["'])/gs;
   const raw = string_replace_all_default(
-    /* isOptionalObject*/
+    /* isOptionalObject */
     false,
     rawText,
     regex,
