@@ -41,6 +41,7 @@ import { printFunctionParameters } from "./function-parameters.js";
 // a <= a ? a : a
 const shouldAddParensIfNotBreakCache = new WeakMap();
 function shouldAddParensIfNotBreak(node) {
+  return false;
   if (!shouldAddParensIfNotBreakCache.has(node)) {
     shouldAddParensIfNotBreakCache.set(
       node,

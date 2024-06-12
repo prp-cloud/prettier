@@ -363,10 +363,12 @@ function needsParens(path, options) {
           //   foo satisfies unknown satisfies Bar
           //   foo satisfies unknown as Bar
           //   foo as unknown satisfies Bar
-          return !isBinaryCastExpression(node);
+          return (
+            !isBinaryCastExpression(node) && node.type !== "BinaryExpression"
+          );
 
         case "ConditionalExpression":
-          return isBinaryCastExpression(node);
+          return false; //isBinaryCastExpression(node);
 
         case "CallExpression":
         case "NewExpression":
@@ -380,8 +382,8 @@ function needsParens(path, options) {
         case "TSTypeAssertion":
         case "TaggedTemplateExpression":
         case "UnaryExpression":
-        case "JSXSpreadAttribute":
-        case "SpreadElement":
+        /*case "JSXSpreadAttribute":
+        case "SpreadElement":*/
         case "BindExpression":
         case "AwaitExpression":
         case "TSNonNullExpression":
@@ -401,14 +403,24 @@ function needsParens(path, options) {
 
         case "LogicalExpression":
           if (node.type === "LogicalExpression") {
-            return parent.operator !== node.operator;
+            return (
+              getPrecedence(node.operator) < getPrecedence(parent.operator) ||
+              [node, parent].some(({ operator }) => operator === "??")
+            );
           }
         // else fallthrough
 
         case "BinaryExpression": {
           const { operator, type } = node;
           if (!operator && type !== "TSTypeAssertion") {
-            return true;
+            const precedence = getPrecedence(parent.operator);
+            const parentPrecedence = getPrecedence(path.grandparent.operator);
+            return (
+              (key === "right" && parent.type === "BinaryExpression") ||
+              (path.grandparent.type === "BinaryExpression" &&
+                parentPrecedence < precedence &&
+                path.grandparent.right === parent)
+            );
           }
 
           const precedence = getPrecedence(operator);
@@ -423,7 +435,7 @@ function needsParens(path, options) {
             return true;
           }
 
-          if (
+          /*if (
             parentPrecedence === precedence &&
             !shouldFlatten(parentOperator, operator)
           ) {
@@ -432,13 +444,13 @@ function needsParens(path, options) {
 
           if (parentPrecedence < precedence && operator === "%") {
             return parentOperator === "+" || parentOperator === "-";
-          }
+          }*/
 
           // Add parenthesis when working with bitwise operators
           // It's not strictly needed but helps with code understanding
-          if (isBitwiseOperator(parentOperator)) {
+          /*if (isBitwiseOperator(parentOperator)) {
             return true;
-          }
+          }*/
 
           return false;
         }
@@ -484,11 +496,11 @@ function needsParens(path, options) {
     case "AwaitExpression":
       switch (parent.type) {
         case "TaggedTemplateExpression":
-        case "UnaryExpression":
+        /*case "UnaryExpression":
         case "LogicalExpression":
         case "SpreadElement":
         case "TSAsExpression":
-        case "TSSatisfiesExpression":
+        case "TSSatisfiesExpression":*/
         case "TSNonNullExpression":
         case "AsExpression":
         case "AsConstExpression":
@@ -506,14 +518,14 @@ function needsParens(path, options) {
           return key === "callee";
 
         case "ConditionalExpression":
-          return key === "test";
+          return /*key === "test"*/ false;
 
         case "BinaryExpression":
-          if (!node.argument && parent.operator === "|>") {
-            return false;
-          }
+          //if (!node.argument && parent.operator === "|>") {
+          return false;
+        /*}
 
-          return true;
+          return true;*/
 
         default:
           return false;
@@ -561,7 +573,6 @@ function needsParens(path, options) {
       }
     // fallthrough
     case "TSUnionType":
-    case "TSIntersectionType":
       if (
         (parent.type === "TSUnionType" ||
           parent.type === "TSIntersectionType") &&
@@ -571,6 +582,7 @@ function needsParens(path, options) {
         return true;
       }
     // fallthrough
+    case "TSIntersectionType": // is this correct? unsure
     case "TSInferType":
       if (node.type === "TSInferType") {
         if (parent.type === "TSRestType") {
@@ -600,8 +612,8 @@ function needsParens(path, options) {
       );
     case "TSTypeQuery":
       return (
-        (key === "objectType" && parent.type === "TSIndexedAccessType") ||
-        (key === "elementType" && parent.type === "TSArrayType")
+        //(key === "objectType" && parent.type === "TSIndexedAccessType") ||
+        key === "elementType" && parent.type === "TSArrayType"
       );
     // Same as `TSTypeOperator`, but for Flow syntax
     case "TypeOperator":
@@ -756,6 +768,20 @@ function needsParens(path, options) {
       );
 
     case "AssignmentExpression": {
+      return (
+        (key === "callee" && parent.type === "CallExpression") ||
+        (key === "test" && parent.type === "ConditionalExpression") ||
+        (parent.type === "ExpressionStatement" &&
+          node.left.type === "ObjectPattern") ||
+        (key === "object" && parent.type === "MemberExpression") ||
+        [
+          "AwaitExpression",
+          "BinaryExpression",
+          "LogicalExpression",
+          "UnaryExpression",
+        ].includes(parent.type)
+      );
+
       const grandParent = path.grandparent;
 
       if (key === "body" && parent.type === "ArrowFunctionExpression") {
@@ -817,13 +843,13 @@ function needsParens(path, options) {
       switch (parent.type) {
         case "TaggedTemplateExpression":
         case "UnaryExpression":
-        case "SpreadElement":
+        //case "SpreadElement":
         case "BinaryExpression":
         case "LogicalExpression":
         case "NGPipeExpression":
         case "ExportDefaultDeclaration":
         case "AwaitExpression":
-        case "JSXSpreadAttribute":
+        //case "JSXSpreadAttribute":
         case "TSTypeAssertion":
         case "TypeCastExpression":
         case "TSAsExpression":
