@@ -456,7 +456,7 @@ Author: Alex Bell <alex@bellandwhistle.net>
 
 ----------------------------------------
 
-### @typescript-eslint/types@v7.13.0
+### @typescript-eslint/types@v8.0.0-alpha.30
 
 > Types for the TypeScript-ESTree AST spec
 
@@ -488,7 +488,7 @@ Repository: <https://github.com/typescript-eslint/typescript-eslint.git>
 
 ----------------------------------------
 
-### @typescript-eslint/typescript-estree@v7.13.0
+### @typescript-eslint/typescript-estree@v8.0.0-alpha.30
 
 > A parser that converts TypeScript source code into an ESTree compatible form
 
@@ -1605,7 +1605,7 @@ Contributors:
 
 ----------------------------------------
 
-### graphql@v16.8.1
+### graphql@v16.8.2
 
 > A Query Language and Runtime which can target any service.
 
@@ -3620,7 +3620,7 @@ Author: JoshuaKGoldberg <npm@joshuakgoldberg.com>
 
 ----------------------------------------
 
-### typescript@v5.4.5
+### typescript@v5.5.1-rc
 
 > TypeScript is a language for application scale JavaScript development
 
