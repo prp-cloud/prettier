@@ -525,13 +525,13 @@ Repository: <https://github.com/typescript-eslint/typescript-eslint.git>
 
 ----------------------------------------
 
-### acorn@v8.11.3
+### acorn@v8.12.0
 
 > ECMAScript parser
 
 License: MIT
 Homepage: <https://github.com/acornjs/acorn>
-Repository: <https://github.com/acornjs/acorn.git>
+Repository: <git+https://github.com/acornjs/acorn.git>
 
 > MIT License
 >
@@ -2223,7 +2223,7 @@ Author: fisker Cheung <lionkay@gmail.com> (https://www.fiskercheung.com/)
 
 ----------------------------------------
 
-### jest-docblock@v29.7.0
+### jest-docblock@v30.0.0-alpha.5
 
 License: MIT
 Repository: <https://github.com/jestjs/jest.git>
@@ -2231,6 +2231,7 @@ Repository: <https://github.com/jestjs/jest.git>
 > MIT License
 >
 > Copyright (c) Meta Platforms, Inc. and affiliates.
+> Copyright Contributors to the Jest project.
 >
 > Permission is hereby granted, free of charge, to any person obtaining a copy
 > of this software and associated documentation files (the "Software"), to deal
