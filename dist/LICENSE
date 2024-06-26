@@ -456,7 +456,7 @@ Author: Alex Bell <alex@bellandwhistle.net>
 
 ----------------------------------------
 
-### @typescript-eslint/types@v8.0.0-alpha.30
+### @typescript-eslint/types@v8.0.0-alpha.34
 
 > Types for the TypeScript-ESTree AST spec
 
@@ -488,7 +488,7 @@ Repository: <https://github.com/typescript-eslint/typescript-eslint.git>
 
 ----------------------------------------
 
-### @typescript-eslint/typescript-estree@v8.0.0-alpha.30
+### @typescript-eslint/typescript-estree@v8.0.0-alpha.34
 
 > A parser that converts TypeScript source code into an ESTree compatible form
 
@@ -1167,7 +1167,7 @@ Author: Sindre Sorhus <sindresorhus@gmail.com> (https://sindresorhus.com)
 
 ----------------------------------------
 
-### espree@v10.0.1
+### espree@v10.1.0
 
 > An Esprima-compatible JavaScript parser built on Acorn
 
@@ -1605,7 +1605,7 @@ Contributors:
 
 ----------------------------------------
 
-### graphql@v16.8.2
+### graphql@v16.9.0
 
 > A Query Language and Runtime which can target any service.
 
@@ -3621,7 +3621,7 @@ Author: JoshuaKGoldberg <npm@joshuakgoldberg.com>
 
 ----------------------------------------
 
-### typescript@v5.5.1-rc
+### typescript@v5.5.2
 
 > TypeScript is a language for application scale JavaScript development
 
