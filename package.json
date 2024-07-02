@@ -45,7 +45,7 @@
     "@types/estree": "1.0.5",
     "@types/file-entry-cache": "5.0.4",
     "@types/jest": "29.5.12",
-		"@typescript-eslint/eslint-plugin": "8.0.0-alpha.34",
+    "@typescript-eslint/eslint-plugin": "8.0.0-alpha.34",
     "@typescript-eslint/typescript-estree": "8.0.0-alpha.34",
     "@typescript-eslint/visitor-keys": "8.0.0-alpha.34",
     "acorn": "8.12.0",
@@ -69,7 +69,7 @@
     "editorconfig": "0.15.3",
     "emoji-regex": "10.3.0",
     "enquirer": "2.4.1",
-		"esbuild": "0.22.0",
+    "esbuild": "0.22.0",
     "esbuild-plugins-node-modules-polyfill": "1.6.4",
     "esbuild-visualizer": "0.6.0",
     "escape-string-regexp": "5.0.0",
@@ -208,6 +208,7 @@
   "packageManager": "yarn@4.3.1",
   "overrides": {
     "@typescript-eslint/eslint-plugin": "$@typescript-eslint/eslint-plugin",
+    "esbuild": "$esbuild",
     "eslint": "$eslint",
     "jest": "$jest"
   }
