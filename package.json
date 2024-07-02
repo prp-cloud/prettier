@@ -208,6 +208,7 @@
   "packageManager": "yarn@4.3.1",
   "overrides": {
     "@typescript-eslint/eslint-plugin": "$@typescript-eslint/eslint-plugin",
+    "@typescript-eslint/parser": "$@typescript-eslint/eslint-plugin",
     "esbuild": "$esbuild",
     "eslint": "$eslint",
     "jest": "$jest"

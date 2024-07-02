@@ -2911,7 +2911,7 @@ Author: Sindre Sorhus <sindresorhus@gmail.com> (https://sindresorhus.com)
 
 ----------------------------------------
 
-### postcss@v8.4.38
+### postcss@v8.4.39
 
 > Tool for transforming styles with JS plugins
 
@@ -3621,7 +3621,7 @@ Author: JoshuaKGoldberg <npm@joshuakgoldberg.com>
 
 ----------------------------------------
 
-### typescript@v5.5.2
+### typescript@v5.5.3
 
 > TypeScript is a language for application scale JavaScript development
 
@@ -4296,7 +4296,7 @@ Author: Ika <ikatyang@gmail.com> (https://github.com/ikatyang)
 
 ----------------------------------------
 
-### yocto-queue@v1.0.0
+### yocto-queue@v1.1.1
 
 > Tiny queue data structure
 
