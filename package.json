@@ -132,7 +132,7 @@
     "remark-footnotes": "2.0.0",
     "remark-math": "3.0.1",
     "remark-parse": "8.0.3",
-    "rollup-plugin-license": "3.4.1",
+		"rollup-plugin-license": "3.5.2",
     "sdbm": "2.0.0",
     "semver": "7.6.2",
     "serialize-javascript": "6.0.2",
