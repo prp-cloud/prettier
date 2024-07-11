@@ -27,7 +27,7 @@
     "dist"
   ],
   "devDependencies": {
-    "@angular/compiler": "18.0.2",
+    "@angular/compiler": "18.1.0",
     "@babel/code-frame": "7.24.7",
     "@babel/generator": "7.24.7",
     "@babel/parser": "7.24.7",
