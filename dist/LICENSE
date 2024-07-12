@@ -128,7 +128,7 @@ Author: The Babel Team (https://babel.dev/team)
 
 ----------------------------------------
 
-### @babel/parser@v7.24.7
+### @babel/parser@v7.24.8
 
 > A JavaScript parser
 
@@ -525,7 +525,7 @@ Repository: <https://github.com/typescript-eslint/typescript-eslint.git>
 
 ----------------------------------------
 
-### acorn@v8.12.0
+### acorn@v8.12.1
 
 > ECMAScript parser
 
@@ -619,7 +619,7 @@ Author: Ika <ikatyang@gmail.com> (https://github.com/ikatyang)
 
 ----------------------------------------
 
-### angular-html-parser@v5.2.0
+### angular-html-parser@v6.0.2
 
 > A HTML parser extracted from Angular with some modifications
 
@@ -628,19 +628,19 @@ Homepage: <https://github.com/prettier/angular-html-parser/blob/master/packages/
 Author: Ika <ikatyang@gmail.com> (https://github.com/ikatyang)
 
 > MIT License
->
+> 
 > Copyright (c) Ika <ikatyang@gmail.com> (https://github.com/ikatyang)
->
+> 
 > Permission is hereby granted, free of charge, to any person obtaining a copy
 > of this software and associated documentation files (the "Software"), to deal
 > in the Software without restriction, including without limitation the rights
 > to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 > copies of the Software, and to permit persons to whom the Software is
 > furnished to do so, subject to the following conditions:
->
+> 
 > The above copyright notice and this permission notice shall be included in all
 > copies or substantial portions of the Software.
->
+> 
 > THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 > IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 > FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
