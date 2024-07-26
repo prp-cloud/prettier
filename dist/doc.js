@@ -713,6 +713,7 @@ Expected it to be ${EXPECTED_TYPE_VALUES}.`;
   var MODE_BREAK = Symbol("MODE_BREAK");
   var MODE_FLAT = Symbol("MODE_FLAT");
   var CURSOR_PLACEHOLDER = Symbol("cursor");
+  var IS_MUTABLE_FILL = Symbol("IS_MUTABLE_FILL");
   function rootIndent() {
     return {
       value: "",
@@ -1140,13 +1141,22 @@ Expected it to be ${EXPECTED_TYPE_VALUES}.`;
             }
             break;
           }
-          parts.splice(0, 2);
+          const secondContent = parts[2];
+          let remainingDoc = doc2;
+          if (doc2[IS_MUTABLE_FILL]) {
+            parts.splice(0, 2);
+          } else {
+            remainingDoc = {
+              ...doc2,
+              parts: parts.slice(2),
+              [IS_MUTABLE_FILL]: true
+            };
+          }
           const remainingCmd = {
             ind,
             mode,
-            doc: fill(parts)
+            doc: remainingDoc
           };
-          const secondContent = parts[0];
           const firstAndSecondContentFlatCmd = {
             ind,
             mode: MODE_FLAT,
