@@ -351,6 +351,30 @@ var init_get_next_non_space_non_comment_character = __esm({
   }
 });
 
+// src/utils/get-preferred-quote.js
+function getPreferredQuote(text, preferredQuoteOrPreferSingleQuote) {
+  const preferred = preferredQuoteOrPreferSingleQuote === true || preferredQuoteOrPreferSingleQuote === SINGLE_QUOTE ? SINGLE_QUOTE : DOUBLE_QUOTE;
+  const alternate = preferred === SINGLE_QUOTE ? DOUBLE_QUOTE : SINGLE_QUOTE;
+  let preferredQuoteCount = 0;
+  let alternateQuoteCount = 0;
+  for (const character of text) {
+    if (character === preferred) {
+      preferredQuoteCount++;
+    } else if (character === alternate) {
+      alternateQuoteCount++;
+    }
+  }
+  return preferredQuoteCount > alternateQuoteCount ? alternate : preferred;
+}
+var SINGLE_QUOTE, DOUBLE_QUOTE, get_preferred_quote_default;
+var init_get_preferred_quote = __esm({
+  "src/utils/get-preferred-quote.js"() {
+    SINGLE_QUOTE = "'";
+    DOUBLE_QUOTE = '"';
+    get_preferred_quote_default = getPreferredQuote;
+  }
+});
+
 // node_modules/emoji-regex/index.mjs
 var emoji_regex_default;
 var init_emoji_regex = __esm({
@@ -510,6 +534,7 @@ __export(public_exports, {
   getMaxContinuousCount: () => get_max_continuous_count_default,
   getNextNonSpaceNonCommentCharacter: () => get_next_non_space_non_comment_character_default,
   getNextNonSpaceNonCommentCharacterIndex: () => getNextNonSpaceNonCommentCharacterIndex2,
+  getPreferredQuote: () => get_preferred_quote_default,
   getStringWidth: () => get_string_width_default,
   hasNewline: () => has_newline_default,
   hasNewlineInRange: () => has_newline_in_range_default,
@@ -570,6 +595,7 @@ var init_public = __esm({
     init_get_indent_size();
     init_get_max_continuous_count();
     init_get_next_non_space_non_comment_character();
+    init_get_preferred_quote();
     init_get_string_width();
     init_has_newline();
     init_has_newline_in_range();

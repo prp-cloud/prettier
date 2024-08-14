@@ -21604,6 +21604,7 @@ __export(public_exports, {
   getMaxContinuousCount: () => get_max_continuous_count_default,
   getNextNonSpaceNonCommentCharacter: () => get_next_non_space_non_comment_character_default,
   getNextNonSpaceNonCommentCharacterIndex: () => getNextNonSpaceNonCommentCharacterIndex2,
+  getPreferredQuote: () => get_preferred_quote_default,
   getStringWidth: () => get_string_width_default,
   hasNewline: () => has_newline_default,
   hasNewlineInRange: () => has_newline_in_range_default,
@@ -21724,6 +21725,25 @@ function getNextNonSpaceNonCommentCharacter(text, startIndex) {
   return index === false ? "" : text.charAt(index);
 }
 var get_next_non_space_non_comment_character_default = getNextNonSpaceNonCommentCharacter;
+
+// src/utils/get-preferred-quote.js
+var SINGLE_QUOTE = "'";
+var DOUBLE_QUOTE = '"';
+function getPreferredQuote(text, preferredQuoteOrPreferSingleQuote) {
+  const preferred = preferredQuoteOrPreferSingleQuote === true || preferredQuoteOrPreferSingleQuote === SINGLE_QUOTE ? SINGLE_QUOTE : DOUBLE_QUOTE;
+  const alternate = preferred === SINGLE_QUOTE ? DOUBLE_QUOTE : SINGLE_QUOTE;
+  let preferredQuoteCount = 0;
+  let alternateQuoteCount = 0;
+  for (const character of text) {
+    if (character === preferred) {
+      preferredQuoteCount++;
+    } else if (character === alternate) {
+      alternateQuoteCount++;
+    }
+  }
+  return preferredQuoteCount > alternateQuoteCount ? alternate : preferred;
+}
+var get_preferred_quote_default = getPreferredQuote;
 
 // src/utils/has-newline-in-range.js
 function hasNewlineInRange(text, startIndex, endIndex) {
