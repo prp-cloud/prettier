@@ -195,6 +195,7 @@
     "standalone.mjs"
   ],
   "preferUnplugged": true,
+  "type": "commonjs",
   "scripts": {
     "prepublishOnly": "node -e \"assert.equal(require('.').version, require('..').version)\""
   }

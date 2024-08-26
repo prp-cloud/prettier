@@ -2950,7 +2950,11 @@ var require_micromatch = __commonJS({
     var braces = require_braces();
     var picomatch = require_picomatch2();
     var utils = require_utils2();
-    var isEmptyString = (val) => val === "" || val === "./";
+    var isEmptyString = (v) => v === "" || v === "./";
+    var hasBraces = (v) => {
+      const index = v.indexOf("{");
+      return index > -1 && v.indexOf("}", index) > -1;
+    };
     var micromatch2 = (list, patterns, options8) => {
       patterns = [].concat(patterns);
       list = [].concat(list);
@@ -3085,7 +3089,7 @@ var require_micromatch = __commonJS({
     };
     micromatch2.braces = (pattern, options8) => {
       if (typeof pattern !== "string") throw new TypeError("Expected a string");
-      if (options8 && options8.nobrace === true || !/\{.*\}/.test(pattern)) {
+      if (options8 && options8.nobrace === true || !hasBraces(pattern)) {
         return [pattern];
       }
       return braces(pattern, options8);
@@ -3094,6 +3098,7 @@ var require_micromatch = __commonJS({
       if (typeof pattern !== "string") throw new TypeError("Expected a string");
       return micromatch2.braces(pattern, { ...options8, expand: true });
     };
+    micromatch2.hasBraces = hasBraces;
     module.exports = micromatch2;
   }
 });
@@ -9488,14 +9493,21 @@ var require_ignore = __commonJS({
       [
         // (a\ ) -> (a )
         // (a  ) -> (a)
+        // (a ) -> (a)
         // (a \ ) -> (a  )
-        /\\?\s+$/,
-        (match) => match.indexOf("\\") === 0 ? SPACE : EMPTY
+        /((?:\\\\)*?)(\\?\s+)$/,
+        (_, m1, m2) => m1 + (m2.indexOf("\\") === 0 ? SPACE : EMPTY)
       ],
       // replace (\ ) with ' '
+      // (\ ) -> ' '
+      // (\\ ) -> '\\ '
+      // (\\\ ) -> '\\ '
       [
-        /\\\s/g,
-        () => SPACE
+        /(\\+?)\s/g,
+        (_, m1) => {
+          const { length } = m1;
+          return m1.slice(0, length - length % 2) + SPACE;
+        }
       ],
       // Escape metacharacters
       // which is written down by users but means special for regular expressions.
@@ -9630,7 +9642,7 @@ var require_ignore = __commonJS({
       let source2 = regexCache[pattern];
       if (!source2) {
         source2 = REPLACERS.reduce(
-          (prev, current) => prev.replace(current[0], current[1].bind(pattern)),
+          (prev, [matcher, replacer]) => prev.replace(matcher, replacer.bind(pattern)),
           pattern
         );
         regexCache[pattern] = source2;
@@ -17649,7 +17661,7 @@ function inheritLabel(doc2, fn) {
 var MODE_BREAK = Symbol("MODE_BREAK");
 var MODE_FLAT = Symbol("MODE_FLAT");
 var CURSOR_PLACEHOLDER = Symbol("cursor");
-var IS_MUTABLE_FILL = Symbol("IS_MUTABLE_FILL");
+var DOC_FILL_PRINTED_LENGTH = Symbol("DOC_FILL_PRINTED_LENGTH");
 function rootIndent() {
   return {
     value: "",
@@ -18033,13 +18045,16 @@ function printDocToString(doc2, options8) {
         break;
       case DOC_TYPE_FILL: {
         const rem = width - pos2;
+        const offset = doc3[DOC_FILL_PRINTED_LENGTH] ?? 0;
         const {
           parts
         } = doc3;
-        if (parts.length === 0) {
+        const length = parts.length - offset;
+        if (length === 0) {
           break;
         }
-        const [content, whitespace] = parts;
+        const content = parts[offset + 0];
+        const whitespace = parts[offset + 1];
         const contentFlatCmd = {
           ind,
           mode: MODE_FLAT,
@@ -18051,7 +18066,7 @@ function printDocToString(doc2, options8) {
           doc: content
         };
         const contentFits = fits(contentFlatCmd, [], rem, lineSuffix2.length > 0, groupModeMap, true);
-        if (parts.length === 1) {
+        if (length === 1) {
           if (contentFits) {
             cmds.push(contentFlatCmd);
           } else {
@@ -18069,7 +18084,7 @@ function printDocToString(doc2, options8) {
           mode: MODE_BREAK,
           doc: whitespace
         };
-        if (parts.length === 2) {
+        if (length === 2) {
           if (contentFits) {
             cmds.push(whitespaceFlatCmd, contentFlatCmd);
           } else {
@@ -18077,21 +18092,14 @@ function printDocToString(doc2, options8) {
           }
           break;
         }
-        const secondContent = parts[2];
-        let remainingDoc = doc3;
-        if (doc3[IS_MUTABLE_FILL]) {
-          parts.splice(0, 2);
-        } else {
-          remainingDoc = {
-            ...doc3,
-            parts: parts.slice(2),
-            [IS_MUTABLE_FILL]: true
-          };
-        }
+        const secondContent = parts[offset + 2];
         const remainingCmd = {
           ind,
           mode,
-          doc: remainingDoc
+          doc: {
+            ...doc3,
+            [DOC_FILL_PRINTED_LENGTH]: offset + 2
+          }
         };
         const firstAndSecondContentFlatCmd = {
           ind,

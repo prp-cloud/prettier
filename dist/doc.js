@@ -713,7 +713,7 @@ Expected it to be ${EXPECTED_TYPE_VALUES}.`;
   var MODE_BREAK = Symbol("MODE_BREAK");
   var MODE_FLAT = Symbol("MODE_FLAT");
   var CURSOR_PLACEHOLDER = Symbol("cursor");
-  var IS_MUTABLE_FILL = Symbol("IS_MUTABLE_FILL");
+  var DOC_FILL_PRINTED_LENGTH = Symbol("DOC_FILL_PRINTED_LENGTH");
   function rootIndent() {
     return {
       value: "",
@@ -1097,13 +1097,16 @@ Expected it to be ${EXPECTED_TYPE_VALUES}.`;
           break;
         case DOC_TYPE_FILL: {
           const rem = width - pos;
+          const offset = doc2[DOC_FILL_PRINTED_LENGTH] ?? 0;
           const {
             parts
           } = doc2;
-          if (parts.length === 0) {
+          const length = parts.length - offset;
+          if (length === 0) {
             break;
           }
-          const [content, whitespace] = parts;
+          const content = parts[offset + 0];
+          const whitespace = parts[offset + 1];
           const contentFlatCmd = {
             ind,
             mode: MODE_FLAT,
@@ -1115,7 +1118,7 @@ Expected it to be ${EXPECTED_TYPE_VALUES}.`;
             doc: content
           };
           const contentFits = fits(contentFlatCmd, [], rem, lineSuffix2.length > 0, groupModeMap, true);
-          if (parts.length === 1) {
+          if (length === 1) {
             if (contentFits) {
               cmds.push(contentFlatCmd);
             } else {
@@ -1133,7 +1136,7 @@ Expected it to be ${EXPECTED_TYPE_VALUES}.`;
             mode: MODE_BREAK,
             doc: whitespace
           };
-          if (parts.length === 2) {
+          if (length === 2) {
             if (contentFits) {
               cmds.push(whitespaceFlatCmd, contentFlatCmd);
             } else {
@@ -1141,21 +1144,14 @@ Expected it to be ${EXPECTED_TYPE_VALUES}.`;
             }
             break;
           }
-          const secondContent = parts[2];
-          let remainingDoc = doc2;
-          if (doc2[IS_MUTABLE_FILL]) {
-            parts.splice(0, 2);
-          } else {
-            remainingDoc = {
-              ...doc2,
-              parts: parts.slice(2),
-              [IS_MUTABLE_FILL]: true
-            };
-          }
+          const secondContent = parts[offset + 2];
           const remainingCmd = {
             ind,
             mode,
-            doc: remainingDoc
+            doc: {
+              ...doc2,
+              [DOC_FILL_PRINTED_LENGTH]: offset + 2
+            }
           };
           const firstAndSecondContentFlatCmd = {
             ind,
