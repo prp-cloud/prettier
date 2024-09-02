@@ -963,15 +963,14 @@ var require_cache = __commonJS({
 var require_cache2 = __commonJS({
   "node_modules/file-entry-cache/cache.js"(exports, module) {
     var path10 = __require("path");
-    var process5 = __require("process");
     var crypto = __require("crypto");
     module.exports = {
-      createFromFile(filePath, useChecksum) {
+      createFromFile(filePath, useChecksum, currentWorkingDir) {
         const fname = path10.basename(filePath);
         const dir = path10.dirname(filePath);
-        return this.create(fname, dir, useChecksum);
+        return this.create(fname, dir, useChecksum, currentWorkingDir);
       },
-      create(cacheId, _path, useChecksum) {
+      create(cacheId, _path, useChecksum, currentWorkingDir) {
         const fs6 = __require("fs");
         const flatCache = require_cache();
         const cache = flatCache.load(cacheId, _path);
@@ -980,7 +979,11 @@ var require_cache2 = __commonJS({
           const cachedEntries = cache.keys();
           for (const fPath of cachedEntries) {
             try {
-              fs6.statSync(fPath);
+              let filePath = fPath;
+              if (currentWorkingDir) {
+                filePath = path10.join(currentWorkingDir, fPath);
+              }
+              fs6.statSync(filePath);
             } catch (error) {
               if (error.code === "ENOENT") {
                 cache.removeKey(fPath);
@@ -995,6 +998,11 @@ var require_cache2 = __commonJS({
               * @type {Object}
               */
           cache,
+          /**
+              * To enable relative paths as the key with current working directory
+              * @type {string}
+              */
+          currentWorkingDir: currentWorkingDir ?? void 0,
           /**
               * Given a buffer, calculate md5 hash of its content.
               * @method getHash
@@ -1046,9 +1054,6 @@ var require_cache2 = __commonJS({
           getFileDescriptor(file) {
             let fstat;
             try {
-              if (!path10.isAbsolute(file)) {
-                file = path10.resolve(process5.cwd(), file);
-              }
               fstat = fs6.statSync(file);
             } catch (error) {
               this.removeEntry(file);
@@ -1059,8 +1064,14 @@ var require_cache2 = __commonJS({
             }
             return this._getFileDescriptorUsingMtimeAndSize(file, fstat);
           },
+          _getFileKey(file) {
+            if (this.currentWorkingDir) {
+              return file.split(this.currentWorkingDir).pop();
+            }
+            return file;
+          },
           _getFileDescriptorUsingMtimeAndSize(file, fstat) {
-            let meta = cache.getKey(file);
+            let meta = cache.getKey(this._getFileKey(file));
             const cacheExists = Boolean(meta);
             const cSize = fstat.size;
             const cTime = fstat.mtime.getTime();
@@ -1072,15 +1083,15 @@ var require_cache2 = __commonJS({
             } else {
               meta = { size: cSize, mtime: cTime };
             }
-            const nEntry = normalizedEntries[file] = {
-              key: file,
+            const nEntry = normalizedEntries[this._getFileKey(file)] = {
+              key: this._getFileKey(file),
               changed: !cacheExists || isDifferentDate || isDifferentSize,
               meta
             };
             return nEntry;
           },
           _getFileDescriptorUsingChecksum(file) {
-            let meta = cache.getKey(file);
+            let meta = cache.getKey(this._getFileKey(file));
             const cacheExists = Boolean(meta);
             let contentBuffer;
             try {
@@ -1095,8 +1106,8 @@ var require_cache2 = __commonJS({
             } else {
               meta = { hash };
             }
-            const nEntry = normalizedEntries[file] = {
-              key: file,
+            const nEntry = normalizedEntries[this._getFileKey(file)] = {
+              key: this._getFileKey(file),
               changed: !cacheExists || isDifferent,
               meta
             };
@@ -1135,11 +1146,8 @@ var require_cache2 = __commonJS({
               * @param entryName
               */
           removeEntry(entryName) {
-            if (!path10.isAbsolute(entryName)) {
-              entryName = path10.resolve(process5.cwd(), entryName);
-            }
-            delete normalizedEntries[entryName];
-            cache.removeKey(entryName);
+            delete normalizedEntries[this._getFileKey(entryName)];
+            cache.removeKey(this._getFileKey(entryName));
           },
           /**
               * Delete the cache file from the disk
@@ -1156,7 +1164,11 @@ var require_cache2 = __commonJS({
             cache.destroy();
           },
           _getMetaForFileUsingCheckSum(cacheEntry) {
-            const contentBuffer = fs6.readFileSync(cacheEntry.key);
+            let filePath = cacheEntry.key;
+            if (this.currentWorkingDir) {
+              filePath = path10.join(this.currentWorkingDir, filePath);
+            }
+            const contentBuffer = fs6.readFileSync(filePath);
             const hash = this.getHash(contentBuffer);
             const meta = Object.assign(cacheEntry.meta, { hash });
             delete meta.size;
@@ -1164,7 +1176,11 @@ var require_cache2 = __commonJS({
             return meta;
           },
           _getMetaForFileUsingMtimeAndSize(cacheEntry) {
-            const stat = fs6.statSync(cacheEntry.key);
+            let filePath = cacheEntry.key;
+            if (currentWorkingDir) {
+              filePath = path10.join(currentWorkingDir, filePath);
+            }
+            const stat = fs6.statSync(filePath);
             const meta = Object.assign(cacheEntry.meta, {
               size: stat.size,
               mtime: stat.mtime.getTime()
@@ -1189,7 +1205,7 @@ var require_cache2 = __commonJS({
               const cacheEntry = entries[entryName];
               try {
                 const meta = useChecksum ? me._getMetaForFileUsingCheckSum(cacheEntry) : me._getMetaForFileUsingMtimeAndSize(cacheEntry);
-                cache.setKey(entryName, meta);
+                cache.setKey(this._getFileKey(entryName), meta);
               } catch (error) {
                 if (error.code !== "ENOENT") {
                   throw error;
