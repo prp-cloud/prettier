@@ -1026,6 +1026,7 @@ Expected it to be ${EXPECTED_TYPE_VALUES}.`;
                 });
                 break;
               }
+            // fallthrough
             case MODE_BREAK: {
               shouldRemeasure = false;
               const next = {
@@ -1095,6 +1096,26 @@ Expected it to be ${EXPECTED_TYPE_VALUES}.`;
             ).mode;
           }
           break;
+        // Fills each line with as much code as possible before moving to a new
+        // line with the same indentation.
+        //
+        // Expects doc.parts to be an array of alternating content and
+        // whitespace. The whitespace contains the linebreaks.
+        //
+        // For example:
+        //   ["I", line, "love", line, "monkeys"]
+        // or
+        //   [{ type: group, ... }, softline, { type: group, ... }]
+        //
+        // It uses this parts structure to handle three main layout cases:
+        // * The first two content items fit on the same line without
+        //   breaking
+        //   -> output the first content item and the whitespace "flat".
+        // * Only the first content item fits on the line without breaking
+        //   -> output the first content item "flat" and the whitespace with
+        //   "break".
+        // * Neither content item fits on the line without breaking
+        //   -> output the first content item and the whitespace with "break".
         case DOC_TYPE_FILL: {
           const rem = width - pos;
           const offset = doc2[DOC_FILL_PRINTED_LENGTH] ?? 0;
@@ -1221,6 +1242,7 @@ Expected it to be ${EXPECTED_TYPE_VALUES}.`;
               } else {
                 shouldRemeasure = true;
               }
+            // fallthrough
             case MODE_BREAK:
               if (lineSuffix2.length > 0) {
                 cmds.push({

@@ -6363,6 +6363,8 @@ var require_semver = __commonJS({
             this.inc("patch", identifier, identifierBase);
             this.inc("pre", identifier, identifierBase);
             break;
+          // If the input is a non-prerelease version, this acts the same as
+          // prepatch.
           case "prerelease":
             if (this.prerelease.length === 0) {
               this.inc("patch", identifier, identifierBase);
@@ -6390,6 +6392,8 @@ var require_semver = __commonJS({
             }
             this.prerelease = [];
             break;
+          // This probably shouldn't be used publicly.
+          // 1.0.0 'pre' would become 1.0.0-0 which is the wrong direction.
           case "pre": {
             const base = Number(identifierBase) ? 1 : 0;
             if (!identifier && identifierBase === false) {
@@ -7614,6 +7618,8 @@ var require_fnmatch = __commonJS({
             clearStateChar();
             escaping = true;
             continue;
+          // the various stateChar values
+          // for the "extglob" stuff.
           case "?":
           case "*":
           case "+":
@@ -7677,6 +7683,7 @@ var require_fnmatch = __commonJS({
             }
             re += "|";
             continue;
+          // these are mostly the same in regexp and glob
           case "[":
             clearStateChar();
             if (inClass) {
@@ -17990,6 +17997,7 @@ function printDocToString(doc2, options8) {
               });
               break;
             }
+          // fallthrough
           case MODE_BREAK: {
             shouldRemeasure = false;
             const next = {
@@ -18059,6 +18067,26 @@ function printDocToString(doc2, options8) {
           ).mode;
         }
         break;
+      // Fills each line with as much code as possible before moving to a new
+      // line with the same indentation.
+      //
+      // Expects doc.parts to be an array of alternating content and
+      // whitespace. The whitespace contains the linebreaks.
+      //
+      // For example:
+      //   ["I", line, "love", line, "monkeys"]
+      // or
+      //   [{ type: group, ... }, softline, { type: group, ... }]
+      //
+      // It uses this parts structure to handle three main layout cases:
+      // * The first two content items fit on the same line without
+      //   breaking
+      //   -> output the first content item and the whitespace "flat".
+      // * Only the first content item fits on the line without breaking
+      //   -> output the first content item "flat" and the whitespace with
+      //   "break".
+      // * Neither content item fits on the line without breaking
+      //   -> output the first content item and the whitespace with "break".
       case DOC_TYPE_FILL: {
         const rem = width - pos2;
         const offset = doc3[DOC_FILL_PRINTED_LENGTH] ?? 0;
@@ -18185,6 +18213,7 @@ function printDocToString(doc2, options8) {
             } else {
               shouldRemeasure = true;
             }
+          // fallthrough
           case MODE_BREAK:
             if (lineSuffix2.length > 0) {
               cmds.push({

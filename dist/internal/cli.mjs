@@ -3654,14 +3654,17 @@ function createLogger(logLevel = "log") {
         if (loggerName === "debug") {
           return true;
         }
+      // fall through
       case "log":
         if (loggerName === "log") {
           return true;
         }
+      // fall through
       case "warn":
         if (loggerName === "warn") {
           return true;
         }
+      // fall through
       case "error":
         return loggerName === "error";
     }
