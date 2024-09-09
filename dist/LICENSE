@@ -2810,7 +2810,7 @@ Author: Sindre Sorhus <sindresorhus@gmail.com> (https://sindresorhus.com)
 
 ----------------------------------------
 
-### picocolors@v1.0.1
+### picocolors@v1.1.0
 
 > The tiniest and the fastest library for terminal output formatting with ANSI colors
 
@@ -2819,7 +2819,7 @@ Author: Alexey Raspopov
 
 > ISC License
 >
-> Copyright (c) 2021 Alexey Raspopov, Kostiantyn Denysov, Anton Verinov
+> Copyright (c) 2021-2024 Oleksii Raspopov, Kostiantyn Denysov, Anton Verinov
 >
 > Permission to use, copy, modify, and/or distribute this software for any
 > purpose with or without fee is hereby granted, provided that the above

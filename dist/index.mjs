@@ -9125,7 +9125,23 @@ var require_picocolors = __commonJS({
         bgBlue: init("\x1B[44m", "\x1B[49m"),
         bgMagenta: init("\x1B[45m", "\x1B[49m"),
         bgCyan: init("\x1B[46m", "\x1B[49m"),
-        bgWhite: init("\x1B[47m", "\x1B[49m")
+        bgWhite: init("\x1B[47m", "\x1B[49m"),
+        blackBright: init("\x1B[90m", "\x1B[39m"),
+        redBright: init("\x1B[91m", "\x1B[39m"),
+        greenBright: init("\x1B[92m", "\x1B[39m"),
+        yellowBright: init("\x1B[93m", "\x1B[39m"),
+        blueBright: init("\x1B[94m", "\x1B[39m"),
+        magentaBright: init("\x1B[95m", "\x1B[39m"),
+        cyanBright: init("\x1B[96m", "\x1B[39m"),
+        whiteBright: init("\x1B[97m", "\x1B[39m"),
+        bgBlackBright: init("\x1B[100m", "\x1B[49m"),
+        bgRedBright: init("\x1B[101m", "\x1B[49m"),
+        bgGreenBright: init("\x1B[102m", "\x1B[49m"),
+        bgYellowBright: init("\x1B[103m", "\x1B[49m"),
+        bgBlueBright: init("\x1B[104m", "\x1B[49m"),
+        bgMagentaBright: init("\x1B[105m", "\x1B[49m"),
+        bgCyanBright: init("\x1B[106m", "\x1B[49m"),
+        bgWhiteBright: init("\x1B[107m", "\x1B[49m")
       };
     };
     module.exports = createColors();
