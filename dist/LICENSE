@@ -213,7 +213,7 @@ License: MIT
 
 ----------------------------------------
 
-### @glimmer/util@v0.92.0
+### @glimmer/util@v0.92.3
 
 > Common utilities used in Glimmer
 
@@ -241,7 +241,7 @@ License: MIT
 
 ----------------------------------------
 
-### @glimmer/wire-format@v0.92.0
+### @glimmer/wire-format@v0.92.3
 
 License: MIT
 
@@ -626,7 +626,7 @@ Author: Ika <ikatyang@gmail.com> (https://github.com/ikatyang)
 
 ----------------------------------------
 
-### ansi-regex@v6.0.1
+### ansi-regex@v6.1.0
 
 > Regular expression for matching ANSI escape codes
 
