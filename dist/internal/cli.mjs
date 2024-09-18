@@ -1885,8 +1885,6 @@ var normalizeToPosix = path.sep === "\\" ? (filepath) => string_replace_all_defa
   "/"
 ) : (filepath) => filepath;
 var {
-  isNonEmptyArray,
-  partition,
   omit
 } = sharedWithCli2.utils;
 

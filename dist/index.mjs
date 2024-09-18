@@ -21929,8 +21929,6 @@ var sharedWithCli = {
   fastGlob: import_fast_glob.default,
   createTwoFilesPatch,
   utils: {
-    isNonEmptyArray: is_non_empty_array_default,
-    partition: partition_default,
     omit: object_omit_default
   },
   mockable: mockable_default
