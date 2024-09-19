@@ -17,7 +17,7 @@ MIT, ISC, BSD-2-Clause, BSD-3-Clause, Apache-2.0
 
 ## Bundled dependencies
 
-### @angular/compiler@v18.2.3
+### @angular/compiler@v18.2.5
 
 > Angular - the compiler library
 
@@ -1503,7 +1503,7 @@ Contributors:
 
 ----------------------------------------
 
-### flow-parser@v0.245.2
+### flow-parser@v0.246.0
 
 > JavaScript parser written in OCaml. Produces ESTree AST
 
@@ -2886,7 +2886,7 @@ Author: Sindre Sorhus <sindresorhus@gmail.com> (https://sindresorhus.com)
 
 ----------------------------------------
 
-### postcss@v8.4.45
+### postcss@v8.4.47
 
 > Tool for transforming styles with JS plugins
 
