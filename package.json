@@ -89,7 +89,7 @@
     "flow-parser": "0.246.0",
     "get-east-asian-width": "1.2.0",
     "get-stdin": "9.0.0",
-		"globals": "15.9.0",
+    "globals": "15.9.0",
     "graphql": "16.9.0",
     "hermes-parser": "0.23.1",
     "html-element-attributes": "3.4.0",
@@ -106,7 +106,7 @@
     "jest-watch-typeahead": "2.2.2",
     "js-yaml": "4.1.0",
     "json5": "2.2.3",
-		"knip": "5.30.2",
+    "knip": "5.30.2",
     "leven": "4.0.0",
     "lines-and-columns": "2.0.4",
     "linguist-languages": "7.27.0",
@@ -115,7 +115,7 @@
     "micromatch": "4.0.8",
     "minimist": "1.2.8",
     "n-readlines": "1.0.1",
-		"npm-run-all2": "6.2.3",
+    "npm-run-all2": "6.2.3",
     "outdent": "0.8.0",
     "parse-json": "8.1.0",
     "postcss": "8.4.47",
@@ -207,6 +207,7 @@
   "preferUnplugged": true,
   "packageManager": "yarn@4.5.0",
   "overrides": {
+    "@typescript-eslint/parser": "$@typescript-eslint/eslint-plugin",
     "eslint": "$eslint",
     "jest": "$jest"
   }
