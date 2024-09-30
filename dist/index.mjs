@@ -10010,26 +10010,26 @@ Diff.prototype = {
       callback = options8;
       options8 = {};
     }
-    this.options = options8;
     var self = this;
     function done(value) {
+      value = self.postProcess(value, options8);
       if (callback) {
         setTimeout(function() {
-          callback(void 0, value);
+          callback(value);
         }, 0);
         return true;
       } else {
         return value;
       }
     }
-    oldString = this.castInput(oldString);
-    newString = this.castInput(newString);
-    oldString = this.removeEmpty(this.tokenize(oldString));
-    newString = this.removeEmpty(this.tokenize(newString));
+    oldString = this.castInput(oldString, options8);
+    newString = this.castInput(newString, options8);
+    oldString = this.removeEmpty(this.tokenize(oldString, options8));
+    newString = this.removeEmpty(this.tokenize(newString, options8));
     var newLen = newString.length, oldLen = oldString.length;
     var editLength = 1;
     var maxEditLength = newLen + oldLen;
-    if (options8.maxEditLength) {
+    if (options8.maxEditLength != null) {
       maxEditLength = Math.min(maxEditLength, options8.maxEditLength);
     }
     var maxExecutionTime = (_options$timeout = options8.timeout) !== null && _options$timeout !== void 0 ? _options$timeout : Infinity;
@@ -10038,12 +10038,9 @@ Diff.prototype = {
       oldPos: -1,
       lastComponent: void 0
     }];
-    var newPos = this.extractCommon(bestPath[0], newString, oldString, 0);
+    var newPos = this.extractCommon(bestPath[0], newString, oldString, 0, options8);
     if (bestPath[0].oldPos + 1 >= oldLen && newPos + 1 >= newLen) {
-      return done([{
-        value: this.join(newString),
-        count: newString.length
-      }]);
+      return done(buildValues(self, bestPath[0].lastComponent, newString, oldString, self.useLongestToken));
     }
     var minDiagonalToConsider = -Infinity, maxDiagonalToConsider = Infinity;
     function execEditLength() {
@@ -10063,12 +10060,12 @@ Diff.prototype = {
           bestPath[diagonalPath] = void 0;
           continue;
         }
-        if (!canRemove || canAdd && removePath.oldPos + 1 < addPath.oldPos) {
-          basePath = self.addToPath(addPath, true, void 0, 0);
+        if (!canRemove || canAdd && removePath.oldPos < addPath.oldPos) {
+          basePath = self.addToPath(addPath, true, false, 0, options8);
         } else {
-          basePath = self.addToPath(removePath, void 0, true, 1);
+          basePath = self.addToPath(removePath, false, true, 1, options8);
         }
-        newPos = self.extractCommon(basePath, newString, oldString, diagonalPath);
+        newPos = self.extractCommon(basePath, newString, oldString, diagonalPath, options8);
         if (basePath.oldPos + 1 >= oldLen && newPos + 1 >= newLen) {
           return done(buildValues(self, basePath.lastComponent, newString, oldString, self.useLongestToken));
         } else {
@@ -10103,9 +10100,9 @@ Diff.prototype = {
       }
     }
   },
-  addToPath: function addToPath(path13, added, removed, oldPosInc) {
+  addToPath: function addToPath(path13, added, removed, oldPosInc, options8) {
     var last = path13.lastComponent;
-    if (last && last.added === added && last.removed === removed) {
+    if (last && !options8.oneChangePerToken && last.added === added && last.removed === removed) {
       return {
         oldPos: path13.oldPos + oldPosInc,
         lastComponent: {
@@ -10127,27 +10124,37 @@ Diff.prototype = {
       };
     }
   },
-  extractCommon: function extractCommon(basePath, newString, oldString, diagonalPath) {
+  extractCommon: function extractCommon(basePath, newString, oldString, diagonalPath, options8) {
     var newLen = newString.length, oldLen = oldString.length, oldPos = basePath.oldPos, newPos = oldPos - diagonalPath, commonCount = 0;
-    while (newPos + 1 < newLen && oldPos + 1 < oldLen && this.equals(newString[newPos + 1], oldString[oldPos + 1])) {
+    while (newPos + 1 < newLen && oldPos + 1 < oldLen && this.equals(oldString[oldPos + 1], newString[newPos + 1], options8)) {
       newPos++;
       oldPos++;
       commonCount++;
+      if (options8.oneChangePerToken) {
+        basePath.lastComponent = {
+          count: 1,
+          previousComponent: basePath.lastComponent,
+          added: false,
+          removed: false
+        };
+      }
     }
-    if (commonCount) {
+    if (commonCount && !options8.oneChangePerToken) {
       basePath.lastComponent = {
         count: commonCount,
-        previousComponent: basePath.lastComponent
+        previousComponent: basePath.lastComponent,
+        added: false,
+        removed: false
       };
     }
     basePath.oldPos = oldPos;
     return newPos;
   },
-  equals: function equals(left, right) {
-    if (this.options.comparator) {
-      return this.options.comparator(left, right);
+  equals: function equals(left, right, options8) {
+    if (options8.comparator) {
+      return options8.comparator(left, right);
     } else {
-      return left === right || this.options.ignoreCase && left.toLowerCase() === right.toLowerCase();
+      return left === right || options8.ignoreCase && left.toLowerCase() === right.toLowerCase();
     }
   },
   removeEmpty: function removeEmpty(array2) {
@@ -10163,10 +10170,13 @@ Diff.prototype = {
     return value;
   },
   tokenize: function tokenize(value) {
-    return value.split("");
+    return Array.from(value);
   },
   join: function join(chars) {
     return chars.join("");
+  },
+  postProcess: function postProcess(changeObjects) {
+    return changeObjects;
   }
 };
 function buildValues(diff2, lastComponent, newString, oldString, useLongestToken) {
@@ -10200,45 +10210,225 @@ function buildValues(diff2, lastComponent, newString, oldString, useLongestToken
     } else {
       component.value = diff2.join(oldString.slice(oldPos, oldPos + component.count));
       oldPos += component.count;
-      if (componentPos && components[componentPos - 1].added) {
-        var tmp = components[componentPos - 1];
-        components[componentPos - 1] = components[componentPos];
-        components[componentPos] = tmp;
-      }
     }
-  }
-  var finalComponent = components[componentLen - 1];
-  if (componentLen > 1 && typeof finalComponent.value === "string" && (finalComponent.added || finalComponent.removed) && diff2.equals("", finalComponent.value)) {
-    components[componentLen - 2].value += finalComponent.value;
-    components.pop();
   }
   return components;
 }
 var characterDiff = new Diff();
-var extendedWordChars = /^[A-Za-z\xC0-\u02C6\u02C8-\u02D7\u02DE-\u02FF\u1E00-\u1EFF]+$/;
-var reWhitespace = /\S/;
+function longestCommonPrefix(str1, str2) {
+  var i;
+  for (i = 0; i < str1.length && i < str2.length; i++) {
+    if (str1[i] != str2[i]) {
+      return str1.slice(0, i);
+    }
+  }
+  return str1.slice(0, i);
+}
+function longestCommonSuffix(str1, str2) {
+  var i;
+  if (!str1 || !str2 || str1[str1.length - 1] != str2[str2.length - 1]) {
+    return "";
+  }
+  for (i = 0; i < str1.length && i < str2.length; i++) {
+    if (str1[str1.length - (i + 1)] != str2[str2.length - (i + 1)]) {
+      return str1.slice(-i);
+    }
+  }
+  return str1.slice(-i);
+}
+function replacePrefix(string, oldPrefix, newPrefix) {
+  if (string.slice(0, oldPrefix.length) != oldPrefix) {
+    throw Error("string ".concat(JSON.stringify(string), " doesn't start with prefix ").concat(JSON.stringify(oldPrefix), "; this is a bug"));
+  }
+  return newPrefix + string.slice(oldPrefix.length);
+}
+function replaceSuffix(string, oldSuffix, newSuffix) {
+  if (!oldSuffix) {
+    return string + newSuffix;
+  }
+  if (string.slice(-oldSuffix.length) != oldSuffix) {
+    throw Error("string ".concat(JSON.stringify(string), " doesn't end with suffix ").concat(JSON.stringify(oldSuffix), "; this is a bug"));
+  }
+  return string.slice(0, -oldSuffix.length) + newSuffix;
+}
+function removePrefix(string, oldPrefix) {
+  return replacePrefix(string, oldPrefix, "");
+}
+function removeSuffix(string, oldSuffix) {
+  return replaceSuffix(string, oldSuffix, "");
+}
+function maximumOverlap(string1, string2) {
+  return string2.slice(0, overlapCount(string1, string2));
+}
+function overlapCount(a, b) {
+  var startA = 0;
+  if (a.length > b.length) {
+    startA = a.length - b.length;
+  }
+  var endB = b.length;
+  if (a.length < b.length) {
+    endB = a.length;
+  }
+  var map2 = Array(endB);
+  var k = 0;
+  map2[0] = 0;
+  for (var j = 1; j < endB; j++) {
+    if (b[j] == b[k]) {
+      map2[j] = map2[k];
+    } else {
+      map2[j] = k;
+    }
+    while (k > 0 && b[j] != b[k]) {
+      k = map2[k];
+    }
+    if (b[j] == b[k]) {
+      k++;
+    }
+  }
+  k = 0;
+  for (var i = startA; i < a.length; i++) {
+    while (k > 0 && a[i] != b[k]) {
+      k = map2[k];
+    }
+    if (a[i] == b[k]) {
+      k++;
+    }
+  }
+  return k;
+}
+var extendedWordChars = "a-zA-Z0-9_\\u{C0}-\\u{FF}\\u{D8}-\\u{F6}\\u{F8}-\\u{2C6}\\u{2C8}-\\u{2D7}\\u{2DE}-\\u{2FF}\\u{1E00}-\\u{1EFF}";
+var tokenizeIncludingWhitespace = new RegExp("[".concat(extendedWordChars, "]+|\\s+|[^").concat(extendedWordChars, "]"), "ug");
 var wordDiff = new Diff();
-wordDiff.equals = function(left, right) {
-  if (this.options.ignoreCase) {
+wordDiff.equals = function(left, right, options8) {
+  if (options8.ignoreCase) {
     left = left.toLowerCase();
     right = right.toLowerCase();
   }
-  return left === right || this.options.ignoreWhitespace && !reWhitespace.test(left) && !reWhitespace.test(right);
+  return left.trim() === right.trim();
 };
 wordDiff.tokenize = function(value) {
-  var tokens = value.split(/([^\S\r\n]+|[()[\]{}'"\r\n]|\b)/);
-  for (var i = 0; i < tokens.length - 1; i++) {
-    if (!tokens[i + 1] && tokens[i + 2] && extendedWordChars.test(tokens[i]) && extendedWordChars.test(tokens[i + 2])) {
-      tokens[i] += tokens[i + 2];
-      tokens.splice(i + 1, 2);
-      i--;
+  var options8 = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : {};
+  var parts;
+  if (options8.intlSegmenter) {
+    if (options8.intlSegmenter.resolvedOptions().granularity != "word") {
+      throw new Error('The segmenter passed must have a granularity of "word"');
     }
+    parts = Array.from(options8.intlSegmenter.segment(value), function(segment) {
+      return segment.segment;
+    });
+  } else {
+    parts = value.match(tokenizeIncludingWhitespace) || [];
   }
+  var tokens = [];
+  var prevPart = null;
+  parts.forEach(function(part) {
+    if (/\s/.test(part)) {
+      if (prevPart == null) {
+        tokens.push(part);
+      } else {
+        tokens.push(tokens.pop() + part);
+      }
+    } else if (/\s/.test(prevPart)) {
+      if (tokens[tokens.length - 1] == prevPart) {
+        tokens.push(tokens.pop() + part);
+      } else {
+        tokens.push(prevPart + part);
+      }
+    } else {
+      tokens.push(part);
+    }
+    prevPart = part;
+  });
   return tokens;
 };
+wordDiff.join = function(tokens) {
+  return tokens.map(function(token2, i) {
+    if (i == 0) {
+      return token2;
+    } else {
+      return token2.replace(/^\s+/, "");
+    }
+  }).join("");
+};
+wordDiff.postProcess = function(changes, options8) {
+  if (!changes || options8.oneChangePerToken) {
+    return changes;
+  }
+  var lastKeep = null;
+  var insertion = null;
+  var deletion = null;
+  changes.forEach(function(change) {
+    if (change.added) {
+      insertion = change;
+    } else if (change.removed) {
+      deletion = change;
+    } else {
+      if (insertion || deletion) {
+        dedupeWhitespaceInChangeObjects(lastKeep, deletion, insertion, change);
+      }
+      lastKeep = change;
+      insertion = null;
+      deletion = null;
+    }
+  });
+  if (insertion || deletion) {
+    dedupeWhitespaceInChangeObjects(lastKeep, deletion, insertion, null);
+  }
+  return changes;
+};
+function dedupeWhitespaceInChangeObjects(startKeep, deletion, insertion, endKeep) {
+  if (deletion && insertion) {
+    var oldWsPrefix = deletion.value.match(/^\s*/)[0];
+    var oldWsSuffix = deletion.value.match(/\s*$/)[0];
+    var newWsPrefix = insertion.value.match(/^\s*/)[0];
+    var newWsSuffix = insertion.value.match(/\s*$/)[0];
+    if (startKeep) {
+      var commonWsPrefix = longestCommonPrefix(oldWsPrefix, newWsPrefix);
+      startKeep.value = replaceSuffix(startKeep.value, newWsPrefix, commonWsPrefix);
+      deletion.value = removePrefix(deletion.value, commonWsPrefix);
+      insertion.value = removePrefix(insertion.value, commonWsPrefix);
+    }
+    if (endKeep) {
+      var commonWsSuffix = longestCommonSuffix(oldWsSuffix, newWsSuffix);
+      endKeep.value = replacePrefix(endKeep.value, newWsSuffix, commonWsSuffix);
+      deletion.value = removeSuffix(deletion.value, commonWsSuffix);
+      insertion.value = removeSuffix(insertion.value, commonWsSuffix);
+    }
+  } else if (insertion) {
+    if (startKeep) {
+      insertion.value = insertion.value.replace(/^\s*/, "");
+    }
+    if (endKeep) {
+      endKeep.value = endKeep.value.replace(/^\s*/, "");
+    }
+  } else if (startKeep && endKeep) {
+    var newWsFull = endKeep.value.match(/^\s*/)[0], delWsStart = deletion.value.match(/^\s*/)[0], delWsEnd = deletion.value.match(/\s*$/)[0];
+    var newWsStart = longestCommonPrefix(newWsFull, delWsStart);
+    deletion.value = removePrefix(deletion.value, newWsStart);
+    var newWsEnd = longestCommonSuffix(removePrefix(newWsFull, newWsStart), delWsEnd);
+    deletion.value = removeSuffix(deletion.value, newWsEnd);
+    endKeep.value = replacePrefix(endKeep.value, newWsFull, newWsEnd);
+    startKeep.value = replaceSuffix(startKeep.value, newWsFull, newWsFull.slice(0, newWsFull.length - newWsEnd.length));
+  } else if (endKeep) {
+    var endKeepWsPrefix = endKeep.value.match(/^\s*/)[0];
+    var deletionWsSuffix = deletion.value.match(/\s*$/)[0];
+    var overlap = maximumOverlap(deletionWsSuffix, endKeepWsPrefix);
+    deletion.value = removeSuffix(deletion.value, overlap);
+  } else if (startKeep) {
+    var startKeepWsSuffix = startKeep.value.match(/\s*$/)[0];
+    var deletionWsPrefix = deletion.value.match(/^\s*/)[0];
+    var _overlap = maximumOverlap(startKeepWsSuffix, deletionWsPrefix);
+    deletion.value = removePrefix(deletion.value, _overlap);
+  }
+}
+var wordWithSpaceDiff = new Diff();
+wordWithSpaceDiff.tokenize = function(value) {
+  var regex = new RegExp("(\\r?\\n)|[".concat(extendedWordChars, "]+|[^\\S\\n\\r]+|[^").concat(extendedWordChars, "]"), "ug");
+  return value.match(regex) || [];
+};
 var lineDiff = new Diff();
-lineDiff.tokenize = function(value) {
-  if (this.options.stripTrailingCr) {
+lineDiff.tokenize = function(value, options8) {
+  if (options8.stripTrailingCr) {
     value = value.replace(/\r\n/g, "\n");
   }
   var retLines = [], linesAndNewlines = value.split(/(\n|\r\n)/);
@@ -10247,16 +10437,31 @@ lineDiff.tokenize = function(value) {
   }
   for (var i = 0; i < linesAndNewlines.length; i++) {
     var line3 = linesAndNewlines[i];
-    if (i % 2 && !this.options.newlineIsToken) {
+    if (i % 2 && !options8.newlineIsToken) {
       retLines[retLines.length - 1] += line3;
     } else {
-      if (this.options.ignoreWhitespace) {
-        line3 = line3.trim();
-      }
       retLines.push(line3);
     }
   }
   return retLines;
+};
+lineDiff.equals = function(left, right, options8) {
+  if (options8.ignoreWhitespace) {
+    if (!options8.newlineIsToken || !left.includes("\n")) {
+      left = left.trim();
+    }
+    if (!options8.newlineIsToken || !right.includes("\n")) {
+      right = right.trim();
+    }
+  } else if (options8.ignoreNewlineAtEof && !options8.newlineIsToken) {
+    if (left.endsWith("\n")) {
+      left = left.slice(0, -1);
+    }
+    if (right.endsWith("\n")) {
+      right = right.slice(0, -1);
+    }
+  }
+  return Diff.prototype.equals.call(this, left, right, options8);
 };
 function diffLines(oldStr, newStr, callback) {
   return lineDiff.diff(oldStr, newStr, callback);
@@ -10269,18 +10474,62 @@ var cssDiff = new Diff();
 cssDiff.tokenize = function(value) {
   return value.split(/([{}:;,]|\s+)/);
 };
-function _typeof(obj) {
-  "@babel/helpers - typeof";
-  if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-    _typeof = function(obj2) {
-      return typeof obj2;
-    };
-  } else {
-    _typeof = function(obj2) {
-      return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
-    };
+function ownKeys(e, r) {
+  var t = Object.keys(e);
+  if (Object.getOwnPropertySymbols) {
+    var o = Object.getOwnPropertySymbols(e);
+    r && (o = o.filter(function(r2) {
+      return Object.getOwnPropertyDescriptor(e, r2).enumerable;
+    })), t.push.apply(t, o);
   }
-  return _typeof(obj);
+  return t;
+}
+function _objectSpread2(e) {
+  for (var r = 1; r < arguments.length; r++) {
+    var t = null != arguments[r] ? arguments[r] : {};
+    r % 2 ? ownKeys(Object(t), true).forEach(function(r2) {
+      _defineProperty(e, r2, t[r2]);
+    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function(r2) {
+      Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
+    });
+  }
+  return e;
+}
+function _toPrimitive(t, r) {
+  if ("object" != typeof t || !t) return t;
+  var e = t[Symbol.toPrimitive];
+  if (void 0 !== e) {
+    var i = e.call(t, r || "default");
+    if ("object" != typeof i) return i;
+    throw new TypeError("@@toPrimitive must return a primitive value.");
+  }
+  return ("string" === r ? String : Number)(t);
+}
+function _toPropertyKey(t) {
+  var i = _toPrimitive(t, "string");
+  return "symbol" == typeof i ? i : i + "";
+}
+function _typeof(o) {
+  "@babel/helpers - typeof";
+  return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function(o2) {
+    return typeof o2;
+  } : function(o2) {
+    return o2 && "function" == typeof Symbol && o2.constructor === Symbol && o2 !== Symbol.prototype ? "symbol" : typeof o2;
+  }, _typeof(o);
+}
+function _defineProperty(obj, key2, value) {
+  key2 = _toPropertyKey(key2);
+  if (key2 in obj) {
+    Object.defineProperty(obj, key2, {
+      value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key2] = value;
+  }
+  return obj;
 }
 function _toConsumableArray(arr) {
   return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread();
@@ -10289,7 +10538,7 @@ function _arrayWithoutHoles(arr) {
   if (Array.isArray(arr)) return _arrayLikeToArray(arr);
 }
 function _iterableToArray(iter) {
-  if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter);
+  if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter);
 }
 function _unsupportedIterableToArray(o, minLen) {
   if (!o) return;
@@ -10307,18 +10556,17 @@ function _arrayLikeToArray(arr, len) {
 function _nonIterableSpread() {
   throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
-var objectPrototypeToString = Object.prototype.toString;
 var jsonDiff = new Diff();
 jsonDiff.useLongestToken = true;
 jsonDiff.tokenize = lineDiff.tokenize;
-jsonDiff.castInput = function(value) {
-  var _this$options = this.options, undefinedReplacement = _this$options.undefinedReplacement, _this$options$stringi = _this$options.stringifyReplacer, stringifyReplacer = _this$options$stringi === void 0 ? function(k, v) {
+jsonDiff.castInput = function(value, options8) {
+  var undefinedReplacement = options8.undefinedReplacement, _options$stringifyRep = options8.stringifyReplacer, stringifyReplacer = _options$stringifyRep === void 0 ? function(k, v) {
     return typeof v === "undefined" ? undefinedReplacement : v;
-  } : _this$options$stringi;
+  } : _options$stringifyRep;
   return typeof value === "string" ? value : JSON.stringify(canonicalize(value, null, null, stringifyReplacer), stringifyReplacer, "  ");
 };
-jsonDiff.equals = function(left, right) {
-  return Diff.prototype.equals.call(jsonDiff, left.replace(/,([\r\n])/g, "$1"), right.replace(/,([\r\n])/g, "$1"));
+jsonDiff.equals = function(left, right, options8) {
+  return Diff.prototype.equals.call(jsonDiff, left.replace(/,([\r\n])/g, "$1"), right.replace(/,([\r\n])/g, "$1"), options8);
 };
 function canonicalize(obj, stack2, replacementStack, replacer, key2) {
   stack2 = stack2 || [];
@@ -10333,7 +10581,7 @@ function canonicalize(obj, stack2, replacementStack, replacer, key2) {
     }
   }
   var canonicalizedObj;
-  if ("[object Array]" === objectPrototypeToString.call(obj)) {
+  if ("[object Array]" === Object.prototype.toString.call(obj)) {
     stack2.push(obj);
     canonicalizedObj = new Array(obj.length);
     replacementStack.push(canonicalizedObj);
@@ -10353,7 +10601,7 @@ function canonicalize(obj, stack2, replacementStack, replacer, key2) {
     replacementStack.push(canonicalizedObj);
     var sortedKeys = [], _key;
     for (_key in obj) {
-      if (obj.hasOwnProperty(_key)) {
+      if (Object.prototype.hasOwnProperty.call(obj, _key)) {
         sortedKeys.push(_key);
       }
     }
@@ -10383,94 +10631,114 @@ function structuredPatch(oldFileName, newFileName, oldStr, newStr, oldHeader, ne
   if (!options8) {
     options8 = {};
   }
+  if (typeof options8 === "function") {
+    options8 = {
+      callback: options8
+    };
+  }
   if (typeof options8.context === "undefined") {
     options8.context = 4;
   }
-  var diff2 = diffLines(oldStr, newStr, options8);
-  if (!diff2) {
-    return;
+  if (options8.newlineIsToken) {
+    throw new Error("newlineIsToken may not be used with patch-generation functions, only with diffing functions");
   }
-  diff2.push({
-    value: "",
-    lines: []
-  });
-  function contextLines(lines) {
-    return lines.map(function(entry) {
-      return " " + entry;
-    });
+  if (!options8.callback) {
+    return diffLinesResultToPatch(diffLines(oldStr, newStr, options8));
+  } else {
+    var _options = options8, _callback = _options.callback;
+    diffLines(oldStr, newStr, _objectSpread2(_objectSpread2({}, options8), {}, {
+      callback: function callback(diff2) {
+        var patch = diffLinesResultToPatch(diff2);
+        _callback(patch);
+      }
+    }));
   }
-  var hunks = [];
-  var oldRangeStart = 0, newRangeStart = 0, curRange = [], oldLine = 1, newLine = 1;
-  var _loop = function _loop2(i2) {
-    var current = diff2[i2], lines = current.lines || current.value.replace(/\n$/, "").split("\n");
-    current.lines = lines;
-    if (current.added || current.removed) {
-      var _curRange;
-      if (!oldRangeStart) {
-        var prev = diff2[i2 - 1];
-        oldRangeStart = oldLine;
-        newRangeStart = newLine;
-        if (prev) {
-          curRange = options8.context > 0 ? contextLines(prev.lines.slice(-options8.context)) : [];
-          oldRangeStart -= curRange.length;
-          newRangeStart -= curRange.length;
-        }
-      }
-      (_curRange = curRange).push.apply(_curRange, _toConsumableArray(lines.map(function(entry) {
-        return (current.added ? "+" : "-") + entry;
-      })));
-      if (current.added) {
-        newLine += lines.length;
-      } else {
-        oldLine += lines.length;
-      }
-    } else {
-      if (oldRangeStart) {
-        if (lines.length <= options8.context * 2 && i2 < diff2.length - 2) {
-          var _curRange2;
-          (_curRange2 = curRange).push.apply(_curRange2, _toConsumableArray(contextLines(lines)));
-        } else {
-          var _curRange3;
-          var contextSize = Math.min(lines.length, options8.context);
-          (_curRange3 = curRange).push.apply(_curRange3, _toConsumableArray(contextLines(lines.slice(0, contextSize))));
-          var hunk = {
-            oldStart: oldRangeStart,
-            oldLines: oldLine - oldRangeStart + contextSize,
-            newStart: newRangeStart,
-            newLines: newLine - newRangeStart + contextSize,
-            lines: curRange
-          };
-          if (i2 >= diff2.length - 2 && lines.length <= options8.context) {
-            var oldEOFNewline = /\n$/.test(oldStr);
-            var newEOFNewline = /\n$/.test(newStr);
-            var noNlBeforeAdds = lines.length == 0 && curRange.length > hunk.oldLines;
-            if (!oldEOFNewline && noNlBeforeAdds && oldStr.length > 0) {
-              curRange.splice(hunk.oldLines, 0, "\\ No newline at end of file");
-            }
-            if (!oldEOFNewline && !noNlBeforeAdds || !newEOFNewline) {
-              curRange.push("\\ No newline at end of file");
-            }
-          }
-          hunks.push(hunk);
-          oldRangeStart = 0;
-          newRangeStart = 0;
-          curRange = [];
-        }
-      }
-      oldLine += lines.length;
-      newLine += lines.length;
+  function diffLinesResultToPatch(diff2) {
+    if (!diff2) {
+      return;
     }
-  };
-  for (var i = 0; i < diff2.length; i++) {
-    _loop(i);
+    diff2.push({
+      value: "",
+      lines: []
+    });
+    function contextLines(lines) {
+      return lines.map(function(entry) {
+        return " " + entry;
+      });
+    }
+    var hunks = [];
+    var oldRangeStart = 0, newRangeStart = 0, curRange = [], oldLine = 1, newLine = 1;
+    var _loop = function _loop2() {
+      var current = diff2[i], lines = current.lines || splitLines(current.value);
+      current.lines = lines;
+      if (current.added || current.removed) {
+        var _curRange;
+        if (!oldRangeStart) {
+          var prev = diff2[i - 1];
+          oldRangeStart = oldLine;
+          newRangeStart = newLine;
+          if (prev) {
+            curRange = options8.context > 0 ? contextLines(prev.lines.slice(-options8.context)) : [];
+            oldRangeStart -= curRange.length;
+            newRangeStart -= curRange.length;
+          }
+        }
+        (_curRange = curRange).push.apply(_curRange, _toConsumableArray(lines.map(function(entry) {
+          return (current.added ? "+" : "-") + entry;
+        })));
+        if (current.added) {
+          newLine += lines.length;
+        } else {
+          oldLine += lines.length;
+        }
+      } else {
+        if (oldRangeStart) {
+          if (lines.length <= options8.context * 2 && i < diff2.length - 2) {
+            var _curRange2;
+            (_curRange2 = curRange).push.apply(_curRange2, _toConsumableArray(contextLines(lines)));
+          } else {
+            var _curRange3;
+            var contextSize = Math.min(lines.length, options8.context);
+            (_curRange3 = curRange).push.apply(_curRange3, _toConsumableArray(contextLines(lines.slice(0, contextSize))));
+            var _hunk = {
+              oldStart: oldRangeStart,
+              oldLines: oldLine - oldRangeStart + contextSize,
+              newStart: newRangeStart,
+              newLines: newLine - newRangeStart + contextSize,
+              lines: curRange
+            };
+            hunks.push(_hunk);
+            oldRangeStart = 0;
+            newRangeStart = 0;
+            curRange = [];
+          }
+        }
+        oldLine += lines.length;
+        newLine += lines.length;
+      }
+    };
+    for (var i = 0; i < diff2.length; i++) {
+      _loop();
+    }
+    for (var _i = 0, _hunks = hunks; _i < _hunks.length; _i++) {
+      var hunk = _hunks[_i];
+      for (var _i2 = 0; _i2 < hunk.lines.length; _i2++) {
+        if (hunk.lines[_i2].endsWith("\n")) {
+          hunk.lines[_i2] = hunk.lines[_i2].slice(0, -1);
+        } else {
+          hunk.lines.splice(_i2 + 1, 0, "\\ No newline at end of file");
+          _i2++;
+        }
+      }
+    }
+    return {
+      oldFileName,
+      newFileName,
+      oldHeader,
+      newHeader,
+      hunks
+    };
   }
-  return {
-    oldFileName,
-    newFileName,
-    oldHeader,
-    newHeader,
-    hunks
-  };
 }
 function formatPatch(diff2) {
   if (Array.isArray(diff2)) {
@@ -10497,11 +10765,46 @@ function formatPatch(diff2) {
   return ret.join("\n") + "\n";
 }
 function createTwoFilesPatch(oldFileName, newFileName, oldStr, newStr, oldHeader, newHeader, options8) {
-  return formatPatch(structuredPatch(oldFileName, newFileName, oldStr, newStr, oldHeader, newHeader, options8));
+  var _options2;
+  if (typeof options8 === "function") {
+    options8 = {
+      callback: options8
+    };
+  }
+  if (!((_options2 = options8) !== null && _options2 !== void 0 && _options2.callback)) {
+    var patchObj = structuredPatch(oldFileName, newFileName, oldStr, newStr, oldHeader, newHeader, options8);
+    if (!patchObj) {
+      return;
+    }
+    return formatPatch(patchObj);
+  } else {
+    var _options3 = options8, _callback2 = _options3.callback;
+    structuredPatch(oldFileName, newFileName, oldStr, newStr, oldHeader, newHeader, _objectSpread2(_objectSpread2({}, options8), {}, {
+      callback: function callback(patchObj2) {
+        if (!patchObj2) {
+          _callback2();
+        } else {
+          _callback2(formatPatch(patchObj2));
+        }
+      }
+    }));
+  }
+}
+function splitLines(text) {
+  var hasTrailingNl = text.endsWith("\n");
+  var result = text.split("\n").map(function(line3) {
+    return line3 + "\n";
+  });
+  if (hasTrailingNl) {
+    result.pop();
+  } else {
+    result.push(result.pop().slice(0, -1));
+  }
+  return result;
 }
 
 // src/index.js
-var import_fast_glob = __toESM(require_out4(), 1);
+var import_fast_glob2 = __toESM(require_out4(), 1);
 
 // node_modules/vnopts/lib/descriptors/api.js
 var apiDescriptor = {
@@ -11494,6 +11797,7 @@ async function isFile(file, options8) {
 var is_file_default = isFile;
 
 // src/config/prettier-config/loaders.js
+var import_fast_glob = __toESM(require_out4(), 1);
 import { pathToFileURL as pathToFileURL2 } from "url";
 
 // node_modules/js-yaml/dist/js-yaml.mjs
@@ -18260,6 +18564,11 @@ function printDocToString(doc2, options8) {
   const cursorPlaceholderIndex = out.indexOf(CURSOR_PLACEHOLDER);
   if (cursorPlaceholderIndex !== -1) {
     const otherCursorPlaceholderIndex = out.indexOf(CURSOR_PLACEHOLDER, cursorPlaceholderIndex + 1);
+    if (otherCursorPlaceholderIndex === -1) {
+      return {
+        formatted: out.filter((char) => char !== CURSOR_PLACEHOLDER).join("")
+      };
+    }
     const beforeCursor = out.slice(0, cursorPlaceholderIndex).join("");
     const aroundCursor = out.slice(cursorPlaceholderIndex + 1, otherCursorPlaceholderIndex).join("");
     const afterCursor = out.slice(otherCursorPlaceholderIndex + 1).join("");
@@ -18628,6 +18937,9 @@ function* getDescendants(node, options8) {
       queue.push(child);
     }
   }
+}
+function isLeaf(node, options8) {
+  return getChildren(node, options8).next().done;
 }
 
 // src/utils/skip.js
@@ -19980,6 +20292,12 @@ async function printAstToDoc(ast, options8) {
   if (!/(?:^|\/)package(?:-lock)?\.json$/.test(options8.filepath)) {
     findAndRemoveLastLinebreak(doc2);
   }
+  if (options8.nodeAfterCursor && !options8.nodeBeforeCursor) {
+    return [cursor, doc2];
+  }
+  if (options8.nodeBeforeCursor && !options8.nodeAfterCursor) {
+    return [doc2, cursor];
+  }
   return doc2;
   function mainPrint(selector, args) {
     if (selector === void 0 || selector === path13) {
@@ -20019,8 +20337,16 @@ function callPluginPrintFunction(path13, options8, printPath, args, embeds) {
   } else {
     doc2 = printer.print(path13, options8, printPath, args);
   }
-  if (node === options8.cursorNode) {
-    doc2 = inheritLabel(doc2, (doc3) => [cursor, doc3, cursor]);
+  switch (node) {
+    case options8.cursorNode:
+      doc2 = inheritLabel(doc2, (doc3) => [cursor, doc3, cursor]);
+      break;
+    case options8.nodeBeforeCursor:
+      doc2 = inheritLabel(doc2, (doc3) => [doc3, cursor]);
+      break;
+    case options8.nodeAfterCursor:
+      doc2 = inheritLabel(doc2, (doc3) => [cursor, doc3]);
+      break;
   }
   if (printer.printComment && (!printer.willPrintOwnComments || !printer.willPrintOwnComments(path13, options8))) {
     doc2 = printComments(path13, doc2, options8);
@@ -20041,22 +20367,55 @@ async function prepareToPrint(ast, options8) {
 }
 
 // src/main/get-cursor-node.js
-function getCursorNode(ast, options8) {
+function getCursorLocation(ast, options8) {
   const { cursorOffset, locStart, locEnd } = options8;
   const getVisitorKeys = create_get_visitor_keys_function_default(
     options8.printer.getVisitorKeys
   );
   const nodeContainsCursor = (node) => locStart(node) <= cursorOffset && locEnd(node) >= cursorOffset;
   let cursorNode = ast;
+  const nodesContainingCursor = [ast];
   for (const node of getDescendants(ast, {
     getVisitorKeys,
     filter: nodeContainsCursor
   })) {
+    nodesContainingCursor.push(node);
     cursorNode = node;
   }
-  return cursorNode;
+  if (isLeaf(cursorNode, { getVisitorKeys })) {
+    return { cursorNode };
+  }
+  let nodeBeforeCursor;
+  let nodeAfterCursor;
+  let nodeBeforeCursorEndIndex = -1;
+  let nodeAfterCursorStartIndex = Number.POSITIVE_INFINITY;
+  while (nodesContainingCursor.length > 0 && (nodeBeforeCursor === void 0 || nodeAfterCursor === void 0)) {
+    cursorNode = nodesContainingCursor.pop();
+    const foundBeforeNode = nodeBeforeCursor !== void 0;
+    const foundAfterNode = nodeAfterCursor !== void 0;
+    for (const node of getChildren(cursorNode, { getVisitorKeys })) {
+      if (!foundBeforeNode) {
+        const nodeEnd = locEnd(node);
+        if (nodeEnd <= cursorOffset && nodeEnd > nodeBeforeCursorEndIndex) {
+          nodeBeforeCursor = node;
+          nodeBeforeCursorEndIndex = nodeEnd;
+        }
+      }
+      if (!foundAfterNode) {
+        const nodeStart = locStart(node);
+        if (nodeStart >= cursorOffset && nodeStart < nodeAfterCursorStartIndex) {
+          nodeAfterCursor = node;
+          nodeAfterCursorStartIndex = nodeStart;
+        }
+      }
+    }
+  }
+  return {
+    nodeBeforeCursor,
+    nodeAfterCursor
+  };
 }
-var get_cursor_node_default = getCursorNode;
+var get_cursor_node_default = getCursorLocation;
 
 // src/main/massage-ast.js
 function massageAst(ast, options8) {
@@ -20294,7 +20653,10 @@ async function coreFormat(originalText, opts, addAlignmentSize = 0) {
     text
   } = await parse_default(originalText, opts);
   if (opts.cursorOffset >= 0) {
-    opts.cursorNode = get_cursor_node_default(ast, opts);
+    opts = {
+      ...opts,
+      ...get_cursor_node_default(ast, opts)
+    };
   }
   let doc2 = await printAstToDoc(ast, opts, addAlignmentSize);
   if (addAlignmentSize > 0) {
@@ -20305,41 +20667,55 @@ async function coreFormat(originalText, opts, addAlignmentSize = 0) {
     const trimmed = result.formatted.trim();
     if (result.cursorNodeStart !== void 0) {
       result.cursorNodeStart -= result.formatted.indexOf(trimmed);
+      if (result.cursorNodeStart < 0) {
+        result.cursorNodeStart = 0;
+        result.cursorNodeText = result.cursorNodeText.trimStart();
+      }
+      if (result.cursorNodeStart + result.cursorNodeText.length > trimmed.length) {
+        result.cursorNodeText = result.cursorNodeText.trimEnd();
+      }
     }
     result.formatted = trimmed + convertEndOfLineToChars(opts.endOfLine);
   }
   const comments = opts[Symbol.for("comments")];
   if (opts.cursorOffset >= 0) {
-    let oldCursorNodeStart;
-    let oldCursorNodeText;
-    let cursorOffsetRelativeToOldCursorNode;
-    let newCursorNodeStart;
-    let newCursorNodeText;
-    if (opts.cursorNode && result.cursorNodeText) {
-      oldCursorNodeStart = opts.locStart(opts.cursorNode);
-      oldCursorNodeText = text.slice(oldCursorNodeStart, opts.locEnd(opts.cursorNode));
-      cursorOffsetRelativeToOldCursorNode = opts.cursorOffset - oldCursorNodeStart;
-      newCursorNodeStart = result.cursorNodeStart;
-      newCursorNodeText = result.cursorNodeText;
+    let oldCursorRegionStart;
+    let oldCursorRegionText;
+    let newCursorRegionStart;
+    let newCursorRegionText;
+    if ((opts.cursorNode || opts.nodeBeforeCursor || opts.nodeAfterCursor) && result.cursorNodeText) {
+      newCursorRegionStart = result.cursorNodeStart;
+      newCursorRegionText = result.cursorNodeText;
+      if (opts.cursorNode) {
+        oldCursorRegionStart = opts.locStart(opts.cursorNode);
+        oldCursorRegionText = text.slice(oldCursorRegionStart, opts.locEnd(opts.cursorNode));
+      } else {
+        if (!opts.nodeBeforeCursor && !opts.nodeAfterCursor) {
+          throw new Error("Cursor location must contain at least one of cursorNode, nodeBeforeCursor, nodeAfterCursor");
+        }
+        oldCursorRegionStart = opts.nodeBeforeCursor ? opts.locEnd(opts.nodeBeforeCursor) : 0;
+        const oldCursorRegionEnd = opts.nodeAfterCursor ? opts.locStart(opts.nodeAfterCursor) : text.length;
+        oldCursorRegionText = text.slice(oldCursorRegionStart, oldCursorRegionEnd);
+      }
     } else {
-      oldCursorNodeStart = 0;
-      oldCursorNodeText = text;
-      cursorOffsetRelativeToOldCursorNode = opts.cursorOffset;
-      newCursorNodeStart = 0;
-      newCursorNodeText = result.formatted;
+      oldCursorRegionStart = 0;
+      oldCursorRegionText = text;
+      newCursorRegionStart = 0;
+      newCursorRegionText = result.formatted;
     }
-    if (oldCursorNodeText === newCursorNodeText) {
+    const cursorOffsetRelativeToOldCursorRegionStart = opts.cursorOffset - oldCursorRegionStart;
+    if (oldCursorRegionText === newCursorRegionText) {
       return {
         formatted: result.formatted,
-        cursorOffset: newCursorNodeStart + cursorOffsetRelativeToOldCursorNode,
+        cursorOffset: newCursorRegionStart + cursorOffsetRelativeToOldCursorRegionStart,
         comments
       };
     }
-    const oldCursorNodeCharArray = oldCursorNodeText.split("");
-    oldCursorNodeCharArray.splice(cursorOffsetRelativeToOldCursorNode, 0, CURSOR);
-    const newCursorNodeCharArray = newCursorNodeText.split("");
+    const oldCursorNodeCharArray = oldCursorRegionText.split("");
+    oldCursorNodeCharArray.splice(cursorOffsetRelativeToOldCursorRegionStart, 0, CURSOR);
+    const newCursorNodeCharArray = newCursorRegionText.split("");
     const cursorNodeDiff = diffArrays(oldCursorNodeCharArray, newCursorNodeCharArray);
-    let cursorOffset = newCursorNodeStart;
+    let cursorOffset = newCursorRegionStart;
     for (const entry of cursorNodeDiff) {
       if (entry.removed) {
         if (entry.value.includes(CURSOR)) {
@@ -21926,7 +22302,7 @@ var sharedWithCli = {
     ChoiceSchema,
     apiDescriptor
   },
-  fastGlob: import_fast_glob.default,
+  fastGlob: import_fast_glob2.default,
   createTwoFilesPatch,
   utils: {
     omit: object_omit_default

@@ -17,7 +17,7 @@ MIT, ISC, BSD-2-Clause, BSD-3-Clause, Apache-2.0
 
 ## Bundled dependencies
 
-### @angular/compiler@v18.2.5
+### @angular/compiler@v18.2.6
 
 > Angular - the compiler library
 
@@ -431,7 +431,7 @@ Author: Alex Bell <alex@bellandwhistle.net>
 
 ----------------------------------------
 
-### @typescript-eslint/types@v8.6.0
+### @typescript-eslint/types@v8.7.0
 
 > Types for the TypeScript-ESTree AST spec
 
@@ -463,7 +463,7 @@ Repository: <https://github.com/typescript-eslint/typescript-eslint.git>
 
 ----------------------------------------
 
-### @typescript-eslint/typescript-estree@v8.6.0
+### @typescript-eslint/typescript-estree@v8.7.0
 
 > A parser that converts TypeScript source code into an ESTree compatible form
 
@@ -562,7 +562,7 @@ Repository: <https://github.com/acornjs/acorn-jsx>
 
 ----------------------------------------
 
-### angular-estree-parser@v10.0.3
+### angular-estree-parser@v10.0.4
 
 > A parser that converts Angular source code into an ESTree-compatible form
 
@@ -594,7 +594,7 @@ Author: Ika <ikatyang@gmail.com> (https://github.com/ikatyang)
 
 ----------------------------------------
 
-### angular-html-parser@v6.0.2
+### angular-html-parser@v7.0.0
 
 > A HTML parser extracted from Angular with some modifications
 
@@ -1018,7 +1018,7 @@ Contributors:
 
 ----------------------------------------
 
-### diff@v5.2.0
+### diff@v7.0.0
 
 > A JavaScript text diff implementation.
 
@@ -1142,12 +1142,12 @@ Author: Sindre Sorhus <sindresorhus@gmail.com> (https://sindresorhus.com)
 
 ----------------------------------------
 
-### espree@v10.1.0
+### espree@v10.2.0
 
 > An Esprima-compatible JavaScript parser built on Acorn
 
 License: BSD-2-Clause
-Homepage: <https://github.com/eslint/espree>
+Homepage: <https://github.com/eslint/js/blob/main/packages/espree/README.md>
 Author: Nicholas C. Zakas <nicholas+npm@nczconsulting.com>
 
 > BSD 2-Clause License
@@ -1503,7 +1503,7 @@ Contributors:
 
 ----------------------------------------
 
-### flow-parser@v0.246.0
+### flow-parser@v0.247.1
 
 > JavaScript parser written in OCaml. Produces ESTree AST
 
@@ -3630,13 +3630,13 @@ Author: JoshuaKGoldberg <npm@joshuakgoldberg.com>
 
 ----------------------------------------
 
-### typescript@v5.5.4
+### typescript@v5.6.2
 
 > TypeScript is a language for application scale JavaScript development
 
 License: Apache-2.0
 Homepage: <https://www.typescriptlang.org/>
-Repository: <https://github.com/Microsoft/TypeScript.git>
+Repository: <https://github.com/microsoft/TypeScript.git>
 Author: Microsoft Corp.
 
 > Apache License

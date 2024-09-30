@@ -2696,7 +2696,7 @@ async function* expandPatterns(context) {
   }
 }
 async function* expandPatternsInternal(context) {
-  const silentlyIgnoredDirs = [".git", ".sl", ".svn", ".hg"];
+  const silentlyIgnoredDirs = [".git", ".sl", ".svn", ".hg", ".jj"];
   if (context.argv.withNodeModules !== true) {
     silentlyIgnoredDirs.push("node_modules");
   }

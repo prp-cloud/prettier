@@ -1254,6 +1254,11 @@ function printDocToString(doc, options) {
   const cursorPlaceholderIndex = out.indexOf(CURSOR_PLACEHOLDER);
   if (cursorPlaceholderIndex !== -1) {
     const otherCursorPlaceholderIndex = out.indexOf(CURSOR_PLACEHOLDER, cursorPlaceholderIndex + 1);
+    if (otherCursorPlaceholderIndex === -1) {
+      return {
+        formatted: out.filter((char) => char !== CURSOR_PLACEHOLDER).join("")
+      };
+    }
     const beforeCursor = out.slice(0, cursorPlaceholderIndex).join("");
     const aroundCursor = out.slice(cursorPlaceholderIndex + 1, otherCursorPlaceholderIndex).join("");
     const afterCursor = out.slice(otherCursorPlaceholderIndex + 1).join("");
