@@ -1,6 +1,5 @@
 import collapseWhiteSpace from "collapse-white-space";
 import escapeStringRegexp from "escape-string-regexp";
-
 import {
   align,
   fill,
@@ -323,8 +322,9 @@ function genericPrint(path, options, print) {
                 ? "- "
                 : "* ";
 
-            return node.isAligned ||
-              /* workaround for https://github.com/remarkjs/remark/issues/315 */ node.hasIndentedCodeblock
+            return (node.isAligned ||
+              /* workaround for https://github.com/remarkjs/remark/issues/315 */ node.hasIndentedCodeblock) &&
+              node.ordered
               ? alignListPrefix(rawPrefix, options)
               : rawPrefix;
           }
