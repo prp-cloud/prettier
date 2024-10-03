@@ -61,7 +61,7 @@ Author: The Babel Team (https://babel.dev/team)
 
 ----------------------------------------
 
-### @babel/helper-validator-identifier@v7.24.7
+### @babel/helper-validator-identifier@v7.25.7
 
 > Validate identifier/keywords name
 
@@ -94,7 +94,7 @@ Author: The Babel Team (https://babel.dev/team)
 
 ----------------------------------------
 
-### @babel/highlight@v7.24.7
+### @babel/highlight@v7.25.7
 
 > Syntax highlight JavaScript strings for output in terminals.
 
