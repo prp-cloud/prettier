@@ -628,9 +628,9 @@ var require_cjs = __commonJS({
     var primitive = "string";
     var ignore = {};
     var object = "object";
-    var noop = (_, value) => value;
+    var noop = (_2, value) => value;
     var primitives = (value) => value instanceof Primitive ? Primitive(value) : value;
-    var Primitives = (_, value) => typeof value === primitive ? new Primitive(value) : value;
+    var Primitives = (_2, value) => typeof value === primitive ? new Primitive(value) : value;
     var revive = (input, parsed, output, $) => {
       const lazy = [];
       for (let ke = keys(output), { length } = ke, y = 0; y < length; y++) {
@@ -1220,223 +1220,6 @@ var require_cache2 = __commonJS({
   }
 });
 
-// node_modules/wcwidth.js/combining.js
-var require_combining = __commonJS({
-  "node_modules/wcwidth.js/combining.js"(exports, module) {
-    module.exports = [
-      [768, 879],
-      [1155, 1158],
-      [1160, 1161],
-      [1425, 1469],
-      [1471, 1471],
-      [1473, 1474],
-      [1476, 1477],
-      [1479, 1479],
-      [1536, 1539],
-      [1552, 1557],
-      [1611, 1630],
-      [1648, 1648],
-      [1750, 1764],
-      [1767, 1768],
-      [1770, 1773],
-      [1807, 1807],
-      [1809, 1809],
-      [1840, 1866],
-      [1958, 1968],
-      [2027, 2035],
-      [2305, 2306],
-      [2364, 2364],
-      [2369, 2376],
-      [2381, 2381],
-      [2385, 2388],
-      [2402, 2403],
-      [2433, 2433],
-      [2492, 2492],
-      [2497, 2500],
-      [2509, 2509],
-      [2530, 2531],
-      [2561, 2562],
-      [2620, 2620],
-      [2625, 2626],
-      [2631, 2632],
-      [2635, 2637],
-      [2672, 2673],
-      [2689, 2690],
-      [2748, 2748],
-      [2753, 2757],
-      [2759, 2760],
-      [2765, 2765],
-      [2786, 2787],
-      [2817, 2817],
-      [2876, 2876],
-      [2879, 2879],
-      [2881, 2883],
-      [2893, 2893],
-      [2902, 2902],
-      [2946, 2946],
-      [3008, 3008],
-      [3021, 3021],
-      [3134, 3136],
-      [3142, 3144],
-      [3146, 3149],
-      [3157, 3158],
-      [3260, 3260],
-      [3263, 3263],
-      [3270, 3270],
-      [3276, 3277],
-      [3298, 3299],
-      [3393, 3395],
-      [3405, 3405],
-      [3530, 3530],
-      [3538, 3540],
-      [3542, 3542],
-      [3633, 3633],
-      [3636, 3642],
-      [3655, 3662],
-      [3761, 3761],
-      [3764, 3769],
-      [3771, 3772],
-      [3784, 3789],
-      [3864, 3865],
-      [3893, 3893],
-      [3895, 3895],
-      [3897, 3897],
-      [3953, 3966],
-      [3968, 3972],
-      [3974, 3975],
-      [3984, 3991],
-      [3993, 4028],
-      [4038, 4038],
-      [4141, 4144],
-      [4146, 4146],
-      [4150, 4151],
-      [4153, 4153],
-      [4184, 4185],
-      [4448, 4607],
-      [4959, 4959],
-      [5906, 5908],
-      [5938, 5940],
-      [5970, 5971],
-      [6002, 6003],
-      [6068, 6069],
-      [6071, 6077],
-      [6086, 6086],
-      [6089, 6099],
-      [6109, 6109],
-      [6155, 6157],
-      [6313, 6313],
-      [6432, 6434],
-      [6439, 6440],
-      [6450, 6450],
-      [6457, 6459],
-      [6679, 6680],
-      [6912, 6915],
-      [6964, 6964],
-      [6966, 6970],
-      [6972, 6972],
-      [6978, 6978],
-      [7019, 7027],
-      [7616, 7626],
-      [7678, 7679],
-      [8203, 8207],
-      [8234, 8238],
-      [8288, 8291],
-      [8298, 8303],
-      [8400, 8431],
-      [12330, 12335],
-      [12441, 12442],
-      [43014, 43014],
-      [43019, 43019],
-      [43045, 43046],
-      [64286, 64286],
-      [65024, 65039],
-      [65056, 65059],
-      [65279, 65279],
-      [65529, 65531],
-      [68097, 68099],
-      [68101, 68102],
-      [68108, 68111],
-      [68152, 68154],
-      [68159, 68159],
-      [119143, 119145],
-      [119155, 119170],
-      [119173, 119179],
-      [119210, 119213],
-      [119362, 119364],
-      [917505, 917505],
-      [917536, 917631],
-      [917760, 917999]
-    ];
-  }
-});
-
-// node_modules/wcwidth.js/index.js
-var require_wcwidth = __commonJS({
-  "node_modules/wcwidth.js/index.js"(exports, module) {
-    var combining = require_combining();
-    var DEFAULTS = {
-      nul: 0,
-      control: 0
-    };
-    function bisearch(ucs) {
-      let min = 0;
-      let max = combining.length - 1;
-      let mid;
-      if (ucs < combining[0][0] || ucs > combining[max][1]) return false;
-      while (max >= min) {
-        mid = Math.floor((min + max) / 2);
-        if (ucs > combining[mid][1]) min = mid + 1;
-        else if (ucs < combining[mid][0]) max = mid - 1;
-        else return true;
-      }
-      return false;
-    }
-    function wcwidth2(ucs, opts) {
-      if (ucs === 0) return opts.nul;
-      if (ucs < 32 || ucs >= 127 && ucs < 160) return opts.control;
-      if (bisearch(ucs)) return 0;
-      return 1 + (ucs >= 4352 && (ucs <= 4447 || // Hangul Jamo init. consonants
-      ucs == 9001 || ucs == 9002 || ucs >= 11904 && ucs <= 42191 && ucs != 12351 || // CJK ... Yi
-      ucs >= 44032 && ucs <= 55203 || // Hangul Syllables
-      ucs >= 63744 && ucs <= 64255 || // CJK Compatibility Ideographs
-      ucs >= 65040 && ucs <= 65049 || // Vertical forms
-      ucs >= 65072 && ucs <= 65135 || // CJK Compatibility Forms
-      ucs >= 65280 && ucs <= 65376 || // Fullwidth Forms
-      ucs >= 65504 && ucs <= 65510 || ucs >= 131072 && ucs <= 196605 || ucs >= 196608 && ucs <= 262141));
-    }
-    function wcswidth(str, opts) {
-      let h;
-      let l;
-      let s = 0;
-      let n;
-      if (typeof str !== "string") return wcwidth2(str, opts);
-      for (let i = 0; i < str.length; i++) {
-        h = str.charCodeAt(i);
-        if (h >= 55296 && h <= 56319) {
-          l = str.charCodeAt(++i);
-          if (l >= 56320 && l <= 57343) {
-            h = (h - 55296) * 1024 + (l - 56320) + 65536;
-          } else {
-            i--;
-          }
-        }
-        n = wcwidth2(h, opts);
-        if (n < 0) return -1;
-        s += n;
-      }
-      return s;
-    }
-    module.exports = (str) => wcswidth(str, DEFAULTS);
-    module.exports.config = (opts = {}) => {
-      opts = {
-        ...DEFAULTS,
-        ...opts
-      };
-      return (str) => wcswidth(str, opts);
-    };
-  }
-});
-
 // src/cli/index.js
 import * as prettier2 from "../index.mjs";
 
@@ -1776,7 +1559,7 @@ var postProcess = (input, toUpperCase) => {
       (match, pattern, offset) => ["_", "-"].includes(input.charAt(offset + match.length)) ? match : toUpperCase(match)
     ),
     SEPARATORS_AND_IDENTIFIER,
-    (_, identifier) => toUpperCase(identifier)
+    (_2, identifier) => toUpperCase(identifier)
   );
 };
 function camelCase(input, options) {
@@ -3585,13 +3368,221 @@ function stripAnsi(string) {
   return string.replace(regex, "");
 }
 
+// node_modules/wcwidth.js/combining.js
+var combining_default = [
+  [768, 879],
+  [1155, 1158],
+  [1160, 1161],
+  [1425, 1469],
+  [1471, 1471],
+  [1473, 1474],
+  [1476, 1477],
+  [1479, 1479],
+  [1536, 1539],
+  [1552, 1557],
+  [1611, 1630],
+  [1648, 1648],
+  [1750, 1764],
+  [1767, 1768],
+  [1770, 1773],
+  [1807, 1807],
+  [1809, 1809],
+  [1840, 1866],
+  [1958, 1968],
+  [2027, 2035],
+  [2305, 2306],
+  [2364, 2364],
+  [2369, 2376],
+  [2381, 2381],
+  [2385, 2388],
+  [2402, 2403],
+  [2433, 2433],
+  [2492, 2492],
+  [2497, 2500],
+  [2509, 2509],
+  [2530, 2531],
+  [2561, 2562],
+  [2620, 2620],
+  [2625, 2626],
+  [2631, 2632],
+  [2635, 2637],
+  [2672, 2673],
+  [2689, 2690],
+  [2748, 2748],
+  [2753, 2757],
+  [2759, 2760],
+  [2765, 2765],
+  [2786, 2787],
+  [2817, 2817],
+  [2876, 2876],
+  [2879, 2879],
+  [2881, 2883],
+  [2893, 2893],
+  [2902, 2902],
+  [2946, 2946],
+  [3008, 3008],
+  [3021, 3021],
+  [3134, 3136],
+  [3142, 3144],
+  [3146, 3149],
+  [3157, 3158],
+  [3260, 3260],
+  [3263, 3263],
+  [3270, 3270],
+  [3276, 3277],
+  [3298, 3299],
+  [3393, 3395],
+  [3405, 3405],
+  [3530, 3530],
+  [3538, 3540],
+  [3542, 3542],
+  [3633, 3633],
+  [3636, 3642],
+  [3655, 3662],
+  [3761, 3761],
+  [3764, 3769],
+  [3771, 3772],
+  [3784, 3789],
+  [3864, 3865],
+  [3893, 3893],
+  [3895, 3895],
+  [3897, 3897],
+  [3953, 3966],
+  [3968, 3972],
+  [3974, 3975],
+  [3984, 3991],
+  [3993, 4028],
+  [4038, 4038],
+  [4141, 4144],
+  [4146, 4146],
+  [4150, 4151],
+  [4153, 4153],
+  [4184, 4185],
+  [4448, 4607],
+  [4959, 4959],
+  [5906, 5908],
+  [5938, 5940],
+  [5970, 5971],
+  [6002, 6003],
+  [6068, 6069],
+  [6071, 6077],
+  [6086, 6086],
+  [6089, 6099],
+  [6109, 6109],
+  [6155, 6157],
+  [6313, 6313],
+  [6432, 6434],
+  [6439, 6440],
+  [6450, 6450],
+  [6457, 6459],
+  [6679, 6680],
+  [6912, 6915],
+  [6964, 6964],
+  [6966, 6970],
+  [6972, 6972],
+  [6978, 6978],
+  [7019, 7027],
+  [7616, 7626],
+  [7678, 7679],
+  [8203, 8207],
+  [8234, 8238],
+  [8288, 8291],
+  [8298, 8303],
+  [8400, 8431],
+  [12330, 12335],
+  [12441, 12442],
+  [43014, 43014],
+  [43019, 43019],
+  [43045, 43046],
+  [64286, 64286],
+  [65024, 65039],
+  [65056, 65059],
+  [65279, 65279],
+  [65529, 65531],
+  [68097, 68099],
+  [68101, 68102],
+  [68108, 68111],
+  [68152, 68154],
+  [68159, 68159],
+  [119143, 119145],
+  [119155, 119170],
+  [119173, 119179],
+  [119210, 119213],
+  [119362, 119364],
+  [917505, 917505],
+  [917536, 917631],
+  [917760, 917999]
+];
+
+// node_modules/wcwidth.js/index.js
+var DEFAULTS = {
+  nul: 0,
+  control: 0
+};
+function bisearch(ucs) {
+  let min = 0;
+  let max = combining_default.length - 1;
+  let mid;
+  if (ucs < combining_default[0][0] || ucs > combining_default[max][1]) return false;
+  while (max >= min) {
+    mid = Math.floor((min + max) / 2);
+    if (ucs > combining_default[mid][1]) min = mid + 1;
+    else if (ucs < combining_default[mid][0]) max = mid - 1;
+    else return true;
+  }
+  return false;
+}
+function wcwidth(ucs, opts) {
+  if (ucs === 0) return opts.nul;
+  if (ucs < 32 || ucs >= 127 && ucs < 160) return opts.control;
+  if (bisearch(ucs)) return 0;
+  return 1 + (ucs >= 4352 && (ucs <= 4447 || // Hangul Jamo init. consonants
+  ucs == 9001 || ucs == 9002 || ucs >= 11904 && ucs <= 42191 && ucs != 12351 || // CJK ... Yi
+  ucs >= 44032 && ucs <= 55203 || // Hangul Syllables
+  ucs >= 63744 && ucs <= 64255 || // CJK Compatibility Ideographs
+  ucs >= 65040 && ucs <= 65049 || // Vertical forms
+  ucs >= 65072 && ucs <= 65135 || // CJK Compatibility Forms
+  ucs >= 65280 && ucs <= 65376 || // Fullwidth Forms
+  ucs >= 65504 && ucs <= 65510 || ucs >= 131072 && ucs <= 196605 || ucs >= 196608 && ucs <= 262141));
+}
+function wcswidth(str, opts) {
+  let h;
+  let l;
+  let s = 0;
+  let n;
+  if (typeof str !== "string") return wcwidth(str, opts);
+  for (let i = 0; i < str.length; i++) {
+    h = str.charCodeAt(i);
+    if (h >= 55296 && h <= 56319) {
+      l = str.charCodeAt(++i);
+      if (l >= 56320 && l <= 57343) {
+        h = (h - 55296) * 1024 + (l - 56320) + 65536;
+      } else {
+        i--;
+      }
+    }
+    n = wcwidth(h, opts);
+    if (n < 0) return -1;
+    s += n;
+  }
+  return s;
+}
+var _ = (str) => wcswidth(str, DEFAULTS);
+_.config = (opts = {}) => {
+  opts = {
+    ...DEFAULTS,
+    ...opts
+  };
+  return (str) => wcswidth(str, opts);
+};
+var wcwidth_default = _;
+
 // src/cli/logger.js
-var import_wcwidth = __toESM(require_wcwidth(), 1);
 var countLines = (stream, text) => {
   const columns = stream.columns || 80;
   let lineCount = 0;
   for (const line of stripAnsi(text).split("\n")) {
-    lineCount += Math.max(1, Math.ceil((0, import_wcwidth.default)(line) / columns));
+    lineCount += Math.max(1, Math.ceil(wcwidth_default(line) / columns));
   }
   return lineCount;
 };

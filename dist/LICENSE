@@ -431,7 +431,7 @@ Author: Alex Bell <alex@bellandwhistle.net>
 
 ----------------------------------------
 
-### @typescript-eslint/types@v8.7.0
+### @typescript-eslint/types@v8.8.1
 
 > Types for the TypeScript-ESTree AST spec
 
@@ -463,7 +463,7 @@ Repository: <https://github.com/typescript-eslint/typescript-eslint.git>
 
 ----------------------------------------
 
-### @typescript-eslint/typescript-estree@v8.7.0
+### @typescript-eslint/typescript-estree@v8.8.1
 
 > A parser that converts TypeScript source code into an ESTree compatible form
 
@@ -594,7 +594,7 @@ Author: Ika <ikatyang@gmail.com> (https://github.com/ikatyang)
 
 ----------------------------------------
 
-### angular-html-parser@v7.0.0
+### angular-html-parser@v7.0.1
 
 > A HTML parser extracted from Angular with some modifications
 
@@ -4146,7 +4146,7 @@ Author: Ika <ikatyang@gmail.com> (https://github.com/ikatyang)
 
 ----------------------------------------
 
-### wcwidth.js@v1.1.2
+### wcwidth.js@v2.0.0
 
 > a javascript porting of C's wcwidth()
 
