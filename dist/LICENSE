@@ -128,7 +128,7 @@ Author: The Babel Team (https://babel.dev/team)
 
 ----------------------------------------
 
-### @babel/parser@v7.25.7
+### @babel/parser@v7.25.8
 
 > A JavaScript parser
 
@@ -1514,7 +1514,7 @@ Author: Flow Team <flow@fb.com>
 
 ----------------------------------------
 
-### get-east-asian-width@v1.2.0
+### get-east-asian-width@v1.3.0
 
 > Determine the East Asian Width of a Unicode character
 
