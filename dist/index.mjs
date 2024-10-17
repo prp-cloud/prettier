@@ -9086,17 +9086,16 @@ var require_lib = __commonJS({
 // node_modules/picocolors/picocolors.js
 var require_picocolors = __commonJS({
   "node_modules/picocolors/picocolors.js"(exports, module) {
-    var argv = process.argv || [];
-    var env2 = process.env;
-    var isColorSupported = !("NO_COLOR" in env2 || argv.includes("--no-color")) && ("FORCE_COLOR" in env2 || argv.includes("--color") || process.platform === "win32" || __require != null && __require("tty").isatty(1) && env2.TERM !== "dumb" || "CI" in env2);
+    var p = process || {};
+    var argv = p.argv || [];
+    var env2 = p.env || {};
+    var isColorSupported = !(!!env2.NO_COLOR || argv.includes("--no-color")) && (!!env2.FORCE_COLOR || argv.includes("--color") || p.platform === "win32" || (p.stdout || {}).isTTY && env2.TERM !== "dumb" || !!env2.CI);
     var formatter = (open, close, replace = open) => (input) => {
-      let string = "" + input;
-      let index = string.indexOf(close, open.length);
+      let string = "" + input, index = string.indexOf(close, open.length);
       return ~index ? open + replaceClose(string, close, replace, index) + close : open + string + close;
     };
     var replaceClose = (string, close, replace, index) => {
-      let result = "";
-      let cursor2 = 0;
+      let result = "", cursor2 = 0;
       do {
         result += string.substring(cursor2, index) + replace;
         cursor2 = index + close.length;
@@ -9105,50 +9104,50 @@ var require_picocolors = __commonJS({
       return result + string.substring(cursor2);
     };
     var createColors = (enabled = isColorSupported) => {
-      let init = enabled ? formatter : () => String;
+      let f = enabled ? formatter : () => String;
       return {
         isColorSupported: enabled,
-        reset: init("\x1B[0m", "\x1B[0m"),
-        bold: init("\x1B[1m", "\x1B[22m", "\x1B[22m\x1B[1m"),
-        dim: init("\x1B[2m", "\x1B[22m", "\x1B[22m\x1B[2m"),
-        italic: init("\x1B[3m", "\x1B[23m"),
-        underline: init("\x1B[4m", "\x1B[24m"),
-        inverse: init("\x1B[7m", "\x1B[27m"),
-        hidden: init("\x1B[8m", "\x1B[28m"),
-        strikethrough: init("\x1B[9m", "\x1B[29m"),
-        black: init("\x1B[30m", "\x1B[39m"),
-        red: init("\x1B[31m", "\x1B[39m"),
-        green: init("\x1B[32m", "\x1B[39m"),
-        yellow: init("\x1B[33m", "\x1B[39m"),
-        blue: init("\x1B[34m", "\x1B[39m"),
-        magenta: init("\x1B[35m", "\x1B[39m"),
-        cyan: init("\x1B[36m", "\x1B[39m"),
-        white: init("\x1B[37m", "\x1B[39m"),
-        gray: init("\x1B[90m", "\x1B[39m"),
-        bgBlack: init("\x1B[40m", "\x1B[49m"),
-        bgRed: init("\x1B[41m", "\x1B[49m"),
-        bgGreen: init("\x1B[42m", "\x1B[49m"),
-        bgYellow: init("\x1B[43m", "\x1B[49m"),
-        bgBlue: init("\x1B[44m", "\x1B[49m"),
-        bgMagenta: init("\x1B[45m", "\x1B[49m"),
-        bgCyan: init("\x1B[46m", "\x1B[49m"),
-        bgWhite: init("\x1B[47m", "\x1B[49m"),
-        blackBright: init("\x1B[90m", "\x1B[39m"),
-        redBright: init("\x1B[91m", "\x1B[39m"),
-        greenBright: init("\x1B[92m", "\x1B[39m"),
-        yellowBright: init("\x1B[93m", "\x1B[39m"),
-        blueBright: init("\x1B[94m", "\x1B[39m"),
-        magentaBright: init("\x1B[95m", "\x1B[39m"),
-        cyanBright: init("\x1B[96m", "\x1B[39m"),
-        whiteBright: init("\x1B[97m", "\x1B[39m"),
-        bgBlackBright: init("\x1B[100m", "\x1B[49m"),
-        bgRedBright: init("\x1B[101m", "\x1B[49m"),
-        bgGreenBright: init("\x1B[102m", "\x1B[49m"),
-        bgYellowBright: init("\x1B[103m", "\x1B[49m"),
-        bgBlueBright: init("\x1B[104m", "\x1B[49m"),
-        bgMagentaBright: init("\x1B[105m", "\x1B[49m"),
-        bgCyanBright: init("\x1B[106m", "\x1B[49m"),
-        bgWhiteBright: init("\x1B[107m", "\x1B[49m")
+        reset: f("\x1B[0m", "\x1B[0m"),
+        bold: f("\x1B[1m", "\x1B[22m", "\x1B[22m\x1B[1m"),
+        dim: f("\x1B[2m", "\x1B[22m", "\x1B[22m\x1B[2m"),
+        italic: f("\x1B[3m", "\x1B[23m"),
+        underline: f("\x1B[4m", "\x1B[24m"),
+        inverse: f("\x1B[7m", "\x1B[27m"),
+        hidden: f("\x1B[8m", "\x1B[28m"),
+        strikethrough: f("\x1B[9m", "\x1B[29m"),
+        black: f("\x1B[30m", "\x1B[39m"),
+        red: f("\x1B[31m", "\x1B[39m"),
+        green: f("\x1B[32m", "\x1B[39m"),
+        yellow: f("\x1B[33m", "\x1B[39m"),
+        blue: f("\x1B[34m", "\x1B[39m"),
+        magenta: f("\x1B[35m", "\x1B[39m"),
+        cyan: f("\x1B[36m", "\x1B[39m"),
+        white: f("\x1B[37m", "\x1B[39m"),
+        gray: f("\x1B[90m", "\x1B[39m"),
+        bgBlack: f("\x1B[40m", "\x1B[49m"),
+        bgRed: f("\x1B[41m", "\x1B[49m"),
+        bgGreen: f("\x1B[42m", "\x1B[49m"),
+        bgYellow: f("\x1B[43m", "\x1B[49m"),
+        bgBlue: f("\x1B[44m", "\x1B[49m"),
+        bgMagenta: f("\x1B[45m", "\x1B[49m"),
+        bgCyan: f("\x1B[46m", "\x1B[49m"),
+        bgWhite: f("\x1B[47m", "\x1B[49m"),
+        blackBright: f("\x1B[90m", "\x1B[39m"),
+        redBright: f("\x1B[91m", "\x1B[39m"),
+        greenBright: f("\x1B[92m", "\x1B[39m"),
+        yellowBright: f("\x1B[93m", "\x1B[39m"),
+        blueBright: f("\x1B[94m", "\x1B[39m"),
+        magentaBright: f("\x1B[95m", "\x1B[39m"),
+        cyanBright: f("\x1B[96m", "\x1B[39m"),
+        whiteBright: f("\x1B[97m", "\x1B[39m"),
+        bgBlackBright: f("\x1B[100m", "\x1B[49m"),
+        bgRedBright: f("\x1B[101m", "\x1B[49m"),
+        bgGreenBright: f("\x1B[102m", "\x1B[49m"),
+        bgYellowBright: f("\x1B[103m", "\x1B[49m"),
+        bgBlueBright: f("\x1B[104m", "\x1B[49m"),
+        bgMagentaBright: f("\x1B[105m", "\x1B[49m"),
+        bgCyanBright: f("\x1B[106m", "\x1B[49m"),
+        bgWhiteBright: f("\x1B[107m", "\x1B[49m")
       };
     };
     module.exports = createColors();
