@@ -10803,7 +10803,7 @@ function splitLines(text) {
 }
 
 // src/index.js
-var import_fast_glob2 = __toESM(require_out4(), 1);
+var import_fast_glob = __toESM(require_out4(), 1);
 
 // node_modules/vnopts/lib/descriptors/api.js
 var apiDescriptor = {
@@ -11796,7 +11796,6 @@ async function isFile(file, options8) {
 var is_file_default = isFile;
 
 // src/config/prettier-config/loaders.js
-var import_fast_glob = __toESM(require_out4(), 1);
 import { pathToFileURL as pathToFileURL2 } from "url";
 
 // node_modules/js-yaml/dist/js-yaml.mjs
@@ -22301,7 +22300,7 @@ var sharedWithCli = {
     ChoiceSchema,
     apiDescriptor
   },
-  fastGlob: import_fast_glob2.default,
+  fastGlob: import_fast_glob.default,
   createTwoFilesPatch,
   utils: {
     omit: object_omit_default
