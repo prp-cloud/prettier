@@ -114,7 +114,7 @@
     "micromatch": "4.0.8",
     "minimist": "1.2.8",
     "n-readlines": "1.0.1",
-    "npm-run-all2": "6.2.3",
+		"npm-run-all2": "7.0.0",
     "outdent": "0.8.0",
     "parse-json": "8.1.0",
     "postcss": "8.4.47",
