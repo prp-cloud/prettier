@@ -27,7 +27,7 @@ Author: angular
 
 ----------------------------------------
 
-### @babel/code-frame@v7.25.7
+### @babel/code-frame@v7.25.9
 
 > Generate errors that contain a code frame that point to source locations.
 
@@ -128,7 +128,7 @@ Author: The Babel Team (https://babel.dev/team)
 
 ----------------------------------------
 
-### @babel/parser@v7.25.8
+### @babel/parser@v7.25.9
 
 > A JavaScript parser
 
