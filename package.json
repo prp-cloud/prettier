@@ -204,7 +204,7 @@
     "not op_mini all"
   ],
   "preferUnplugged": true,
-  "packageManager": "yarn@4.5.0",
+  "packageManager": "yarn@4.5.1",
   "overrides": {
     "@typescript-eslint/parser": "$@typescript-eslint/eslint-plugin",
     "esbuild": "0.24.0",
