@@ -80,6 +80,8 @@ function hasLanguageComment({ node, parent }, languageName) {
   return (
     hasLeadingBlockCommentWithName(node, languageName) ||
     (isAsConstExpression(parent) &&
+      hasLeadingBlockCommentWithName(parent, languageName)) ||
+    (parent.type === "ExpressionStatement" &&
       hasLeadingBlockCommentWithName(parent, languageName))
   );
 }
@@ -98,5 +100,4 @@ export {
   hasLanguageComment,
   isAngularComponentStyles,
   isAngularComponentTemplate,
-  isAsConstExpression,
 };

@@ -1,9 +1,8 @@
 /**
- * @typedef {import("../../document/builders.js").Doc} Doc
+ * @import {Doc} from "../../document/builders.js"
  */
 
 import assert from "node:assert";
-
 import {
   hardline,
   indent,
@@ -190,7 +189,7 @@ function needsToBorrowNextOpeningTagStartMarker(node) {
 }
 
 function getPrettierIgnoreAttributeCommentData(value) {
-  const match = value.trim().match(/^prettier-ignore-attribute(?:\s+(.+))?$/s);
+  const match = value.trim().match(/^prettier-ignore-attribute(?:\s+(.+))?$/su);
 
   if (!match) {
     return false;
@@ -200,7 +199,7 @@ function getPrettierIgnoreAttributeCommentData(value) {
     return true;
   }
 
-  return match[1].split(/\s+/);
+  return match[1].split(/\s+/u);
 }
 
 function needsToBorrowParentOpeningTagEndMarker(node) {
@@ -384,7 +383,6 @@ export {
   printClosingTag,
   printClosingTagEnd,
   printClosingTagEndMarker,
-  printClosingTagStart,
   printClosingTagStartMarker,
   printClosingTagSuffix,
   printOpeningTag,

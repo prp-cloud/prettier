@@ -1,5 +1,4 @@
 import path from "node:path";
-
 import { DIST_DIR, PROJECT_ROOT, readJson, writeJson } from "../utils/index.js";
 
 const keysToKeep = [
@@ -39,6 +38,7 @@ async function buildPackageJson({ file, files }) {
       // Don't delete, comment out if we don't want override
       node: ">=14",
     },
+    type: "commonjs",
     exports: {
       ".": {
         types: "./index.d.ts",
@@ -58,9 +58,9 @@ async function buildPackageJson({ file, files }) {
             return [
               file.isPlugin ? `./plugins/${basename}` : `./${basename}`,
               {
-                types: `./${file.output.file.replace(/\.js$/, ".d.ts")}`,
+                types: `./${file.output.file.replace(/\.js$/u, ".d.ts")}`,
                 require: `./${file.output.file}`,
-                default: `./${file.output.file.replace(/\.js$/, ".mjs")}`,
+                default: `./${file.output.file.replace(/\.js$/u, ".mjs")}`,
               },
             ];
           }),
@@ -86,7 +86,7 @@ async function buildPackageJson({ file, files }) {
               [`./parser-${basename}.js`, `./${file.output.file}`],
               [
                 `./esm/parser-${basename}.mjs`,
-                `./${file.output.file.replace(/\.js$/, ".mjs")}`,
+                `./${file.output.file.replace(/\.js$/u, ".mjs")}`,
               ],
             ];
           }),

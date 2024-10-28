@@ -16,6 +16,7 @@ import {
 import getNextNonSpaceNonCommentCharacterIndex from "../../utils/get-next-non-space-non-comment-character-index.js";
 import { locEnd } from "../loc.js";
 import {
+  CommentCheckFlags,
   getFunctionParameters,
   hasComment,
   hasLeadingOwnLineComment,
@@ -32,8 +33,8 @@ import { printReturnType, shouldPrintParamsWithoutParens } from "./function.js";
 import { printFunctionParameters } from "./function-parameters.js";
 
 /**
- * @typedef {import("../../common/ast-path.js").default} AstPath
- * @typedef {import("../../document/builders.js").Doc} Doc
+ * @import AstPath from "../../common/ast-path.js"
+ * @import {Doc} from "../../document/builders.js"
  */
 
 // In order to avoid confusion between
@@ -120,8 +121,9 @@ function printArrowFunction(path, options, print, args = {}) {
     signatureDocs,
     shouldBreak: shouldBreakChain,
   });
-  let shouldBreakSignatures;
+  let shouldBreakSignatures = false;
   let shouldIndentSignatures = false;
+  let shouldPrintSoftlineInIndent = false;
   if (
     shouldPrintAsChain &&
     (isCallee ||
@@ -129,6 +131,13 @@ function printArrowFunction(path, options, print, args = {}) {
       args.assignmentLayout)
   ) {
     shouldIndentSignatures = true;
+    // If the arrow function has a leading line comment, there should be a hardline above it
+    // so we should not print a softline in indent call
+    // https://github.com/prettier/prettier/issues/16067
+    shouldPrintSoftlineInIndent = !hasComment(
+      path.node,
+      CommentCheckFlags.Leading & CommentCheckFlags.Line,
+    );
     shouldBreakSignatures =
       args.assignmentLayout === "chain-tail-arrow-chain" ||
       (isCallee && !shouldPutBodyOnSameLine);
@@ -144,7 +153,7 @@ function printArrowFunction(path, options, print, args = {}) {
   return group([
     group(
       shouldIndentSignatures
-        ? indent([softline, signaturesDoc])
+        ? indent([shouldPrintSoftlineInIndent ? softline : "", signaturesDoc])
         : signaturesDoc,
       { shouldBreak: shouldBreakSignatures, id: chainGroupId },
     ),

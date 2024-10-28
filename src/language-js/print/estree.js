@@ -74,8 +74,8 @@ import { printTernary } from "./ternary.js";
 import { printTypeAnnotationProperty } from "./type-annotation.js";
 
 /**
- * @typedef {import("../../common/ast-path.js").default} AstPath
- * @typedef {import("../../document/builders.js").Doc} Doc
+ * @import AstPath from "../../common/ast-path.js"
+ * @import {Doc} from "../../document/builders.js"
  */
 
 /**
@@ -299,7 +299,7 @@ function printEstree(path, options, print, args) {
     case "UnaryExpression":
       parts.push(node.operator);
 
-      if (/[a-z]$/.test(node.operator)) {
+      if (/[a-z]$/u.test(node.operator)) {
         parts.push(" ");
       }
 
@@ -623,7 +623,7 @@ function printEstree(path, options, print, args) {
     case "TemplateLiteral":
       return printTemplateLiteral(path, print, options);
     case "TaggedTemplateExpression":
-      return printTaggedTemplateLiteral(print);
+      return printTaggedTemplateLiteral(path, print);
     case "PrivateIdentifier":
       return ["#", node.name];
     case "PrivateName":

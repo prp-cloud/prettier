@@ -29,7 +29,7 @@ import {
 } from "../utils/index.js";
 import { printFunctionTypeParameters } from "./misc.js";
 
-/** @typedef {import("../../common/ast-path.js").default} AstPath */
+/** @import AstPath from "../../common/ast-path.js" */
 
 function printFunctionParameters(
   path,
@@ -137,7 +137,10 @@ function printFunctionParameters(
     !functionNode.rest;
 
   if (isFlowShorthandWithOneArg) {
-    if (options.arrowParens === "always") {
+    if (
+      options.arrowParens === "always" ||
+      functionNode.type === "HookTypeAnnotation"
+    ) {
       return ["(", ...printed, ")"];
     }
     return printed;

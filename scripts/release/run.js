@@ -1,5 +1,4 @@
 import semver from "semver";
-
 import parseArguments from "./parse-arguments.js";
 import * as steps from "./steps/index.js";
 import { logPromise, readJson, runGit } from "./utils.js";
@@ -20,6 +19,10 @@ if (semver.parse(previousVersion) === null) {
 }
 
 for (let step of [
+  {
+    process: steps.chooseVersion,
+    skip: Boolean(params.version),
+  },
   {
     name: "Validating new version",
     process: steps.validateNewVersion,

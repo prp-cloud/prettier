@@ -13,25 +13,13 @@ import isNodeMatches from "./is-node-matches.js";
 import isTsKeywordType from "./is-ts-keyword-type.js";
 
 /**
- * @typedef {import("../types/estree.js").Node} Node
- * @typedef {import("../types/estree.js").TemplateLiteral} TemplateLiteral
- * @typedef {import("../types/estree.js").Comment} Comment
- * @typedef {import("../types/estree.js").MemberExpression} MemberExpression
- * @typedef {import("../types/estree.js").OptionalMemberExpression} OptionalMemberExpression
- * @typedef {import("../types/estree.js").CallExpression} CallExpression
- * @typedef {import("../types/estree.js").OptionalCallExpression} OptionalCallExpression
- * @typedef {import("../types/estree.js").Expression} Expression
- * @typedef {import("../types/estree.js").Property} Property
- * @typedef {import("../types/estree.js").ObjectTypeProperty} ObjectTypeProperty
- * @typedef {import("../types/estree.js").TaggedTemplateExpression} TaggedTemplateExpression
- * @typedef {import("../types/estree.js").Literal} Literal
- *
- * @typedef {import("../../common/ast-path.js").default} AstPath
+ * @import * as Estree from "../types/estree.js"
+ * @import AstPath from "../../common/ast-path.js"
  */
 
 /**
- * @param {Node} node
- * @param {(Node) => boolean} predicate
+ * @param {Estree.Node} node
+ * @param {(node: Estree.Node) => boolean} predicate
  * @returns {boolean}
  */
 function hasNode(node, predicate) {
@@ -39,7 +27,7 @@ function hasNode(node, predicate) {
 }
 
 /**
- * @param {Node} node
+ * @param {Estree.Node} node
  * @returns {boolean}
  */
 function hasNakedLeftSide(node) {
@@ -105,7 +93,7 @@ function getLeftSidePathName(node) {
 }
 
 /**
- * @param {Comment} comment
+ * @param {Estree.Comment} comment
  * @returns {boolean}
  */
 const isLineComment = createTypeCheckFunction([
@@ -141,7 +129,15 @@ const isObjectOrRecordExpression = createTypeCheckFunction([
 ]);
 
 /**
- * @param {Node} node
+ * @param {Estree.Node} node
+ * @returns {boolean}
+ */
+function isNullishCoalescing(node) {
+  return node.type === "LogicalExpression" && node.operator === "??";
+}
+
+/**
+ * @param {Estree.Node} node
  * @returns {boolean}
  */
 function isNumericLiteral(node) {
@@ -160,7 +156,7 @@ function isSignedNumericLiteral(node) {
 }
 
 /**
- * @param {Node} node
+ * @param {Estree.Node} node
  * @returns {boolean}
  */
 function isStringLiteral(node) {
@@ -182,7 +178,6 @@ const isLiteral = createTypeCheckFunction([
   "Literal",
   "BooleanLiteral",
   "BigIntLiteral", // Babel, flow use `BigIntLiteral` too
-  "DecimalLiteral",
   "DirectiveLiteral",
   "NullLiteral",
   "NumericLiteral",
@@ -211,7 +206,7 @@ const isFunctionOrArrowExpression = createTypeCheckFunction([
 ]);
 
 /**
- * @param {Node} node
+ * @param {Estree.Node} node
  * @returns {boolean}
  */
 function isFunctionOrArrowExpressionWithBody(node) {
@@ -229,7 +224,7 @@ function isFunctionOrArrowExpressionWithBody(node) {
  *
  * example: https://docs.angularjs.org/guide/unit-testing#using-beforeall-
  *
- * @param {CallExpression} node
+ * @param {Estree.CallExpression} node
  * @returns {boolean}
  */
 function isAngularTestWrapper(node) {
@@ -251,7 +246,7 @@ function isMethod(node) {
 }
 
 /**
- * @param {Node} node
+ * @param {Estree.Node} node
  * @returns {boolean}
  */
 function isFlowObjectTypePropertyAFunction(node) {
@@ -287,7 +282,7 @@ const isBinaryish = createTypeCheckFunction([
 ]);
 
 /**
- * @param {Node} node
+ * @param {Estree.Node} node
  * @returns {boolean}
  */
 function isMemberish(node) {
@@ -309,7 +304,7 @@ const isSimpleTypeAnnotation = createTypeCheckFunction([
   "TSTemplateLiteralType",
 ]);
 /**
- * @param {Node} node
+ * @param {Estree.Node} node
  * @returns {boolean}
  */
 function isSimpleType(node) {
@@ -319,7 +314,10 @@ function isSimpleType(node) {
     isSimpleTypeAnnotation(node) ||
     ((node.type === "GenericTypeAnnotation" ||
       node.type === "TSTypeReference") &&
-      !node.typeParameters)
+      // @ts-expect-error -- `GenericTypeAnnotation`
+      !node.typeParameters &&
+      // @ts-expect-error -- `TSTypeReference`
+      !node.typeArguments)
   );
 }
 
@@ -369,39 +367,41 @@ function isTestCallCallee(node) {
 
 // eg; `describe("some string", (done) => {})`
 function isTestCall(node, parent) {
-  if (node.type !== "CallExpression") {
+  if (node?.type !== "CallExpression" || node.optional) {
     return false;
   }
-  if (node.arguments.length === 1) {
-    if (isAngularTestWrapper(node) && parent && isTestCall(parent)) {
-      return isFunctionOrArrowExpression(node.arguments[0]);
+
+  const args = getCallArguments(node);
+
+  if (args.length === 1) {
+    if (isAngularTestWrapper(node) && isTestCall(parent)) {
+      return isFunctionOrArrowExpression(args[0]);
     }
 
     if (isUnitTestSetupIdentifier(node.callee)) {
-      return isAngularTestWrapper(node.arguments[0]);
+      return isAngularTestWrapper(args[0]);
     }
   } else if (
-    (node.arguments.length === 2 || node.arguments.length === 3) &&
-    (node.arguments[0].type === "TemplateLiteral" ||
-      isStringLiteral(node.arguments[0])) &&
+    (args.length === 2 || args.length === 3) &&
+    (args[0].type === "TemplateLiteral" || isStringLiteral(args[0])) &&
     isTestCallCallee(node.callee)
   ) {
     // it("name", () => { ... }, 2500)
-    if (node.arguments[2] && !isNumericLiteral(node.arguments[2])) {
+    if (args[2] && !isNumericLiteral(args[2])) {
       return false;
     }
     return (
-      (node.arguments.length === 2
-        ? isFunctionOrArrowExpression(node.arguments[1])
-        : isFunctionOrArrowExpressionWithBody(node.arguments[1]) &&
-          getFunctionParameters(node.arguments[1]).length <= 1) ||
-      isAngularTestWrapper(node.arguments[1])
+      (args.length === 2
+        ? isFunctionOrArrowExpression(args[1])
+        : isFunctionOrArrowExpressionWithBody(args[1]) &&
+          getFunctionParameters(args[1]).length <= 1) ||
+      isAngularTestWrapper(args[1])
     );
   }
   return false;
 }
 
-/** @return {(node: Node) => boolean} */
+/** @return {(node: Estree.Node) => boolean} */
 const skipChainExpression = (fn) => (node) => {
   if (node?.type === "ChainExpression") {
     node = node.expression;
@@ -417,68 +417,6 @@ const isCallExpression = skipChainExpression(
 const isMemberExpression = skipChainExpression(
   createTypeCheckFunction(["MemberExpression", "OptionalMemberExpression"]),
 );
-
-/**
- *
- * @param {any} node
- * @returns {boolean}
- */
-function isSimpleTemplateLiteral(node) {
-  let expressionsKey = "expressions";
-  if (node.type === "TSTemplateLiteralType") {
-    expressionsKey = "types";
-  }
-  const expressions = node[expressionsKey];
-
-  if (expressions.length === 0) {
-    return false;
-  }
-
-  return expressions.every((expr) => {
-    if (isSimpleAtomicExpression(expr) || isSimpleMemberExpression(expr)) {
-      return true;
-    }
-  });
-}
-
-function isSimpleMemberExpression(
-  node,
-  { maxDepth = Number.POSITIVE_INFINITY } = {},
-) {
-  if (hasComment(node)) {
-    return false;
-  }
-  if (node.type === "ChainExpression") {
-    return isSimpleMemberExpression(node.expression, { maxDepth });
-  }
-  if (!isMemberExpression(node)) {
-    return false;
-  }
-
-  let head = node;
-  let depth = 0;
-  while (isMemberExpression(head) && depth++ <= maxDepth) {
-    if (!isSimpleAtomicExpression(head.property)) {
-      return false;
-    }
-    head = head.object;
-    if (hasComment(head)) {
-      return false;
-    }
-  }
-  return isSimpleAtomicExpression(head);
-}
-
-/**
- * This is intended to return true for small expressions
- * which cannot be broken.
- */
-function isSimpleAtomicExpression(node) {
-  if (hasComment(node)) {
-    return false;
-  }
-  return isLiteral(node) || isSingleWordType(node);
-}
 
 /**
  * Attempts to gauge the rough complexity of a node, for example
@@ -562,7 +500,7 @@ function isLoneShortArgument(node, options) {
 
 /**
  * @param {string} text
- * @param {Node} node
+ * @param {Estree.Node} node
  * @returns {boolean}
  */
 function hasLeadingOwnLineComment(text, node) {
@@ -576,7 +514,7 @@ function hasLeadingOwnLineComment(text, node) {
 }
 
 /**
- * @param {TemplateLiteral} template
+ * @param {Estree.TemplateLiteral} template
  * @returns {boolean}
  */
 function templateLiteralHasNewLines(template) {
@@ -584,7 +522,7 @@ function templateLiteralHasNewLines(template) {
 }
 
 /**
- * @param {TemplateLiteral | TaggedTemplateExpression} node
+ * @param {Estree.TemplateLiteral | Estree.TaggedTemplateExpression} node
  * @param {string} text
  * @returns {boolean}
  */
@@ -598,7 +536,7 @@ function isTemplateOnItsOwnLine(node, text) {
 }
 
 /**
- * @param {Node} node
+ * @param {Estree.Node} node
  * @returns {boolean}
  */
 function needsHardlineAfterDanglingComment(node) {
@@ -765,8 +703,8 @@ function shouldPrintComma(options, level = "es5") {
  *
  * Will be overzealous if there already are necessary grouping parentheses.
  *
- * @param {Node} node
- * @param {(leftmostNode: Node) => boolean} predicate
+ * @param {Estree.Node} node
+ * @param {(leftmostNode: Estree.Node) => boolean} predicate
  * @returns {boolean}
  */
 function startsWithNoLookaheadToken(node, predicate) {
@@ -1093,7 +1031,7 @@ const getCommentTestFunction = (flags, fn) => {
   }
 };
 /**
- * @param {Node} node
+ * @param {Estree.Node} node
  * @param {number | function} [flags]
  * @param {function} [fn]
  * @returns {boolean}
@@ -1107,10 +1045,10 @@ function hasComment(node, flags, fn) {
 }
 
 /**
- * @param {Node} node
+ * @param {Estree.Node} node
  * @param {number | function} [flags]
  * @param {function} [fn]
- * @returns {Comment[]}
+ * @returns {Estree.Comment[]}
  */
 function getComments(node, flags, fn) {
   if (!Array.isArray(node?.comments)) {
@@ -1121,7 +1059,7 @@ function getComments(node, flags, fn) {
 }
 
 /**
- * @param {Node} node
+ * @param {Estree.Node} node
  * @returns {boolean}
  */
 const isNextLineEmpty = (node, { originalText }) =>
@@ -1200,6 +1138,7 @@ export {
   isMemberish,
   isMethod,
   isNextLineEmpty,
+  isNullishCoalescing,
   isNumericLiteral,
   isObjectOrRecordExpression,
   isObjectProperty,
@@ -1207,11 +1146,8 @@ export {
   isPrettierIgnoreComment,
   isRegExpLiteral,
   isSignedNumericLiteral,
-  isSimpleAtomicExpression,
   isSimpleCallArgument,
   isSimpleExpressionByNodeCount,
-  isSimpleMemberExpression,
-  isSimpleTemplateLiteral,
   isSimpleType,
   isStringLiteral,
   isTemplateOnItsOwnLine,

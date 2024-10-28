@@ -7,8 +7,8 @@ import {
 } from "../utils/index.js";
 
 /**
- * @typedef {import("../types/estree.js").Node} Node
- * @typedef {import("../../common/ast-path.js").default} AstPath
+ * @import {Node} from "../types/estree.js"
+ * @import AstPath from "../../common/ast-path.js"
  */
 
 const nodeTypesCanNotAttachComment = new Set([
@@ -84,7 +84,7 @@ function isGap(text, { parser }) {
   if (parser === "flow" || parser === "babel-flow") {
     // Example: (a /* b */ /* : c */)
     //                gap ^^^^
-    text = text.replaceAll(/[\s(]/g, "");
+    text = text.replaceAll(/[\s(]/gu, "");
     return text === "" || text === "/*" || text === "/*::";
   }
 }

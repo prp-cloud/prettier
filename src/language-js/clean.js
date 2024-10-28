@@ -1,4 +1,8 @@
-import { isArrayOrTupleExpression } from "./utils/index.js";
+import {
+  isArrayOrTupleExpression,
+  isNumericLiteral,
+  isStringLiteral,
+} from "./utils/index.js";
 import isBlockComment from "./utils/is-block-comment.js";
 
 const ignoredProperties = new Set([
@@ -42,13 +46,6 @@ function clean(original, cloned, parent) {
     cloned.bigint = original.bigint.toLowerCase();
   }
 
-  if (original.type === "DecimalLiteral") {
-    cloned.value = Number(original.value);
-  }
-  if (original.type === "Literal" && cloned.decimal) {
-    cloned.decimal = Number(original.decimal);
-  }
-
   // We remove extra `;` and add them when needed
   if (original.type === "EmptyStatement") {
     return null;
@@ -81,14 +78,15 @@ function clean(original, cloned, parent) {
       original.type === "TSPropertySignature" ||
       original.type === "ObjectTypeProperty" ||
       original.type === "ImportAttribute") &&
-    typeof original.key === "object" &&
     original.key &&
-    (original.key.type === "Literal" ||
-      original.key.type === "NumericLiteral" ||
-      original.key.type === "StringLiteral" ||
-      original.key.type === "Identifier")
+    !original.computed
   ) {
-    delete cloned.key;
+    const { key } = original;
+    if (isStringLiteral(key) || isNumericLiteral(key)) {
+      cloned.key = String(key.value);
+    } else if (key.type === "Identifier") {
+      cloned.key = key.name;
+    }
   }
 
   // Remove raw and cooked values from TemplateElement when it's CSS
@@ -124,10 +122,10 @@ function clean(original, cloned, parent) {
   if (
     original.type === "JSXAttribute" &&
     original.value?.type === "Literal" &&
-    /["']|&quot;|&apos;/.test(original.value.value)
+    /["']|&quot;|&apos;/u.test(original.value.value)
   ) {
     cloned.value.value = original.value.value.replaceAll(
-      /["']|&quot;|&apos;/g,
+      /["']|&quot;|&apos;/gu,
       '"',
     );
   }
@@ -207,6 +205,17 @@ function clean(original, cloned, parent) {
     // Ideally, we should swap these two nodes, but `type` is the only difference
     cloned.type = "TSNonNullExpression";
     cloned.expression.type = "ChainExpression";
+  }
+
+  // `@typescript-eslint/typescript-estree` v8
+  if (original.type === "TSMappedType") {
+    delete cloned.key;
+    delete cloned.constraint;
+  }
+
+  // `@typescript-eslint/typescript-estree` v8
+  if (original.type === "TSEnumDeclaration") {
+    delete cloned.body;
   }
 }
 

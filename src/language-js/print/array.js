@@ -25,15 +25,17 @@ import {
 import { printOptionalToken } from "./misc.js";
 import { printTypeAnnotationProperty } from "./type-annotation.js";
 
-/** @typedef {import("../../document/builders.js").Doc} Doc */
+/** @import {Doc} from "../../document/builders.js" */
 
 function printEmptyArrayElements(path, options, openBracket, closeBracket) {
   const { node } = path;
+  const inexact = node.inexact ? "..." : "";
   if (!hasComment(node, CommentCheckFlags.Dangling)) {
-    return [openBracket, closeBracket];
+    return [openBracket, inexact, closeBracket];
   }
   return group([
     openBracket,
+    inexact,
     printDanglingComments(path, options, { indent: true }),
     softline,
     closeBracket,
@@ -68,7 +70,8 @@ function printArray(path, options, print) {
     );
   } else {
     const lastElem = elements.at(-1);
-    const canHaveTrailingComma = lastElem?.type !== "RestElement";
+    const canHaveTrailingComma =
+      lastElem?.type !== "RestElement" && !node.inexact;
 
     // JavaScript allows you to have empty elements in an array which
     // changes its length based on the number of commas. The algorithm
@@ -128,7 +131,13 @@ function printArray(path, options, print) {
             shouldUseConciseFormatting
               ? printArrayElementsConcisely(path, options, print, trailingComma)
               : [
-                  printArrayElements(path, options, elementsProperty, print),
+                  printArrayElements(
+                    path,
+                    options,
+                    elementsProperty,
+                    node.inexact,
+                    print,
+                  ),
                   trailingComma,
                 ],
             printDanglingComments(path, options),
@@ -182,13 +191,13 @@ function isLineAfterElementEmpty({ node }, { originalText: text }) {
   return isNextLineEmptyAfterIndex(text, skipToComma(locEnd(node)));
 }
 
-function printArrayElements(path, options, elementsProperty, print) {
+function printArrayElements(path, options, elementsProperty, inexact, print) {
   const parts = [];
 
   path.each(({ node, isLast }) => {
     parts.push(node ? group(print()) : "");
 
-    if (!isLast) {
+    if (!isLast || inexact) {
       parts.push([
         ",",
         line,
@@ -196,6 +205,10 @@ function printArrayElements(path, options, elementsProperty, print) {
       ]);
     }
   }, elementsProperty);
+
+  if (inexact) {
+    parts.push("...");
+  }
 
   return parts;
 }

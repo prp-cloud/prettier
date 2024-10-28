@@ -25,18 +25,17 @@ import {
 import isBlockComment from "../utils/is-block-comment.js";
 import isTypeCastComment from "../utils/is-type-cast-comment.js";
 
+/** @import * as Estree from "../types/estree.js" */
+
 /**
- * @typedef {import("../types/estree.js").Node} Node
- * @typedef {import("../types/estree.js").Comment} Comment
- *
  * @typedef {Object} CommentContext
- * @property {Comment} comment
- * @property {Node} precedingNode
- * @property {Node} enclosingNode
- * @property {Node} followingNode
+ * @property {Estree.Comment} comment
+ * @property {Estree.Node} precedingNode
+ * @property {Estree.Node} enclosingNode
+ * @property {Estree.Node} followingNode
  * @property {string} text
  * @property {any} options
- * @property {Node} ast
+ * @property {Estree.Node} ast
  * @property {boolean} isLastComment
  */
 
@@ -49,6 +48,7 @@ function handleOwnLineComment(context) {
     handleIgnoreComments,
     handleConditionalExpressionComments,
     handleLastFunctionArgComments,
+    handleLastComponentArgComments,
     handleMemberExpressionComments,
     handleIfStatementComments,
     handleWhileComments,
@@ -89,6 +89,7 @@ function handleEndOfLineComment(context) {
     handleBreakAndContinueStatementComments,
     handleSwitchDefaultCaseComments,
     handleLastUnionElementInExpression,
+    handleLastBinaryOperatorOperand,
   ].some((fn) => fn(context));
 }
 
@@ -114,7 +115,7 @@ function handleRemainingComment(context) {
 }
 
 /**
- * @param {Node} node
+ * @param {Estree.Node} node
  * @returns {void}
  */
 function addBlockStatementFirstComment(node, comment) {
@@ -130,7 +131,7 @@ function addBlockStatementFirstComment(node, comment) {
 }
 
 /**
- * @param {Node} node
+ * @param {Estree.Node} node
  * @returns {void}
  */
 function addBlockOrNotComment(node, comment) {
@@ -494,6 +495,7 @@ const propertyLikeNodeTypes = new Set([
   "ClassAccessorProperty",
   "AccessorProperty",
   "TSAbstractAccessorProperty",
+  "TSParameterProperty",
 ]);
 function handleMethodNameComments({
   comment,
@@ -526,7 +528,8 @@ function handleMethodNameComments({
   // on the decorator node instead of the method node
   if (
     precedingNode?.type === "Decorator" &&
-    propertyLikeNodeTypes.has(enclosingNode?.type)
+    propertyLikeNodeTypes.has(enclosingNode?.type) &&
+    isLineComment(comment)
   ) {
     addTrailingComment(precedingNode, comment);
     return true;
@@ -597,6 +600,38 @@ function handleCommentInEmptyParens({ comment, enclosingNode, text }) {
     addDanglingComment(enclosingNode.value, comment);
     return true;
   }
+  return false;
+}
+
+function handleLastComponentArgComments({
+  comment,
+  precedingNode,
+  enclosingNode,
+  followingNode,
+  text,
+}) {
+  // "DeclareComponent" and "ComponentTypeAnnotation" definitions
+  if (
+    precedingNode?.type === "ComponentTypeParameter" &&
+    (enclosingNode?.type === "DeclareComponent" ||
+      enclosingNode?.type === "ComponentTypeAnnotation") &&
+    followingNode?.type !== "ComponentTypeParameter"
+  ) {
+    addTrailingComment(precedingNode, comment);
+    return true;
+  }
+
+  // "ComponentParameter" definitions
+  if (
+    (precedingNode?.type === "ComponentParameter" ||
+      precedingNode?.type === "RestElement") &&
+    enclosingNode?.type === "ComponentDeclaration" &&
+    getNextNonSpaceNonCommentCharacter(text, locEnd(comment)) === ")"
+  ) {
+    addTrailingComment(precedingNode, comment);
+    return true;
+  }
+
   return false;
 }
 
@@ -984,6 +1019,44 @@ function handleCommentsInDestructuringPattern({
     }
     return true;
   }
+}
+
+function handleLastBinaryOperatorOperand({
+  comment,
+  precedingNode,
+  enclosingNode,
+  followingNode,
+}) {
+  // "baz" should be a trailing comment of `cond3`:
+  //
+  //   !(
+  //     cond1 || // foo
+  //     cond2 || // bar
+  //     cond3 // baz
+  //   );
+  if (
+    !followingNode &&
+    enclosingNode?.type === "UnaryExpression" &&
+    (precedingNode?.type === "LogicalExpression" ||
+      precedingNode?.type === "BinaryExpression")
+  ) {
+    //   !(
+    //     (cond1 || cond2) // foo
+    //   );
+    const isMultilineExpression =
+      enclosingNode.argument.loc?.start.line !==
+      precedingNode.right.loc.start.line;
+    const isSingleLineComment =
+      isLineComment(comment) || comment.loc.start.line === comment.loc.end.line;
+    const isSameLineComment =
+      comment.loc.start.line === precedingNode.right.loc.start.line;
+
+    if (isMultilineExpression && isSingleLineComment && isSameLineComment) {
+      addTrailingComment(precedingNode.right, comment);
+      return true;
+    }
+  }
+  return false;
 }
 
 /**

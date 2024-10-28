@@ -8,7 +8,7 @@ import {
 } from "../utils/index.js";
 import { printStatementSequence } from "./statement.js";
 
-/** @typedef {import("../../document/builders.js").Doc} Doc */
+/** @import {Doc} from "../../document/builders.js" */
 
 /*
 - `Program`
@@ -40,6 +40,8 @@ function printBlock(path, options, print) {
         parent.type === "ArrowFunctionExpression" ||
         parent.type === "FunctionExpression" ||
         parent.type === "FunctionDeclaration" ||
+        parent.type === "ComponentDeclaration" ||
+        parent.type === "HookDeclaration" ||
         parent.type === "ObjectMethod" ||
         parent.type === "ClassMethod" ||
         parent.type === "ClassPrivateMethod" ||
@@ -50,7 +52,6 @@ function printBlock(path, options, print) {
         parent.type === "ModuleExpression" ||
         (parent.type === "CatchClause" && !parentParent.finalizer) ||
         parent.type === "TSModuleDeclaration" ||
-        parent.type === "TSDeclareFunction" ||
         node.type === "StaticBlock"
       )
     ) {

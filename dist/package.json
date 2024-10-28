@@ -1,6 +1,6 @@
 {
   "name": "prettier",
-  "version": "3.3.0-894b9ec7",
+  "version": "3.4.0-894b9ec7",
   "description": "Prettier is an opinionated code formatter",
   "bin": "./dist/bin/prettier.cjs",
   "repository": "prettier/prettier",
@@ -195,6 +195,7 @@
     "standalone.mjs"
   ],
   "preferUnplugged": true,
+  "type": "commonjs",
   "scripts": {
     "prepublishOnly": "node -e \"assert.equal(require('.').version, require('..').version)\""
   }

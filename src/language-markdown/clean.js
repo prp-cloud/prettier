@@ -1,5 +1,4 @@
 import collapseWhiteSpace from "collapse-white-space";
-
 import isFrontMatter from "../utils/front-matter/is-front-matter.js";
 import { startWithPragma } from "./pragma.js";
 
@@ -38,7 +37,7 @@ function clean(original, cloned, parent) {
   }
 
   if (original.type === "wikiLink") {
-    cloned.value = original.value.trim().replaceAll(/[\t\n]+/g, " ");
+    cloned.value = original.value.trim().replaceAll(/[\t\n]+/gu, " ");
   }
 
   if (
@@ -68,7 +67,7 @@ function clean(original, cloned, parent) {
       original.type === "image") &&
     original.title
   ) {
-    cloned.title = original.title.replaceAll(/\\(?=["')])/g, "");
+    cloned.title = original.title.replaceAll(/\\(?=["')])/gu, "");
   }
 
   // for insert pragma
