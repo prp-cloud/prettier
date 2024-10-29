@@ -27,7 +27,7 @@ Author: angular
 
 ----------------------------------------
 
-### @babel/code-frame@v7.25.9
+### @babel/code-frame@v7.26.0
 
 > Generate errors that contain a code frame that point to source locations.
 
@@ -94,41 +94,7 @@ Author: The Babel Team (https://babel.dev/team)
 
 ----------------------------------------
 
-### @babel/highlight@v7.25.9
-
-> Syntax highlight JavaScript strings for output in terminals.
-
-License: MIT
-Homepage: <https://babel.dev/docs/en/next/babel-highlight>
-Repository: <https://github.com/babel/babel.git>
-Author: The Babel Team (https://babel.dev/team)
-
-> MIT License
->
-> Copyright (c) 2014-present Sebastian McKenzie and other contributors
->
-> Permission is hereby granted, free of charge, to any person obtaining
-> a copy of this software and associated documentation files (the
-> "Software"), to deal in the Software without restriction, including
-> without limitation the rights to use, copy, modify, merge, publish,
-> distribute, sublicense, and/or sell copies of the Software, and to
-> permit persons to whom the Software is furnished to do so, subject to
-> the following conditions:
->
-> The above copyright notice and this permission notice shall be
-> included in all copies or substantial portions of the Software.
->
-> THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-> EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-> MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-> NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-> LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-> OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-> WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-----------------------------------------
-
-### @babel/parser@v7.25.9
+### @babel/parser@v7.26.1
 
 > A JavaScript parser
 
@@ -2540,7 +2506,7 @@ Repository: <git@github.com:teambition/merge2.git>
 
 ----------------------------------------
 
-### meriyah@v6.0.2
+### meriyah@v6.0.3
 
 > A 100% compliant, self-hosted javascript parser with high focus on both performance and stability
 
