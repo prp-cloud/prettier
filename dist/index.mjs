@@ -8631,7 +8631,7 @@ var require_lib2 = __commonJS({
       return typeof process === "object" && (process.env.FORCE_COLOR === "0" || process.env.FORCE_COLOR === "false") ? false : picocolors.isColorSupported;
     }
     var compose = (f, g) => (v) => f(g(v));
-    function builDefs(colors) {
+    function buildDefs(colors) {
       return {
         keyword: colors.cyan,
         capitalized: colors.yellow,
@@ -8648,8 +8648,8 @@ var require_lib2 = __commonJS({
         reset: colors.reset
       };
     }
-    var defsOn = builDefs(picocolors.createColors(true));
-    var defsOff = builDefs(picocolors.createColors(false));
+    var defsOn = buildDefs(picocolors.createColors(true));
+    var defsOff = buildDefs(picocolors.createColors(false));
     function getDefs(enabled) {
       return enabled ? defsOn : defsOff;
     }
@@ -11366,8 +11366,9 @@ import path9 from "path";
 
 // node_modules/url-or-path/index.js
 import { fileURLToPath, pathToFileURL } from "url";
+var URL_STRING_PREFIX = "file:";
 var isUrlInstance = (value) => value instanceof URL;
-var isUrlString = (value) => typeof value === "string" && value.startsWith("file://");
+var isUrlString = (value) => typeof value === "string" && value.startsWith(URL_STRING_PREFIX);
 var isUrl = (urlOrPath) => isUrlInstance(urlOrPath) || isUrlString(urlOrPath);
 var toPath = (urlOrPath) => isUrl(urlOrPath) ? fileURLToPath(urlOrPath) : urlOrPath;
 
@@ -17016,23 +17017,22 @@ async function createSingleIsIgnoredFunction(ignoreFile, withNodeModules) {
   if (!content) {
     return;
   }
-  const ignore = createIgnore({
-    allowRelativePaths: true
-  }).add(content);
+  const ignore = createIgnore({ allowRelativePaths: true }).add(content);
   return (file) => ignore.ignores(slash(getRelativePath(file, ignoreFile)));
 }
 async function createIsIgnoredFunction(ignoreFiles, withNodeModules) {
   if (ignoreFiles.length === 0 && !withNodeModules) {
     ignoreFiles = [void 0];
   }
-  const isIgnoredFunctions = (await Promise.all(ignoreFiles.map((ignoreFile) => createSingleIsIgnoredFunction(ignoreFile, withNodeModules)))).filter(Boolean);
+  const isIgnoredFunctions = (await Promise.all(
+    ignoreFiles.map(
+      (ignoreFile) => createSingleIsIgnoredFunction(ignoreFile, withNodeModules)
+    )
+  )).filter(Boolean);
   return (file) => isIgnoredFunctions.some((isIgnored2) => isIgnored2(file));
 }
 async function isIgnored(file, options8) {
-  const {
-    ignorePath: ignoreFiles,
-    withNodeModules
-  } = options8;
+  const { ignorePath: ignoreFiles, withNodeModules } = options8;
   const isIgnored2 = await createIsIgnoredFunction(ignoreFiles, withNodeModules);
   return isIgnored2(file);
 }
@@ -17587,10 +17587,7 @@ function mapDoc(doc2, cb) {
       case DOC_TYPE_ARRAY:
         return cb(doc3.map(rec));
       case DOC_TYPE_FILL:
-        return cb({
-          ...doc3,
-          parts: doc3.parts.map(rec)
-        });
+        return cb({ ...doc3, parts: doc3.parts.map(rec) });
       case DOC_TYPE_IF_BREAK:
         return cb({
           ...doc3,
@@ -17598,31 +17595,21 @@ function mapDoc(doc2, cb) {
           flatContents: rec(doc3.flatContents)
         });
       case DOC_TYPE_GROUP: {
-        let {
-          expandedStates,
-          contents
-        } = doc3;
+        let { expandedStates, contents } = doc3;
         if (expandedStates) {
           expandedStates = expandedStates.map(rec);
           contents = expandedStates[0];
         } else {
           contents = rec(contents);
         }
-        return cb({
-          ...doc3,
-          contents,
-          expandedStates
-        });
+        return cb({ ...doc3, contents, expandedStates });
       }
       case DOC_TYPE_ALIGN:
       case DOC_TYPE_INDENT:
       case DOC_TYPE_INDENT_IF_BREAK:
       case DOC_TYPE_LABEL:
       case DOC_TYPE_LINE_SUFFIX:
-        return cb({
-          ...doc3,
-          contents: rec(doc3.contents)
-        });
+        return cb({ ...doc3, contents: rec(doc3.contents) });
       case DOC_TYPE_STRING:
       case DOC_TYPE_CURSOR:
       case DOC_TYPE_TRIM:
@@ -17714,10 +17701,7 @@ function stripTrailingHardlineFromDoc(doc2) {
     case DOC_TYPE_LINE_SUFFIX:
     case DOC_TYPE_LABEL: {
       const contents = stripTrailingHardlineFromDoc(doc2.contents);
-      return {
-        ...doc2,
-        contents
-      };
+      return { ...doc2, contents };
     }
     case DOC_TYPE_IF_BREAK:
       return {
@@ -17726,10 +17710,7 @@ function stripTrailingHardlineFromDoc(doc2) {
         flatContents: stripTrailingHardlineFromDoc(doc2.flatContents)
       };
     case DOC_TYPE_FILL:
-      return {
-        ...doc2,
-        parts: stripTrailingHardlineFromParts(doc2.parts)
-      };
+      return { ...doc2, parts: stripTrailingHardlineFromParts(doc2.parts) };
     case DOC_TYPE_ARRAY:
       return stripTrailingHardlineFromParts(doc2);
     case DOC_TYPE_STRING:
@@ -17821,10 +17802,7 @@ function cleanDoc(doc2) {
   return mapDoc(doc2, (currentDoc) => cleanDocFn(currentDoc));
 }
 function inheritLabel(doc2, fn) {
-  return doc2.type === DOC_TYPE_LABEL ? {
-    ...doc2,
-    contents: fn(doc2.contents)
-  } : fn(doc2);
+  return doc2.type === DOC_TYPE_LABEL ? { ...doc2, contents: fn(doc2.contents) } : fn(doc2);
 }
 
 // src/document/printer.js
@@ -17833,40 +17811,26 @@ var MODE_FLAT = Symbol("MODE_FLAT");
 var CURSOR_PLACEHOLDER = Symbol("cursor");
 var DOC_FILL_PRINTED_LENGTH = Symbol("DOC_FILL_PRINTED_LENGTH");
 function rootIndent() {
-  return {
-    value: "",
-    length: 0,
-    queue: []
-  };
+  return { value: "", length: 0, queue: [] };
 }
 function makeIndent(ind, options8) {
-  return generateInd(ind, {
-    type: "indent"
-  }, options8);
+  return generateInd(ind, { type: "indent" }, options8);
 }
 function makeAlign(indent2, widthOrDoc, options8) {
   if (widthOrDoc === Number.NEGATIVE_INFINITY) {
     return indent2.root || rootIndent();
   }
   if (widthOrDoc < 0) {
-    return generateInd(indent2, {
-      type: "dedent"
-    }, options8);
+    return generateInd(indent2, { type: "dedent" }, options8);
   }
   if (!widthOrDoc) {
     return indent2;
   }
   if (widthOrDoc.type === "root") {
-    return {
-      ...indent2,
-      root: indent2
-    };
+    return { ...indent2, root: indent2 };
   }
   const alignType = typeof widthOrDoc === "string" ? "stringAlign" : "numberAlign";
-  return generateInd(indent2, {
-    type: alignType,
-    n: widthOrDoc
-  }, options8);
+  return generateInd(indent2, { type: alignType, n: widthOrDoc }, options8);
 }
 function generateInd(ind, newPart, options8) {
   const queue = newPart.type === "dedent" ? ind.queue.slice(0, -1) : [...ind.queue, newPart];
@@ -17898,12 +17862,7 @@ function generateInd(ind, newPart, options8) {
     }
   }
   flushSpaces();
-  return {
-    ...ind,
-    value,
-    length,
-    queue
-  };
+  return { ...ind, value, length, queue };
   function addTabs(count) {
     value += "	".repeat(count);
     length += options8.tabWidth * count;
@@ -17982,10 +17941,7 @@ function fits(next, restCommands, width, hasLineSuffix, groupModeMap, mustBeFlat
       cmds.push(restCommands[--restIdx]);
       continue;
     }
-    const {
-      mode,
-      doc: doc2
-    } = cmds.pop();
+    const { mode, doc: doc2 } = cmds.pop();
     const docType = get_doc_type_default(doc2);
     switch (docType) {
       case DOC_TYPE_STRING:
@@ -17996,10 +17952,7 @@ function fits(next, restCommands, width, hasLineSuffix, groupModeMap, mustBeFlat
       case DOC_TYPE_FILL: {
         const parts = docType === DOC_TYPE_ARRAY ? doc2 : doc2.parts;
         for (let i = parts.length - 1; i >= 0; i--) {
-          cmds.push({
-            mode,
-            doc: parts[i]
-          });
+          cmds.push({ mode, doc: parts[i] });
         }
         break;
       }
@@ -18007,10 +17960,7 @@ function fits(next, restCommands, width, hasLineSuffix, groupModeMap, mustBeFlat
       case DOC_TYPE_ALIGN:
       case DOC_TYPE_INDENT_IF_BREAK:
       case DOC_TYPE_LABEL:
-        cmds.push({
-          mode,
-          doc: doc2.contents
-        });
+        cmds.push({ mode, doc: doc2.contents });
         break;
       case DOC_TYPE_TRIM:
         width += trim(out);
@@ -18026,20 +17976,14 @@ function fits(next, restCommands, width, hasLineSuffix, groupModeMap, mustBeFlat
           doc2.expandedStates,
           -1
         ) : doc2.contents;
-        cmds.push({
-          mode: groupMode,
-          doc: contents
-        });
+        cmds.push({ mode: groupMode, doc: contents });
         break;
       }
       case DOC_TYPE_IF_BREAK: {
         const groupMode = doc2.groupId ? groupModeMap[doc2.groupId] || MODE_FLAT : mode;
         const contents = groupMode === MODE_BREAK ? doc2.breakContents : doc2.flatContents;
         if (contents) {
-          cmds.push({
-            mode,
-            doc: contents
-          });
+          cmds.push({ mode, doc: contents });
         }
         break;
       }
@@ -18069,22 +18013,14 @@ function printDocToString(doc2, options8) {
   const width = options8.printWidth;
   const newLine = convertEndOfLineToChars(options8.endOfLine);
   let pos2 = 0;
-  const cmds = [{
-    ind: rootIndent(),
-    mode: MODE_BREAK,
-    doc: doc2
-  }];
+  const cmds = [{ ind: rootIndent(), mode: MODE_BREAK, doc: doc2 }];
   const out = [];
   let shouldRemeasure = false;
   const lineSuffix2 = [];
   let printedCursorCount = 0;
   propagateBreaks(doc2);
   while (cmds.length > 0) {
-    const {
-      ind,
-      mode,
-      doc: doc3
-    } = cmds.pop();
+    const { ind, mode, doc: doc3 } = cmds.pop();
     switch (get_doc_type_default(doc3)) {
       case DOC_TYPE_STRING: {
         const formatted = newLine !== "\n" ? string_replace_all_default(
@@ -18102,11 +18038,7 @@ function printDocToString(doc2, options8) {
       }
       case DOC_TYPE_ARRAY:
         for (let i = doc3.length - 1; i >= 0; i--) {
-          cmds.push({
-            ind,
-            mode,
-            doc: doc3[i]
-          });
+          cmds.push({ ind, mode, doc: doc3[i] });
         }
         break;
       case DOC_TYPE_CURSOR:
@@ -18117,11 +18049,7 @@ function printDocToString(doc2, options8) {
         printedCursorCount++;
         break;
       case DOC_TYPE_INDENT:
-        cmds.push({
-          ind: makeIndent(ind, options8),
-          mode,
-          doc: doc3.contents
-        });
+        cmds.push({ ind: makeIndent(ind, options8), mode, doc: doc3.contents });
         break;
       case DOC_TYPE_ALIGN:
         cmds.push({
@@ -18147,11 +18075,7 @@ function printDocToString(doc2, options8) {
           // fallthrough
           case MODE_BREAK: {
             shouldRemeasure = false;
-            const next = {
-              ind,
-              mode: MODE_FLAT,
-              doc: doc3.contents
-            };
+            const next = { ind, mode: MODE_FLAT, doc: doc3.contents };
             const rem = width - pos2;
             const hasLineSuffix = lineSuffix2.length > 0;
             if (!doc3.break && fits(next, cmds, rem, hasLineSuffix, groupModeMap)) {
@@ -18165,28 +18089,16 @@ function printDocToString(doc2, options8) {
                   -1
                 );
                 if (doc3.break) {
-                  cmds.push({
-                    ind,
-                    mode: MODE_BREAK,
-                    doc: mostExpanded
-                  });
+                  cmds.push({ ind, mode: MODE_BREAK, doc: mostExpanded });
                   break;
                 } else {
                   for (let i = 1; i < doc3.expandedStates.length + 1; i++) {
                     if (i >= doc3.expandedStates.length) {
-                      cmds.push({
-                        ind,
-                        mode: MODE_BREAK,
-                        doc: mostExpanded
-                      });
+                      cmds.push({ ind, mode: MODE_BREAK, doc: mostExpanded });
                       break;
                     } else {
                       const state = doc3.expandedStates[i];
-                      const cmd = {
-                        ind,
-                        mode: MODE_FLAT,
-                        doc: state
-                      };
+                      const cmd = { ind, mode: MODE_FLAT, doc: state };
                       if (fits(cmd, cmds, rem, hasLineSuffix, groupModeMap)) {
                         cmds.push(cmd);
                         break;
@@ -18195,11 +18107,7 @@ function printDocToString(doc2, options8) {
                   }
                 }
               } else {
-                cmds.push({
-                  ind,
-                  mode: MODE_BREAK,
-                  doc: doc3.contents
-                });
+                cmds.push({ ind, mode: MODE_BREAK, doc: doc3.contents });
               }
             }
             break;
@@ -18237,26 +18145,23 @@ function printDocToString(doc2, options8) {
       case DOC_TYPE_FILL: {
         const rem = width - pos2;
         const offset = doc3[DOC_FILL_PRINTED_LENGTH] ?? 0;
-        const {
-          parts
-        } = doc3;
+        const { parts } = doc3;
         const length = parts.length - offset;
         if (length === 0) {
           break;
         }
         const content = parts[offset + 0];
         const whitespace = parts[offset + 1];
-        const contentFlatCmd = {
-          ind,
-          mode: MODE_FLAT,
-          doc: content
-        };
-        const contentBreakCmd = {
-          ind,
-          mode: MODE_BREAK,
-          doc: content
-        };
-        const contentFits = fits(contentFlatCmd, [], rem, lineSuffix2.length > 0, groupModeMap, true);
+        const contentFlatCmd = { ind, mode: MODE_FLAT, doc: content };
+        const contentBreakCmd = { ind, mode: MODE_BREAK, doc: content };
+        const contentFits = fits(
+          contentFlatCmd,
+          [],
+          rem,
+          lineSuffix2.length > 0,
+          groupModeMap,
+          true
+        );
         if (length === 1) {
           if (contentFits) {
             cmds.push(contentFlatCmd);
@@ -18265,16 +18170,8 @@ function printDocToString(doc2, options8) {
           }
           break;
         }
-        const whitespaceFlatCmd = {
-          ind,
-          mode: MODE_FLAT,
-          doc: whitespace
-        };
-        const whitespaceBreakCmd = {
-          ind,
-          mode: MODE_BREAK,
-          doc: whitespace
-        };
+        const whitespaceFlatCmd = { ind, mode: MODE_FLAT, doc: whitespace };
+        const whitespaceBreakCmd = { ind, mode: MODE_BREAK, doc: whitespace };
         if (length === 2) {
           if (contentFits) {
             cmds.push(whitespaceFlatCmd, contentFlatCmd);
@@ -18287,17 +18184,21 @@ function printDocToString(doc2, options8) {
         const remainingCmd = {
           ind,
           mode,
-          doc: {
-            ...doc3,
-            [DOC_FILL_PRINTED_LENGTH]: offset + 2
-          }
+          doc: { ...doc3, [DOC_FILL_PRINTED_LENGTH]: offset + 2 }
         };
         const firstAndSecondContentFlatCmd = {
           ind,
           mode: MODE_FLAT,
           doc: [content, whitespace, secondContent]
         };
-        const firstAndSecondContentFits = fits(firstAndSecondContentFlatCmd, [], rem, lineSuffix2.length > 0, groupModeMap, true);
+        const firstAndSecondContentFits = fits(
+          firstAndSecondContentFlatCmd,
+          [],
+          rem,
+          lineSuffix2.length > 0,
+          groupModeMap,
+          true
+        );
         if (firstAndSecondContentFits) {
           cmds.push(remainingCmd, whitespaceFlatCmd, contentFlatCmd);
         } else if (contentFits) {
@@ -18313,39 +18214,23 @@ function printDocToString(doc2, options8) {
         if (groupMode === MODE_BREAK) {
           const breakContents = doc3.type === DOC_TYPE_IF_BREAK ? doc3.breakContents : doc3.negate ? doc3.contents : indent(doc3.contents);
           if (breakContents) {
-            cmds.push({
-              ind,
-              mode,
-              doc: breakContents
-            });
+            cmds.push({ ind, mode, doc: breakContents });
           }
         }
         if (groupMode === MODE_FLAT) {
           const flatContents = doc3.type === DOC_TYPE_IF_BREAK ? doc3.flatContents : doc3.negate ? indent(doc3.contents) : doc3.contents;
           if (flatContents) {
-            cmds.push({
-              ind,
-              mode,
-              doc: flatContents
-            });
+            cmds.push({ ind, mode, doc: flatContents });
           }
         }
         break;
       }
       case DOC_TYPE_LINE_SUFFIX:
-        lineSuffix2.push({
-          ind,
-          mode,
-          doc: doc3.contents
-        });
+        lineSuffix2.push({ ind, mode, doc: doc3.contents });
         break;
       case DOC_TYPE_LINE_SUFFIX_BOUNDARY:
         if (lineSuffix2.length > 0) {
-          cmds.push({
-            ind,
-            mode,
-            doc: hardlineWithoutBreakParent
-          });
+          cmds.push({ ind, mode, doc: hardlineWithoutBreakParent });
         }
         break;
       case DOC_TYPE_LINE:
@@ -18363,11 +18248,7 @@ function printDocToString(doc2, options8) {
           // fallthrough
           case MODE_BREAK:
             if (lineSuffix2.length > 0) {
-              cmds.push({
-                ind,
-                mode,
-                doc: doc3
-              }, ...lineSuffix2.reverse());
+              cmds.push({ ind, mode, doc: doc3 }, ...lineSuffix2.reverse());
               lineSuffix2.length = 0;
               break;
             }
@@ -18388,11 +18269,7 @@ function printDocToString(doc2, options8) {
         }
         break;
       case DOC_TYPE_LABEL:
-        cmds.push({
-          ind,
-          mode,
-          doc: doc3.contents
-        });
+        cmds.push({ ind, mode, doc: doc3.contents });
         break;
       case DOC_TYPE_BREAK_PARENT:
         break;
@@ -18406,7 +18283,10 @@ function printDocToString(doc2, options8) {
   }
   const cursorPlaceholderIndex = out.indexOf(CURSOR_PLACEHOLDER);
   if (cursorPlaceholderIndex !== -1) {
-    const otherCursorPlaceholderIndex = out.indexOf(CURSOR_PLACEHOLDER, cursorPlaceholderIndex + 1);
+    const otherCursorPlaceholderIndex = out.indexOf(
+      CURSOR_PLACEHOLDER,
+      cursorPlaceholderIndex + 1
+    );
     if (otherCursorPlaceholderIndex === -1) {
       return {
         formatted: out.filter((char) => char !== CURSOR_PLACEHOLDER).join("")
@@ -18421,9 +18301,7 @@ function printDocToString(doc2, options8) {
       cursorNodeText: aroundCursor
     };
   }
-  return {
-    formatted: out.join("")
-  };
+  return { formatted: out.join("") };
 }
 
 // src/utils/get-alignment-size.js
@@ -18449,10 +18327,7 @@ var AstPath = class {
   }
   /** @type {string | null} */
   get key() {
-    const {
-      stack: stack2,
-      siblings
-    } = this;
+    const { stack: stack2, siblings } = this;
     return at_default(
       /* isOptionalObject */
       false,
@@ -18492,9 +18367,7 @@ var AstPath = class {
   }
   /** @type {object[] | null} */
   get siblings() {
-    const {
-      stack: stack2
-    } = this;
+    const { stack: stack2 } = this;
     const maybeArray = at_default(
       /* isOptionalObject */
       false,
@@ -18505,16 +18378,12 @@ var AstPath = class {
   }
   /** @type {object | null} */
   get next() {
-    const {
-      siblings
-    } = this;
+    const { siblings } = this;
     return siblings === null ? null : siblings[this.index + 1];
   }
   /** @type {object | null} */
   get previous() {
-    const {
-      siblings
-    } = this;
+    const { siblings } = this;
     return siblings === null ? null : siblings[this.index - 1];
   }
   /** @type {boolean} */
@@ -18523,10 +18392,7 @@ var AstPath = class {
   }
   /** @type {boolean} */
   get isLast() {
-    const {
-      siblings,
-      index
-    } = this;
+    const { siblings, index } = this;
     return siblings !== null && index === siblings.length - 1;
   }
   /** @type {boolean} */
@@ -18544,12 +18410,8 @@ var AstPath = class {
   // The name of the current property is always the penultimate element of
   // this.stack, and always a string/number/symbol.
   getName() {
-    const {
-      stack: stack2
-    } = this;
-    const {
-      length
-    } = stack2;
+    const { stack: stack2 } = this;
+    const { length } = stack2;
     if (length > 1) {
       return at_default(
         /* isOptionalObject */
@@ -18583,12 +18445,8 @@ var AstPath = class {
   // be restored to its original state after the callback is finished, so it
   // is probably a mistake to retain a reference to the path.
   call(callback, ...names) {
-    const {
-      stack: stack2
-    } = this;
-    const {
-      length
-    } = stack2;
+    const { stack: stack2 } = this;
+    const { length } = stack2;
     let value = at_default(
       /* isOptionalObject */
       false,
@@ -18625,12 +18483,8 @@ var AstPath = class {
   // callback will be called with a reference to this path object for each
   // element of the array.
   each(callback, ...names) {
-    const {
-      stack: stack2
-    } = this;
-    const {
-      length
-    } = stack2;
+    const { stack: stack2 } = this;
+    const { length } = stack2;
     let value = at_default(
       /* isOptionalObject */
       false,
@@ -18656,9 +18510,12 @@ var AstPath = class {
   // the end of the iteration.
   map(callback, ...names) {
     const result = [];
-    this.each((path13, index, value) => {
-      result[index] = callback(path13, index, value);
-    }, ...names);
+    this.each(
+      (path13, index, value) => {
+        result[index] = callback(path13, index, value);
+      },
+      ...names
+    );
     return result;
   }
   /**
@@ -18722,9 +18579,7 @@ var AstPath = class {
 };
 _AstPath_instances = new WeakSet();
 getNodeStackIndex_fn = function(count) {
-  const {
-    stack: stack2
-  } = this;
+  const { stack: stack2 } = this;
   for (let i = stack2.length - 1; i >= 0; i -= 2) {
     if (!Array.isArray(stack2[i]) && --count < 0) {
       return i;
@@ -18733,9 +18588,7 @@ getNodeStackIndex_fn = function(count) {
   return -1;
 };
 getAncestors_fn = function* () {
-  const {
-    stack: stack2
-  } = this;
+  const { stack: stack2 } = this;
   for (let index = stack2.length - 3; index >= 0; index -= 2) {
     const value = stack2[index];
     if (!Array.isArray(value)) {
@@ -19586,15 +19439,12 @@ var core_options_evaluate_default = {
 };
 
 // src/main/support.js
-function getSupportInfo({
-  plugins = [],
-  showDeprecated = false
-} = {}) {
+function getSupportInfo({ plugins = [], showDeprecated = false } = {}) {
   const languages2 = plugins.flatMap((plugin) => plugin.languages ?? []);
   const options8 = [];
-  for (const option of normalizeOptionSettings(Object.assign({}, ...plugins.map(({
-    options: options9
-  }) => options9), core_options_evaluate_default))) {
+  for (const option of normalizeOptionSettings(
+    Object.assign({}, ...plugins.map(({ options: options9 }) => options9), core_options_evaluate_default)
+  )) {
     if (!showDeprecated && option.deprecated) {
       continue;
     }
@@ -19603,19 +19453,21 @@ function getSupportInfo({
         option.choices = option.choices.filter((choice) => !choice.deprecated);
       }
       if (option.name === "parser") {
-        option.choices = [...option.choices, ...collectParsersFromLanguages(option.choices, languages2, plugins)];
+        option.choices = [
+          ...option.choices,
+          ...collectParsersFromLanguages(option.choices, languages2, plugins)
+        ];
       }
     }
-    option.pluginDefaults = Object.fromEntries(plugins.filter((plugin) => {
-      var _a;
-      return ((_a = plugin.defaultOptions) == null ? void 0 : _a[option.name]) !== void 0;
-    }).map((plugin) => [plugin.name, plugin.defaultOptions[option.name]]));
+    option.pluginDefaults = Object.fromEntries(
+      plugins.filter((plugin) => {
+        var _a;
+        return ((_a = plugin.defaultOptions) == null ? void 0 : _a[option.name]) !== void 0;
+      }).map((plugin) => [plugin.name, plugin.defaultOptions[option.name]])
+    );
     options8.push(option);
   }
-  return {
-    languages: languages2,
-    options: options8
-  };
+  return { languages: languages2, options: options8 };
 }
 function* collectParsersFromLanguages(parserChoices, languages2, plugins) {
   const existingParsers = new Set(parserChoices.map((choice) => choice.value));
@@ -19624,15 +19476,14 @@ function* collectParsersFromLanguages(parserChoices, languages2, plugins) {
       for (const parserName of language.parsers) {
         if (!existingParsers.has(parserName)) {
           existingParsers.add(parserName);
-          const plugin = plugins.find((plugin2) => plugin2.parsers && Object.prototype.hasOwnProperty.call(plugin2.parsers, parserName));
+          const plugin = plugins.find(
+            (plugin2) => plugin2.parsers && Object.prototype.hasOwnProperty.call(plugin2.parsers, parserName)
+          );
           let description = language.name;
           if (plugin == null ? void 0 : plugin.name) {
             description += ` (plugin: ${plugin.name})`;
           }
-          yield {
-            value: parserName,
-            description
-          };
+          yield { value: parserName, description };
         }
       }
     }
@@ -19641,10 +19492,7 @@ function* collectParsersFromLanguages(parserChoices, languages2, plugins) {
 function normalizeOptionSettings(settings) {
   const options8 = [];
   for (const [name, originalOption] of Object.entries(settings)) {
-    const option = {
-      name,
-      ...originalOption
-    };
+    const option = { name, ...originalOption };
     if (Array.isArray(option.default)) {
       option.default = at_default(
         /* isOptionalObject */
@@ -19678,23 +19526,13 @@ function normalizeOptions(options8, optionInfos, {
     descriptor = apiDescriptor;
   }
   const unknown = !passThrough ? (key2, value, options9) => {
-    const {
-      _,
-      ...schemas2
-    } = options9.schemas;
+    const { _, ...schemas2 } = options9.schemas;
     return levenUnknownHandler(key2, value, {
       ...options9,
       schemas: schemas2
     });
-  } : Array.isArray(passThrough) ? (key2, value) => !passThrough.includes(key2) ? void 0 : {
-    [key2]: value
-  } : (key2, value) => ({
-    [key2]: value
-  });
-  const schemas = optionInfosToSchemas(optionInfos, {
-    isCLI,
-    FlagSchema
-  });
+  } : Array.isArray(passThrough) ? (key2, value) => !passThrough.includes(key2) ? void 0 : { [key2]: value } : (key2, value) => ({ [key2]: value });
+  const schemas = optionInfosToSchemas(optionInfos, { isCLI, FlagSchema });
   const normalizer = new Normalizer(schemas, {
     logger,
     unknown,
@@ -19710,43 +19548,34 @@ function normalizeOptions(options8, optionInfos, {
   }
   return normalized;
 }
-function optionInfosToSchemas(optionInfos, {
-  isCLI,
-  FlagSchema
-}) {
+function optionInfosToSchemas(optionInfos, { isCLI, FlagSchema }) {
   const schemas = [];
   if (isCLI) {
-    schemas.push(AnySchema.create({
-      name: "_"
-    }));
+    schemas.push(AnySchema.create({ name: "_" }));
   }
   for (const optionInfo of optionInfos) {
-    schemas.push(optionInfoToSchema(optionInfo, {
-      isCLI,
-      optionInfos,
-      FlagSchema
-    }));
+    schemas.push(
+      optionInfoToSchema(optionInfo, {
+        isCLI,
+        optionInfos,
+        FlagSchema
+      })
+    );
     if (optionInfo.alias && isCLI) {
-      schemas.push(AliasSchema.create({
-        // @ts-expect-error
-        name: optionInfo.alias,
-        sourceName: optionInfo.name
-      }));
+      schemas.push(
+        AliasSchema.create({
+          // @ts-expect-error
+          name: optionInfo.alias,
+          sourceName: optionInfo.name
+        })
+      );
     }
   }
   return schemas;
 }
-function optionInfoToSchema(optionInfo, {
-  isCLI,
-  optionInfos,
-  FlagSchema
-}) {
-  const {
-    name
-  } = optionInfo;
-  const parameters = {
-    name
-  };
+function optionInfoToSchema(optionInfo, { isCLI, optionInfos, FlagSchema }) {
+  const { name } = optionInfo;
+  const parameters = { name };
   let SchemaConstructor;
   const handlers = {};
   switch (optionInfo.type) {
@@ -19761,22 +19590,27 @@ function optionInfoToSchema(optionInfo, {
       break;
     case "choice":
       SchemaConstructor = ChoiceSchema;
-      parameters.choices = optionInfo.choices.map((choiceInfo) => (choiceInfo == null ? void 0 : choiceInfo.redirect) ? {
-        ...choiceInfo,
-        redirect: {
-          to: {
-            key: optionInfo.name,
-            value: choiceInfo.redirect
+      parameters.choices = optionInfo.choices.map(
+        (choiceInfo) => (choiceInfo == null ? void 0 : choiceInfo.redirect) ? {
+          ...choiceInfo,
+          redirect: {
+            to: { key: optionInfo.name, value: choiceInfo.redirect }
           }
-        }
-      } : choiceInfo);
+        } : choiceInfo
+      );
       break;
     case "boolean":
       SchemaConstructor = BooleanSchema;
       break;
     case "flag":
       SchemaConstructor = FlagSchema;
-      parameters.flags = optionInfos.flatMap((optionInfo2) => [optionInfo2.alias, optionInfo2.description && optionInfo2.name, optionInfo2.oppositeDescription && `no-${optionInfo2.name}`].filter(Boolean));
+      parameters.flags = optionInfos.flatMap(
+        (optionInfo2) => [
+          optionInfo2.alias,
+          optionInfo2.description && optionInfo2.name,
+          optionInfo2.oppositeDescription && `no-${optionInfo2.name}`
+        ].filter(Boolean)
+      );
       break;
     case "path":
       SchemaConstructor = StringSchema;
@@ -19802,24 +19636,22 @@ function optionInfoToSchema(optionInfo, {
   }
   if (isCLI && !optionInfo.array) {
     const originalPreprocess = parameters.preprocess || ((x) => x);
-    parameters.preprocess = (value, schema2, utils) => schema2.preprocess(originalPreprocess(Array.isArray(value) ? at_default(
-      /* isOptionalObject */
-      false,
-      value,
-      -1
-    ) : value), utils);
+    parameters.preprocess = (value, schema2, utils) => schema2.preprocess(
+      originalPreprocess(Array.isArray(value) ? at_default(
+        /* isOptionalObject */
+        false,
+        value,
+        -1
+      ) : value),
+      utils
+    );
   }
   return optionInfo.array ? ArraySchema.create({
-    ...isCLI ? {
-      preprocess: (v) => Array.isArray(v) ? v : [v]
-    } : {},
+    ...isCLI ? { preprocess: (v) => Array.isArray(v) ? v : [v] } : {},
     ...handlers,
     // @ts-expect-error
     valueSchema: SchemaConstructor.create(parameters)
-  }) : SchemaConstructor.create({
-    ...parameters,
-    ...handlers
-  });
+  }) : SchemaConstructor.create({ ...parameters, ...handlers });
 }
 var normalize_options_default = normalizeOptions;
 
@@ -19879,10 +19711,7 @@ function getPrinterPluginByAstFormat(plugins, astFormat) {
   }
   throw new ConfigError(message);
 }
-function resolveParser({
-  plugins,
-  parser
-}) {
+function resolveParser({ plugins, parser }) {
   const plugin = getParserPluginByParserName(plugins, parser);
   return initParser(plugin, parser);
 }
@@ -20322,13 +20151,19 @@ var array_find_last_index_default = arrayFindLastIndex;
 
 // src/main/range-util.js
 import assert5 from "assert";
-var isJsonParser = ({
-  parser
-}) => parser === "json" || parser === "json5" || parser === "jsonc" || parser === "json-stringify";
+var isJsonParser = ({ parser }) => parser === "json" || parser === "json5" || parser === "jsonc" || parser === "json-stringify";
 function findCommonAncestor(startNodeAndParents, endNodeAndParents) {
-  const startNodeAndAncestors = [startNodeAndParents.node, ...startNodeAndParents.parentNodes];
-  const endNodeAndAncestors = /* @__PURE__ */ new Set([endNodeAndParents.node, ...endNodeAndParents.parentNodes]);
-  return startNodeAndAncestors.find((node) => jsonSourceElements.has(node.type) && endNodeAndAncestors.has(node));
+  const startNodeAndAncestors = [
+    startNodeAndParents.node,
+    ...startNodeAndParents.parentNodes
+  ];
+  const endNodeAndAncestors = /* @__PURE__ */ new Set([
+    endNodeAndParents.node,
+    ...endNodeAndParents.parentNodes
+  ]);
+  return startNodeAndAncestors.find(
+    (node) => jsonSourceElements.has(node.type) && endNodeAndAncestors.has(node)
+  );
 }
 function dropRootParents(parents) {
   const index = array_find_last_index_default(
@@ -20342,10 +20177,7 @@ function dropRootParents(parents) {
   }
   return parents.slice(0, index + 1);
 }
-function findSiblingAncestors(startNodeAndParents, endNodeAndParents, {
-  locStart,
-  locEnd
-}) {
+function findSiblingAncestors(startNodeAndParents, endNodeAndParents, { locStart, locEnd }) {
   let resultStartNode = startNodeAndParents.node;
   let resultEndNode = endNodeAndParents.node;
   if (resultStartNode === resultEndNode) {
@@ -20379,17 +20211,21 @@ function findSiblingAncestors(startNodeAndParents, endNodeAndParents, {
   };
 }
 function findNodeAtOffset(node, offset, options8, predicate, parentNodes = [], type2) {
-  const {
-    locStart,
-    locEnd
-  } = options8;
+  const { locStart, locEnd } = options8;
   const start = locStart(node);
   const end = locEnd(node);
   if (offset > end || offset < start || type2 === "rangeEnd" && offset === start || type2 === "rangeStart" && offset === end) {
     return;
   }
   for (const childNode of getSortedChildNodes(node, options8)) {
-    const childResult = findNodeAtOffset(childNode, offset, options8, predicate, [node, ...parentNodes], type2);
+    const childResult = findNodeAtOffset(
+      childNode,
+      offset,
+      options8,
+      predicate,
+      [node, ...parentNodes],
+      type2
+    );
     if (childResult) {
       return childResult;
     }
@@ -20404,8 +20240,35 @@ function findNodeAtOffset(node, offset, options8, predicate, parentNodes = [], t
 function isJsSourceElement(type2, parentType) {
   return parentType !== "DeclareExportDeclaration" && type2 !== "TypeParameterDeclaration" && (type2 === "Directive" || type2 === "TypeAlias" || type2 === "TSExportAssignment" || type2.startsWith("Declare") || type2.startsWith("TSDeclare") || type2.endsWith("Statement") || type2.endsWith("Declaration"));
 }
-var jsonSourceElements = /* @__PURE__ */ new Set(["JsonRoot", "ObjectExpression", "ArrayExpression", "StringLiteral", "NumericLiteral", "BooleanLiteral", "NullLiteral", "UnaryExpression", "TemplateLiteral"]);
-var graphqlSourceElements = /* @__PURE__ */ new Set(["OperationDefinition", "FragmentDefinition", "VariableDefinition", "TypeExtensionDefinition", "ObjectTypeDefinition", "FieldDefinition", "DirectiveDefinition", "EnumTypeDefinition", "EnumValueDefinition", "InputValueDefinition", "InputObjectTypeDefinition", "SchemaDefinition", "OperationTypeDefinition", "InterfaceTypeDefinition", "UnionTypeDefinition", "ScalarTypeDefinition"]);
+var jsonSourceElements = /* @__PURE__ */ new Set([
+  "JsonRoot",
+  "ObjectExpression",
+  "ArrayExpression",
+  "StringLiteral",
+  "NumericLiteral",
+  "BooleanLiteral",
+  "NullLiteral",
+  "UnaryExpression",
+  "TemplateLiteral"
+]);
+var graphqlSourceElements = /* @__PURE__ */ new Set([
+  "OperationDefinition",
+  "FragmentDefinition",
+  "VariableDefinition",
+  "TypeExtensionDefinition",
+  "ObjectTypeDefinition",
+  "FieldDefinition",
+  "DirectiveDefinition",
+  "EnumTypeDefinition",
+  "EnumValueDefinition",
+  "InputValueDefinition",
+  "InputObjectTypeDefinition",
+  "SchemaDefinition",
+  "OperationTypeDefinition",
+  "InterfaceTypeDefinition",
+  "UnionTypeDefinition",
+  "ScalarTypeDefinition"
+]);
 function isSourceElement(opts, node, parentNode) {
   if (!node) {
     return false;
@@ -20434,12 +20297,7 @@ function isSourceElement(opts, node, parentNode) {
   return false;
 }
 function calculateRange(text, opts, ast) {
-  let {
-    rangeStart: start,
-    rangeEnd: end,
-    locStart,
-    locEnd
-  } = opts;
+  let { rangeStart: start, rangeEnd: end, locStart, locEnd } = opts;
   assert5.ok(end > start);
   const firstNonWhitespaceCharacterIndex = text.slice(start, end).search(/\S/u);
   const isAllWhitespace = firstNonWhitespaceCharacterIndex === -1;
@@ -20451,10 +20309,24 @@ function calculateRange(text, opts, ast) {
       }
     }
   }
-  const startNodeAndParents = findNodeAtOffset(ast, start, opts, (node, parentNode) => isSourceElement(opts, node, parentNode), [], "rangeStart");
+  const startNodeAndParents = findNodeAtOffset(
+    ast,
+    start,
+    opts,
+    (node, parentNode) => isSourceElement(opts, node, parentNode),
+    [],
+    "rangeStart"
+  );
   const endNodeAndParents = (
     // No need find Node at `end`, it will be the same as `startNodeAndParents`
-    isAllWhitespace ? startNodeAndParents : findNodeAtOffset(ast, end, opts, (node) => isSourceElement(opts, node), [], "rangeEnd")
+    isAllWhitespace ? startNodeAndParents : findNodeAtOffset(
+      ast,
+      end,
+      opts,
+      (node) => isSourceElement(opts, node),
+      [],
+      "rangeEnd"
+    )
   );
   if (!startNodeAndParents || !endNodeAndParents) {
     return {
@@ -20465,14 +20337,18 @@ function calculateRange(text, opts, ast) {
   let startNode;
   let endNode;
   if (isJsonParser(opts)) {
-    const commonAncestor = findCommonAncestor(startNodeAndParents, endNodeAndParents);
+    const commonAncestor = findCommonAncestor(
+      startNodeAndParents,
+      endNodeAndParents
+    );
     startNode = commonAncestor;
     endNode = commonAncestor;
   } else {
-    ({
-      startNode,
-      endNode
-    } = findSiblingAncestors(startNodeAndParents, endNodeAndParents, opts));
+    ({ startNode, endNode } = findSiblingAncestors(
+      startNodeAndParents,
+      endNodeAndParents,
+      opts
+    ));
   }
   return {
     rangeStart: Math.min(locStart(startNode), locStart(endNode)),
@@ -20485,16 +20361,9 @@ var BOM = "\uFEFF";
 var CURSOR = Symbol("cursor");
 async function coreFormat(originalText, opts, addAlignmentSize = 0) {
   if (!originalText || originalText.trim().length === 0) {
-    return {
-      formatted: "",
-      cursorOffset: -1,
-      comments: []
-    };
+    return { formatted: "", cursorOffset: -1, comments: [] };
   }
-  const {
-    ast,
-    text
-  } = await parse_default(originalText, opts);
+  const { ast, text } = await parse_default(originalText, opts);
   if (opts.cursorOffset >= 0) {
     opts = {
       ...opts,
@@ -20531,14 +20400,22 @@ async function coreFormat(originalText, opts, addAlignmentSize = 0) {
       newCursorRegionText = result.cursorNodeText;
       if (opts.cursorNode) {
         oldCursorRegionStart = opts.locStart(opts.cursorNode);
-        oldCursorRegionText = text.slice(oldCursorRegionStart, opts.locEnd(opts.cursorNode));
+        oldCursorRegionText = text.slice(
+          oldCursorRegionStart,
+          opts.locEnd(opts.cursorNode)
+        );
       } else {
         if (!opts.nodeBeforeCursor && !opts.nodeAfterCursor) {
-          throw new Error("Cursor location must contain at least one of cursorNode, nodeBeforeCursor, nodeAfterCursor");
+          throw new Error(
+            "Cursor location must contain at least one of cursorNode, nodeBeforeCursor, nodeAfterCursor"
+          );
         }
         oldCursorRegionStart = opts.nodeBeforeCursor ? opts.locEnd(opts.nodeBeforeCursor) : 0;
         const oldCursorRegionEnd = opts.nodeAfterCursor ? opts.locStart(opts.nodeAfterCursor) : text.length;
-        oldCursorRegionText = text.slice(oldCursorRegionStart, oldCursorRegionEnd);
+        oldCursorRegionText = text.slice(
+          oldCursorRegionStart,
+          oldCursorRegionEnd
+        );
       }
     } else {
       oldCursorRegionStart = 0;
@@ -20555,9 +20432,16 @@ async function coreFormat(originalText, opts, addAlignmentSize = 0) {
       };
     }
     const oldCursorNodeCharArray = oldCursorRegionText.split("");
-    oldCursorNodeCharArray.splice(cursorOffsetRelativeToOldCursorRegionStart, 0, CURSOR);
+    oldCursorNodeCharArray.splice(
+      cursorOffsetRelativeToOldCursorRegionStart,
+      0,
+      CURSOR
+    );
     const newCursorNodeCharArray = newCursorRegionText.split("");
-    const cursorNodeDiff = diffArrays(oldCursorNodeCharArray, newCursorNodeCharArray);
+    const cursorNodeDiff = diffArrays(
+      oldCursorNodeCharArray,
+      newCursorNodeCharArray
+    );
     let cursorOffset = newCursorRegionStart;
     for (const entry of cursorNodeDiff) {
       if (entry.removed) {
@@ -20568,44 +20452,35 @@ async function coreFormat(originalText, opts, addAlignmentSize = 0) {
         cursorOffset += entry.count;
       }
     }
-    return {
-      formatted: result.formatted,
-      cursorOffset,
-      comments
-    };
+    return { formatted: result.formatted, cursorOffset, comments };
   }
-  return {
-    formatted: result.formatted,
-    cursorOffset: -1,
-    comments
-  };
+  return { formatted: result.formatted, cursorOffset: -1, comments };
 }
 async function formatRange(originalText, opts) {
-  const {
-    ast,
-    text
-  } = await parse_default(originalText, opts);
-  const {
-    rangeStart,
-    rangeEnd
-  } = calculateRange(text, opts, ast);
+  const { ast, text } = await parse_default(originalText, opts);
+  const { rangeStart, rangeEnd } = calculateRange(text, opts, ast);
   const rangeString = text.slice(rangeStart, rangeEnd);
-  const rangeStart2 = Math.min(rangeStart, text.lastIndexOf("\n", rangeStart) + 1);
+  const rangeStart2 = Math.min(
+    rangeStart,
+    text.lastIndexOf("\n", rangeStart) + 1
+  );
   const indentString = text.slice(rangeStart2, rangeStart).match(/^\s*/u)[0];
   const alignmentSize = get_alignment_size_default(indentString, opts.tabWidth);
-  const rangeResult = await coreFormat(rangeString, {
-    ...opts,
-    rangeStart: 0,
-    rangeEnd: Number.POSITIVE_INFINITY,
-    // Track the cursor offset only if it's within our range
-    cursorOffset: opts.cursorOffset > rangeStart && opts.cursorOffset <= rangeEnd ? opts.cursorOffset - rangeStart : -1,
-    // Always use `lf` to format, we'll replace it later
-    endOfLine: "lf"
-  }, alignmentSize);
+  const rangeResult = await coreFormat(
+    rangeString,
+    {
+      ...opts,
+      rangeStart: 0,
+      rangeEnd: Number.POSITIVE_INFINITY,
+      // Track the cursor offset only if it's within our range
+      cursorOffset: opts.cursorOffset > rangeStart && opts.cursorOffset <= rangeEnd ? opts.cursorOffset - rangeStart : -1,
+      // Always use `lf` to format, we'll replace it later
+      endOfLine: "lf"
+    },
+    alignmentSize
+  );
   const rangeTrimmed = rangeResult.formatted.trimEnd();
-  let {
-    cursorOffset
-  } = opts;
+  let { cursorOffset } = opts;
   if (cursorOffset > rangeEnd) {
     cursorOffset += rangeTrimmed.length - rangeString.length;
   } else if (rangeResult.cursorOffset >= 0) {
@@ -20615,7 +20490,10 @@ async function formatRange(originalText, opts) {
   if (opts.endOfLine !== "lf") {
     const eol = convertEndOfLineToChars(opts.endOfLine);
     if (cursorOffset >= 0 && eol === "\r\n") {
-      cursorOffset += countEndOfLineChars(formatted.slice(0, cursorOffset), "\n");
+      cursorOffset += countEndOfLineChars(
+        formatted.slice(0, cursorOffset),
+        "\n"
+      );
     }
     formatted = string_replace_all_default(
       /* isOptionalObject */
@@ -20625,11 +20503,7 @@ async function formatRange(originalText, opts) {
       eol
     );
   }
-  return {
-    formatted,
-    cursorOffset,
-    comments: rangeResult.comments
-  };
+  return { formatted, cursorOffset, comments: rangeResult.comments };
 }
 function ensureIndexInText(text, index, defaultValue) {
   if (typeof index !== "number" || Number.isNaN(index) || index < 0 || index > text.length) {
@@ -20638,28 +20512,17 @@ function ensureIndexInText(text, index, defaultValue) {
   return index;
 }
 function normalizeIndexes(text, options8) {
-  let {
-    cursorOffset,
-    rangeStart,
-    rangeEnd
-  } = options8;
+  let { cursorOffset, rangeStart, rangeEnd } = options8;
   cursorOffset = ensureIndexInText(text, cursorOffset, -1);
   rangeStart = ensureIndexInText(text, rangeStart, 0);
   rangeEnd = ensureIndexInText(text, rangeEnd, text.length);
-  return {
-    ...options8,
-    cursorOffset,
-    rangeStart,
-    rangeEnd
-  };
+  return { ...options8, cursorOffset, rangeStart, rangeEnd };
 }
 function normalizeInputAndOptions(text, options8) {
-  let {
-    cursorOffset,
-    rangeStart,
-    rangeEnd,
-    endOfLine
-  } = normalizeIndexes(text, options8);
+  let { cursorOffset, rangeStart, rangeEnd, endOfLine } = normalizeIndexes(
+    text,
+    options8
+  );
   const hasBOM = text.charAt(0) === BOM;
   if (hasBOM) {
     text = text.slice(1);
@@ -20694,11 +20557,10 @@ async function hasPragma(text, options8) {
   return !selectedParser.hasPragma || selectedParser.hasPragma(text);
 }
 async function formatWithCursor(originalText, originalOptions) {
-  let {
-    hasBOM,
-    text,
-    options: options8
-  } = normalizeInputAndOptions(originalText, await normalize_format_options_default(originalOptions));
+  let { hasBOM, text, options: options8 } = normalizeInputAndOptions(
+    originalText,
+    await normalize_format_options_default(originalOptions)
+  );
   if (options8.rangeStart >= options8.rangeEnd && text !== "" || options8.requirePragma && !await hasPragma(text, options8)) {
     return {
       formatted: originalText,
@@ -20724,10 +20586,10 @@ async function formatWithCursor(originalText, originalOptions) {
   return result;
 }
 async function parse6(originalText, originalOptions, devOptions) {
-  const {
-    text,
-    options: options8
-  } = normalizeInputAndOptions(originalText, await normalize_format_options_default(originalOptions));
+  const { text, options: options8 } = normalizeInputAndOptions(
+    originalText,
+    await normalize_format_options_default(originalOptions)
+  );
   const parsed = await parse_default(text, options8);
   if (devOptions) {
     if (devOptions.preprocessForPrint) {
@@ -20746,9 +20608,7 @@ async function formatAst(ast, options8) {
 }
 async function formatDoc(doc2, options8) {
   const text = printDocToDebug(doc2);
-  const {
-    formatted
-  } = await formatWithCursor(text, {
+  const { formatted } = await formatWithCursor(text, {
     ...options8,
     parser: "__js_expression"
   });
@@ -20756,13 +20616,14 @@ async function formatDoc(doc2, options8) {
 }
 async function printToDoc(originalText, options8) {
   options8 = await normalize_format_options_default(options8);
-  const {
-    ast
-  } = await parse_default(originalText, options8);
+  const { ast } = await parse_default(originalText, options8);
   return printAstToDoc(ast, options8);
 }
 async function printDocToString2(doc2, options8) {
-  return printDocToString(doc2, await normalize_format_options_default(options8));
+  return printDocToString(
+    doc2,
+    await normalize_format_options_default(options8)
+  );
 }
 
 // src/main/option-categories.js

@@ -27,7 +27,7 @@ Author: angular
 
 ----------------------------------------
 
-### @babel/code-frame@v7.26.0
+### @babel/code-frame@v7.26.2
 
 > Generate errors that contain a code frame that point to source locations.
 
@@ -94,7 +94,7 @@ Author: The Babel Team (https://babel.dev/team)
 
 ----------------------------------------
 
-### @babel/parser@v7.26.1
+### @babel/parser@v7.26.2
 
 > A JavaScript parser
 
@@ -1108,7 +1108,7 @@ Author: Sindre Sorhus <sindresorhus@gmail.com> (https://sindresorhus.com)
 
 ----------------------------------------
 
-### espree@v10.2.0
+### espree@v10.3.0
 
 > An Esprima-compatible JavaScript parser built on Acorn
 
@@ -3941,7 +3941,7 @@ Contributors:
 
 ----------------------------------------
 
-### url-or-path@v2.3.0
+### url-or-path@v2.3.2
 
 > Convert between file URL and path.
 

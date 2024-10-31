@@ -1667,9 +1667,7 @@ var normalizeToPosix = path.sep === "\\" ? (filepath) => string_replace_all_defa
   "\\",
   "/"
 ) : (filepath) => filepath;
-var {
-  omit
-} = sharedWithCli2.utils;
+var { omit } = sharedWithCli2.utils;
 
 // src/cli/options/create-minimist-options.js
 function createMinimistOptions(detailedOptions) {
@@ -2335,22 +2333,16 @@ function parseArgvWithoutPlugins(rawArguments, logger, keys) {
 // src/cli/context.js
 var _stack;
 var Context = class {
-  constructor({
-    rawArguments,
-    logger
-  }) {
+  constructor({ rawArguments, logger }) {
     __privateAdd(this, _stack, []);
     this.rawArguments = rawArguments;
     this.logger = logger;
   }
   async init() {
-    const {
-      rawArguments,
-      logger
-    } = this;
-    const {
-      plugins
-    } = parseArgvWithoutPlugins(rawArguments, logger, ["plugin"]);
+    const { rawArguments, logger } = this;
+    const { plugins } = parseArgvWithoutPlugins(rawArguments, logger, [
+      "plugin"
+    ]);
     await this.pushContextPlugins(plugins);
     const argv = parseArgv(rawArguments, this.detailedOptions, logger);
     this.argv = argv;
@@ -2375,10 +2367,7 @@ var Context = class {
   }
   // eslint-disable-next-line getter-return
   get performanceTestFlag() {
-    const {
-      debugBenchmark,
-      debugRepeat
-    } = this.argv;
+    const { debugBenchmark, debugRepeat } = this.argv;
     if (debugBenchmark) {
       return {
         name: "--debug-benchmark",
@@ -2391,9 +2380,7 @@ var Context = class {
         debugRepeat
       };
     }
-    const {
-      PRETTIER_PERF_REPEAT
-    } = process.env;
+    const { PRETTIER_PERF_REPEAT } = process.env;
     if (PRETTIER_PERF_REPEAT && /^\d+$/u.test(PRETTIER_PERF_REPEAT)) {
       return {
         name: "PRETTIER_PERF_REPEAT (environment variable)",
@@ -2450,16 +2437,12 @@ import path3 from "path";
 async function* expandPatterns(context) {
   const seen = /* @__PURE__ */ new Set();
   let noResults = true;
-  for await (const {
-    filePath,
-    ignoreUnknown,
-    error
-  } of expandPatternsInternal(context)) {
+  for await (const { filePath, ignoreUnknown, error } of expandPatternsInternal(
+    context
+  )) {
     noResults = false;
     if (error) {
-      yield {
-        error
-      };
+      yield { error };
       continue;
     }
     const filename = path3.resolve(filePath);
@@ -2467,10 +2450,7 @@ async function* expandPatterns(context) {
       continue;
     }
     seen.add(filename);
-    yield {
-      filename,
-      ignoreUnknown
-    };
+    yield { filename, ignoreUnknown };
   }
   if (noResults && context.argv.errorOnUnmatchedPattern !== false) {
     yield {
@@ -2503,7 +2483,9 @@ async function* expandPatternsInternal(context) {
             error: `Explicitly specified pattern "${pattern}" is a symbolic link.`
           };
         } else {
-          context.logger.debug(`Skipping pattern "${pattern}", as it is a symbolic link.`);
+          context.logger.debug(
+            `Skipping pattern "${pattern}", as it is a symbolic link.`
+          );
         }
       } else if (stat.isFile()) {
         entries.push({
@@ -2531,18 +2513,11 @@ async function* expandPatternsInternal(context) {
       });
     }
   }
-  for (const {
-    type,
-    glob,
-    input,
-    ignoreUnknown
-  } of entries) {
+  for (const { type, glob, input, ignoreUnknown } of entries) {
     let result;
     try {
       result = await fastGlob(glob, globOptions);
-    } catch ({
-      message
-    }) {
+    } catch ({ message }) {
       yield {
         error: `${errorMessages.globError[type]}: "${input}".
 ${message}`
@@ -2551,15 +2526,10 @@ ${message}`
     }
     if (result.length === 0) {
       if (context.argv.errorOnUnmatchedPattern !== false) {
-        yield {
-          error: `${errorMessages.emptyResults[type]}: "${input}".`
-        };
+        yield { error: `${errorMessages.emptyResults[type]}: "${input}".` };
       }
     } else {
-      yield* sortPaths(result).map((filePath) => ({
-        filePath,
-        ignoreUnknown
-      }));
+      yield* sortPaths(result).map((filePath) => ({ filePath, ignoreUnknown }));
     }
   }
 }
@@ -3596,10 +3566,8 @@ var clear = (stream, text) => () => {
     readline.cursorTo(stream, 0);
   }
 };
-var emptyLogResult = {
-  clear() {
-  }
-};
+var emptyLogResult = { clear() {
+} };
 function createLogger(logLevel = "log") {
   return {
     logLevel,
@@ -3706,14 +3674,16 @@ function createDefaultValueDisplay(value) {
 }
 function getOptionDefaultValue(context, optionName) {
   var _a;
-  const option = context.detailedOptions.find(({
-    name
-  }) => name === optionName);
+  const option = context.detailedOptions.find(
+    ({ name }) => name === optionName
+  );
   if ((option == null ? void 0 : option.default) !== void 0) {
     return option.default;
   }
   const optionCamelName = camelCase(optionName);
-  return formatOptionsHiddenDefaults[optionCamelName] ?? ((_a = context.supportOptions.find((option2) => !option2.deprecated && option2.name === optionCamelName)) == null ? void 0 : _a.default);
+  return formatOptionsHiddenDefaults[optionCamelName] ?? ((_a = context.supportOptions.find(
+    (option2) => !option2.deprecated && option2.name === optionCamelName
+  )) == null ? void 0 : _a.default);
 }
 function createOptionUsageHeader(option) {
   const name = `--${option.name}`;
@@ -3747,25 +3717,39 @@ function createOptionUsageType(option) {
 function createChoiceUsages(choices, margin, indentation) {
   const activeChoices = choices.filter((choice) => !choice.deprecated);
   const threshold = Math.max(0, ...activeChoices.map((choice) => choice.value.length)) + margin;
-  return activeChoices.map((choice) => indent(createOptionUsageRow(choice.value, choice.description, threshold), indentation));
+  return activeChoices.map(
+    (choice) => indent(
+      createOptionUsageRow(choice.value, choice.description, threshold),
+      indentation
+    )
+  );
 }
 function createOptionUsage(context, option, threshold) {
   const header = createOptionUsageHeader(option);
   const optionDefaultValue = getOptionDefaultValue(context, option.name);
-  return createOptionUsageRow(header, `${option.description}${optionDefaultValue === void 0 ? "" : `
-Defaults to ${createDefaultValueDisplay(optionDefaultValue)}.`}`, threshold);
+  return createOptionUsageRow(
+    header,
+    `${option.description}${optionDefaultValue === void 0 ? "" : `
+Defaults to ${createDefaultValueDisplay(optionDefaultValue)}.`}`,
+    threshold
+  );
 }
 function getOptionsWithOpposites(options) {
-  const optionsWithOpposites = options.map((option) => [option.description ? option : null, option.oppositeDescription ? {
-    ...option,
-    name: `no-${option.name}`,
-    type: "boolean",
-    description: option.oppositeDescription
-  } : null]);
+  const optionsWithOpposites = options.map((option) => [
+    option.description ? option : null,
+    option.oppositeDescription ? {
+      ...option,
+      name: `no-${option.name}`,
+      type: "boolean",
+      description: option.oppositeDescription
+    } : null
+  ]);
   return optionsWithOpposites.flat().filter(Boolean);
 }
 function createUsage(context) {
-  const sortedOptions = context.detailedOptions.sort((optionA, optionB) => optionA.name.localeCompare(optionB.name));
+  const sortedOptions = context.detailedOptions.sort(
+    (optionA, optionB) => optionA.name.localeCompare(optionB.name)
+  );
   const options = getOptionsWithOpposites(sortedOptions).filter(
     // remove unnecessary option (e.g. `semi`, `color`, etc.), which is only used for --help <flag>
     (option) => !(option.type === "boolean" && option.oppositeDescription && !option.name.startsWith("no-"))
@@ -3773,10 +3757,18 @@ function createUsage(context) {
   const groupedOptions = groupBy(options, (option) => option.category);
   const firstCategories = categoryOrder.slice(0, -1);
   const lastCategories = categoryOrder.slice(-1);
-  const restCategories = Object.keys(groupedOptions).filter((category) => !categoryOrder.includes(category));
-  const allCategories = [...firstCategories, ...restCategories, ...lastCategories];
+  const restCategories = Object.keys(groupedOptions).filter(
+    (category) => !categoryOrder.includes(category)
+  );
+  const allCategories = [
+    ...firstCategories,
+    ...restCategories,
+    ...lastCategories
+  ];
   const optionsUsage = allCategories.map((category) => {
-    const categoryOptions = groupedOptions[category].map((option) => createOptionUsage(context, option, OPTION_USAGE_THRESHOLD)).join("\n");
+    const categoryOptions = groupedOptions[category].map(
+      (option) => createOptionUsage(context, option, OPTION_USAGE_THRESHOLD)
+    ).join("\n");
     return `${category} options:
 
 ${indent(categoryOptions, 2)}`;
@@ -3787,13 +3779,19 @@ function createPluginDefaults(pluginDefaults) {
   if (!pluginDefaults || Object.keys(pluginDefaults).length === 0) {
     return "";
   }
-  const defaults = Object.entries(pluginDefaults).sort(([pluginNameA], [pluginNameB]) => pluginNameA.localeCompare(pluginNameB)).map(([plugin, value]) => `* ${plugin}: ${createDefaultValueDisplay(value)}`).join("\n");
+  const defaults = Object.entries(pluginDefaults).sort(
+    ([pluginNameA], [pluginNameB]) => pluginNameA.localeCompare(pluginNameB)
+  ).map(
+    ([plugin, value]) => `* ${plugin}: ${createDefaultValueDisplay(value)}`
+  ).join("\n");
   return `
 Plugin defaults:
 ${defaults}`;
 }
 function createDetailedUsage(context, flag) {
-  const option = getOptionsWithOpposites(context.detailedOptions).find((option2) => option2.name === flag || option2.alias === flag);
+  const option = getOptionsWithOpposites(context.detailedOptions).find(
+    (option2) => option2.name === flag || option2.alias === flag
+  );
   const header = createOptionUsageHeader(option);
   const description = `
 
@@ -3802,7 +3800,11 @@ ${indent(option.description, 2)}`;
 
 Valid options:
 
-${createChoiceUsages(option.choices, CHOICE_USAGE_MARGIN, CHOICE_USAGE_INDENTATION).join("\n")}`;
+${createChoiceUsages(
+    option.choices,
+    CHOICE_USAGE_MARGIN,
+    CHOICE_USAGE_INDENTATION
+  ).join("\n")}`;
   const optionDefaultValue = getOptionDefaultValue(context, option.name);
   const defaults = optionDefaultValue !== void 0 ? `
 
