@@ -21,9 +21,6 @@ var __require = /* @__PURE__ */ ((x) => typeof require !== "undefined" ? require
   if (typeof require !== "undefined") return require.apply(this, arguments);
   throw Error('Dynamic require of "' + x + '" is not supported');
 });
-var __esm = (fn, res) => function __init() {
-  return fn && (res = (0, fn[__getOwnPropNames(fn)[0]])(fn = 0)), res;
-};
 var __commonJS = (cb, mod) => function __require2() {
   return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
 };
@@ -47,7 +44,6 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
   isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
   mod
 ));
-var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 var __publicField = (obj, key2, value) => __defNormalProp(obj, typeof key2 !== "symbol" ? key2 + "" : key2, value);
 var __accessCheck = (obj, member, msg) => member.has(obj) || __typeError("Cannot " + msg);
 var __privateGet = (obj, member, getter) => (__accessCheck(obj, member, "read from private field"), getter ? getter.call(obj) : member.get(obj));
@@ -5503,538 +5499,6 @@ var require_out4 = __commonJS({
   }
 });
 
-// node_modules/chalk/source/vendor/ansi-styles/index.js
-function assembleStyles() {
-  const codes2 = /* @__PURE__ */ new Map();
-  for (const [groupName, group] of Object.entries(styles)) {
-    for (const [styleName, style] of Object.entries(group)) {
-      styles[styleName] = {
-        open: `\x1B[${style[0]}m`,
-        close: `\x1B[${style[1]}m`
-      };
-      group[styleName] = styles[styleName];
-      codes2.set(style[0], style[1]);
-    }
-    Object.defineProperty(styles, groupName, {
-      value: group,
-      enumerable: false
-    });
-  }
-  Object.defineProperty(styles, "codes", {
-    value: codes2,
-    enumerable: false
-  });
-  styles.color.close = "\x1B[39m";
-  styles.bgColor.close = "\x1B[49m";
-  styles.color.ansi = wrapAnsi16();
-  styles.color.ansi256 = wrapAnsi256();
-  styles.color.ansi16m = wrapAnsi16m();
-  styles.bgColor.ansi = wrapAnsi16(ANSI_BACKGROUND_OFFSET);
-  styles.bgColor.ansi256 = wrapAnsi256(ANSI_BACKGROUND_OFFSET);
-  styles.bgColor.ansi16m = wrapAnsi16m(ANSI_BACKGROUND_OFFSET);
-  Object.defineProperties(styles, {
-    rgbToAnsi256: {
-      value(red, green, blue) {
-        if (red === green && green === blue) {
-          if (red < 8) {
-            return 16;
-          }
-          if (red > 248) {
-            return 231;
-          }
-          return Math.round((red - 8) / 247 * 24) + 232;
-        }
-        return 16 + 36 * Math.round(red / 255 * 5) + 6 * Math.round(green / 255 * 5) + Math.round(blue / 255 * 5);
-      },
-      enumerable: false
-    },
-    hexToRgb: {
-      value(hex) {
-        const matches = /[a-f\d]{6}|[a-f\d]{3}/i.exec(hex.toString(16));
-        if (!matches) {
-          return [0, 0, 0];
-        }
-        let [colorString] = matches;
-        if (colorString.length === 3) {
-          colorString = [...colorString].map((character) => character + character).join("");
-        }
-        const integer = Number.parseInt(colorString, 16);
-        return [
-          /* eslint-disable no-bitwise */
-          integer >> 16 & 255,
-          integer >> 8 & 255,
-          integer & 255
-          /* eslint-enable no-bitwise */
-        ];
-      },
-      enumerable: false
-    },
-    hexToAnsi256: {
-      value: (hex) => styles.rgbToAnsi256(...styles.hexToRgb(hex)),
-      enumerable: false
-    },
-    ansi256ToAnsi: {
-      value(code) {
-        if (code < 8) {
-          return 30 + code;
-        }
-        if (code < 16) {
-          return 90 + (code - 8);
-        }
-        let red;
-        let green;
-        let blue;
-        if (code >= 232) {
-          red = ((code - 232) * 10 + 8) / 255;
-          green = red;
-          blue = red;
-        } else {
-          code -= 16;
-          const remainder = code % 36;
-          red = Math.floor(code / 36) / 5;
-          green = Math.floor(remainder / 6) / 5;
-          blue = remainder % 6 / 5;
-        }
-        const value = Math.max(red, green, blue) * 2;
-        if (value === 0) {
-          return 30;
-        }
-        let result = 30 + (Math.round(blue) << 2 | Math.round(green) << 1 | Math.round(red));
-        if (value === 2) {
-          result += 60;
-        }
-        return result;
-      },
-      enumerable: false
-    },
-    rgbToAnsi: {
-      value: (red, green, blue) => styles.ansi256ToAnsi(styles.rgbToAnsi256(red, green, blue)),
-      enumerable: false
-    },
-    hexToAnsi: {
-      value: (hex) => styles.ansi256ToAnsi(styles.hexToAnsi256(hex)),
-      enumerable: false
-    }
-  });
-  return styles;
-}
-var ANSI_BACKGROUND_OFFSET, wrapAnsi16, wrapAnsi256, wrapAnsi16m, styles, modifierNames, foregroundColorNames, backgroundColorNames, colorNames, ansiStyles, ansi_styles_default;
-var init_ansi_styles = __esm({
-  "node_modules/chalk/source/vendor/ansi-styles/index.js"() {
-    ANSI_BACKGROUND_OFFSET = 10;
-    wrapAnsi16 = (offset = 0) => (code) => `\x1B[${code + offset}m`;
-    wrapAnsi256 = (offset = 0) => (code) => `\x1B[${38 + offset};5;${code}m`;
-    wrapAnsi16m = (offset = 0) => (red, green, blue) => `\x1B[${38 + offset};2;${red};${green};${blue}m`;
-    styles = {
-      modifier: {
-        reset: [0, 0],
-        // 21 isn't widely supported and 22 does the same thing
-        bold: [1, 22],
-        dim: [2, 22],
-        italic: [3, 23],
-        underline: [4, 24],
-        overline: [53, 55],
-        inverse: [7, 27],
-        hidden: [8, 28],
-        strikethrough: [9, 29]
-      },
-      color: {
-        black: [30, 39],
-        red: [31, 39],
-        green: [32, 39],
-        yellow: [33, 39],
-        blue: [34, 39],
-        magenta: [35, 39],
-        cyan: [36, 39],
-        white: [37, 39],
-        // Bright color
-        blackBright: [90, 39],
-        gray: [90, 39],
-        // Alias of `blackBright`
-        grey: [90, 39],
-        // Alias of `blackBright`
-        redBright: [91, 39],
-        greenBright: [92, 39],
-        yellowBright: [93, 39],
-        blueBright: [94, 39],
-        magentaBright: [95, 39],
-        cyanBright: [96, 39],
-        whiteBright: [97, 39]
-      },
-      bgColor: {
-        bgBlack: [40, 49],
-        bgRed: [41, 49],
-        bgGreen: [42, 49],
-        bgYellow: [43, 49],
-        bgBlue: [44, 49],
-        bgMagenta: [45, 49],
-        bgCyan: [46, 49],
-        bgWhite: [47, 49],
-        // Bright color
-        bgBlackBright: [100, 49],
-        bgGray: [100, 49],
-        // Alias of `bgBlackBright`
-        bgGrey: [100, 49],
-        // Alias of `bgBlackBright`
-        bgRedBright: [101, 49],
-        bgGreenBright: [102, 49],
-        bgYellowBright: [103, 49],
-        bgBlueBright: [104, 49],
-        bgMagentaBright: [105, 49],
-        bgCyanBright: [106, 49],
-        bgWhiteBright: [107, 49]
-      }
-    };
-    modifierNames = Object.keys(styles.modifier);
-    foregroundColorNames = Object.keys(styles.color);
-    backgroundColorNames = Object.keys(styles.bgColor);
-    colorNames = [...foregroundColorNames, ...backgroundColorNames];
-    ansiStyles = assembleStyles();
-    ansi_styles_default = ansiStyles;
-  }
-});
-
-// node_modules/chalk/source/vendor/supports-color/index.js
-import process2 from "process";
-import os from "os";
-import tty from "tty";
-function hasFlag(flag, argv = globalThis.Deno ? globalThis.Deno.args : process2.argv) {
-  const prefix = flag.startsWith("-") ? "" : flag.length === 1 ? "-" : "--";
-  const position = argv.indexOf(prefix + flag);
-  const terminatorPosition = argv.indexOf("--");
-  return position !== -1 && (terminatorPosition === -1 || position < terminatorPosition);
-}
-function envForceColor() {
-  if ("FORCE_COLOR" in env) {
-    if (env.FORCE_COLOR === "true") {
-      return 1;
-    }
-    if (env.FORCE_COLOR === "false") {
-      return 0;
-    }
-    return env.FORCE_COLOR.length === 0 ? 1 : Math.min(Number.parseInt(env.FORCE_COLOR, 10), 3);
-  }
-}
-function translateLevel(level) {
-  if (level === 0) {
-    return false;
-  }
-  return {
-    level,
-    hasBasic: true,
-    has256: level >= 2,
-    has16m: level >= 3
-  };
-}
-function _supportsColor(haveStream, { streamIsTTY, sniffFlags = true } = {}) {
-  const noFlagForceColor = envForceColor();
-  if (noFlagForceColor !== void 0) {
-    flagForceColor = noFlagForceColor;
-  }
-  const forceColor = sniffFlags ? flagForceColor : noFlagForceColor;
-  if (forceColor === 0) {
-    return 0;
-  }
-  if (sniffFlags) {
-    if (hasFlag("color=16m") || hasFlag("color=full") || hasFlag("color=truecolor")) {
-      return 3;
-    }
-    if (hasFlag("color=256")) {
-      return 2;
-    }
-  }
-  if ("TF_BUILD" in env && "AGENT_NAME" in env) {
-    return 1;
-  }
-  if (haveStream && !streamIsTTY && forceColor === void 0) {
-    return 0;
-  }
-  const min = forceColor || 0;
-  if (env.TERM === "dumb") {
-    return min;
-  }
-  if (process2.platform === "win32") {
-    const osRelease = os.release().split(".");
-    if (Number(osRelease[0]) >= 10 && Number(osRelease[2]) >= 10586) {
-      return Number(osRelease[2]) >= 14931 ? 3 : 2;
-    }
-    return 1;
-  }
-  if ("CI" in env) {
-    if ("GITHUB_ACTIONS" in env || "GITEA_ACTIONS" in env) {
-      return 3;
-    }
-    if (["TRAVIS", "CIRCLECI", "APPVEYOR", "GITLAB_CI", "BUILDKITE", "DRONE"].some((sign2) => sign2 in env) || env.CI_NAME === "codeship") {
-      return 1;
-    }
-    return min;
-  }
-  if ("TEAMCITY_VERSION" in env) {
-    return /^(9\.(0*[1-9]\d*)\.|\d{2,}\.)/.test(env.TEAMCITY_VERSION) ? 1 : 0;
-  }
-  if (env.COLORTERM === "truecolor") {
-    return 3;
-  }
-  if (env.TERM === "xterm-kitty") {
-    return 3;
-  }
-  if ("TERM_PROGRAM" in env) {
-    const version = Number.parseInt((env.TERM_PROGRAM_VERSION || "").split(".")[0], 10);
-    switch (env.TERM_PROGRAM) {
-      case "iTerm.app": {
-        return version >= 3 ? 3 : 2;
-      }
-      case "Apple_Terminal": {
-        return 2;
-      }
-    }
-  }
-  if (/-256(color)?$/i.test(env.TERM)) {
-    return 2;
-  }
-  if (/^screen|^xterm|^vt100|^vt220|^rxvt|color|ansi|cygwin|linux/i.test(env.TERM)) {
-    return 1;
-  }
-  if ("COLORTERM" in env) {
-    return 1;
-  }
-  return min;
-}
-function createSupportsColor(stream, options8 = {}) {
-  const level = _supportsColor(stream, {
-    streamIsTTY: stream && stream.isTTY,
-    ...options8
-  });
-  return translateLevel(level);
-}
-var env, flagForceColor, supportsColor, supports_color_default;
-var init_supports_color = __esm({
-  "node_modules/chalk/source/vendor/supports-color/index.js"() {
-    ({ env } = process2);
-    if (hasFlag("no-color") || hasFlag("no-colors") || hasFlag("color=false") || hasFlag("color=never")) {
-      flagForceColor = 0;
-    } else if (hasFlag("color") || hasFlag("colors") || hasFlag("color=true") || hasFlag("color=always")) {
-      flagForceColor = 1;
-    }
-    supportsColor = {
-      stdout: createSupportsColor({ isTTY: tty.isatty(1) }),
-      stderr: createSupportsColor({ isTTY: tty.isatty(2) })
-    };
-    supports_color_default = supportsColor;
-  }
-});
-
-// node_modules/chalk/source/utilities.js
-function stringReplaceAll(string, substring, replacer) {
-  let index = string.indexOf(substring);
-  if (index === -1) {
-    return string;
-  }
-  const substringLength = substring.length;
-  let endIndex = 0;
-  let returnValue = "";
-  do {
-    returnValue += string.slice(endIndex, index) + substring + replacer;
-    endIndex = index + substringLength;
-    index = string.indexOf(substring, endIndex);
-  } while (index !== -1);
-  returnValue += string.slice(endIndex);
-  return returnValue;
-}
-function stringEncaseCRLFWithFirstIndex(string, prefix, postfix, index) {
-  let endIndex = 0;
-  let returnValue = "";
-  do {
-    const gotCR = string[index - 1] === "\r";
-    returnValue += string.slice(endIndex, gotCR ? index - 1 : index) + prefix + (gotCR ? "\r\n" : "\n") + postfix;
-    endIndex = index + 1;
-    index = string.indexOf("\n", endIndex);
-  } while (index !== -1);
-  returnValue += string.slice(endIndex);
-  return returnValue;
-}
-var init_utilities = __esm({
-  "node_modules/chalk/source/utilities.js"() {
-  }
-});
-
-// node_modules/chalk/source/index.js
-var source_exports = {};
-__export(source_exports, {
-  Chalk: () => Chalk,
-  backgroundColorNames: () => backgroundColorNames,
-  backgroundColors: () => backgroundColorNames,
-  chalkStderr: () => chalkStderr,
-  colorNames: () => colorNames,
-  colors: () => colorNames,
-  default: () => source_default,
-  foregroundColorNames: () => foregroundColorNames,
-  foregroundColors: () => foregroundColorNames,
-  modifierNames: () => modifierNames,
-  modifiers: () => modifierNames,
-  supportsColor: () => stdoutColor,
-  supportsColorStderr: () => stderrColor
-});
-function createChalk(options8) {
-  return chalkFactory(options8);
-}
-var stdoutColor, stderrColor, GENERATOR, STYLER, IS_EMPTY, levelMapping, styles2, applyOptions, Chalk, chalkFactory, getModelAnsi, usedModels, proto, createStyler, createBuilder, applyStyle, chalk, chalkStderr, source_default;
-var init_source = __esm({
-  "node_modules/chalk/source/index.js"() {
-    init_ansi_styles();
-    init_supports_color();
-    init_utilities();
-    init_ansi_styles();
-    ({ stdout: stdoutColor, stderr: stderrColor } = supports_color_default);
-    GENERATOR = Symbol("GENERATOR");
-    STYLER = Symbol("STYLER");
-    IS_EMPTY = Symbol("IS_EMPTY");
-    levelMapping = [
-      "ansi",
-      "ansi",
-      "ansi256",
-      "ansi16m"
-    ];
-    styles2 = /* @__PURE__ */ Object.create(null);
-    applyOptions = (object, options8 = {}) => {
-      if (options8.level && !(Number.isInteger(options8.level) && options8.level >= 0 && options8.level <= 3)) {
-        throw new Error("The `level` option should be an integer from 0 to 3");
-      }
-      const colorLevel = stdoutColor ? stdoutColor.level : 0;
-      object.level = options8.level === void 0 ? colorLevel : options8.level;
-    };
-    Chalk = class {
-      constructor(options8) {
-        return chalkFactory(options8);
-      }
-    };
-    chalkFactory = (options8) => {
-      const chalk2 = (...strings) => strings.join(" ");
-      applyOptions(chalk2, options8);
-      Object.setPrototypeOf(chalk2, createChalk.prototype);
-      return chalk2;
-    };
-    Object.setPrototypeOf(createChalk.prototype, Function.prototype);
-    for (const [styleName, style] of Object.entries(ansi_styles_default)) {
-      styles2[styleName] = {
-        get() {
-          const builder = createBuilder(this, createStyler(style.open, style.close, this[STYLER]), this[IS_EMPTY]);
-          Object.defineProperty(this, styleName, { value: builder });
-          return builder;
-        }
-      };
-    }
-    styles2.visible = {
-      get() {
-        const builder = createBuilder(this, this[STYLER], true);
-        Object.defineProperty(this, "visible", { value: builder });
-        return builder;
-      }
-    };
-    getModelAnsi = (model, level, type2, ...arguments_) => {
-      if (model === "rgb") {
-        if (level === "ansi16m") {
-          return ansi_styles_default[type2].ansi16m(...arguments_);
-        }
-        if (level === "ansi256") {
-          return ansi_styles_default[type2].ansi256(ansi_styles_default.rgbToAnsi256(...arguments_));
-        }
-        return ansi_styles_default[type2].ansi(ansi_styles_default.rgbToAnsi(...arguments_));
-      }
-      if (model === "hex") {
-        return getModelAnsi("rgb", level, type2, ...ansi_styles_default.hexToRgb(...arguments_));
-      }
-      return ansi_styles_default[type2][model](...arguments_);
-    };
-    usedModels = ["rgb", "hex", "ansi256"];
-    for (const model of usedModels) {
-      styles2[model] = {
-        get() {
-          const { level } = this;
-          return function(...arguments_) {
-            const styler = createStyler(getModelAnsi(model, levelMapping[level], "color", ...arguments_), ansi_styles_default.color.close, this[STYLER]);
-            return createBuilder(this, styler, this[IS_EMPTY]);
-          };
-        }
-      };
-      const bgModel = "bg" + model[0].toUpperCase() + model.slice(1);
-      styles2[bgModel] = {
-        get() {
-          const { level } = this;
-          return function(...arguments_) {
-            const styler = createStyler(getModelAnsi(model, levelMapping[level], "bgColor", ...arguments_), ansi_styles_default.bgColor.close, this[STYLER]);
-            return createBuilder(this, styler, this[IS_EMPTY]);
-          };
-        }
-      };
-    }
-    proto = Object.defineProperties(() => {
-    }, {
-      ...styles2,
-      level: {
-        enumerable: true,
-        get() {
-          return this[GENERATOR].level;
-        },
-        set(level) {
-          this[GENERATOR].level = level;
-        }
-      }
-    });
-    createStyler = (open, close, parent) => {
-      let openAll;
-      let closeAll;
-      if (parent === void 0) {
-        openAll = open;
-        closeAll = close;
-      } else {
-        openAll = parent.openAll + open;
-        closeAll = close + parent.closeAll;
-      }
-      return {
-        open,
-        close,
-        openAll,
-        closeAll,
-        parent
-      };
-    };
-    createBuilder = (self, _styler, _isEmpty) => {
-      const builder = (...arguments_) => applyStyle(builder, arguments_.length === 1 ? "" + arguments_[0] : arguments_.join(" "));
-      Object.setPrototypeOf(builder, proto);
-      builder[GENERATOR] = self;
-      builder[STYLER] = _styler;
-      builder[IS_EMPTY] = _isEmpty;
-      return builder;
-    };
-    applyStyle = (self, string) => {
-      if (self.level <= 0 || !string) {
-        return self[IS_EMPTY] ? "" : string;
-      }
-      let styler = self[STYLER];
-      if (styler === void 0) {
-        return string;
-      }
-      const { openAll, closeAll } = styler;
-      if (string.includes("\x1B")) {
-        while (styler !== void 0) {
-          string = stringReplaceAll(string, styler.close, styler.open);
-          styler = styler.parent;
-        }
-      }
-      const lfIndex = string.indexOf("\n");
-      if (lfIndex !== -1) {
-        string = stringEncaseCRLFWithFirstIndex(string, closeAll, openAll, lfIndex);
-      }
-      return openAll + string + closeAll;
-    };
-    Object.defineProperties(createChalk.prototype, styles2);
-    chalk = createChalk();
-    chalkStderr = createChalk({ level: stderrColor ? stderrColor.level : 0 });
-    source_default = chalk;
-  }
-});
-
 // node_modules/semver/internal/debug.js
 var require_debug = __commonJS({
   "node_modules/semver/internal/debug.js"(exports, module) {
@@ -8890,6 +8354,78 @@ var require_ci_info = __commonJS({
   }
 });
 
+// node_modules/picocolors/picocolors.js
+var require_picocolors = __commonJS({
+  "node_modules/picocolors/picocolors.js"(exports, module) {
+    var p = process || {};
+    var argv = p.argv || [];
+    var env2 = p.env || {};
+    var isColorSupported = !(!!env2.NO_COLOR || argv.includes("--no-color")) && (!!env2.FORCE_COLOR || argv.includes("--color") || p.platform === "win32" || (p.stdout || {}).isTTY && env2.TERM !== "dumb" || !!env2.CI);
+    var formatter = (open, close, replace = open) => (input) => {
+      let string = "" + input, index = string.indexOf(close, open.length);
+      return ~index ? open + replaceClose(string, close, replace, index) + close : open + string + close;
+    };
+    var replaceClose = (string, close, replace, index) => {
+      let result = "", cursor2 = 0;
+      do {
+        result += string.substring(cursor2, index) + replace;
+        cursor2 = index + close.length;
+        index = string.indexOf(close, cursor2);
+      } while (~index);
+      return result + string.substring(cursor2);
+    };
+    var createColors = (enabled = isColorSupported) => {
+      let f = enabled ? formatter : () => String;
+      return {
+        isColorSupported: enabled,
+        reset: f("\x1B[0m", "\x1B[0m"),
+        bold: f("\x1B[1m", "\x1B[22m", "\x1B[22m\x1B[1m"),
+        dim: f("\x1B[2m", "\x1B[22m", "\x1B[22m\x1B[2m"),
+        italic: f("\x1B[3m", "\x1B[23m"),
+        underline: f("\x1B[4m", "\x1B[24m"),
+        inverse: f("\x1B[7m", "\x1B[27m"),
+        hidden: f("\x1B[8m", "\x1B[28m"),
+        strikethrough: f("\x1B[9m", "\x1B[29m"),
+        black: f("\x1B[30m", "\x1B[39m"),
+        red: f("\x1B[31m", "\x1B[39m"),
+        green: f("\x1B[32m", "\x1B[39m"),
+        yellow: f("\x1B[33m", "\x1B[39m"),
+        blue: f("\x1B[34m", "\x1B[39m"),
+        magenta: f("\x1B[35m", "\x1B[39m"),
+        cyan: f("\x1B[36m", "\x1B[39m"),
+        white: f("\x1B[37m", "\x1B[39m"),
+        gray: f("\x1B[90m", "\x1B[39m"),
+        bgBlack: f("\x1B[40m", "\x1B[49m"),
+        bgRed: f("\x1B[41m", "\x1B[49m"),
+        bgGreen: f("\x1B[42m", "\x1B[49m"),
+        bgYellow: f("\x1B[43m", "\x1B[49m"),
+        bgBlue: f("\x1B[44m", "\x1B[49m"),
+        bgMagenta: f("\x1B[45m", "\x1B[49m"),
+        bgCyan: f("\x1B[46m", "\x1B[49m"),
+        bgWhite: f("\x1B[47m", "\x1B[49m"),
+        blackBright: f("\x1B[90m", "\x1B[39m"),
+        redBright: f("\x1B[91m", "\x1B[39m"),
+        greenBright: f("\x1B[92m", "\x1B[39m"),
+        yellowBright: f("\x1B[93m", "\x1B[39m"),
+        blueBright: f("\x1B[94m", "\x1B[39m"),
+        magentaBright: f("\x1B[95m", "\x1B[39m"),
+        cyanBright: f("\x1B[96m", "\x1B[39m"),
+        whiteBright: f("\x1B[97m", "\x1B[39m"),
+        bgBlackBright: f("\x1B[100m", "\x1B[49m"),
+        bgRedBright: f("\x1B[101m", "\x1B[49m"),
+        bgGreenBright: f("\x1B[102m", "\x1B[49m"),
+        bgYellowBright: f("\x1B[103m", "\x1B[49m"),
+        bgBlueBright: f("\x1B[104m", "\x1B[49m"),
+        bgMagentaBright: f("\x1B[105m", "\x1B[49m"),
+        bgCyanBright: f("\x1B[106m", "\x1B[49m"),
+        bgWhiteBright: f("\x1B[107m", "\x1B[49m")
+      };
+    };
+    module.exports = createColors();
+    module.exports.createColors = createColors;
+  }
+});
+
 // node_modules/js-tokens/index.js
 var require_js_tokens = __commonJS({
   "node_modules/js-tokens/index.js"(exports) {
@@ -9083,133 +8619,49 @@ var require_lib = __commonJS({
   }
 });
 
-// node_modules/picocolors/picocolors.js
-var require_picocolors = __commonJS({
-  "node_modules/picocolors/picocolors.js"(exports, module) {
-    var p = process || {};
-    var argv = p.argv || [];
-    var env2 = p.env || {};
-    var isColorSupported = !(!!env2.NO_COLOR || argv.includes("--no-color")) && (!!env2.FORCE_COLOR || argv.includes("--color") || p.platform === "win32" || (p.stdout || {}).isTTY && env2.TERM !== "dumb" || !!env2.CI);
-    var formatter = (open, close, replace = open) => (input) => {
-      let string = "" + input, index = string.indexOf(close, open.length);
-      return ~index ? open + replaceClose(string, close, replace, index) + close : open + string + close;
-    };
-    var replaceClose = (string, close, replace, index) => {
-      let result = "", cursor2 = 0;
-      do {
-        result += string.substring(cursor2, index) + replace;
-        cursor2 = index + close.length;
-        index = string.indexOf(close, cursor2);
-      } while (~index);
-      return result + string.substring(cursor2);
-    };
-    var createColors = (enabled = isColorSupported) => {
-      let f = enabled ? formatter : () => String;
-      return {
-        isColorSupported: enabled,
-        reset: f("\x1B[0m", "\x1B[0m"),
-        bold: f("\x1B[1m", "\x1B[22m", "\x1B[22m\x1B[1m"),
-        dim: f("\x1B[2m", "\x1B[22m", "\x1B[22m\x1B[2m"),
-        italic: f("\x1B[3m", "\x1B[23m"),
-        underline: f("\x1B[4m", "\x1B[24m"),
-        inverse: f("\x1B[7m", "\x1B[27m"),
-        hidden: f("\x1B[8m", "\x1B[28m"),
-        strikethrough: f("\x1B[9m", "\x1B[29m"),
-        black: f("\x1B[30m", "\x1B[39m"),
-        red: f("\x1B[31m", "\x1B[39m"),
-        green: f("\x1B[32m", "\x1B[39m"),
-        yellow: f("\x1B[33m", "\x1B[39m"),
-        blue: f("\x1B[34m", "\x1B[39m"),
-        magenta: f("\x1B[35m", "\x1B[39m"),
-        cyan: f("\x1B[36m", "\x1B[39m"),
-        white: f("\x1B[37m", "\x1B[39m"),
-        gray: f("\x1B[90m", "\x1B[39m"),
-        bgBlack: f("\x1B[40m", "\x1B[49m"),
-        bgRed: f("\x1B[41m", "\x1B[49m"),
-        bgGreen: f("\x1B[42m", "\x1B[49m"),
-        bgYellow: f("\x1B[43m", "\x1B[49m"),
-        bgBlue: f("\x1B[44m", "\x1B[49m"),
-        bgMagenta: f("\x1B[45m", "\x1B[49m"),
-        bgCyan: f("\x1B[46m", "\x1B[49m"),
-        bgWhite: f("\x1B[47m", "\x1B[49m"),
-        blackBright: f("\x1B[90m", "\x1B[39m"),
-        redBright: f("\x1B[91m", "\x1B[39m"),
-        greenBright: f("\x1B[92m", "\x1B[39m"),
-        yellowBright: f("\x1B[93m", "\x1B[39m"),
-        blueBright: f("\x1B[94m", "\x1B[39m"),
-        magentaBright: f("\x1B[95m", "\x1B[39m"),
-        cyanBright: f("\x1B[96m", "\x1B[39m"),
-        whiteBright: f("\x1B[97m", "\x1B[39m"),
-        bgBlackBright: f("\x1B[100m", "\x1B[49m"),
-        bgRedBright: f("\x1B[101m", "\x1B[49m"),
-        bgGreenBright: f("\x1B[102m", "\x1B[49m"),
-        bgYellowBright: f("\x1B[103m", "\x1B[49m"),
-        bgBlueBright: f("\x1B[104m", "\x1B[49m"),
-        bgMagentaBright: f("\x1B[105m", "\x1B[49m"),
-        bgCyanBright: f("\x1B[106m", "\x1B[49m"),
-        bgWhiteBright: f("\x1B[107m", "\x1B[49m")
-      };
-    };
-    module.exports = createColors();
-    module.exports.createColors = createColors;
-  }
-});
-
-// node_modules/@babel/highlight/lib/index.js
+// node_modules/@babel/code-frame/lib/index.js
 var require_lib2 = __commonJS({
-  "node_modules/@babel/highlight/lib/index.js"(exports) {
+  "node_modules/@babel/code-frame/lib/index.js"(exports) {
     "use strict";
-    Object.defineProperty(exports, "__esModule", {
-      value: true
-    });
-    exports.default = highlight;
-    exports.shouldHighlight = shouldHighlight;
-    var _jsTokens = require_js_tokens();
-    var _helperValidatorIdentifier = require_lib();
-    var _picocolors = _interopRequireWildcard(require_picocolors(), true);
-    function _getRequireWildcardCache(e) {
-      if ("function" != typeof WeakMap) return null;
-      var r = /* @__PURE__ */ new WeakMap(), t = /* @__PURE__ */ new WeakMap();
-      return (_getRequireWildcardCache = function(e2) {
-        return e2 ? t : r;
-      })(e);
+    Object.defineProperty(exports, "__esModule", { value: true });
+    var picocolors = require_picocolors();
+    var jsTokens = require_js_tokens();
+    var helperValidatorIdentifier = require_lib();
+    function isColorSupported() {
+      return typeof process === "object" && (process.env.FORCE_COLOR === "0" || process.env.FORCE_COLOR === "false") ? false : picocolors.isColorSupported;
     }
-    function _interopRequireWildcard(e, r) {
-      if (!r && e && e.__esModule) return e;
-      if (null === e || "object" != typeof e && "function" != typeof e) return { default: e };
-      var t = _getRequireWildcardCache(r);
-      if (t && t.has(e)) return t.get(e);
-      var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor;
-      for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) {
-        var i = a ? Object.getOwnPropertyDescriptor(e, u) : null;
-        i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u];
-      }
-      return n.default = e, t && t.set(e, n), n;
-    }
-    var colors = typeof process === "object" && (process.env.FORCE_COLOR === "0" || process.env.FORCE_COLOR === "false") ? (0, _picocolors.createColors)(false) : _picocolors.default;
     var compose = (f, g) => (v) => f(g(v));
-    var sometimesKeywords = /* @__PURE__ */ new Set(["as", "async", "from", "get", "of", "set"]);
-    function getDefs(colors2) {
+    function buildDefs(colors) {
       return {
-        keyword: colors2.cyan,
-        capitalized: colors2.yellow,
-        jsxIdentifier: colors2.yellow,
-        punctuator: colors2.yellow,
-        number: colors2.magenta,
-        string: colors2.green,
-        regex: colors2.magenta,
-        comment: colors2.gray,
-        invalid: compose(compose(colors2.white, colors2.bgRed), colors2.bold)
+        keyword: colors.cyan,
+        capitalized: colors.yellow,
+        jsxIdentifier: colors.yellow,
+        punctuator: colors.yellow,
+        number: colors.magenta,
+        string: colors.green,
+        regex: colors.magenta,
+        comment: colors.gray,
+        invalid: compose(compose(colors.white, colors.bgRed), colors.bold),
+        gutter: colors.gray,
+        marker: compose(colors.red, colors.bold),
+        message: compose(colors.red, colors.bold),
+        reset: colors.reset
       };
     }
-    var NEWLINE = /\r\n|[\n\r\u2028\u2029]/;
+    var defsOn = buildDefs(picocolors.createColors(true));
+    var defsOff = buildDefs(picocolors.createColors(false));
+    function getDefs(enabled) {
+      return enabled ? defsOn : defsOff;
+    }
+    var sometimesKeywords = /* @__PURE__ */ new Set(["as", "async", "from", "get", "of", "set"]);
+    var NEWLINE$1 = /\r\n|[\n\r\u2028\u2029]/;
     var BRACKET = /^[()[\]{}]$/;
     var tokenize2;
     {
       const JSX_TAG = /^[a-z][\w-]*$/i;
       const getTokenType = function(token2, offset, text) {
         if (token2.type === "name") {
-          if ((0, _helperValidatorIdentifier.isKeyword)(token2.value) || (0, _helperValidatorIdentifier.isStrictReservedWord)(token2.value, true) || sometimesKeywords.has(token2.value)) {
+          if (helperValidatorIdentifier.isKeyword(token2.value) || helperValidatorIdentifier.isStrictReservedWord(token2.value, true) || sometimesKeywords.has(token2.value)) {
             return "keyword";
           }
           if (JSX_TAG.test(token2.value) && (text[offset - 1] === "<" || text.slice(offset - 2, offset) === "</")) {
@@ -9229,8 +8681,8 @@ var require_lib2 = __commonJS({
       };
       tokenize2 = function* (text) {
         let match;
-        while (match = _jsTokens.default.exec(text)) {
-          const token2 = _jsTokens.matchToToken(match);
+        while (match = jsTokens.default.exec(text)) {
+          const token2 = jsTokens.matchToToken(match);
           yield {
             type: getTokenType(token2, match.index, text),
             value: token2.value
@@ -9238,111 +8690,23 @@ var require_lib2 = __commonJS({
         }
       };
     }
-    function highlightTokens(defs, text) {
+    function highlight(text) {
+      if (text === "") return "";
+      const defs = getDefs(true);
       let highlighted = "";
       for (const {
         type: type2,
         value
       } of tokenize2(text)) {
-        const colorize = defs[type2];
-        if (colorize) {
-          highlighted += value.split(NEWLINE).map((str2) => colorize(str2)).join("\n");
+        if (type2 in defs) {
+          highlighted += value.split(NEWLINE$1).map((str2) => defs[type2](str2)).join("\n");
         } else {
           highlighted += value;
         }
       }
       return highlighted;
     }
-    function shouldHighlight(options8) {
-      return colors.isColorSupported || options8.forceColor;
-    }
-    var pcWithForcedColor = void 0;
-    function getColors(forceColor) {
-      if (forceColor) {
-        var _pcWithForcedColor;
-        (_pcWithForcedColor = pcWithForcedColor) != null ? _pcWithForcedColor : pcWithForcedColor = (0, _picocolors.createColors)(true);
-        return pcWithForcedColor;
-      }
-      return colors;
-    }
-    function highlight(code, options8 = {}) {
-      if (code !== "" && shouldHighlight(options8)) {
-        const defs = getDefs(getColors(options8.forceColor));
-        return highlightTokens(defs, code);
-      } else {
-        return code;
-      }
-    }
-    {
-      let chalk2, chalkWithForcedColor;
-      exports.getChalk = ({
-        forceColor
-      }) => {
-        var _chalk;
-        (_chalk = chalk2) != null ? _chalk : chalk2 = (init_source(), __toCommonJS(source_exports));
-        if (forceColor) {
-          var _chalkWithForcedColor;
-          (_chalkWithForcedColor = chalkWithForcedColor) != null ? _chalkWithForcedColor : chalkWithForcedColor = new chalk2.constructor({
-            enabled: true,
-            level: 1
-          });
-          return chalkWithForcedColor;
-        }
-        return chalk2;
-      };
-    }
-  }
-});
-
-// node_modules/@babel/code-frame/lib/index.js
-var require_lib3 = __commonJS({
-  "node_modules/@babel/code-frame/lib/index.js"(exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", {
-      value: true
-    });
-    exports.codeFrameColumns = codeFrameColumns3;
-    exports.default = _default2;
-    var _highlight = require_lib2();
-    var _picocolors = _interopRequireWildcard(require_picocolors(), true);
-    function _getRequireWildcardCache(e) {
-      if ("function" != typeof WeakMap) return null;
-      var r = /* @__PURE__ */ new WeakMap(), t = /* @__PURE__ */ new WeakMap();
-      return (_getRequireWildcardCache = function(e2) {
-        return e2 ? t : r;
-      })(e);
-    }
-    function _interopRequireWildcard(e, r) {
-      if (!r && e && e.__esModule) return e;
-      if (null === e || "object" != typeof e && "function" != typeof e) return { default: e };
-      var t = _getRequireWildcardCache(r);
-      if (t && t.has(e)) return t.get(e);
-      var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor;
-      for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) {
-        var i = a ? Object.getOwnPropertyDescriptor(e, u) : null;
-        i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u];
-      }
-      return n.default = e, t && t.set(e, n), n;
-    }
-    var colors = typeof process === "object" && (process.env.FORCE_COLOR === "0" || process.env.FORCE_COLOR === "false") ? (0, _picocolors.createColors)(false) : _picocolors.default;
-    var compose = (f, g) => (v) => f(g(v));
-    var pcWithForcedColor = void 0;
-    function getColors(forceColor) {
-      if (forceColor) {
-        var _pcWithForcedColor;
-        (_pcWithForcedColor = pcWithForcedColor) != null ? _pcWithForcedColor : pcWithForcedColor = (0, _picocolors.createColors)(true);
-        return pcWithForcedColor;
-      }
-      return colors;
-    }
     var deprecationWarningShown = false;
-    function getDefs(colors2) {
-      return {
-        gutter: colors2.gray,
-        marker: compose(colors2.red, colors2.bold),
-        message: compose(colors2.red, colors2.bold)
-      };
-    }
     var NEWLINE = /\r\n|[\n\r\u2028\u2029]/;
     function getMarkerLines(loc, source2, opts) {
       const startLoc = Object.assign({
@@ -9401,12 +8765,8 @@ var require_lib3 = __commonJS({
       };
     }
     function codeFrameColumns3(rawLines, loc, opts = {}) {
-      const highlighted = (opts.highlightCode || opts.forceColor) && (0, _highlight.shouldHighlight)(opts);
-      const colors2 = getColors(opts.forceColor);
-      const defs = getDefs(colors2);
-      const maybeHighlight = (fmt, string) => {
-        return highlighted ? fmt(string) : string;
-      };
+      const shouldHighlight = opts.forceColor || isColorSupported() && opts.highlightCode;
+      const defs = getDefs(shouldHighlight);
       const lines = rawLines.split(NEWLINE);
       const {
         start,
@@ -9415,9 +8775,9 @@ var require_lib3 = __commonJS({
       } = getMarkerLines(loc, lines, opts);
       const hasColumns = loc.start && typeof loc.start.column === "number";
       const numberMaxWidth = String(end).length;
-      const highlightedLines = highlighted ? (0, _highlight.default)(rawLines, opts) : rawLines;
-      let frame = highlightedLines.split(NEWLINE, end).slice(start, end).map((line3, index) => {
-        const number = start + 1 + index;
+      const highlightedLines = shouldHighlight ? highlight(rawLines) : rawLines;
+      let frame = highlightedLines.split(NEWLINE, end).slice(start, end).map((line3, index2) => {
+        const number = start + 1 + index2;
         const paddedNumber = ` ${number}`.slice(-numberMaxWidth);
         const gutter = ` ${paddedNumber} |`;
         const hasMarker = markerLines[number];
@@ -9427,27 +8787,27 @@ var require_lib3 = __commonJS({
           if (Array.isArray(hasMarker)) {
             const markerSpacing = line3.slice(0, Math.max(hasMarker[0] - 1, 0)).replace(/[^\t]/g, " ");
             const numberOfMarkers = hasMarker[1] || 1;
-            markerLine = ["\n ", maybeHighlight(defs.gutter, gutter.replace(/\d/g, " ")), " ", markerSpacing, maybeHighlight(defs.marker, "^").repeat(numberOfMarkers)].join("");
+            markerLine = ["\n ", defs.gutter(gutter.replace(/\d/g, " ")), " ", markerSpacing, defs.marker("^").repeat(numberOfMarkers)].join("");
             if (lastMarkerLine && opts.message) {
-              markerLine += " " + maybeHighlight(defs.message, opts.message);
+              markerLine += " " + defs.message(opts.message);
             }
           }
-          return [maybeHighlight(defs.marker, ">"), maybeHighlight(defs.gutter, gutter), line3.length > 0 ? ` ${line3}` : "", markerLine].join("");
+          return [defs.marker(">"), defs.gutter(gutter), line3.length > 0 ? ` ${line3}` : "", markerLine].join("");
         } else {
-          return ` ${maybeHighlight(defs.gutter, gutter)}${line3.length > 0 ? ` ${line3}` : ""}`;
+          return ` ${defs.gutter(gutter)}${line3.length > 0 ? ` ${line3}` : ""}`;
         }
       }).join("\n");
       if (opts.message && !hasColumns) {
         frame = `${" ".repeat(numberMaxWidth + 1)}${opts.message}
 ${frame}`;
       }
-      if (highlighted) {
-        return colors2.reset(frame);
+      if (shouldHighlight) {
+        return defs.reset(frame);
       } else {
         return frame;
       }
     }
-    function _default2(rawLines, lineNumber, colNumber, opts = {}) {
+    function index(rawLines, lineNumber, colNumber, opts = {}) {
       if (!deprecationWarningShown) {
         deprecationWarningShown = true;
         const message = "Passing lineNumber and colNumber is deprecated to @babel/code-frame. Please use `codeFrameColumns`.";
@@ -9468,6 +8828,9 @@ ${frame}`;
       };
       return codeFrameColumns3(rawLines, location, opts);
     }
+    exports.codeFrameColumns = codeFrameColumns3;
+    exports.default = index;
+    exports.highlight = highlight;
   }
 });
 
@@ -10821,8 +10184,496 @@ var apiDescriptor = {
   pair: ({ key: key2, value }) => apiDescriptor.value({ [key2]: value })
 };
 
+// node_modules/chalk/source/vendor/ansi-styles/index.js
+var ANSI_BACKGROUND_OFFSET = 10;
+var wrapAnsi16 = (offset = 0) => (code) => `\x1B[${code + offset}m`;
+var wrapAnsi256 = (offset = 0) => (code) => `\x1B[${38 + offset};5;${code}m`;
+var wrapAnsi16m = (offset = 0) => (red, green, blue) => `\x1B[${38 + offset};2;${red};${green};${blue}m`;
+var styles = {
+  modifier: {
+    reset: [0, 0],
+    // 21 isn't widely supported and 22 does the same thing
+    bold: [1, 22],
+    dim: [2, 22],
+    italic: [3, 23],
+    underline: [4, 24],
+    overline: [53, 55],
+    inverse: [7, 27],
+    hidden: [8, 28],
+    strikethrough: [9, 29]
+  },
+  color: {
+    black: [30, 39],
+    red: [31, 39],
+    green: [32, 39],
+    yellow: [33, 39],
+    blue: [34, 39],
+    magenta: [35, 39],
+    cyan: [36, 39],
+    white: [37, 39],
+    // Bright color
+    blackBright: [90, 39],
+    gray: [90, 39],
+    // Alias of `blackBright`
+    grey: [90, 39],
+    // Alias of `blackBright`
+    redBright: [91, 39],
+    greenBright: [92, 39],
+    yellowBright: [93, 39],
+    blueBright: [94, 39],
+    magentaBright: [95, 39],
+    cyanBright: [96, 39],
+    whiteBright: [97, 39]
+  },
+  bgColor: {
+    bgBlack: [40, 49],
+    bgRed: [41, 49],
+    bgGreen: [42, 49],
+    bgYellow: [43, 49],
+    bgBlue: [44, 49],
+    bgMagenta: [45, 49],
+    bgCyan: [46, 49],
+    bgWhite: [47, 49],
+    // Bright color
+    bgBlackBright: [100, 49],
+    bgGray: [100, 49],
+    // Alias of `bgBlackBright`
+    bgGrey: [100, 49],
+    // Alias of `bgBlackBright`
+    bgRedBright: [101, 49],
+    bgGreenBright: [102, 49],
+    bgYellowBright: [103, 49],
+    bgBlueBright: [104, 49],
+    bgMagentaBright: [105, 49],
+    bgCyanBright: [106, 49],
+    bgWhiteBright: [107, 49]
+  }
+};
+var modifierNames = Object.keys(styles.modifier);
+var foregroundColorNames = Object.keys(styles.color);
+var backgroundColorNames = Object.keys(styles.bgColor);
+var colorNames = [...foregroundColorNames, ...backgroundColorNames];
+function assembleStyles() {
+  const codes2 = /* @__PURE__ */ new Map();
+  for (const [groupName, group] of Object.entries(styles)) {
+    for (const [styleName, style] of Object.entries(group)) {
+      styles[styleName] = {
+        open: `\x1B[${style[0]}m`,
+        close: `\x1B[${style[1]}m`
+      };
+      group[styleName] = styles[styleName];
+      codes2.set(style[0], style[1]);
+    }
+    Object.defineProperty(styles, groupName, {
+      value: group,
+      enumerable: false
+    });
+  }
+  Object.defineProperty(styles, "codes", {
+    value: codes2,
+    enumerable: false
+  });
+  styles.color.close = "\x1B[39m";
+  styles.bgColor.close = "\x1B[49m";
+  styles.color.ansi = wrapAnsi16();
+  styles.color.ansi256 = wrapAnsi256();
+  styles.color.ansi16m = wrapAnsi16m();
+  styles.bgColor.ansi = wrapAnsi16(ANSI_BACKGROUND_OFFSET);
+  styles.bgColor.ansi256 = wrapAnsi256(ANSI_BACKGROUND_OFFSET);
+  styles.bgColor.ansi16m = wrapAnsi16m(ANSI_BACKGROUND_OFFSET);
+  Object.defineProperties(styles, {
+    rgbToAnsi256: {
+      value(red, green, blue) {
+        if (red === green && green === blue) {
+          if (red < 8) {
+            return 16;
+          }
+          if (red > 248) {
+            return 231;
+          }
+          return Math.round((red - 8) / 247 * 24) + 232;
+        }
+        return 16 + 36 * Math.round(red / 255 * 5) + 6 * Math.round(green / 255 * 5) + Math.round(blue / 255 * 5);
+      },
+      enumerable: false
+    },
+    hexToRgb: {
+      value(hex) {
+        const matches = /[a-f\d]{6}|[a-f\d]{3}/i.exec(hex.toString(16));
+        if (!matches) {
+          return [0, 0, 0];
+        }
+        let [colorString] = matches;
+        if (colorString.length === 3) {
+          colorString = [...colorString].map((character) => character + character).join("");
+        }
+        const integer = Number.parseInt(colorString, 16);
+        return [
+          /* eslint-disable no-bitwise */
+          integer >> 16 & 255,
+          integer >> 8 & 255,
+          integer & 255
+          /* eslint-enable no-bitwise */
+        ];
+      },
+      enumerable: false
+    },
+    hexToAnsi256: {
+      value: (hex) => styles.rgbToAnsi256(...styles.hexToRgb(hex)),
+      enumerable: false
+    },
+    ansi256ToAnsi: {
+      value(code) {
+        if (code < 8) {
+          return 30 + code;
+        }
+        if (code < 16) {
+          return 90 + (code - 8);
+        }
+        let red;
+        let green;
+        let blue;
+        if (code >= 232) {
+          red = ((code - 232) * 10 + 8) / 255;
+          green = red;
+          blue = red;
+        } else {
+          code -= 16;
+          const remainder = code % 36;
+          red = Math.floor(code / 36) / 5;
+          green = Math.floor(remainder / 6) / 5;
+          blue = remainder % 6 / 5;
+        }
+        const value = Math.max(red, green, blue) * 2;
+        if (value === 0) {
+          return 30;
+        }
+        let result = 30 + (Math.round(blue) << 2 | Math.round(green) << 1 | Math.round(red));
+        if (value === 2) {
+          result += 60;
+        }
+        return result;
+      },
+      enumerable: false
+    },
+    rgbToAnsi: {
+      value: (red, green, blue) => styles.ansi256ToAnsi(styles.rgbToAnsi256(red, green, blue)),
+      enumerable: false
+    },
+    hexToAnsi: {
+      value: (hex) => styles.ansi256ToAnsi(styles.hexToAnsi256(hex)),
+      enumerable: false
+    }
+  });
+  return styles;
+}
+var ansiStyles = assembleStyles();
+var ansi_styles_default = ansiStyles;
+
+// node_modules/chalk/source/vendor/supports-color/index.js
+import process2 from "process";
+import os from "os";
+import tty from "tty";
+function hasFlag(flag, argv = globalThis.Deno ? globalThis.Deno.args : process2.argv) {
+  const prefix = flag.startsWith("-") ? "" : flag.length === 1 ? "-" : "--";
+  const position = argv.indexOf(prefix + flag);
+  const terminatorPosition = argv.indexOf("--");
+  return position !== -1 && (terminatorPosition === -1 || position < terminatorPosition);
+}
+var { env } = process2;
+var flagForceColor;
+if (hasFlag("no-color") || hasFlag("no-colors") || hasFlag("color=false") || hasFlag("color=never")) {
+  flagForceColor = 0;
+} else if (hasFlag("color") || hasFlag("colors") || hasFlag("color=true") || hasFlag("color=always")) {
+  flagForceColor = 1;
+}
+function envForceColor() {
+  if ("FORCE_COLOR" in env) {
+    if (env.FORCE_COLOR === "true") {
+      return 1;
+    }
+    if (env.FORCE_COLOR === "false") {
+      return 0;
+    }
+    return env.FORCE_COLOR.length === 0 ? 1 : Math.min(Number.parseInt(env.FORCE_COLOR, 10), 3);
+  }
+}
+function translateLevel(level) {
+  if (level === 0) {
+    return false;
+  }
+  return {
+    level,
+    hasBasic: true,
+    has256: level >= 2,
+    has16m: level >= 3
+  };
+}
+function _supportsColor(haveStream, { streamIsTTY, sniffFlags = true } = {}) {
+  const noFlagForceColor = envForceColor();
+  if (noFlagForceColor !== void 0) {
+    flagForceColor = noFlagForceColor;
+  }
+  const forceColor = sniffFlags ? flagForceColor : noFlagForceColor;
+  if (forceColor === 0) {
+    return 0;
+  }
+  if (sniffFlags) {
+    if (hasFlag("color=16m") || hasFlag("color=full") || hasFlag("color=truecolor")) {
+      return 3;
+    }
+    if (hasFlag("color=256")) {
+      return 2;
+    }
+  }
+  if ("TF_BUILD" in env && "AGENT_NAME" in env) {
+    return 1;
+  }
+  if (haveStream && !streamIsTTY && forceColor === void 0) {
+    return 0;
+  }
+  const min = forceColor || 0;
+  if (env.TERM === "dumb") {
+    return min;
+  }
+  if (process2.platform === "win32") {
+    const osRelease = os.release().split(".");
+    if (Number(osRelease[0]) >= 10 && Number(osRelease[2]) >= 10586) {
+      return Number(osRelease[2]) >= 14931 ? 3 : 2;
+    }
+    return 1;
+  }
+  if ("CI" in env) {
+    if ("GITHUB_ACTIONS" in env || "GITEA_ACTIONS" in env) {
+      return 3;
+    }
+    if (["TRAVIS", "CIRCLECI", "APPVEYOR", "GITLAB_CI", "BUILDKITE", "DRONE"].some((sign2) => sign2 in env) || env.CI_NAME === "codeship") {
+      return 1;
+    }
+    return min;
+  }
+  if ("TEAMCITY_VERSION" in env) {
+    return /^(9\.(0*[1-9]\d*)\.|\d{2,}\.)/.test(env.TEAMCITY_VERSION) ? 1 : 0;
+  }
+  if (env.COLORTERM === "truecolor") {
+    return 3;
+  }
+  if (env.TERM === "xterm-kitty") {
+    return 3;
+  }
+  if ("TERM_PROGRAM" in env) {
+    const version = Number.parseInt((env.TERM_PROGRAM_VERSION || "").split(".")[0], 10);
+    switch (env.TERM_PROGRAM) {
+      case "iTerm.app": {
+        return version >= 3 ? 3 : 2;
+      }
+      case "Apple_Terminal": {
+        return 2;
+      }
+    }
+  }
+  if (/-256(color)?$/i.test(env.TERM)) {
+    return 2;
+  }
+  if (/^screen|^xterm|^vt100|^vt220|^rxvt|color|ansi|cygwin|linux/i.test(env.TERM)) {
+    return 1;
+  }
+  if ("COLORTERM" in env) {
+    return 1;
+  }
+  return min;
+}
+function createSupportsColor(stream, options8 = {}) {
+  const level = _supportsColor(stream, {
+    streamIsTTY: stream && stream.isTTY,
+    ...options8
+  });
+  return translateLevel(level);
+}
+var supportsColor = {
+  stdout: createSupportsColor({ isTTY: tty.isatty(1) }),
+  stderr: createSupportsColor({ isTTY: tty.isatty(2) })
+};
+var supports_color_default = supportsColor;
+
+// node_modules/chalk/source/utilities.js
+function stringReplaceAll(string, substring, replacer) {
+  let index = string.indexOf(substring);
+  if (index === -1) {
+    return string;
+  }
+  const substringLength = substring.length;
+  let endIndex = 0;
+  let returnValue = "";
+  do {
+    returnValue += string.slice(endIndex, index) + substring + replacer;
+    endIndex = index + substringLength;
+    index = string.indexOf(substring, endIndex);
+  } while (index !== -1);
+  returnValue += string.slice(endIndex);
+  return returnValue;
+}
+function stringEncaseCRLFWithFirstIndex(string, prefix, postfix, index) {
+  let endIndex = 0;
+  let returnValue = "";
+  do {
+    const gotCR = string[index - 1] === "\r";
+    returnValue += string.slice(endIndex, gotCR ? index - 1 : index) + prefix + (gotCR ? "\r\n" : "\n") + postfix;
+    endIndex = index + 1;
+    index = string.indexOf("\n", endIndex);
+  } while (index !== -1);
+  returnValue += string.slice(endIndex);
+  return returnValue;
+}
+
+// node_modules/chalk/source/index.js
+var { stdout: stdoutColor, stderr: stderrColor } = supports_color_default;
+var GENERATOR = Symbol("GENERATOR");
+var STYLER = Symbol("STYLER");
+var IS_EMPTY = Symbol("IS_EMPTY");
+var levelMapping = [
+  "ansi",
+  "ansi",
+  "ansi256",
+  "ansi16m"
+];
+var styles2 = /* @__PURE__ */ Object.create(null);
+var applyOptions = (object, options8 = {}) => {
+  if (options8.level && !(Number.isInteger(options8.level) && options8.level >= 0 && options8.level <= 3)) {
+    throw new Error("The `level` option should be an integer from 0 to 3");
+  }
+  const colorLevel = stdoutColor ? stdoutColor.level : 0;
+  object.level = options8.level === void 0 ? colorLevel : options8.level;
+};
+var chalkFactory = (options8) => {
+  const chalk2 = (...strings) => strings.join(" ");
+  applyOptions(chalk2, options8);
+  Object.setPrototypeOf(chalk2, createChalk.prototype);
+  return chalk2;
+};
+function createChalk(options8) {
+  return chalkFactory(options8);
+}
+Object.setPrototypeOf(createChalk.prototype, Function.prototype);
+for (const [styleName, style] of Object.entries(ansi_styles_default)) {
+  styles2[styleName] = {
+    get() {
+      const builder = createBuilder(this, createStyler(style.open, style.close, this[STYLER]), this[IS_EMPTY]);
+      Object.defineProperty(this, styleName, { value: builder });
+      return builder;
+    }
+  };
+}
+styles2.visible = {
+  get() {
+    const builder = createBuilder(this, this[STYLER], true);
+    Object.defineProperty(this, "visible", { value: builder });
+    return builder;
+  }
+};
+var getModelAnsi = (model, level, type2, ...arguments_) => {
+  if (model === "rgb") {
+    if (level === "ansi16m") {
+      return ansi_styles_default[type2].ansi16m(...arguments_);
+    }
+    if (level === "ansi256") {
+      return ansi_styles_default[type2].ansi256(ansi_styles_default.rgbToAnsi256(...arguments_));
+    }
+    return ansi_styles_default[type2].ansi(ansi_styles_default.rgbToAnsi(...arguments_));
+  }
+  if (model === "hex") {
+    return getModelAnsi("rgb", level, type2, ...ansi_styles_default.hexToRgb(...arguments_));
+  }
+  return ansi_styles_default[type2][model](...arguments_);
+};
+var usedModels = ["rgb", "hex", "ansi256"];
+for (const model of usedModels) {
+  styles2[model] = {
+    get() {
+      const { level } = this;
+      return function(...arguments_) {
+        const styler = createStyler(getModelAnsi(model, levelMapping[level], "color", ...arguments_), ansi_styles_default.color.close, this[STYLER]);
+        return createBuilder(this, styler, this[IS_EMPTY]);
+      };
+    }
+  };
+  const bgModel = "bg" + model[0].toUpperCase() + model.slice(1);
+  styles2[bgModel] = {
+    get() {
+      const { level } = this;
+      return function(...arguments_) {
+        const styler = createStyler(getModelAnsi(model, levelMapping[level], "bgColor", ...arguments_), ansi_styles_default.bgColor.close, this[STYLER]);
+        return createBuilder(this, styler, this[IS_EMPTY]);
+      };
+    }
+  };
+}
+var proto = Object.defineProperties(() => {
+}, {
+  ...styles2,
+  level: {
+    enumerable: true,
+    get() {
+      return this[GENERATOR].level;
+    },
+    set(level) {
+      this[GENERATOR].level = level;
+    }
+  }
+});
+var createStyler = (open, close, parent) => {
+  let openAll;
+  let closeAll;
+  if (parent === void 0) {
+    openAll = open;
+    closeAll = close;
+  } else {
+    openAll = parent.openAll + open;
+    closeAll = close + parent.closeAll;
+  }
+  return {
+    open,
+    close,
+    openAll,
+    closeAll,
+    parent
+  };
+};
+var createBuilder = (self, _styler, _isEmpty) => {
+  const builder = (...arguments_) => applyStyle(builder, arguments_.length === 1 ? "" + arguments_[0] : arguments_.join(" "));
+  Object.setPrototypeOf(builder, proto);
+  builder[GENERATOR] = self;
+  builder[STYLER] = _styler;
+  builder[IS_EMPTY] = _isEmpty;
+  return builder;
+};
+var applyStyle = (self, string) => {
+  if (self.level <= 0 || !string) {
+    return self[IS_EMPTY] ? "" : string;
+  }
+  let styler = self[STYLER];
+  if (styler === void 0) {
+    return string;
+  }
+  const { openAll, closeAll } = styler;
+  if (string.includes("\x1B")) {
+    while (styler !== void 0) {
+      string = stringReplaceAll(string, styler.close, styler.open);
+      styler = styler.parent;
+    }
+  }
+  const lfIndex = string.indexOf("\n");
+  if (lfIndex !== -1) {
+    string = stringEncaseCRLFWithFirstIndex(string, closeAll, openAll, lfIndex);
+  }
+  return openAll + string + closeAll;
+};
+Object.defineProperties(createChalk.prototype, styles2);
+var chalk = createChalk();
+var chalkStderr = createChalk({ level: stderrColor ? stderrColor.level : 0 });
+var source_default = chalk;
+
 // node_modules/vnopts/lib/handlers/deprecated/common.js
-init_source();
 var commonDeprecatedHandler = (keyOrPair, redirectTo, { descriptor }) => {
   const messages2 = [
     `${source_default.yellow(typeof keyOrPair === "string" ? descriptor.key(keyOrPair) : descriptor.pair(keyOrPair))} is deprecated`
@@ -10832,9 +10683,6 @@ var commonDeprecatedHandler = (keyOrPair, redirectTo, { descriptor }) => {
   }
   return messages2.join("; ") + ".";
 };
-
-// node_modules/vnopts/lib/handlers/invalid/common.js
-init_source();
 
 // node_modules/vnopts/lib/constants.js
 var VALUE_NOT_EXIST = Symbol.for("vnopts.VALUE_NOT_EXIST");
@@ -10878,9 +10726,6 @@ function chooseDescription(descriptions, printWidth) {
   const [firstWidth, secondWidth] = descriptions.map((description) => description.split("\n", 1)[0].length);
   return firstWidth > printWidth && firstWidth > secondWidth ? secondDescription : firstDescription;
 }
-
-// node_modules/vnopts/lib/handlers/unknown/leven.js
-init_source();
 
 // node_modules/leven/index.js
 var array = [];
@@ -11521,8 +11366,9 @@ import path9 from "path";
 
 // node_modules/url-or-path/index.js
 import { fileURLToPath, pathToFileURL } from "url";
+var URL_STRING_PREFIX = "file:";
 var isUrlInstance = (value) => value instanceof URL;
-var isUrlString = (value) => typeof value === "string" && value.startsWith("file://");
+var isUrlString = (value) => typeof value === "string" && value.startsWith(URL_STRING_PREFIX);
 var isUrl = (urlOrPath) => isUrlInstance(urlOrPath) || isUrlString(urlOrPath);
 var toPath = (urlOrPath) => isUrl(urlOrPath) ? fileURLToPath(urlOrPath) : urlOrPath;
 
@@ -14643,7 +14489,7 @@ function syntaxError(message) {
 var dist_default = { parse: parse2 };
 
 // node_modules/parse-json/index.js
-var import_code_frame = __toESM(require_lib3(), 1);
+var import_code_frame = __toESM(require_lib2(), 1);
 
 // node_modules/index-to-position/index.js
 var safeLastIndexOf = (string, searchString, index) => index < 0 ? -1 : string.lastIndexOf(searchString, index);
@@ -17171,23 +17017,22 @@ async function createSingleIsIgnoredFunction(ignoreFile, withNodeModules) {
   if (!content) {
     return;
   }
-  const ignore = createIgnore({
-    allowRelativePaths: true
-  }).add(content);
+  const ignore = createIgnore({ allowRelativePaths: true }).add(content);
   return (file) => ignore.ignores(slash(getRelativePath(file, ignoreFile)));
 }
 async function createIsIgnoredFunction(ignoreFiles, withNodeModules) {
   if (ignoreFiles.length === 0 && !withNodeModules) {
     ignoreFiles = [void 0];
   }
-  const isIgnoredFunctions = (await Promise.all(ignoreFiles.map((ignoreFile) => createSingleIsIgnoredFunction(ignoreFile, withNodeModules)))).filter(Boolean);
+  const isIgnoredFunctions = (await Promise.all(
+    ignoreFiles.map(
+      (ignoreFile) => createSingleIsIgnoredFunction(ignoreFile, withNodeModules)
+    )
+  )).filter(Boolean);
   return (file) => isIgnoredFunctions.some((isIgnored2) => isIgnored2(file));
 }
 async function isIgnored(file, options8) {
-  const {
-    ignorePath: ignoreFiles,
-    withNodeModules
-  } = options8;
+  const { ignorePath: ignoreFiles, withNodeModules } = options8;
   const isIgnored2 = await createIsIgnoredFunction(ignoreFiles, withNodeModules);
   return isIgnored2(file);
 }
@@ -17742,10 +17587,7 @@ function mapDoc(doc2, cb) {
       case DOC_TYPE_ARRAY:
         return cb(doc3.map(rec));
       case DOC_TYPE_FILL:
-        return cb({
-          ...doc3,
-          parts: doc3.parts.map(rec)
-        });
+        return cb({ ...doc3, parts: doc3.parts.map(rec) });
       case DOC_TYPE_IF_BREAK:
         return cb({
           ...doc3,
@@ -17753,31 +17595,21 @@ function mapDoc(doc2, cb) {
           flatContents: rec(doc3.flatContents)
         });
       case DOC_TYPE_GROUP: {
-        let {
-          expandedStates,
-          contents
-        } = doc3;
+        let { expandedStates, contents } = doc3;
         if (expandedStates) {
           expandedStates = expandedStates.map(rec);
           contents = expandedStates[0];
         } else {
           contents = rec(contents);
         }
-        return cb({
-          ...doc3,
-          contents,
-          expandedStates
-        });
+        return cb({ ...doc3, contents, expandedStates });
       }
       case DOC_TYPE_ALIGN:
       case DOC_TYPE_INDENT:
       case DOC_TYPE_INDENT_IF_BREAK:
       case DOC_TYPE_LABEL:
       case DOC_TYPE_LINE_SUFFIX:
-        return cb({
-          ...doc3,
-          contents: rec(doc3.contents)
-        });
+        return cb({ ...doc3, contents: rec(doc3.contents) });
       case DOC_TYPE_STRING:
       case DOC_TYPE_CURSOR:
       case DOC_TYPE_TRIM:
@@ -17869,10 +17701,7 @@ function stripTrailingHardlineFromDoc(doc2) {
     case DOC_TYPE_LINE_SUFFIX:
     case DOC_TYPE_LABEL: {
       const contents = stripTrailingHardlineFromDoc(doc2.contents);
-      return {
-        ...doc2,
-        contents
-      };
+      return { ...doc2, contents };
     }
     case DOC_TYPE_IF_BREAK:
       return {
@@ -17881,10 +17710,7 @@ function stripTrailingHardlineFromDoc(doc2) {
         flatContents: stripTrailingHardlineFromDoc(doc2.flatContents)
       };
     case DOC_TYPE_FILL:
-      return {
-        ...doc2,
-        parts: stripTrailingHardlineFromParts(doc2.parts)
-      };
+      return { ...doc2, parts: stripTrailingHardlineFromParts(doc2.parts) };
     case DOC_TYPE_ARRAY:
       return stripTrailingHardlineFromParts(doc2);
     case DOC_TYPE_STRING:
@@ -17976,10 +17802,7 @@ function cleanDoc(doc2) {
   return mapDoc(doc2, (currentDoc) => cleanDocFn(currentDoc));
 }
 function inheritLabel(doc2, fn) {
-  return doc2.type === DOC_TYPE_LABEL ? {
-    ...doc2,
-    contents: fn(doc2.contents)
-  } : fn(doc2);
+  return doc2.type === DOC_TYPE_LABEL ? { ...doc2, contents: fn(doc2.contents) } : fn(doc2);
 }
 
 // src/document/printer.js
@@ -17988,40 +17811,26 @@ var MODE_FLAT = Symbol("MODE_FLAT");
 var CURSOR_PLACEHOLDER = Symbol("cursor");
 var DOC_FILL_PRINTED_LENGTH = Symbol("DOC_FILL_PRINTED_LENGTH");
 function rootIndent() {
-  return {
-    value: "",
-    length: 0,
-    queue: []
-  };
+  return { value: "", length: 0, queue: [] };
 }
 function makeIndent(ind, options8) {
-  return generateInd(ind, {
-    type: "indent"
-  }, options8);
+  return generateInd(ind, { type: "indent" }, options8);
 }
 function makeAlign(indent2, widthOrDoc, options8) {
   if (widthOrDoc === Number.NEGATIVE_INFINITY) {
     return indent2.root || rootIndent();
   }
   if (widthOrDoc < 0) {
-    return generateInd(indent2, {
-      type: "dedent"
-    }, options8);
+    return generateInd(indent2, { type: "dedent" }, options8);
   }
   if (!widthOrDoc) {
     return indent2;
   }
   if (widthOrDoc.type === "root") {
-    return {
-      ...indent2,
-      root: indent2
-    };
+    return { ...indent2, root: indent2 };
   }
   const alignType = typeof widthOrDoc === "string" ? "stringAlign" : "numberAlign";
-  return generateInd(indent2, {
-    type: alignType,
-    n: widthOrDoc
-  }, options8);
+  return generateInd(indent2, { type: alignType, n: widthOrDoc }, options8);
 }
 function generateInd(ind, newPart, options8) {
   const queue = newPart.type === "dedent" ? ind.queue.slice(0, -1) : [...ind.queue, newPart];
@@ -18053,12 +17862,7 @@ function generateInd(ind, newPart, options8) {
     }
   }
   flushSpaces();
-  return {
-    ...ind,
-    value,
-    length,
-    queue
-  };
+  return { ...ind, value, length, queue };
   function addTabs(count) {
     value += "	".repeat(count);
     length += options8.tabWidth * count;
@@ -18137,10 +17941,7 @@ function fits(next, restCommands, width, hasLineSuffix, groupModeMap, mustBeFlat
       cmds.push(restCommands[--restIdx]);
       continue;
     }
-    const {
-      mode,
-      doc: doc2
-    } = cmds.pop();
+    const { mode, doc: doc2 } = cmds.pop();
     const docType = get_doc_type_default(doc2);
     switch (docType) {
       case DOC_TYPE_STRING:
@@ -18151,10 +17952,7 @@ function fits(next, restCommands, width, hasLineSuffix, groupModeMap, mustBeFlat
       case DOC_TYPE_FILL: {
         const parts = docType === DOC_TYPE_ARRAY ? doc2 : doc2.parts;
         for (let i = parts.length - 1; i >= 0; i--) {
-          cmds.push({
-            mode,
-            doc: parts[i]
-          });
+          cmds.push({ mode, doc: parts[i] });
         }
         break;
       }
@@ -18162,10 +17960,7 @@ function fits(next, restCommands, width, hasLineSuffix, groupModeMap, mustBeFlat
       case DOC_TYPE_ALIGN:
       case DOC_TYPE_INDENT_IF_BREAK:
       case DOC_TYPE_LABEL:
-        cmds.push({
-          mode,
-          doc: doc2.contents
-        });
+        cmds.push({ mode, doc: doc2.contents });
         break;
       case DOC_TYPE_TRIM:
         width += trim(out);
@@ -18181,20 +17976,14 @@ function fits(next, restCommands, width, hasLineSuffix, groupModeMap, mustBeFlat
           doc2.expandedStates,
           -1
         ) : doc2.contents;
-        cmds.push({
-          mode: groupMode,
-          doc: contents
-        });
+        cmds.push({ mode: groupMode, doc: contents });
         break;
       }
       case DOC_TYPE_IF_BREAK: {
         const groupMode = doc2.groupId ? groupModeMap[doc2.groupId] || MODE_FLAT : mode;
         const contents = groupMode === MODE_BREAK ? doc2.breakContents : doc2.flatContents;
         if (contents) {
-          cmds.push({
-            mode,
-            doc: contents
-          });
+          cmds.push({ mode, doc: contents });
         }
         break;
       }
@@ -18224,22 +18013,14 @@ function printDocToString(doc2, options8) {
   const width = options8.printWidth;
   const newLine = convertEndOfLineToChars(options8.endOfLine);
   let pos2 = 0;
-  const cmds = [{
-    ind: rootIndent(),
-    mode: MODE_BREAK,
-    doc: doc2
-  }];
+  const cmds = [{ ind: rootIndent(), mode: MODE_BREAK, doc: doc2 }];
   const out = [];
   let shouldRemeasure = false;
   const lineSuffix2 = [];
   let printedCursorCount = 0;
   propagateBreaks(doc2);
   while (cmds.length > 0) {
-    const {
-      ind,
-      mode,
-      doc: doc3
-    } = cmds.pop();
+    const { ind, mode, doc: doc3 } = cmds.pop();
     switch (get_doc_type_default(doc3)) {
       case DOC_TYPE_STRING: {
         const formatted = newLine !== "\n" ? string_replace_all_default(
@@ -18257,11 +18038,7 @@ function printDocToString(doc2, options8) {
       }
       case DOC_TYPE_ARRAY:
         for (let i = doc3.length - 1; i >= 0; i--) {
-          cmds.push({
-            ind,
-            mode,
-            doc: doc3[i]
-          });
+          cmds.push({ ind, mode, doc: doc3[i] });
         }
         break;
       case DOC_TYPE_CURSOR:
@@ -18272,11 +18049,7 @@ function printDocToString(doc2, options8) {
         printedCursorCount++;
         break;
       case DOC_TYPE_INDENT:
-        cmds.push({
-          ind: makeIndent(ind, options8),
-          mode,
-          doc: doc3.contents
-        });
+        cmds.push({ ind: makeIndent(ind, options8), mode, doc: doc3.contents });
         break;
       case DOC_TYPE_ALIGN:
         cmds.push({
@@ -18302,11 +18075,7 @@ function printDocToString(doc2, options8) {
           // fallthrough
           case MODE_BREAK: {
             shouldRemeasure = false;
-            const next = {
-              ind,
-              mode: MODE_FLAT,
-              doc: doc3.contents
-            };
+            const next = { ind, mode: MODE_FLAT, doc: doc3.contents };
             const rem = width - pos2;
             const hasLineSuffix = lineSuffix2.length > 0;
             if (!doc3.break && fits(next, cmds, rem, hasLineSuffix, groupModeMap)) {
@@ -18320,28 +18089,16 @@ function printDocToString(doc2, options8) {
                   -1
                 );
                 if (doc3.break) {
-                  cmds.push({
-                    ind,
-                    mode: MODE_BREAK,
-                    doc: mostExpanded
-                  });
+                  cmds.push({ ind, mode: MODE_BREAK, doc: mostExpanded });
                   break;
                 } else {
                   for (let i = 1; i < doc3.expandedStates.length + 1; i++) {
                     if (i >= doc3.expandedStates.length) {
-                      cmds.push({
-                        ind,
-                        mode: MODE_BREAK,
-                        doc: mostExpanded
-                      });
+                      cmds.push({ ind, mode: MODE_BREAK, doc: mostExpanded });
                       break;
                     } else {
                       const state = doc3.expandedStates[i];
-                      const cmd = {
-                        ind,
-                        mode: MODE_FLAT,
-                        doc: state
-                      };
+                      const cmd = { ind, mode: MODE_FLAT, doc: state };
                       if (fits(cmd, cmds, rem, hasLineSuffix, groupModeMap)) {
                         cmds.push(cmd);
                         break;
@@ -18350,11 +18107,7 @@ function printDocToString(doc2, options8) {
                   }
                 }
               } else {
-                cmds.push({
-                  ind,
-                  mode: MODE_BREAK,
-                  doc: doc3.contents
-                });
+                cmds.push({ ind, mode: MODE_BREAK, doc: doc3.contents });
               }
             }
             break;
@@ -18392,26 +18145,23 @@ function printDocToString(doc2, options8) {
       case DOC_TYPE_FILL: {
         const rem = width - pos2;
         const offset = doc3[DOC_FILL_PRINTED_LENGTH] ?? 0;
-        const {
-          parts
-        } = doc3;
+        const { parts } = doc3;
         const length = parts.length - offset;
         if (length === 0) {
           break;
         }
         const content = parts[offset + 0];
         const whitespace = parts[offset + 1];
-        const contentFlatCmd = {
-          ind,
-          mode: MODE_FLAT,
-          doc: content
-        };
-        const contentBreakCmd = {
-          ind,
-          mode: MODE_BREAK,
-          doc: content
-        };
-        const contentFits = fits(contentFlatCmd, [], rem, lineSuffix2.length > 0, groupModeMap, true);
+        const contentFlatCmd = { ind, mode: MODE_FLAT, doc: content };
+        const contentBreakCmd = { ind, mode: MODE_BREAK, doc: content };
+        const contentFits = fits(
+          contentFlatCmd,
+          [],
+          rem,
+          lineSuffix2.length > 0,
+          groupModeMap,
+          true
+        );
         if (length === 1) {
           if (contentFits) {
             cmds.push(contentFlatCmd);
@@ -18420,16 +18170,8 @@ function printDocToString(doc2, options8) {
           }
           break;
         }
-        const whitespaceFlatCmd = {
-          ind,
-          mode: MODE_FLAT,
-          doc: whitespace
-        };
-        const whitespaceBreakCmd = {
-          ind,
-          mode: MODE_BREAK,
-          doc: whitespace
-        };
+        const whitespaceFlatCmd = { ind, mode: MODE_FLAT, doc: whitespace };
+        const whitespaceBreakCmd = { ind, mode: MODE_BREAK, doc: whitespace };
         if (length === 2) {
           if (contentFits) {
             cmds.push(whitespaceFlatCmd, contentFlatCmd);
@@ -18442,17 +18184,21 @@ function printDocToString(doc2, options8) {
         const remainingCmd = {
           ind,
           mode,
-          doc: {
-            ...doc3,
-            [DOC_FILL_PRINTED_LENGTH]: offset + 2
-          }
+          doc: { ...doc3, [DOC_FILL_PRINTED_LENGTH]: offset + 2 }
         };
         const firstAndSecondContentFlatCmd = {
           ind,
           mode: MODE_FLAT,
           doc: [content, whitespace, secondContent]
         };
-        const firstAndSecondContentFits = fits(firstAndSecondContentFlatCmd, [], rem, lineSuffix2.length > 0, groupModeMap, true);
+        const firstAndSecondContentFits = fits(
+          firstAndSecondContentFlatCmd,
+          [],
+          rem,
+          lineSuffix2.length > 0,
+          groupModeMap,
+          true
+        );
         if (firstAndSecondContentFits) {
           cmds.push(remainingCmd, whitespaceFlatCmd, contentFlatCmd);
         } else if (contentFits) {
@@ -18468,39 +18214,23 @@ function printDocToString(doc2, options8) {
         if (groupMode === MODE_BREAK) {
           const breakContents = doc3.type === DOC_TYPE_IF_BREAK ? doc3.breakContents : doc3.negate ? doc3.contents : indent(doc3.contents);
           if (breakContents) {
-            cmds.push({
-              ind,
-              mode,
-              doc: breakContents
-            });
+            cmds.push({ ind, mode, doc: breakContents });
           }
         }
         if (groupMode === MODE_FLAT) {
           const flatContents = doc3.type === DOC_TYPE_IF_BREAK ? doc3.flatContents : doc3.negate ? indent(doc3.contents) : doc3.contents;
           if (flatContents) {
-            cmds.push({
-              ind,
-              mode,
-              doc: flatContents
-            });
+            cmds.push({ ind, mode, doc: flatContents });
           }
         }
         break;
       }
       case DOC_TYPE_LINE_SUFFIX:
-        lineSuffix2.push({
-          ind,
-          mode,
-          doc: doc3.contents
-        });
+        lineSuffix2.push({ ind, mode, doc: doc3.contents });
         break;
       case DOC_TYPE_LINE_SUFFIX_BOUNDARY:
         if (lineSuffix2.length > 0) {
-          cmds.push({
-            ind,
-            mode,
-            doc: hardlineWithoutBreakParent
-          });
+          cmds.push({ ind, mode, doc: hardlineWithoutBreakParent });
         }
         break;
       case DOC_TYPE_LINE:
@@ -18518,11 +18248,7 @@ function printDocToString(doc2, options8) {
           // fallthrough
           case MODE_BREAK:
             if (lineSuffix2.length > 0) {
-              cmds.push({
-                ind,
-                mode,
-                doc: doc3
-              }, ...lineSuffix2.reverse());
+              cmds.push({ ind, mode, doc: doc3 }, ...lineSuffix2.reverse());
               lineSuffix2.length = 0;
               break;
             }
@@ -18543,11 +18269,7 @@ function printDocToString(doc2, options8) {
         }
         break;
       case DOC_TYPE_LABEL:
-        cmds.push({
-          ind,
-          mode,
-          doc: doc3.contents
-        });
+        cmds.push({ ind, mode, doc: doc3.contents });
         break;
       case DOC_TYPE_BREAK_PARENT:
         break;
@@ -18561,7 +18283,10 @@ function printDocToString(doc2, options8) {
   }
   const cursorPlaceholderIndex = out.indexOf(CURSOR_PLACEHOLDER);
   if (cursorPlaceholderIndex !== -1) {
-    const otherCursorPlaceholderIndex = out.indexOf(CURSOR_PLACEHOLDER, cursorPlaceholderIndex + 1);
+    const otherCursorPlaceholderIndex = out.indexOf(
+      CURSOR_PLACEHOLDER,
+      cursorPlaceholderIndex + 1
+    );
     if (otherCursorPlaceholderIndex === -1) {
       return {
         formatted: out.filter((char) => char !== CURSOR_PLACEHOLDER).join("")
@@ -18576,9 +18301,7 @@ function printDocToString(doc2, options8) {
       cursorNodeText: aroundCursor
     };
   }
-  return {
-    formatted: out.join("")
-  };
+  return { formatted: out.join("") };
 }
 
 // src/utils/get-alignment-size.js
@@ -18604,10 +18327,7 @@ var AstPath = class {
   }
   /** @type {string | null} */
   get key() {
-    const {
-      stack: stack2,
-      siblings
-    } = this;
+    const { stack: stack2, siblings } = this;
     return at_default(
       /* isOptionalObject */
       false,
@@ -18647,9 +18367,7 @@ var AstPath = class {
   }
   /** @type {object[] | null} */
   get siblings() {
-    const {
-      stack: stack2
-    } = this;
+    const { stack: stack2 } = this;
     const maybeArray = at_default(
       /* isOptionalObject */
       false,
@@ -18660,16 +18378,12 @@ var AstPath = class {
   }
   /** @type {object | null} */
   get next() {
-    const {
-      siblings
-    } = this;
+    const { siblings } = this;
     return siblings === null ? null : siblings[this.index + 1];
   }
   /** @type {object | null} */
   get previous() {
-    const {
-      siblings
-    } = this;
+    const { siblings } = this;
     return siblings === null ? null : siblings[this.index - 1];
   }
   /** @type {boolean} */
@@ -18678,10 +18392,7 @@ var AstPath = class {
   }
   /** @type {boolean} */
   get isLast() {
-    const {
-      siblings,
-      index
-    } = this;
+    const { siblings, index } = this;
     return siblings !== null && index === siblings.length - 1;
   }
   /** @type {boolean} */
@@ -18699,12 +18410,8 @@ var AstPath = class {
   // The name of the current property is always the penultimate element of
   // this.stack, and always a string/number/symbol.
   getName() {
-    const {
-      stack: stack2
-    } = this;
-    const {
-      length
-    } = stack2;
+    const { stack: stack2 } = this;
+    const { length } = stack2;
     if (length > 1) {
       return at_default(
         /* isOptionalObject */
@@ -18738,12 +18445,8 @@ var AstPath = class {
   // be restored to its original state after the callback is finished, so it
   // is probably a mistake to retain a reference to the path.
   call(callback, ...names) {
-    const {
-      stack: stack2
-    } = this;
-    const {
-      length
-    } = stack2;
+    const { stack: stack2 } = this;
+    const { length } = stack2;
     let value = at_default(
       /* isOptionalObject */
       false,
@@ -18780,12 +18483,8 @@ var AstPath = class {
   // callback will be called with a reference to this path object for each
   // element of the array.
   each(callback, ...names) {
-    const {
-      stack: stack2
-    } = this;
-    const {
-      length
-    } = stack2;
+    const { stack: stack2 } = this;
+    const { length } = stack2;
     let value = at_default(
       /* isOptionalObject */
       false,
@@ -18811,9 +18510,12 @@ var AstPath = class {
   // the end of the iteration.
   map(callback, ...names) {
     const result = [];
-    this.each((path13, index, value) => {
-      result[index] = callback(path13, index, value);
-    }, ...names);
+    this.each(
+      (path13, index, value) => {
+        result[index] = callback(path13, index, value);
+      },
+      ...names
+    );
     return result;
   }
   /**
@@ -18877,9 +18579,7 @@ var AstPath = class {
 };
 _AstPath_instances = new WeakSet();
 getNodeStackIndex_fn = function(count) {
-  const {
-    stack: stack2
-  } = this;
+  const { stack: stack2 } = this;
   for (let i = stack2.length - 1; i >= 0; i -= 2) {
     if (!Array.isArray(stack2[i]) && --count < 0) {
       return i;
@@ -18888,9 +18588,7 @@ getNodeStackIndex_fn = function(count) {
   return -1;
 };
 getAncestors_fn = function* () {
-  const {
-    stack: stack2
-  } = this;
+  const { stack: stack2 } = this;
   for (let index = stack2.length - 3; index >= 0; index -= 2) {
     const value = stack2[index];
     if (!Array.isArray(value)) {
@@ -19743,15 +19441,12 @@ var core_options_evaluate_default = {
 };
 
 // src/main/support.js
-function getSupportInfo({
-  plugins = [],
-  showDeprecated = false
-} = {}) {
+function getSupportInfo({ plugins = [], showDeprecated = false } = {}) {
   const languages2 = plugins.flatMap((plugin) => plugin.languages ?? []);
   const options8 = [];
-  for (const option of normalizeOptionSettings(Object.assign({}, ...plugins.map(({
-    options: options9
-  }) => options9), core_options_evaluate_default))) {
+  for (const option of normalizeOptionSettings(
+    Object.assign({}, ...plugins.map(({ options: options9 }) => options9), core_options_evaluate_default)
+  )) {
     if (!showDeprecated && option.deprecated) {
       continue;
     }
@@ -19760,19 +19455,21 @@ function getSupportInfo({
         option.choices = option.choices.filter((choice) => !choice.deprecated);
       }
       if (option.name === "parser") {
-        option.choices = [...option.choices, ...collectParsersFromLanguages(option.choices, languages2, plugins)];
+        option.choices = [
+          ...option.choices,
+          ...collectParsersFromLanguages(option.choices, languages2, plugins)
+        ];
       }
     }
-    option.pluginDefaults = Object.fromEntries(plugins.filter((plugin) => {
-      var _a;
-      return ((_a = plugin.defaultOptions) == null ? void 0 : _a[option.name]) !== void 0;
-    }).map((plugin) => [plugin.name, plugin.defaultOptions[option.name]]));
+    option.pluginDefaults = Object.fromEntries(
+      plugins.filter((plugin) => {
+        var _a;
+        return ((_a = plugin.defaultOptions) == null ? void 0 : _a[option.name]) !== void 0;
+      }).map((plugin) => [plugin.name, plugin.defaultOptions[option.name]])
+    );
     options8.push(option);
   }
-  return {
-    languages: languages2,
-    options: options8
-  };
+  return { languages: languages2, options: options8 };
 }
 function* collectParsersFromLanguages(parserChoices, languages2, plugins) {
   const existingParsers = new Set(parserChoices.map((choice) => choice.value));
@@ -19781,15 +19478,14 @@ function* collectParsersFromLanguages(parserChoices, languages2, plugins) {
       for (const parserName of language.parsers) {
         if (!existingParsers.has(parserName)) {
           existingParsers.add(parserName);
-          const plugin = plugins.find((plugin2) => plugin2.parsers && Object.prototype.hasOwnProperty.call(plugin2.parsers, parserName));
+          const plugin = plugins.find(
+            (plugin2) => plugin2.parsers && Object.prototype.hasOwnProperty.call(plugin2.parsers, parserName)
+          );
           let description = language.name;
           if (plugin == null ? void 0 : plugin.name) {
             description += ` (plugin: ${plugin.name})`;
           }
-          yield {
-            value: parserName,
-            description
-          };
+          yield { value: parserName, description };
         }
       }
     }
@@ -19798,10 +19494,7 @@ function* collectParsersFromLanguages(parserChoices, languages2, plugins) {
 function normalizeOptionSettings(settings) {
   const options8 = [];
   for (const [name, originalOption] of Object.entries(settings)) {
-    const option = {
-      name,
-      ...originalOption
-    };
+    const option = { name, ...originalOption };
     if (Array.isArray(option.default)) {
       option.default = at_default(
         /* isOptionalObject */
@@ -19835,23 +19528,13 @@ function normalizeOptions(options8, optionInfos, {
     descriptor = apiDescriptor;
   }
   const unknown = !passThrough ? (key2, value, options9) => {
-    const {
-      _,
-      ...schemas2
-    } = options9.schemas;
+    const { _, ...schemas2 } = options9.schemas;
     return levenUnknownHandler(key2, value, {
       ...options9,
       schemas: schemas2
     });
-  } : Array.isArray(passThrough) ? (key2, value) => !passThrough.includes(key2) ? void 0 : {
-    [key2]: value
-  } : (key2, value) => ({
-    [key2]: value
-  });
-  const schemas = optionInfosToSchemas(optionInfos, {
-    isCLI,
-    FlagSchema
-  });
+  } : Array.isArray(passThrough) ? (key2, value) => !passThrough.includes(key2) ? void 0 : { [key2]: value } : (key2, value) => ({ [key2]: value });
+  const schemas = optionInfosToSchemas(optionInfos, { isCLI, FlagSchema });
   const normalizer = new Normalizer(schemas, {
     logger,
     unknown,
@@ -19867,43 +19550,34 @@ function normalizeOptions(options8, optionInfos, {
   }
   return normalized;
 }
-function optionInfosToSchemas(optionInfos, {
-  isCLI,
-  FlagSchema
-}) {
+function optionInfosToSchemas(optionInfos, { isCLI, FlagSchema }) {
   const schemas = [];
   if (isCLI) {
-    schemas.push(AnySchema.create({
-      name: "_"
-    }));
+    schemas.push(AnySchema.create({ name: "_" }));
   }
   for (const optionInfo of optionInfos) {
-    schemas.push(optionInfoToSchema(optionInfo, {
-      isCLI,
-      optionInfos,
-      FlagSchema
-    }));
+    schemas.push(
+      optionInfoToSchema(optionInfo, {
+        isCLI,
+        optionInfos,
+        FlagSchema
+      })
+    );
     if (optionInfo.alias && isCLI) {
-      schemas.push(AliasSchema.create({
-        // @ts-expect-error
-        name: optionInfo.alias,
-        sourceName: optionInfo.name
-      }));
+      schemas.push(
+        AliasSchema.create({
+          // @ts-expect-error
+          name: optionInfo.alias,
+          sourceName: optionInfo.name
+        })
+      );
     }
   }
   return schemas;
 }
-function optionInfoToSchema(optionInfo, {
-  isCLI,
-  optionInfos,
-  FlagSchema
-}) {
-  const {
-    name
-  } = optionInfo;
-  const parameters = {
-    name
-  };
+function optionInfoToSchema(optionInfo, { isCLI, optionInfos, FlagSchema }) {
+  const { name } = optionInfo;
+  const parameters = { name };
   let SchemaConstructor;
   const handlers = {};
   switch (optionInfo.type) {
@@ -19918,22 +19592,27 @@ function optionInfoToSchema(optionInfo, {
       break;
     case "choice":
       SchemaConstructor = ChoiceSchema;
-      parameters.choices = optionInfo.choices.map((choiceInfo) => (choiceInfo == null ? void 0 : choiceInfo.redirect) ? {
-        ...choiceInfo,
-        redirect: {
-          to: {
-            key: optionInfo.name,
-            value: choiceInfo.redirect
+      parameters.choices = optionInfo.choices.map(
+        (choiceInfo) => (choiceInfo == null ? void 0 : choiceInfo.redirect) ? {
+          ...choiceInfo,
+          redirect: {
+            to: { key: optionInfo.name, value: choiceInfo.redirect }
           }
-        }
-      } : choiceInfo);
+        } : choiceInfo
+      );
       break;
     case "boolean":
       SchemaConstructor = BooleanSchema;
       break;
     case "flag":
       SchemaConstructor = FlagSchema;
-      parameters.flags = optionInfos.flatMap((optionInfo2) => [optionInfo2.alias, optionInfo2.description && optionInfo2.name, optionInfo2.oppositeDescription && `no-${optionInfo2.name}`].filter(Boolean));
+      parameters.flags = optionInfos.flatMap(
+        (optionInfo2) => [
+          optionInfo2.alias,
+          optionInfo2.description && optionInfo2.name,
+          optionInfo2.oppositeDescription && `no-${optionInfo2.name}`
+        ].filter(Boolean)
+      );
       break;
     case "path":
       SchemaConstructor = StringSchema;
@@ -19959,24 +19638,22 @@ function optionInfoToSchema(optionInfo, {
   }
   if (isCLI && !optionInfo.array) {
     const originalPreprocess = parameters.preprocess || ((x) => x);
-    parameters.preprocess = (value, schema2, utils) => schema2.preprocess(originalPreprocess(Array.isArray(value) ? at_default(
-      /* isOptionalObject */
-      false,
-      value,
-      -1
-    ) : value), utils);
+    parameters.preprocess = (value, schema2, utils) => schema2.preprocess(
+      originalPreprocess(Array.isArray(value) ? at_default(
+        /* isOptionalObject */
+        false,
+        value,
+        -1
+      ) : value),
+      utils
+    );
   }
   return optionInfo.array ? ArraySchema.create({
-    ...isCLI ? {
-      preprocess: (v) => Array.isArray(v) ? v : [v]
-    } : {},
+    ...isCLI ? { preprocess: (v) => Array.isArray(v) ? v : [v] } : {},
     ...handlers,
     // @ts-expect-error
     valueSchema: SchemaConstructor.create(parameters)
-  }) : SchemaConstructor.create({
-    ...parameters,
-    ...handlers
-  });
+  }) : SchemaConstructor.create({ ...parameters, ...handlers });
 }
 var normalize_options_default = normalizeOptions;
 
@@ -20036,10 +19713,7 @@ function getPrinterPluginByAstFormat(plugins, astFormat) {
   }
   throw new ConfigError(message);
 }
-function resolveParser({
-  plugins,
-  parser
-}) {
+function resolveParser({ plugins, parser }) {
   const plugin = getParserPluginByParserName(plugins, parser);
   return initParser(plugin, parser);
 }
@@ -20122,7 +19796,7 @@ async function normalizeFormatOptions(options8, opts = {}) {
 var normalize_format_options_default = normalizeFormatOptions;
 
 // src/main/parse.js
-var import_code_frame2 = __toESM(require_lib3(), 1);
+var import_code_frame2 = __toESM(require_lib2(), 1);
 async function parse5(originalText, options8) {
   const parser = await resolveParser(options8);
   const text = parser.preprocess ? parser.preprocess(originalText, options8) : originalText;
@@ -20479,13 +20153,19 @@ var array_find_last_index_default = arrayFindLastIndex;
 
 // src/main/range-util.js
 import assert5 from "assert";
-var isJsonParser = ({
-  parser
-}) => parser === "json" || parser === "json5" || parser === "jsonc" || parser === "json-stringify";
+var isJsonParser = ({ parser }) => parser === "json" || parser === "json5" || parser === "jsonc" || parser === "json-stringify";
 function findCommonAncestor(startNodeAndParents, endNodeAndParents) {
-  const startNodeAndAncestors = [startNodeAndParents.node, ...startNodeAndParents.parentNodes];
-  const endNodeAndAncestors = /* @__PURE__ */ new Set([endNodeAndParents.node, ...endNodeAndParents.parentNodes]);
-  return startNodeAndAncestors.find((node) => jsonSourceElements.has(node.type) && endNodeAndAncestors.has(node));
+  const startNodeAndAncestors = [
+    startNodeAndParents.node,
+    ...startNodeAndParents.parentNodes
+  ];
+  const endNodeAndAncestors = /* @__PURE__ */ new Set([
+    endNodeAndParents.node,
+    ...endNodeAndParents.parentNodes
+  ]);
+  return startNodeAndAncestors.find(
+    (node) => jsonSourceElements.has(node.type) && endNodeAndAncestors.has(node)
+  );
 }
 function dropRootParents(parents) {
   const index = array_find_last_index_default(
@@ -20499,10 +20179,7 @@ function dropRootParents(parents) {
   }
   return parents.slice(0, index + 1);
 }
-function findSiblingAncestors(startNodeAndParents, endNodeAndParents, {
-  locStart,
-  locEnd
-}) {
+function findSiblingAncestors(startNodeAndParents, endNodeAndParents, { locStart, locEnd }) {
   let resultStartNode = startNodeAndParents.node;
   let resultEndNode = endNodeAndParents.node;
   if (resultStartNode === resultEndNode) {
@@ -20536,17 +20213,21 @@ function findSiblingAncestors(startNodeAndParents, endNodeAndParents, {
   };
 }
 function findNodeAtOffset(node, offset, options8, predicate, parentNodes = [], type2) {
-  const {
-    locStart,
-    locEnd
-  } = options8;
+  const { locStart, locEnd } = options8;
   const start = locStart(node);
   const end = locEnd(node);
   if (offset > end || offset < start || type2 === "rangeEnd" && offset === start || type2 === "rangeStart" && offset === end) {
     return;
   }
   for (const childNode of getSortedChildNodes(node, options8)) {
-    const childResult = findNodeAtOffset(childNode, offset, options8, predicate, [node, ...parentNodes], type2);
+    const childResult = findNodeAtOffset(
+      childNode,
+      offset,
+      options8,
+      predicate,
+      [node, ...parentNodes],
+      type2
+    );
     if (childResult) {
       return childResult;
     }
@@ -20561,8 +20242,35 @@ function findNodeAtOffset(node, offset, options8, predicate, parentNodes = [], t
 function isJsSourceElement(type2, parentType) {
   return parentType !== "DeclareExportDeclaration" && type2 !== "TypeParameterDeclaration" && (type2 === "Directive" || type2 === "TypeAlias" || type2 === "TSExportAssignment" || type2.startsWith("Declare") || type2.startsWith("TSDeclare") || type2.endsWith("Statement") || type2.endsWith("Declaration"));
 }
-var jsonSourceElements = /* @__PURE__ */ new Set(["JsonRoot", "ObjectExpression", "ArrayExpression", "StringLiteral", "NumericLiteral", "BooleanLiteral", "NullLiteral", "UnaryExpression", "TemplateLiteral"]);
-var graphqlSourceElements = /* @__PURE__ */ new Set(["OperationDefinition", "FragmentDefinition", "VariableDefinition", "TypeExtensionDefinition", "ObjectTypeDefinition", "FieldDefinition", "DirectiveDefinition", "EnumTypeDefinition", "EnumValueDefinition", "InputValueDefinition", "InputObjectTypeDefinition", "SchemaDefinition", "OperationTypeDefinition", "InterfaceTypeDefinition", "UnionTypeDefinition", "ScalarTypeDefinition"]);
+var jsonSourceElements = /* @__PURE__ */ new Set([
+  "JsonRoot",
+  "ObjectExpression",
+  "ArrayExpression",
+  "StringLiteral",
+  "NumericLiteral",
+  "BooleanLiteral",
+  "NullLiteral",
+  "UnaryExpression",
+  "TemplateLiteral"
+]);
+var graphqlSourceElements = /* @__PURE__ */ new Set([
+  "OperationDefinition",
+  "FragmentDefinition",
+  "VariableDefinition",
+  "TypeExtensionDefinition",
+  "ObjectTypeDefinition",
+  "FieldDefinition",
+  "DirectiveDefinition",
+  "EnumTypeDefinition",
+  "EnumValueDefinition",
+  "InputValueDefinition",
+  "InputObjectTypeDefinition",
+  "SchemaDefinition",
+  "OperationTypeDefinition",
+  "InterfaceTypeDefinition",
+  "UnionTypeDefinition",
+  "ScalarTypeDefinition"
+]);
 function isSourceElement(opts, node, parentNode) {
   if (!node) {
     return false;
@@ -20591,12 +20299,7 @@ function isSourceElement(opts, node, parentNode) {
   return false;
 }
 function calculateRange(text, opts, ast) {
-  let {
-    rangeStart: start,
-    rangeEnd: end,
-    locStart,
-    locEnd
-  } = opts;
+  let { rangeStart: start, rangeEnd: end, locStart, locEnd } = opts;
   assert5.ok(end > start);
   const firstNonWhitespaceCharacterIndex = text.slice(start, end).search(/\S/u);
   const isAllWhitespace = firstNonWhitespaceCharacterIndex === -1;
@@ -20608,10 +20311,24 @@ function calculateRange(text, opts, ast) {
       }
     }
   }
-  const startNodeAndParents = findNodeAtOffset(ast, start, opts, (node, parentNode) => isSourceElement(opts, node, parentNode), [], "rangeStart");
+  const startNodeAndParents = findNodeAtOffset(
+    ast,
+    start,
+    opts,
+    (node, parentNode) => isSourceElement(opts, node, parentNode),
+    [],
+    "rangeStart"
+  );
   const endNodeAndParents = (
     // No need find Node at `end`, it will be the same as `startNodeAndParents`
-    isAllWhitespace ? startNodeAndParents : findNodeAtOffset(ast, end, opts, (node) => isSourceElement(opts, node), [], "rangeEnd")
+    isAllWhitespace ? startNodeAndParents : findNodeAtOffset(
+      ast,
+      end,
+      opts,
+      (node) => isSourceElement(opts, node),
+      [],
+      "rangeEnd"
+    )
   );
   if (!startNodeAndParents || !endNodeAndParents) {
     return {
@@ -20622,14 +20339,18 @@ function calculateRange(text, opts, ast) {
   let startNode;
   let endNode;
   if (isJsonParser(opts)) {
-    const commonAncestor = findCommonAncestor(startNodeAndParents, endNodeAndParents);
+    const commonAncestor = findCommonAncestor(
+      startNodeAndParents,
+      endNodeAndParents
+    );
     startNode = commonAncestor;
     endNode = commonAncestor;
   } else {
-    ({
-      startNode,
-      endNode
-    } = findSiblingAncestors(startNodeAndParents, endNodeAndParents, opts));
+    ({ startNode, endNode } = findSiblingAncestors(
+      startNodeAndParents,
+      endNodeAndParents,
+      opts
+    ));
   }
   return {
     rangeStart: Math.min(locStart(startNode), locStart(endNode)),
@@ -20642,16 +20363,9 @@ var BOM = "\uFEFF";
 var CURSOR = Symbol("cursor");
 async function coreFormat(originalText, opts, addAlignmentSize = 0) {
   if (!originalText || originalText.trim().length === 0) {
-    return {
-      formatted: "",
-      cursorOffset: -1,
-      comments: []
-    };
+    return { formatted: "", cursorOffset: -1, comments: [] };
   }
-  const {
-    ast,
-    text
-  } = await parse_default(originalText, opts);
+  const { ast, text } = await parse_default(originalText, opts);
   if (opts.cursorOffset >= 0) {
     opts = {
       ...opts,
@@ -20688,14 +20402,22 @@ async function coreFormat(originalText, opts, addAlignmentSize = 0) {
       newCursorRegionText = result.cursorNodeText;
       if (opts.cursorNode) {
         oldCursorRegionStart = opts.locStart(opts.cursorNode);
-        oldCursorRegionText = text.slice(oldCursorRegionStart, opts.locEnd(opts.cursorNode));
+        oldCursorRegionText = text.slice(
+          oldCursorRegionStart,
+          opts.locEnd(opts.cursorNode)
+        );
       } else {
         if (!opts.nodeBeforeCursor && !opts.nodeAfterCursor) {
-          throw new Error("Cursor location must contain at least one of cursorNode, nodeBeforeCursor, nodeAfterCursor");
+          throw new Error(
+            "Cursor location must contain at least one of cursorNode, nodeBeforeCursor, nodeAfterCursor"
+          );
         }
         oldCursorRegionStart = opts.nodeBeforeCursor ? opts.locEnd(opts.nodeBeforeCursor) : 0;
         const oldCursorRegionEnd = opts.nodeAfterCursor ? opts.locStart(opts.nodeAfterCursor) : text.length;
-        oldCursorRegionText = text.slice(oldCursorRegionStart, oldCursorRegionEnd);
+        oldCursorRegionText = text.slice(
+          oldCursorRegionStart,
+          oldCursorRegionEnd
+        );
       }
     } else {
       oldCursorRegionStart = 0;
@@ -20712,9 +20434,16 @@ async function coreFormat(originalText, opts, addAlignmentSize = 0) {
       };
     }
     const oldCursorNodeCharArray = oldCursorRegionText.split("");
-    oldCursorNodeCharArray.splice(cursorOffsetRelativeToOldCursorRegionStart, 0, CURSOR);
+    oldCursorNodeCharArray.splice(
+      cursorOffsetRelativeToOldCursorRegionStart,
+      0,
+      CURSOR
+    );
     const newCursorNodeCharArray = newCursorRegionText.split("");
-    const cursorNodeDiff = diffArrays(oldCursorNodeCharArray, newCursorNodeCharArray);
+    const cursorNodeDiff = diffArrays(
+      oldCursorNodeCharArray,
+      newCursorNodeCharArray
+    );
     let cursorOffset = newCursorRegionStart;
     for (const entry of cursorNodeDiff) {
       if (entry.removed) {
@@ -20725,44 +20454,35 @@ async function coreFormat(originalText, opts, addAlignmentSize = 0) {
         cursorOffset += entry.count;
       }
     }
-    return {
-      formatted: result.formatted,
-      cursorOffset,
-      comments
-    };
+    return { formatted: result.formatted, cursorOffset, comments };
   }
-  return {
-    formatted: result.formatted,
-    cursorOffset: -1,
-    comments
-  };
+  return { formatted: result.formatted, cursorOffset: -1, comments };
 }
 async function formatRange(originalText, opts) {
-  const {
-    ast,
-    text
-  } = await parse_default(originalText, opts);
-  const {
-    rangeStart,
-    rangeEnd
-  } = calculateRange(text, opts, ast);
+  const { ast, text } = await parse_default(originalText, opts);
+  const { rangeStart, rangeEnd } = calculateRange(text, opts, ast);
   const rangeString = text.slice(rangeStart, rangeEnd);
-  const rangeStart2 = Math.min(rangeStart, text.lastIndexOf("\n", rangeStart) + 1);
+  const rangeStart2 = Math.min(
+    rangeStart,
+    text.lastIndexOf("\n", rangeStart) + 1
+  );
   const indentString = text.slice(rangeStart2, rangeStart).match(/^\s*/u)[0];
   const alignmentSize = get_alignment_size_default(indentString, opts.tabWidth);
-  const rangeResult = await coreFormat(rangeString, {
-    ...opts,
-    rangeStart: 0,
-    rangeEnd: Number.POSITIVE_INFINITY,
-    // Track the cursor offset only if it's within our range
-    cursorOffset: opts.cursorOffset > rangeStart && opts.cursorOffset <= rangeEnd ? opts.cursorOffset - rangeStart : -1,
-    // Always use `lf` to format, we'll replace it later
-    endOfLine: "lf"
-  }, alignmentSize);
+  const rangeResult = await coreFormat(
+    rangeString,
+    {
+      ...opts,
+      rangeStart: 0,
+      rangeEnd: Number.POSITIVE_INFINITY,
+      // Track the cursor offset only if it's within our range
+      cursorOffset: opts.cursorOffset > rangeStart && opts.cursorOffset <= rangeEnd ? opts.cursorOffset - rangeStart : -1,
+      // Always use `lf` to format, we'll replace it later
+      endOfLine: "lf"
+    },
+    alignmentSize
+  );
   const rangeTrimmed = rangeResult.formatted.trimEnd();
-  let {
-    cursorOffset
-  } = opts;
+  let { cursorOffset } = opts;
   if (cursorOffset > rangeEnd) {
     cursorOffset += rangeTrimmed.length - rangeString.length;
   } else if (rangeResult.cursorOffset >= 0) {
@@ -20772,7 +20492,10 @@ async function formatRange(originalText, opts) {
   if (opts.endOfLine !== "lf") {
     const eol = convertEndOfLineToChars(opts.endOfLine);
     if (cursorOffset >= 0 && eol === "\r\n") {
-      cursorOffset += countEndOfLineChars(formatted.slice(0, cursorOffset), "\n");
+      cursorOffset += countEndOfLineChars(
+        formatted.slice(0, cursorOffset),
+        "\n"
+      );
     }
     formatted = string_replace_all_default(
       /* isOptionalObject */
@@ -20782,11 +20505,7 @@ async function formatRange(originalText, opts) {
       eol
     );
   }
-  return {
-    formatted,
-    cursorOffset,
-    comments: rangeResult.comments
-  };
+  return { formatted, cursorOffset, comments: rangeResult.comments };
 }
 function ensureIndexInText(text, index, defaultValue) {
   if (typeof index !== "number" || Number.isNaN(index) || index < 0 || index > text.length) {
@@ -20795,28 +20514,17 @@ function ensureIndexInText(text, index, defaultValue) {
   return index;
 }
 function normalizeIndexes(text, options8) {
-  let {
-    cursorOffset,
-    rangeStart,
-    rangeEnd
-  } = options8;
+  let { cursorOffset, rangeStart, rangeEnd } = options8;
   cursorOffset = ensureIndexInText(text, cursorOffset, -1);
   rangeStart = ensureIndexInText(text, rangeStart, 0);
   rangeEnd = ensureIndexInText(text, rangeEnd, text.length);
-  return {
-    ...options8,
-    cursorOffset,
-    rangeStart,
-    rangeEnd
-  };
+  return { ...options8, cursorOffset, rangeStart, rangeEnd };
 }
 function normalizeInputAndOptions(text, options8) {
-  let {
-    cursorOffset,
-    rangeStart,
-    rangeEnd,
-    endOfLine
-  } = normalizeIndexes(text, options8);
+  let { cursorOffset, rangeStart, rangeEnd, endOfLine } = normalizeIndexes(
+    text,
+    options8
+  );
   const hasBOM = text.charAt(0) === BOM;
   if (hasBOM) {
     text = text.slice(1);
@@ -20851,11 +20559,10 @@ async function hasPragma(text, options8) {
   return !selectedParser.hasPragma || selectedParser.hasPragma(text);
 }
 async function formatWithCursor(originalText, originalOptions) {
-  let {
-    hasBOM,
-    text,
-    options: options8
-  } = normalizeInputAndOptions(originalText, await normalize_format_options_default(originalOptions));
+  let { hasBOM, text, options: options8 } = normalizeInputAndOptions(
+    originalText,
+    await normalize_format_options_default(originalOptions)
+  );
   if (options8.rangeStart >= options8.rangeEnd && text !== "" || options8.requirePragma && !await hasPragma(text, options8)) {
     return {
       formatted: originalText,
@@ -20881,10 +20588,10 @@ async function formatWithCursor(originalText, originalOptions) {
   return result;
 }
 async function parse6(originalText, originalOptions, devOptions) {
-  const {
-    text,
-    options: options8
-  } = normalizeInputAndOptions(originalText, await normalize_format_options_default(originalOptions));
+  const { text, options: options8 } = normalizeInputAndOptions(
+    originalText,
+    await normalize_format_options_default(originalOptions)
+  );
   const parsed = await parse_default(text, options8);
   if (devOptions) {
     if (devOptions.preprocessForPrint) {
@@ -20903,9 +20610,7 @@ async function formatAst(ast, options8) {
 }
 async function formatDoc(doc2, options8) {
   const text = printDocToDebug(doc2);
-  const {
-    formatted
-  } = await formatWithCursor(text, {
+  const { formatted } = await formatWithCursor(text, {
     ...options8,
     parser: "__js_expression"
   });
@@ -20913,13 +20618,14 @@ async function formatDoc(doc2, options8) {
 }
 async function printToDoc(originalText, options8) {
   options8 = await normalize_format_options_default(options8);
-  const {
-    ast
-  } = await parse_default(originalText, options8);
+  const { ast } = await parse_default(originalText, options8);
   return printAstToDoc(ast, options8);
 }
 async function printDocToString2(doc2, options8) {
-  return printDocToString(doc2, await normalize_format_options_default(options8));
+  return printDocToString(
+    doc2,
+    await normalize_format_options_default(options8)
+  );
 }
 
 // src/main/option-categories.js

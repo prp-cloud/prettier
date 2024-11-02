@@ -422,10 +422,7 @@ Expected it to be ${EXPECTED_TYPE_VALUES}.`;
         case DOC_TYPE_ARRAY:
           return cb(doc2.map(rec));
         case DOC_TYPE_FILL:
-          return cb({
-            ...doc2,
-            parts: doc2.parts.map(rec)
-          });
+          return cb({ ...doc2, parts: doc2.parts.map(rec) });
         case DOC_TYPE_IF_BREAK:
           return cb({
             ...doc2,
@@ -433,31 +430,21 @@ Expected it to be ${EXPECTED_TYPE_VALUES}.`;
             flatContents: rec(doc2.flatContents)
           });
         case DOC_TYPE_GROUP: {
-          let {
-            expandedStates,
-            contents
-          } = doc2;
+          let { expandedStates, contents } = doc2;
           if (expandedStates) {
             expandedStates = expandedStates.map(rec);
             contents = expandedStates[0];
           } else {
             contents = rec(contents);
           }
-          return cb({
-            ...doc2,
-            contents,
-            expandedStates
-          });
+          return cb({ ...doc2, contents, expandedStates });
         }
         case DOC_TYPE_ALIGN:
         case DOC_TYPE_INDENT:
         case DOC_TYPE_INDENT_IF_BREAK:
         case DOC_TYPE_LABEL:
         case DOC_TYPE_LINE_SUFFIX:
-          return cb({
-            ...doc2,
-            contents: rec(doc2.contents)
-          });
+          return cb({ ...doc2, contents: rec(doc2.contents) });
         case DOC_TYPE_STRING:
         case DOC_TYPE_CURSOR:
         case DOC_TYPE_TRIM:
@@ -591,10 +578,7 @@ Expected it to be ${EXPECTED_TYPE_VALUES}.`;
       case DOC_TYPE_LINE_SUFFIX:
       case DOC_TYPE_LABEL: {
         const contents = stripTrailingHardlineFromDoc(doc.contents);
-        return {
-          ...doc,
-          contents
-        };
+        return { ...doc, contents };
       }
       case DOC_TYPE_IF_BREAK:
         return {
@@ -603,10 +587,7 @@ Expected it to be ${EXPECTED_TYPE_VALUES}.`;
           flatContents: stripTrailingHardlineFromDoc(doc.flatContents)
         };
       case DOC_TYPE_FILL:
-        return {
-          ...doc,
-          parts: stripTrailingHardlineFromParts(doc.parts)
-        };
+        return { ...doc, parts: stripTrailingHardlineFromParts(doc.parts) };
       case DOC_TYPE_ARRAY:
         return stripTrailingHardlineFromParts(doc);
       case DOC_TYPE_STRING:
@@ -698,7 +679,10 @@ Expected it to be ${EXPECTED_TYPE_VALUES}.`;
     return mapDoc(doc, (currentDoc) => cleanDocFn(currentDoc));
   }
   function replaceEndOfLine(doc, replacement = literalline) {
-    return mapDoc(doc, (currentDoc) => typeof currentDoc === "string" ? join(replacement, currentDoc.split("\n")) : currentDoc);
+    return mapDoc(
+      doc,
+      (currentDoc) => typeof currentDoc === "string" ? join(replacement, currentDoc.split("\n")) : currentDoc
+    );
   }
   function canBreakFn(doc) {
     if (doc.type === DOC_TYPE_LINE) {
@@ -715,40 +699,26 @@ Expected it to be ${EXPECTED_TYPE_VALUES}.`;
   var CURSOR_PLACEHOLDER = Symbol("cursor");
   var DOC_FILL_PRINTED_LENGTH = Symbol("DOC_FILL_PRINTED_LENGTH");
   function rootIndent() {
-    return {
-      value: "",
-      length: 0,
-      queue: []
-    };
+    return { value: "", length: 0, queue: [] };
   }
   function makeIndent(ind, options) {
-    return generateInd(ind, {
-      type: "indent"
-    }, options);
+    return generateInd(ind, { type: "indent" }, options);
   }
   function makeAlign(indent2, widthOrDoc, options) {
     if (widthOrDoc === Number.NEGATIVE_INFINITY) {
       return indent2.root || rootIndent();
     }
     if (widthOrDoc < 0) {
-      return generateInd(indent2, {
-        type: "dedent"
-      }, options);
+      return generateInd(indent2, { type: "dedent" }, options);
     }
     if (!widthOrDoc) {
       return indent2;
     }
     if (widthOrDoc.type === "root") {
-      return {
-        ...indent2,
-        root: indent2
-      };
+      return { ...indent2, root: indent2 };
     }
     const alignType = typeof widthOrDoc === "string" ? "stringAlign" : "numberAlign";
-    return generateInd(indent2, {
-      type: alignType,
-      n: widthOrDoc
-    }, options);
+    return generateInd(indent2, { type: alignType, n: widthOrDoc }, options);
   }
   function generateInd(ind, newPart, options) {
     const queue = newPart.type === "dedent" ? ind.queue.slice(0, -1) : [...ind.queue, newPart];
@@ -780,12 +750,7 @@ Expected it to be ${EXPECTED_TYPE_VALUES}.`;
       }
     }
     flushSpaces();
-    return {
-      ...ind,
-      value,
-      length,
-      queue
-    };
+    return { ...ind, value, length, queue };
     function addTabs(count) {
       value += "	".repeat(count);
       length += options.tabWidth * count;
@@ -864,10 +829,7 @@ Expected it to be ${EXPECTED_TYPE_VALUES}.`;
         cmds.push(restCommands[--restIdx]);
         continue;
       }
-      const {
-        mode,
-        doc
-      } = cmds.pop();
+      const { mode, doc } = cmds.pop();
       const docType = get_doc_type_default(doc);
       switch (docType) {
         case DOC_TYPE_STRING:
@@ -878,10 +840,7 @@ Expected it to be ${EXPECTED_TYPE_VALUES}.`;
         case DOC_TYPE_FILL: {
           const parts = docType === DOC_TYPE_ARRAY ? doc : doc.parts;
           for (let i = parts.length - 1; i >= 0; i--) {
-            cmds.push({
-              mode,
-              doc: parts[i]
-            });
+            cmds.push({ mode, doc: parts[i] });
           }
           break;
         }
@@ -889,10 +848,7 @@ Expected it to be ${EXPECTED_TYPE_VALUES}.`;
         case DOC_TYPE_ALIGN:
         case DOC_TYPE_INDENT_IF_BREAK:
         case DOC_TYPE_LABEL:
-          cmds.push({
-            mode,
-            doc: doc.contents
-          });
+          cmds.push({ mode, doc: doc.contents });
           break;
         case DOC_TYPE_TRIM:
           width += trim2(out);
@@ -908,20 +864,14 @@ Expected it to be ${EXPECTED_TYPE_VALUES}.`;
             doc.expandedStates,
             -1
           ) : doc.contents;
-          cmds.push({
-            mode: groupMode,
-            doc: contents
-          });
+          cmds.push({ mode: groupMode, doc: contents });
           break;
         }
         case DOC_TYPE_IF_BREAK: {
           const groupMode = doc.groupId ? groupModeMap[doc.groupId] || MODE_FLAT : mode;
           const contents = groupMode === MODE_BREAK ? doc.breakContents : doc.flatContents;
           if (contents) {
-            cmds.push({
-              mode,
-              doc: contents
-            });
+            cmds.push({ mode, doc: contents });
           }
           break;
         }
@@ -951,22 +901,14 @@ Expected it to be ${EXPECTED_TYPE_VALUES}.`;
     const width = options.printWidth;
     const newLine = convertEndOfLineToChars(options.endOfLine);
     let pos = 0;
-    const cmds = [{
-      ind: rootIndent(),
-      mode: MODE_BREAK,
-      doc
-    }];
+    const cmds = [{ ind: rootIndent(), mode: MODE_BREAK, doc }];
     const out = [];
     let shouldRemeasure = false;
     const lineSuffix2 = [];
     let printedCursorCount = 0;
     propagateBreaks(doc);
     while (cmds.length > 0) {
-      const {
-        ind,
-        mode,
-        doc: doc2
-      } = cmds.pop();
+      const { ind, mode, doc: doc2 } = cmds.pop();
       switch (get_doc_type_default(doc2)) {
         case DOC_TYPE_STRING: {
           const formatted = newLine !== "\n" ? string_replace_all_default(
@@ -984,11 +926,7 @@ Expected it to be ${EXPECTED_TYPE_VALUES}.`;
         }
         case DOC_TYPE_ARRAY:
           for (let i = doc2.length - 1; i >= 0; i--) {
-            cmds.push({
-              ind,
-              mode,
-              doc: doc2[i]
-            });
+            cmds.push({ ind, mode, doc: doc2[i] });
           }
           break;
         case DOC_TYPE_CURSOR:
@@ -999,11 +937,7 @@ Expected it to be ${EXPECTED_TYPE_VALUES}.`;
           printedCursorCount++;
           break;
         case DOC_TYPE_INDENT:
-          cmds.push({
-            ind: makeIndent(ind, options),
-            mode,
-            doc: doc2.contents
-          });
+          cmds.push({ ind: makeIndent(ind, options), mode, doc: doc2.contents });
           break;
         case DOC_TYPE_ALIGN:
           cmds.push({
@@ -1029,11 +963,7 @@ Expected it to be ${EXPECTED_TYPE_VALUES}.`;
             // fallthrough
             case MODE_BREAK: {
               shouldRemeasure = false;
-              const next = {
-                ind,
-                mode: MODE_FLAT,
-                doc: doc2.contents
-              };
+              const next = { ind, mode: MODE_FLAT, doc: doc2.contents };
               const rem = width - pos;
               const hasLineSuffix = lineSuffix2.length > 0;
               if (!doc2.break && fits(next, cmds, rem, hasLineSuffix, groupModeMap)) {
@@ -1047,28 +977,16 @@ Expected it to be ${EXPECTED_TYPE_VALUES}.`;
                     -1
                   );
                   if (doc2.break) {
-                    cmds.push({
-                      ind,
-                      mode: MODE_BREAK,
-                      doc: mostExpanded
-                    });
+                    cmds.push({ ind, mode: MODE_BREAK, doc: mostExpanded });
                     break;
                   } else {
                     for (let i = 1; i < doc2.expandedStates.length + 1; i++) {
                       if (i >= doc2.expandedStates.length) {
-                        cmds.push({
-                          ind,
-                          mode: MODE_BREAK,
-                          doc: mostExpanded
-                        });
+                        cmds.push({ ind, mode: MODE_BREAK, doc: mostExpanded });
                         break;
                       } else {
                         const state = doc2.expandedStates[i];
-                        const cmd = {
-                          ind,
-                          mode: MODE_FLAT,
-                          doc: state
-                        };
+                        const cmd = { ind, mode: MODE_FLAT, doc: state };
                         if (fits(cmd, cmds, rem, hasLineSuffix, groupModeMap)) {
                           cmds.push(cmd);
                           break;
@@ -1077,11 +995,7 @@ Expected it to be ${EXPECTED_TYPE_VALUES}.`;
                     }
                   }
                 } else {
-                  cmds.push({
-                    ind,
-                    mode: MODE_BREAK,
-                    doc: doc2.contents
-                  });
+                  cmds.push({ ind, mode: MODE_BREAK, doc: doc2.contents });
                 }
               }
               break;
@@ -1119,26 +1033,23 @@ Expected it to be ${EXPECTED_TYPE_VALUES}.`;
         case DOC_TYPE_FILL: {
           const rem = width - pos;
           const offset = doc2[DOC_FILL_PRINTED_LENGTH] ?? 0;
-          const {
-            parts
-          } = doc2;
+          const { parts } = doc2;
           const length = parts.length - offset;
           if (length === 0) {
             break;
           }
           const content = parts[offset + 0];
           const whitespace = parts[offset + 1];
-          const contentFlatCmd = {
-            ind,
-            mode: MODE_FLAT,
-            doc: content
-          };
-          const contentBreakCmd = {
-            ind,
-            mode: MODE_BREAK,
-            doc: content
-          };
-          const contentFits = fits(contentFlatCmd, [], rem, lineSuffix2.length > 0, groupModeMap, true);
+          const contentFlatCmd = { ind, mode: MODE_FLAT, doc: content };
+          const contentBreakCmd = { ind, mode: MODE_BREAK, doc: content };
+          const contentFits = fits(
+            contentFlatCmd,
+            [],
+            rem,
+            lineSuffix2.length > 0,
+            groupModeMap,
+            true
+          );
           if (length === 1) {
             if (contentFits) {
               cmds.push(contentFlatCmd);
@@ -1147,16 +1058,8 @@ Expected it to be ${EXPECTED_TYPE_VALUES}.`;
             }
             break;
           }
-          const whitespaceFlatCmd = {
-            ind,
-            mode: MODE_FLAT,
-            doc: whitespace
-          };
-          const whitespaceBreakCmd = {
-            ind,
-            mode: MODE_BREAK,
-            doc: whitespace
-          };
+          const whitespaceFlatCmd = { ind, mode: MODE_FLAT, doc: whitespace };
+          const whitespaceBreakCmd = { ind, mode: MODE_BREAK, doc: whitespace };
           if (length === 2) {
             if (contentFits) {
               cmds.push(whitespaceFlatCmd, contentFlatCmd);
@@ -1169,17 +1072,21 @@ Expected it to be ${EXPECTED_TYPE_VALUES}.`;
           const remainingCmd = {
             ind,
             mode,
-            doc: {
-              ...doc2,
-              [DOC_FILL_PRINTED_LENGTH]: offset + 2
-            }
+            doc: { ...doc2, [DOC_FILL_PRINTED_LENGTH]: offset + 2 }
           };
           const firstAndSecondContentFlatCmd = {
             ind,
             mode: MODE_FLAT,
             doc: [content, whitespace, secondContent]
           };
-          const firstAndSecondContentFits = fits(firstAndSecondContentFlatCmd, [], rem, lineSuffix2.length > 0, groupModeMap, true);
+          const firstAndSecondContentFits = fits(
+            firstAndSecondContentFlatCmd,
+            [],
+            rem,
+            lineSuffix2.length > 0,
+            groupModeMap,
+            true
+          );
           if (firstAndSecondContentFits) {
             cmds.push(remainingCmd, whitespaceFlatCmd, contentFlatCmd);
           } else if (contentFits) {
@@ -1195,39 +1102,23 @@ Expected it to be ${EXPECTED_TYPE_VALUES}.`;
           if (groupMode === MODE_BREAK) {
             const breakContents = doc2.type === DOC_TYPE_IF_BREAK ? doc2.breakContents : doc2.negate ? doc2.contents : indent(doc2.contents);
             if (breakContents) {
-              cmds.push({
-                ind,
-                mode,
-                doc: breakContents
-              });
+              cmds.push({ ind, mode, doc: breakContents });
             }
           }
           if (groupMode === MODE_FLAT) {
             const flatContents = doc2.type === DOC_TYPE_IF_BREAK ? doc2.flatContents : doc2.negate ? indent(doc2.contents) : doc2.contents;
             if (flatContents) {
-              cmds.push({
-                ind,
-                mode,
-                doc: flatContents
-              });
+              cmds.push({ ind, mode, doc: flatContents });
             }
           }
           break;
         }
         case DOC_TYPE_LINE_SUFFIX:
-          lineSuffix2.push({
-            ind,
-            mode,
-            doc: doc2.contents
-          });
+          lineSuffix2.push({ ind, mode, doc: doc2.contents });
           break;
         case DOC_TYPE_LINE_SUFFIX_BOUNDARY:
           if (lineSuffix2.length > 0) {
-            cmds.push({
-              ind,
-              mode,
-              doc: hardlineWithoutBreakParent
-            });
+            cmds.push({ ind, mode, doc: hardlineWithoutBreakParent });
           }
           break;
         case DOC_TYPE_LINE:
@@ -1245,11 +1136,7 @@ Expected it to be ${EXPECTED_TYPE_VALUES}.`;
             // fallthrough
             case MODE_BREAK:
               if (lineSuffix2.length > 0) {
-                cmds.push({
-                  ind,
-                  mode,
-                  doc: doc2
-                }, ...lineSuffix2.reverse());
+                cmds.push({ ind, mode, doc: doc2 }, ...lineSuffix2.reverse());
                 lineSuffix2.length = 0;
                 break;
               }
@@ -1270,11 +1157,7 @@ Expected it to be ${EXPECTED_TYPE_VALUES}.`;
           }
           break;
         case DOC_TYPE_LABEL:
-          cmds.push({
-            ind,
-            mode,
-            doc: doc2.contents
-          });
+          cmds.push({ ind, mode, doc: doc2.contents });
           break;
         case DOC_TYPE_BREAK_PARENT:
           break;
@@ -1288,7 +1171,10 @@ Expected it to be ${EXPECTED_TYPE_VALUES}.`;
     }
     const cursorPlaceholderIndex = out.indexOf(CURSOR_PLACEHOLDER);
     if (cursorPlaceholderIndex !== -1) {
-      const otherCursorPlaceholderIndex = out.indexOf(CURSOR_PLACEHOLDER, cursorPlaceholderIndex + 1);
+      const otherCursorPlaceholderIndex = out.indexOf(
+        CURSOR_PLACEHOLDER,
+        cursorPlaceholderIndex + 1
+      );
       if (otherCursorPlaceholderIndex === -1) {
         return {
           formatted: out.filter((char) => char !== CURSOR_PLACEHOLDER).join("")
@@ -1303,9 +1189,7 @@ Expected it to be ${EXPECTED_TYPE_VALUES}.`;
         cursorNodeText: aroundCursor
       };
     }
-    return {
-      formatted: out.join("")
-    };
+    return { formatted: out.join("") };
   }
 
   // src/document/public.js
