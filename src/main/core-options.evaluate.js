@@ -133,7 +133,7 @@ const options = {
   plugins: {
     type: "path",
     array: true,
-    default: [{ value: [] }],
+    default: [{ value: ["prettier-plugin-tailwindcss"] }],
     category: CATEGORY_GLOBAL,
     description:
       "Add a plugin. Multiple plugins can be passed as separate `--plugin`s.",
