@@ -1,8 +1,12 @@
 import path from "node:path";
 import { pathToFileURL } from "node:url";
+import * as prettierPluginTailwindcss from "prettier-plugin-tailwindcss";
 import importFromDirectory from "../../utils/import-from-directory.js";
 
 async function importPlugin(name, cwd) {
+  if (name === "prettier-plugin-tailwindcss") {
+    return prettierPluginTailwindcss;
+  }
   if (path.isAbsolute(name)) {
     return import(pathToFileURL(name).href);
   }
