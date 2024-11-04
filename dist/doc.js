@@ -144,7 +144,7 @@ Expected it to be ${EXPECTED_TYPE_VALUES}.`;
       if (!docType) {
         throw new invalid_doc_error_default(doc2);
       }
-      if ((onEnter == null ? void 0 : onEnter(doc2)) === false) {
+      if (onEnter?.(doc2) === false) {
         continue;
       }
       switch (docType) {

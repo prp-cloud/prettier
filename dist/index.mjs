@@ -11,10 +11,6 @@ var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
 var __getProtoOf = Object.getPrototypeOf;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
-var __typeError = (msg) => {
-  throw TypeError(msg);
-};
-var __defNormalProp = (obj, key2, value) => key2 in obj ? __defProp(obj, key2, { enumerable: true, configurable: true, writable: true, value }) : obj[key2] = value;
 var __require = /* @__PURE__ */ ((x) => typeof require !== "undefined" ? require : typeof Proxy !== "undefined" ? new Proxy(x, {
   get: (a, b) => (typeof require !== "undefined" ? require : a)[b]
 }) : x)(function(x) {
@@ -44,12 +40,6 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
   isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
   mod
 ));
-var __publicField = (obj, key2, value) => __defNormalProp(obj, typeof key2 !== "symbol" ? key2 + "" : key2, value);
-var __accessCheck = (obj, member, msg) => member.has(obj) || __typeError("Cannot " + msg);
-var __privateGet = (obj, member, getter) => (__accessCheck(obj, member, "read from private field"), getter ? getter.call(obj) : member.get(obj));
-var __privateAdd = (obj, member, value) => member.has(obj) ? __typeError("Cannot add the same private member more than once") : member instanceof WeakSet ? member.add(obj) : member.set(obj, value);
-var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "write to private field"), setter ? setter.call(obj, value) : member.set(obj, value), value);
-var __privateMethod = (obj, member, method) => (__accessCheck(obj, member, "access private method"), method);
 
 // node_modules/fast-glob/out/utils/array.js
 var require_array = __commonJS({
@@ -11392,7 +11382,7 @@ import * as path3 from "path";
 // src/utils/is-directory.js
 import fs from "fs/promises";
 async function isDirectory(directory, options8) {
-  const allowSymlinks = (options8 == null ? void 0 : options8.allowSymlinks) ?? true;
+  const allowSymlinks = options8?.allowSymlinks ?? true;
   let stats;
   try {
     stats = await (allowSymlinks ? fs.stat : fs.lstat)(toPath(directory));
@@ -11424,8 +11414,11 @@ function* iterateDirectoryUp(from, to) {
 var iterate_directory_up_default = iterateDirectoryUp;
 
 // src/config/searcher.js
-var _names, _filter, _stopDirectory, _cache, _Searcher_instances, searchInDirectory_fn;
 var Searcher = class {
+  #names;
+  #filter;
+  #stopDirectory;
+  #cache = /* @__PURE__ */ new Map();
   /**
    * @param {{
    *   names: string[],
@@ -11434,17 +11427,24 @@ var Searcher = class {
    * }} param0
    */
   constructor({ names, filter: filter2, stopDirectory }) {
-    __privateAdd(this, _Searcher_instances);
-    __privateAdd(this, _names);
-    __privateAdd(this, _filter);
-    __privateAdd(this, _stopDirectory);
-    __privateAdd(this, _cache, /* @__PURE__ */ new Map());
-    __privateSet(this, _names, names);
-    __privateSet(this, _filter, filter2);
-    __privateSet(this, _stopDirectory, stopDirectory);
+    this.#names = names;
+    this.#filter = filter2;
+    this.#stopDirectory = stopDirectory;
+  }
+  async #searchInDirectory(directory, shouldCache) {
+    const cache3 = this.#cache;
+    if (shouldCache && cache3.has(directory)) {
+      return cache3.get(directory);
+    }
+    for (const name of this.#names) {
+      const fileOrDirectory = path2.join(directory, name);
+      if (await this.#filter({ name, path: fileOrDirectory })) {
+        return fileOrDirectory;
+      }
+    }
   }
   async search(startDirectory, { shouldCache }) {
-    const cache3 = __privateGet(this, _cache);
+    const cache3 = this.#cache;
     if (shouldCache && cache3.has(startDirectory)) {
       return cache3.get(startDirectory);
     }
@@ -11452,10 +11452,10 @@ var Searcher = class {
     let result;
     for (const directory of iterate_directory_up_default(
       startDirectory,
-      __privateGet(this, _stopDirectory)
+      this.#stopDirectory
     )) {
       searchedDirectories.push(directory);
-      result = await __privateMethod(this, _Searcher_instances, searchInDirectory_fn).call(this, directory, shouldCache);
+      result = await this.#searchInDirectory(directory, shouldCache);
       if (result) {
         break;
       }
@@ -11466,24 +11466,7 @@ var Searcher = class {
     return result;
   }
   clearCache() {
-    __privateGet(this, _cache).clear();
-  }
-};
-_names = new WeakMap();
-_filter = new WeakMap();
-_stopDirectory = new WeakMap();
-_cache = new WeakMap();
-_Searcher_instances = new WeakSet();
-searchInDirectory_fn = async function(directory, shouldCache) {
-  const cache3 = __privateGet(this, _cache);
-  if (shouldCache && cache3.has(directory)) {
-    return cache3.get(directory);
-  }
-  for (const name of __privateGet(this, _names)) {
-    const fileOrDirectory = path2.join(directory, name);
-    if (await __privateGet(this, _filter).call(this, { name, path: fileOrDirectory })) {
-      return fileOrDirectory;
-    }
+    this.#cache.clear();
   }
 };
 var searcher_default = Searcher;
@@ -11496,12 +11479,12 @@ var searchOptions = {
   filter: ({ path: directory }) => is_directory_default(directory, { allowSymlinks: false })
 };
 async function findProjectRoot(startDirectory, options8) {
-  searcher ?? (searcher = new searcher_default(searchOptions));
+  searcher ??= new searcher_default(searchOptions);
   const mark = await searcher.search(startDirectory, options8);
   return mark ? path3.dirname(mark) : void 0;
 }
 function clearFindProjectRootCache() {
-  searcher == null ? void 0 : searcher.clearCache();
+  searcher?.clearCache();
 }
 
 // src/config/editorconfig/editorconfig-to-prettier.js
@@ -11630,7 +11613,7 @@ var mockable_default = mockable;
 // src/utils/is-file.js
 import fs3 from "fs/promises";
 async function isFile(file, options8) {
-  const allowSymlinks = (options8 == null ? void 0 : options8.allowSymlinks) ?? true;
+  const allowSymlinks = options8?.allowSymlinks ?? true;
   let stats;
   try {
     stats = await (allowSymlinks ? fs3.stat : fs3.lstat)(toPath(file));
@@ -14512,32 +14495,28 @@ function indexToLineColumn(text, textIndex, { oneBased = false } = {}) {
 
 // node_modules/parse-json/index.js
 var getCodePoint = (character) => `\\u{${character.codePointAt(0).toString(16)}}`;
-var _message;
-var _JSONError = class _JSONError extends Error {
+var JSONError = class _JSONError extends Error {
+  name = "JSONError";
+  fileName;
+  codeFrame;
+  rawCodeFrame;
+  #message;
   constructor(message) {
-    var _a;
     super();
-    __publicField(this, "name", "JSONError");
-    __publicField(this, "fileName");
-    __publicField(this, "codeFrame");
-    __publicField(this, "rawCodeFrame");
-    __privateAdd(this, _message);
-    __privateSet(this, _message, message);
-    (_a = Error.captureStackTrace) == null ? void 0 : _a.call(Error, this, _JSONError);
+    this.#message = message;
+    Error.captureStackTrace?.(this, _JSONError);
   }
   get message() {
     const { fileName, codeFrame } = this;
-    return `${__privateGet(this, _message)}${fileName ? ` in ${fileName}` : ""}${codeFrame ? `
+    return `${this.#message}${fileName ? ` in ${fileName}` : ""}${codeFrame ? `
 
 ${codeFrame}
 ` : ""}`;
   }
   set message(message) {
-    __privateSet(this, _message, message);
+    this.#message = message;
   }
 };
-_message = new WeakMap();
-var JSONError = _JSONError;
 var generateCodeFrame = (string, location, highlightCode = true) => (0, import_code_frame.codeFrameColumns)(string, { start: location }, { highlightCode });
 var getErrorLocation = (string, message) => {
   const match = message.match(/in JSON at position (?<index>\d+)(?: \(line (?<line>\d+) column (?<column>\d+)\))?$/);
@@ -14704,8 +14683,10 @@ function getStringEnd(str2, seek) {
 
 // node_modules/smol-toml/dist/date.js
 var DATE_TIME_RE = /^(\d{4}-\d{2}-\d{2})?[T ]?(?:(\d{2}):\d{2}:\d{2}(?:\.\d+)?)?(Z|[-+]\d{2}:\d{2})?$/i;
-var _hasDate, _hasTime, _offset;
-var _TomlDate = class _TomlDate extends Date {
+var TomlDate = class _TomlDate extends Date {
+  #hasDate = false;
+  #hasTime = false;
+  #offset = null;
   constructor(date) {
     let hasDate = true;
     let hasTime = true;
@@ -14731,29 +14712,26 @@ var _TomlDate = class _TomlDate extends Date {
       }
     }
     super(date);
-    __privateAdd(this, _hasDate, false);
-    __privateAdd(this, _hasTime, false);
-    __privateAdd(this, _offset, null);
     if (!isNaN(this.getTime())) {
-      __privateSet(this, _hasDate, hasDate);
-      __privateSet(this, _hasTime, hasTime);
-      __privateSet(this, _offset, offset);
+      this.#hasDate = hasDate;
+      this.#hasTime = hasTime;
+      this.#offset = offset;
     }
   }
   isDateTime() {
-    return __privateGet(this, _hasDate) && __privateGet(this, _hasTime);
+    return this.#hasDate && this.#hasTime;
   }
   isLocal() {
-    return !__privateGet(this, _hasDate) || !__privateGet(this, _hasTime) || !__privateGet(this, _offset);
+    return !this.#hasDate || !this.#hasTime || !this.#offset;
   }
   isDate() {
-    return __privateGet(this, _hasDate) && !__privateGet(this, _hasTime);
+    return this.#hasDate && !this.#hasTime;
   }
   isTime() {
-    return __privateGet(this, _hasTime) && !__privateGet(this, _hasDate);
+    return this.#hasTime && !this.#hasDate;
   }
   isValid() {
-    return __privateGet(this, _hasDate) || __privateGet(this, _hasTime);
+    return this.#hasDate || this.#hasTime;
   }
   toISOString() {
     let iso = super.toISOString();
@@ -14761,42 +14739,38 @@ var _TomlDate = class _TomlDate extends Date {
       return iso.slice(0, 10);
     if (this.isTime())
       return iso.slice(11, 23);
-    if (__privateGet(this, _offset) === null)
+    if (this.#offset === null)
       return iso.slice(0, -1);
-    if (__privateGet(this, _offset) === "Z")
+    if (this.#offset === "Z")
       return iso;
-    let offset = +__privateGet(this, _offset).slice(1, 3) * 60 + +__privateGet(this, _offset).slice(4, 6);
-    offset = __privateGet(this, _offset)[0] === "-" ? offset : -offset;
+    let offset = +this.#offset.slice(1, 3) * 60 + +this.#offset.slice(4, 6);
+    offset = this.#offset[0] === "-" ? offset : -offset;
     let offsetDate = new Date(this.getTime() - offset * 6e4);
-    return offsetDate.toISOString().slice(0, -1) + __privateGet(this, _offset);
+    return offsetDate.toISOString().slice(0, -1) + this.#offset;
   }
   static wrapAsOffsetDateTime(jsDate, offset = "Z") {
     let date = new _TomlDate(jsDate);
-    __privateSet(date, _offset, offset);
+    date.#offset = offset;
     return date;
   }
   static wrapAsLocalDateTime(jsDate) {
     let date = new _TomlDate(jsDate);
-    __privateSet(date, _offset, null);
+    date.#offset = null;
     return date;
   }
   static wrapAsLocalDate(jsDate) {
     let date = new _TomlDate(jsDate);
-    __privateSet(date, _hasTime, false);
-    __privateSet(date, _offset, null);
+    date.#hasTime = false;
+    date.#offset = null;
     return date;
   }
   static wrapAsLocalTime(jsDate) {
     let date = new _TomlDate(jsDate);
-    __privateSet(date, _hasDate, false);
-    __privateSet(date, _offset, null);
+    date.#hasDate = false;
+    date.#offset = null;
     return date;
   }
 };
-_hasDate = new WeakMap();
-_hasTime = new WeakMap();
-_offset = new WeakMap();
-var TomlDate = _TomlDate;
 
 // node_modules/smol-toml/dist/primitive.js
 var INT_REGEX = /^((0x[0-9a-fA-F](_?[0-9a-fA-F])*)|(([+-]|0[ob])?\d(_?\d)*))$/;
@@ -15167,7 +15141,6 @@ function parseArray(str2, ptr) {
 
 // node_modules/smol-toml/dist/parse.js
 function peekTable(key2, table, meta, type2) {
-  var _a, _b;
   let t = table;
   let m = meta;
   let k;
@@ -15187,7 +15160,7 @@ function peekTable(key2, table, meta, type2) {
       }
     }
     k = key2[i];
-    if ((hasOwn = Object.hasOwn(t, k)) && ((_a = m[k]) == null ? void 0 : _a.t) === 0 && ((_b = m[k]) == null ? void 0 : _b.d)) {
+    if ((hasOwn = Object.hasOwn(t, k)) && m[k]?.t === 0 && m[k]?.d) {
       return null;
     }
     if (!hasOwn) {
@@ -16687,7 +16660,7 @@ function checkIfDisallowedImport(specifier, parsed, parsedParentURL) {
     const parentProtocol = parsedParentURL.protocol;
     if (parentProtocol === "http:" || parentProtocol === "https:") {
       if (shouldBeTreatedAsRelativeOrAbsolutePath(specifier)) {
-        const parsedProtocol = parsed == null ? void 0 : parsed.protocol;
+        const parsedProtocol = parsed?.protocol;
         if (parsedProtocol && parsedProtocol !== "https:" && parsedProtocol !== "http:") {
           throw new ERR_NETWORK_IMPORT_DISALLOWED(
             specifier,
@@ -16695,7 +16668,7 @@ function checkIfDisallowedImport(specifier, parsed, parsedParentURL) {
             "remote imports cannot import from a local location."
           );
         }
-        return { url: (parsed == null ? void 0 : parsed.href) || "" };
+        return { url: parsed?.href || "" };
       }
       if (builtinModules.includes(specifier)) {
         throw new ERR_NETWORK_IMPORT_DISALLOWED(
@@ -16819,7 +16792,7 @@ async function loadExternalConfig(externalConfig, configFile) {
   try {
     return require_from_file_default(externalConfig, configFile);
   } catch (error) {
-    if (!requireErrorCodesShouldBeIgnored.has(error == null ? void 0 : error.code)) {
+    if (!requireErrorCodesShouldBeIgnored.has(error?.code)) {
       throw error;
     }
   }
@@ -17075,16 +17048,16 @@ function getLanguageByFileName(languages2, file) {
   }
   const basename = getFileBasename(file).toLowerCase();
   return languages2.find(
-    ({ filenames }) => filenames == null ? void 0 : filenames.some((name) => name.toLowerCase() === basename)
+    ({ filenames }) => filenames?.some((name) => name.toLowerCase() === basename)
   ) ?? languages2.find(
-    ({ extensions }) => extensions == null ? void 0 : extensions.some((extension) => basename.endsWith(extension))
+    ({ extensions }) => extensions?.some((extension) => basename.endsWith(extension))
   );
 }
 function getLanguageByLanguageName(languages2, languageName) {
   if (!languageName) {
     return;
   }
-  return languages2.find(({ name }) => name.toLowerCase() === languageName) ?? languages2.find(({ aliases }) => aliases == null ? void 0 : aliases.includes(languageName)) ?? languages2.find(({ extensions }) => extensions == null ? void 0 : extensions.includes(`.${languageName}`));
+  return languages2.find(({ name }) => name.toLowerCase() === languageName) ?? languages2.find(({ aliases }) => aliases?.includes(languageName)) ?? languages2.find(({ extensions }) => extensions?.includes(`.${languageName}`));
 }
 function getLanguageByInterpreter(languages2, file) {
   if (!file || getFileBasename(file).includes(".")) {
@@ -17095,7 +17068,7 @@ function getLanguageByInterpreter(languages2, file) {
     return;
   }
   return languages2.find(
-    ({ interpreters }) => interpreters == null ? void 0 : interpreters.includes(interpreter)
+    ({ interpreters }) => interpreters?.includes(interpreter)
   );
 }
 function inferParser(options8, fileInfo) {
@@ -17106,7 +17079,7 @@ function inferParser(options8, fileInfo) {
     )
   );
   const language = getLanguageByLanguageName(languages2, fileInfo.language) ?? getLanguageByFileName(languages2, fileInfo.physicalFile) ?? getLanguageByFileName(languages2, fileInfo.file) ?? getLanguageByInterpreter(languages2, fileInfo.physicalFile);
-  return language == null ? void 0 : language.parsers[0];
+  return language?.parsers[0];
 }
 var infer_parser_default = inferParser;
 
@@ -17136,7 +17109,7 @@ async function getParser(file, options8) {
   if (options8.resolveConfig !== false) {
     config = await resolveConfig(file);
   }
-  return (config == null ? void 0 : config.parser) ?? infer_parser_default(options8, { physicalFile: file });
+  return config?.parser ?? infer_parser_default(options8, { physicalFile: file });
 }
 var get_file_info_default = getFileInfo;
 
@@ -17283,7 +17256,7 @@ function traverseDoc(doc2, onEnter, onExit, shouldTraverseConditionalGroups) {
     if (!docType) {
       throw new invalid_doc_error_default(doc3);
     }
-    if ((onEnter == null ? void 0 : onEnter(doc3)) === false) {
+    if (onEnter?.(doc3) === false) {
       continue;
     }
     switch (docType) {
@@ -17375,7 +17348,6 @@ function addAlignmentToDoc(doc2, size, tabWidth) {
 
 // src/document/debug.js
 function flattenDoc(doc2) {
-  var _a;
   if (!doc2) {
     return "";
   }
@@ -17404,7 +17376,7 @@ function flattenDoc(doc2) {
     return {
       ...doc2,
       contents: flattenDoc(doc2.contents),
-      expandedStates: (_a = doc2.expandedStates) == null ? void 0 : _a.map(flattenDoc)
+      expandedStates: doc2.expandedStates?.map(flattenDoc)
     };
   }
   if (doc2.type === DOC_TYPE_FILL) {
@@ -17420,7 +17392,6 @@ function printDocToDebug(doc2) {
   const usedKeysForSymbols = /* @__PURE__ */ new Set();
   return printDoc(flattenDoc(doc2));
   function printDoc(doc3, index, parentParts) {
-    var _a, _b;
     if (typeof doc3 === "string") {
       return JSON.stringify(doc3);
     }
@@ -17429,7 +17400,7 @@ function printDocToDebug(doc2) {
       return printed.length === 1 ? printed[0] : `[${printed.join(", ")}]`;
     }
     if (doc3.type === DOC_TYPE_LINE) {
-      const withBreakParent = ((_a = parentParts == null ? void 0 : parentParts[index + 1]) == null ? void 0 : _a.type) === DOC_TYPE_BREAK_PARENT;
+      const withBreakParent = parentParts?.[index + 1]?.type === DOC_TYPE_BREAK_PARENT;
       if (doc3.literal) {
         return withBreakParent ? "literalline" : "literallineWithoutBreakParent";
       }
@@ -17442,7 +17413,7 @@ function printDocToDebug(doc2) {
       return "line";
     }
     if (doc3.type === DOC_TYPE_BREAK_PARENT) {
-      const afterHardline = ((_b = parentParts == null ? void 0 : parentParts[index - 1]) == null ? void 0 : _b.type) === DOC_TYPE_LINE && parentParts[index - 1].hard;
+      const afterHardline = parentParts?.[index - 1]?.type === DOC_TYPE_LINE && parentParts[index - 1].hard;
       return afterHardline ? void 0 : "breakParent";
     }
     if (doc3.type === DOC_TYPE_TRIM) {
@@ -18319,10 +18290,8 @@ function getAlignmentSize(text, tabWidth, startIndex = 0) {
 var get_alignment_size_default = getAlignmentSize;
 
 // src/common/ast-path.js
-var _AstPath_instances, getNodeStackIndex_fn, getAncestors_fn;
 var AstPath = class {
   constructor(value) {
-    __privateAdd(this, _AstPath_instances);
     this.stack = [value];
   }
   /** @type {string | null} */
@@ -18405,7 +18374,7 @@ var AstPath = class {
   }
   /** @type {object[]} */
   get ancestors() {
-    return [...__privateMethod(this, _AstPath_instances, getAncestors_fn).call(this)];
+    return [...this.#getAncestors()];
   }
   // The name of the current property is always the penultimate element of
   // this.stack, and always a string/number/symbol.
@@ -18433,11 +18402,20 @@ var AstPath = class {
     );
   }
   getNode(count = 0) {
-    const stackIndex = __privateMethod(this, _AstPath_instances, getNodeStackIndex_fn).call(this, count);
+    const stackIndex = this.#getNodeStackIndex(count);
     return stackIndex === -1 ? null : this.stack[stackIndex];
   }
   getParentNode(count = 0) {
     return this.getNode(count + 1);
+  }
+  #getNodeStackIndex(count) {
+    const { stack: stack2 } = this;
+    for (let i = stack2.length - 1; i >= 0; i -= 2) {
+      if (!Array.isArray(stack2[i]) && --count < 0) {
+        return i;
+      }
+    }
+    return -1;
   }
   // Temporarily push properties named by string arguments given after the
   // callback function onto this.stack, then call the callback with a
@@ -18470,7 +18448,7 @@ var AstPath = class {
    * @returns {ReturnType<T>}
    */
   callParent(callback, count = 0) {
-    const stackIndex = __privateMethod(this, _AstPath_instances, getNodeStackIndex_fn).call(this, count + 1);
+    const stackIndex = this.#getNodeStackIndex(count + 1);
     const parentValues = this.stack.splice(stackIndex + 1);
     try {
       return callback(this);
@@ -18554,7 +18532,7 @@ var AstPath = class {
    * @internal Unstable API. Don't use in plugins for now.
    */
   findAncestor(predicate) {
-    for (const node of __privateMethod(this, _AstPath_instances, getAncestors_fn).call(this)) {
+    for (const node of this.#getAncestors()) {
       if (predicate(node)) {
         return node;
       }
@@ -18569,30 +18547,20 @@ var AstPath = class {
    * @internal Unstable API. Don't use in plugins for now.
    */
   hasAncestor(predicate) {
-    for (const node of __privateMethod(this, _AstPath_instances, getAncestors_fn).call(this)) {
+    for (const node of this.#getAncestors()) {
       if (predicate(node)) {
         return true;
       }
     }
     return false;
   }
-};
-_AstPath_instances = new WeakSet();
-getNodeStackIndex_fn = function(count) {
-  const { stack: stack2 } = this;
-  for (let i = stack2.length - 1; i >= 0; i -= 2) {
-    if (!Array.isArray(stack2[i]) && --count < 0) {
-      return i;
-    }
-  }
-  return -1;
-};
-getAncestors_fn = function* () {
-  const { stack: stack2 } = this;
-  for (let index = stack2.length - 3; index >= 0; index -= 2) {
-    const value = stack2[index];
-    if (!Array.isArray(value)) {
-      yield value;
+  *#getAncestors() {
+    const { stack: stack2 } = this;
+    for (let index = stack2.length - 3; index >= 0; index -= 2) {
+      const value = stack2[index];
+      if (!Array.isArray(value)) {
+        yield value;
+      }
     }
   }
 };
@@ -18641,7 +18609,7 @@ function isLeaf(node, options8) {
 // src/utils/skip.js
 function skip(characters) {
   return (text, startIndex, options8) => {
-    const backwards = Boolean(options8 == null ? void 0 : options8.backwards);
+    const backwards = Boolean(options8?.backwards);
     if (startIndex === false) {
       return false;
     }
@@ -18671,7 +18639,7 @@ var skipEverythingButNewLine = skip(/[^\n\r]/u);
 
 // src/utils/skip-newline.js
 function skipNewline(text, startIndex, options8) {
-  const backwards = Boolean(options8 == null ? void 0 : options8.backwards);
+  const backwards = Boolean(options8?.backwards);
   if (startIndex === false) {
     return false;
   }
@@ -18740,7 +18708,7 @@ function describeNodeForDebugging(node) {
   return nodeType + (nodeName ? " " + nodeName : "");
 }
 function addCommentHelper(node, comment) {
-  const comments = node.comments ?? (node.comments = []);
+  const comments = node.comments ??= [];
   comments.push(comment);
   comment.printed = false;
   comment.nodeDescription = describeNodeForDebugging(node);
@@ -18782,7 +18750,7 @@ function getSortedChildNodes(node, options8) {
   if (!canAttachComment) {
     return [];
   }
-  const childNodes = ((getCommentChildNodes == null ? void 0 : getCommentChildNodes(node, options8)) ?? [
+  const childNodes = (getCommentChildNodes?.(node, options8) ?? [
     ...getChildren(node, {
       getVisitorKeys: create_get_visitor_keys_function_default(printerGetVisitorKeys)
     })
@@ -18824,7 +18792,7 @@ function decorateComment(node, comment, options8, enclosingNode) {
     }
     throw new Error("Comment location overlaps with node location");
   }
-  if ((enclosingNode == null ? void 0 : enclosingNode.type) === "TemplateLiteral") {
+  if (enclosingNode?.type === "TemplateLiteral") {
     const { quasis } = enclosingNode;
     const commentIndex = findExpressionIndexForComment(
       quasis,
@@ -18991,7 +18959,6 @@ function isEndOfLineComment(text, options8, decoratedComments, commentIndex) {
   return has_newline_default(text, end);
 }
 function breakTies(tiesToBreak, options8) {
-  var _a, _b;
   const tieCount = tiesToBreak.length;
   if (tieCount === 0) {
     return;
@@ -19008,7 +18975,7 @@ function breakTies(tiesToBreak, options8) {
     assert4.strictEqual(currentCommentPrecedingNode, precedingNode);
     assert4.strictEqual(currentCommentFollowingNode, followingNode);
     const gap = options8.originalText.slice(options8.locEnd(comment), gapEndPos);
-    if (((_b = (_a = options8.printer).isGap) == null ? void 0 : _b.call(_a, gap, options8)) ?? /^[\s(]*$/u.test(gap)) {
+    if (options8.printer.isGap?.(gap, options8) ?? /^[\s(]*$/u.test(gap)) {
       gapEndPos = options8.locStart(comment);
     } else {
       break;
@@ -19056,11 +19023,10 @@ function printComment(path13, options8) {
   return options8.printer.printComment(path13, options8);
 }
 function printLeadingComment(path13, options8) {
-  var _a;
   const comment = path13.node;
   const parts = [printComment(path13, options8)];
   const { printer, originalText, locStart, locEnd } = options8;
-  const isBlock = (_a = printer.isBlockComment) == null ? void 0 : _a.call(printer, comment);
+  const isBlock = printer.isBlockComment?.(comment);
   if (isBlock) {
     const lineBreak = has_newline_default(originalText, locEnd(comment)) ? has_newline_default(originalText, locStart(comment), {
       backwards: true
@@ -19079,12 +19045,11 @@ function printLeadingComment(path13, options8) {
   return parts;
 }
 function printTrailingComment(path13, options8, previousComment) {
-  var _a;
   const comment = path13.node;
   const printed = printComment(path13, options8);
   const { printer, originalText, locStart } = options8;
-  const isBlock = (_a = printer.isBlockComment) == null ? void 0 : _a.call(printer, comment);
-  if ((previousComment == null ? void 0 : previousComment.hasLineSuffix) && !(previousComment == null ? void 0 : previousComment.isBlock) || has_newline_default(originalText, locStart(comment), { backwards: true })) {
+  const isBlock = printer.isBlockComment?.(comment);
+  if (previousComment?.hasLineSuffix && !previousComment?.isBlock || has_newline_default(originalText, locStart(comment), { backwards: true })) {
     const isLineBeforeEmpty = is_previous_line_empty_default(
       originalText,
       locStart(comment)
@@ -19095,7 +19060,7 @@ function printTrailingComment(path13, options8, previousComment) {
       hasLineSuffix: true
     };
   }
-  if (!isBlock || (previousComment == null ? void 0 : previousComment.hasLineSuffix)) {
+  if (!isBlock || previousComment?.hasLineSuffix) {
     return {
       doc: [lineSuffix([" ", printed]), breakParent],
       isBlock,
@@ -19121,7 +19086,7 @@ function printCommentsSeparately(path13, options8) {
   let printedTrailingComment;
   path13.each(() => {
     const comment = path13.node;
-    if (ignored == null ? void 0 : ignored.has(comment)) {
+    if (ignored?.has(comment)) {
       return;
     }
     const { leading, trailing } = comment;
@@ -19460,10 +19425,7 @@ function getSupportInfo({ plugins = [], showDeprecated = false } = {}) {
       }
     }
     option.pluginDefaults = Object.fromEntries(
-      plugins.filter((plugin) => {
-        var _a;
-        return ((_a = plugin.defaultOptions) == null ? void 0 : _a[option.name]) !== void 0;
-      }).map((plugin) => [plugin.name, plugin.defaultOptions[option.name]])
+      plugins.filter((plugin) => plugin.defaultOptions?.[option.name] !== void 0).map((plugin) => [plugin.name, plugin.defaultOptions[option.name]])
     );
     options8.push(option);
   }
@@ -19480,7 +19442,7 @@ function* collectParsersFromLanguages(parserChoices, languages2, plugins) {
             (plugin2) => plugin2.parsers && Object.prototype.hasOwnProperty.call(plugin2.parsers, parserName)
           );
           let description = language.name;
-          if (plugin == null ? void 0 : plugin.name) {
+          if (plugin?.name) {
             description += ` (plugin: ${plugin.name})`;
           }
           yield { value: parserName, description };
@@ -19591,7 +19553,7 @@ function optionInfoToSchema(optionInfo, { isCLI, optionInfos, FlagSchema }) {
     case "choice":
       SchemaConstructor = ChoiceSchema;
       parameters.choices = optionInfo.choices.map(
-        (choiceInfo) => (choiceInfo == null ? void 0 : choiceInfo.redirect) ? {
+        (choiceInfo) => choiceInfo?.redirect ? {
           ...choiceInfo,
           redirect: {
             to: { key: optionInfo.name, value: choiceInfo.redirect }
@@ -19733,7 +19695,6 @@ var formatOptionsHiddenDefaults = {
   locEnd: null
 };
 async function normalizeFormatOptions(options8, opts = {}) {
-  var _a;
   const rawOptions = { ...options8 };
   if (!rawOptions.parser) {
     if (!rawOptions.filepath) {
@@ -19769,7 +19730,7 @@ async function normalizeFormatOptions(options8, opts = {}) {
   rawOptions.astFormat = parser.astFormat;
   rawOptions.locEnd = parser.locEnd;
   rawOptions.locStart = parser.locStart;
-  const printerPlugin = ((_a = parserPlugin.printers) == null ? void 0 : _a[parser.astFormat]) ? parserPlugin : getPrinterPluginByAstFormat(rawOptions.plugins, parser.astFormat);
+  const printerPlugin = parserPlugin.printers?.[parser.astFormat] ? parserPlugin : getPrinterPluginByAstFormat(rawOptions.plugins, parser.astFormat);
   const printer = await initPrinter(printerPlugin, parser.astFormat);
   rawOptions.printer = printer;
   const pluginDefaults = printerPlugin.defaultOptions ? Object.fromEntries(
@@ -19998,11 +19959,10 @@ async function printAstToDoc(ast, options8) {
   }
 }
 function callPluginPrintFunction(path13, options8, printPath, args, embeds) {
-  var _a;
   const { node } = path13;
   const { printer } = options8;
   let doc2;
-  if ((_a = printer.hasPrettierIgnore) == null ? void 0 : _a.call(printer, path13)) {
+  if (printer.hasPrettierIgnore?.(path13)) {
     doc2 = print_ignored_default(path13, options8);
   } else if (embeds.has(node)) {
     doc2 = embeds.get(node);
@@ -20283,7 +20243,7 @@ function isSourceElement(opts, node, parentNode) {
     case "espree":
     case "meriyah":
     case "__babel_estree":
-      return isJsSourceElement(node.type, parentNode == null ? void 0 : parentNode.type);
+      return isJsSourceElement(node.type, parentNode?.type);
     case "json":
     case "json5":
     case "jsonc":

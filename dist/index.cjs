@@ -36,7 +36,7 @@ var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: tru
 // src/utils/skip.js
 function skip(characters) {
   return (text, startIndex, options) => {
-    const backwards = Boolean(options == null ? void 0 : options.backwards);
+    const backwards = Boolean(options?.backwards);
     if (startIndex === false) {
       return false;
     }
@@ -92,7 +92,7 @@ var init_skip_inline_comment = __esm({
 
 // src/utils/skip-newline.js
 function skipNewline(text, startIndex, options) {
-  const backwards = Boolean(options == null ? void 0 : options.backwards);
+  const backwards = Boolean(options?.backwards);
   if (startIndex === false) {
     return false;
   }
@@ -238,7 +238,7 @@ function describeNodeForDebugging(node) {
   return nodeType + (nodeName ? " " + nodeName : "");
 }
 function addCommentHelper(node, comment) {
-  const comments = node.comments ?? (node.comments = []);
+  const comments = node.comments ??= [];
   comments.push(comment);
   comment.printed = false;
   comment.nodeDescription = describeNodeForDebugging(node);

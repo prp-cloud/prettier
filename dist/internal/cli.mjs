@@ -11,9 +11,6 @@ var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
 var __getProtoOf = Object.getPrototypeOf;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
-var __typeError = (msg) => {
-  throw TypeError(msg);
-};
 var __require = /* @__PURE__ */ ((x) => typeof require !== "undefined" ? require : typeof Proxy !== "undefined" ? new Proxy(x, {
   get: (a, b) => (typeof require !== "undefined" ? require : a)[b]
 }) : x)(function(x) {
@@ -39,10 +36,6 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
   isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
   mod
 ));
-var __accessCheck = (obj, member, msg) => member.has(obj) || __typeError("Cannot " + msg);
-var __privateGet = (obj, member, getter) => (__accessCheck(obj, member, "read from private field"), getter ? getter.call(obj) : member.get(obj));
-var __privateAdd = (obj, member, value) => member.has(obj) ? __typeError("Cannot add the same private member more than once") : member instanceof WeakSet ? member.add(obj) : member.set(obj, value);
-var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "write to private field"), setter ? setter.call(obj, value) : member.set(obj, value), value);
 
 // node_modules/dashify/index.js
 var require_dashify = __commonJS({
@@ -1032,7 +1025,7 @@ var require_cache2 = __commonJS({
               */
           analyzeFiles(files) {
             const me = this;
-            files || (files = []);
+            files ||= [];
             const res = {
               changedFiles: [],
               notFoundFiles: [],
@@ -1123,7 +1116,7 @@ var require_cache2 = __commonJS({
               */
           getUpdatedFiles(files) {
             const me = this;
-            files || (files = []);
+            files ||= [];
             return me.normalizeEntries(files).filter((entry) => entry.changed).map((entry) => entry.key);
           },
           /**
@@ -1133,7 +1126,7 @@ var require_cache2 = __commonJS({
               * @returns {*}
               */
           normalizeEntries(files) {
-            files || (files = []);
+            files ||= [];
             const me = this;
             const nEntries = files.map((file) => me.getFileDescriptor(file));
             return nEntries;
@@ -1443,12 +1436,11 @@ function apiOptionToCliOption(apiOption) {
   return normalizeDetailedOption(cliOption);
 }
 function normalizeDetailedOption(option) {
-  var _a;
   return {
     category: optionCategories.CATEGORY_OTHER,
     ...option,
     name: option.cliName ?? (0, import_dashify.default)(option.name),
-    choices: (_a = option.choices) == null ? void 0 : _a.map((choice) => {
+    choices: option.choices?.map((choice) => {
       const newChoice = {
         description: "",
         deprecated: false,
@@ -2258,16 +2250,15 @@ var descriptor = {
   value: (value) => vnopts.apiDescriptor.value(value),
   pair: ({ key, value }) => value === false ? `--no-${key}` : value === true ? descriptor.key(key) : value === "" ? `${descriptor.key(key)} without an argument` : `${descriptor.key(key)}=${value}`
 };
-var _flags;
 var FlagSchema = class extends vnopts.ChoiceSchema {
+  #flags = [];
   constructor({ name, flags }) {
     super({ name, choices: flags });
-    __privateAdd(this, _flags, []);
-    __privateSet(this, _flags, [...flags].sort());
+    this.#flags = [...flags].sort();
   }
   preprocess(value, utils) {
-    if (typeof value === "string" && value.length > 0 && !__privateGet(this, _flags).includes(value)) {
-      const suggestion = __privateGet(this, _flags).find((flag) => leven(flag, value) < 3);
+    if (typeof value === "string" && value.length > 0 && !this.#flags.includes(value)) {
+      const suggestion = this.#flags.find((flag) => leven(flag, value) < 3);
       if (suggestion) {
         utils.logger.warn(
           [
@@ -2284,7 +2275,6 @@ var FlagSchema = class extends vnopts.ChoiceSchema {
     return "a flag";
   }
 };
-_flags = new WeakMap();
 function normalizeCliOptions(options, optionInfos, opts) {
   return normalizeOptions(options, optionInfos, {
     ...opts,
@@ -2297,7 +2287,6 @@ var normalize_cli_options_default = normalizeCliOptions;
 
 // src/cli/options/parse-cli-arguments.js
 function parseArgv(rawArguments, detailedOptions, logger, keys) {
-  var _a;
   const minimistOptions = createMinimistOptions(detailedOptions);
   let argv = minimistParse(rawArguments, minimistOptions);
   if (keys) {
@@ -2314,7 +2303,7 @@ function parseArgv(rawArguments, detailedOptions, logger, keys) {
         return [option.forwardToApi || camelCase(key), value];
       })
     ),
-    _: (_a = normalized._) == null ? void 0 : _a.map(String),
+    _: normalized._?.map(String),
     get __raw() {
       return argv;
     }
@@ -2331,10 +2320,9 @@ function parseArgvWithoutPlugins(rawArguments, logger, keys) {
 }
 
 // src/cli/context.js
-var _stack;
 var Context = class {
+  #stack = [];
   constructor({ rawArguments, logger }) {
-    __privateAdd(this, _stack, []);
     this.rawArguments = rawArguments;
     this.logger = logger;
   }
@@ -2353,15 +2341,15 @@ var Context = class {
    */
   async pushContextPlugins(plugins) {
     const options = await getContextOptions(plugins);
-    __privateGet(this, _stack).push(options);
+    this.#stack.push(options);
     Object.assign(this, options);
   }
   popContextPlugins() {
-    __privateGet(this, _stack).pop();
+    this.#stack.pop();
     Object.assign(this, at_default(
       /* isOptionalObject */
       false,
-      __privateGet(this, _stack),
+      this.#stack,
       -1
     ));
   }
@@ -2389,7 +2377,6 @@ var Context = class {
     }
   }
 };
-_stack = new WeakMap();
 var context_default = Context;
 
 // src/cli/file-info.js
@@ -2777,29 +2764,28 @@ function getHashOfOptions(options) {
 function getMetadataFromFileDescriptor(fileDescriptor) {
   return fileDescriptor.meta;
 }
-var _fileEntryCache;
 var FormatResultsCache = class {
+  #fileEntryCache;
   /**
    * @param {string} cacheFileLocation The path of cache file location. (default: `node_modules/.cache/prettier/.prettier-cache`)
    * @param {string} cacheStrategy
    */
   constructor(cacheFileLocation, cacheStrategy) {
-    __privateAdd(this, _fileEntryCache);
     const useChecksum = cacheStrategy === "content";
-    __privateSet(this, _fileEntryCache, import_file_entry_cache.default.create(
+    this.#fileEntryCache = import_file_entry_cache.default.create(
       /* cacheId */
       cacheFileLocation,
       /* directory */
       void 0,
       useChecksum
-    ));
+    );
   }
   /**
    * @param {string} filePath
    * @param {any} options
    */
   existsAvailableFormatResultsCache(filePath, options) {
-    const fileDescriptor = __privateGet(this, _fileEntryCache).getFileDescriptor(filePath);
+    const fileDescriptor = this.#fileEntryCache.getFileDescriptor(filePath);
     if (fileDescriptor.notFound) {
       return false;
     }
@@ -2813,7 +2799,7 @@ var FormatResultsCache = class {
    * @param {any} options
    */
   setFormatResultsCache(filePath, options) {
-    const fileDescriptor = __privateGet(this, _fileEntryCache).getFileDescriptor(filePath);
+    const fileDescriptor = this.#fileEntryCache.getFileDescriptor(filePath);
     const meta = getMetadataFromFileDescriptor(fileDescriptor);
     if (fileDescriptor && !fileDescriptor.notFound) {
       meta.hashOfOptions = getHashOfOptions(options);
@@ -2823,13 +2809,12 @@ var FormatResultsCache = class {
    * @param {string} filePath
    */
   removeFormatResultsCache(filePath) {
-    __privateGet(this, _fileEntryCache).removeEntry(filePath);
+    this.#fileEntryCache.removeEntry(filePath);
   }
   reconcile() {
-    __privateGet(this, _fileEntryCache).reconcile();
+    this.#fileEntryCache.reconcile();
   }
 };
-_fileEntryCache = new WeakMap();
 var format_results_cache_default = FormatResultsCache;
 
 // src/cli/is-tty.js
@@ -2921,7 +2906,7 @@ function applyConfigPrecedence(context, options) {
 }
 async function getOptionsForFile(context, filepath) {
   const options = await getOptionsOrDie(context, filepath);
-  const hasPlugins = options == null ? void 0 : options.plugins;
+  const hasPlugins = options?.plugins;
   if (hasPlugins) {
     await context.pushContextPlugins(options.plugins);
   }
@@ -2953,7 +2938,7 @@ var DebugError = class extends Error {
   name = "DebugError";
 };
 function handleError(context, filename, error, printedFilename, ignoreUnknown) {
-  ignoreUnknown || (ignoreUnknown = context.argv.ignoreUnknown);
+  ignoreUnknown ||= context.argv.ignoreUnknown;
   const errorIsUndefinedParseError = error instanceof errors.UndefinedParserError;
   if (printedFilename) {
     if ((context.argv.write || ignoreUnknown) && errorIsUndefinedParseError) {
@@ -2972,8 +2957,8 @@ function handleError(context, filename, error, printedFilename, ignoreUnknown) {
     context.logger.error(error.message);
     return;
   }
-  const isParseError = Boolean(error == null ? void 0 : error.loc);
-  const isValidationError = /^Invalid \S+ value\./u.test(error == null ? void 0 : error.message);
+  const isParseError = Boolean(error?.loc);
+  const isValidationError = /^Invalid \S+ value\./u.test(error?.message);
   if (isParseError) {
     context.logger.error(`${filename}: ${String(error)}`);
   } else if (isValidationError || error instanceof errors.ConfigError) {
@@ -3055,7 +3040,7 @@ async function format3(context, input, opt) {
     return { formatted: pp, filepath: opt.filepath || "(stdin)\n" };
   }
   const { performanceTestFlag } = context;
-  if (performanceTestFlag == null ? void 0 : performanceTestFlag.debugBenchmark) {
+  if (performanceTestFlag?.debugBenchmark) {
     let benchmark;
     try {
       ({ default: benchmark } = await import("benchmark"));
@@ -3088,7 +3073,7 @@ async function format3(context, input, opt) {
     context.logger.debug(
       "'--debug-benchmark' measurements for formatWithCursor: " + JSON.stringify(result, null, 2)
     );
-  } else if (performanceTestFlag == null ? void 0 : performanceTestFlag.debugRepeat) {
+  } else if (performanceTestFlag?.debugRepeat) {
     const repeat = performanceTestFlag.debugRepeat;
     context.logger.debug(
       `'${performanceTestFlag.name}' found, running formatWithCursor ${repeat} times.`
@@ -3217,12 +3202,12 @@ ${error2.message}`
       continue;
     }
     if (isFileIgnored) {
-      printedFilename == null ? void 0 : printedFilename.clear();
+      printedFilename?.clear();
       writeOutput(context, { formatted: input }, options);
       continue;
     }
     const start = Date.now();
-    const isCacheExists = formatResultsCache == null ? void 0 : formatResultsCache.existsAvailableFormatResultsCache(
+    const isCacheExists = formatResultsCache?.existsAvailableFormatResultsCache(
       filename,
       options
     );
@@ -3247,7 +3232,7 @@ ${error2.message}`
     }
     const isDifferent = output !== input;
     let shouldSetCache = !isDifferent;
-    printedFilename == null ? void 0 : printedFilename.clear();
+    printedFilename?.clear();
     if (performanceTestFlag) {
       context.logger.log(
         `'${performanceTestFlag.name}' option found, skipped print code or write files.`
@@ -3287,9 +3272,9 @@ ${error2.message}`
       writeOutput(context, result, options);
     }
     if (shouldSetCache) {
-      formatResultsCache == null ? void 0 : formatResultsCache.setFormatResultsCache(filename, options);
+      formatResultsCache?.setFormatResultsCache(filename, options);
     } else {
-      formatResultsCache == null ? void 0 : formatResultsCache.removeFormatResultsCache(filename);
+      formatResultsCache?.removeFormatResultsCache(filename);
     }
     if (isDifferent) {
       if (context.argv.check) {
@@ -3300,7 +3285,7 @@ ${error2.message}`
       numberOfUnformattedFilesFound += 1;
     }
   }
-  formatResultsCache == null ? void 0 : formatResultsCache.reconcile();
+  formatResultsCache?.reconcile();
   if (context.argv.check) {
     if (numberOfUnformattedFilesFound === 0) {
       context.logger.log("All matched files use Prettier code style!");
@@ -3673,17 +3658,16 @@ function createDefaultValueDisplay(value) {
   return Array.isArray(value) ? `[${value.map(createDefaultValueDisplay).join(", ")}]` : value;
 }
 function getOptionDefaultValue(context, optionName) {
-  var _a;
   const option = context.detailedOptions.find(
     ({ name }) => name === optionName
   );
-  if ((option == null ? void 0 : option.default) !== void 0) {
+  if (option?.default !== void 0) {
     return option.default;
   }
   const optionCamelName = camelCase(optionName);
-  return formatOptionsHiddenDefaults[optionCamelName] ?? ((_a = context.supportOptions.find(
+  return formatOptionsHiddenDefaults[optionCamelName] ?? context.supportOptions.find(
     (option2) => !option2.deprecated && option2.name === optionCamelName
-  )) == null ? void 0 : _a.default);
+  )?.default;
 }
 function createOptionUsageHeader(option) {
   const name = `--${option.name}`;
