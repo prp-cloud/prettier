@@ -117,7 +117,7 @@
 		"npm-run-all2": "7.0.0",
     "outdent": "0.8.0",
     "parse-json": "8.1.0",
-    "postcss": "8.4.47",
+    "postcss": "8.4.49",
     "postcss-less": "6.0.0",
     "postcss-media-query-parser": "0.2.3",
     "postcss-scss": "4.0.9",
