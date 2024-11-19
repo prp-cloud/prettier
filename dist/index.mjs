@@ -14925,10 +14925,16 @@ function sliceAndTrimEndOf(str2, startPtr, endPtr, allowNewLines) {
   }
   return [trimmed, commentIdx];
 }
-function extractValue(str2, ptr, end) {
+function extractValue(str2, ptr, end, depth) {
+  if (depth === 0) {
+    throw new TomlError("document contains excessively nested structures. aborting.", {
+      toml: str2,
+      ptr
+    });
+  }
   let c2 = str2[ptr];
   if (c2 === "[" || c2 === "{") {
-    let [value, endPtr2] = c2 === "[" ? parseArray(str2, ptr) : parseInlineTable(str2, ptr);
+    let [value, endPtr2] = c2 === "[" ? parseArray(str2, ptr, depth) : parseInlineTable(str2, ptr, depth);
     let newPtr = skipUntil(str2, endPtr2, ",", end);
     if (end === "}") {
       let nextNewLine = indexOfNewline(str2, endPtr2, newPtr);
@@ -15044,7 +15050,7 @@ function parseKey(str2, ptr, end = "=") {
   } while (dot + 1 && dot < endPtr);
   return [parsed, skipVoid(str2, endPtr + 1, true, true)];
 }
-function parseInlineTable(str2, ptr) {
+function parseInlineTable(str2, ptr, depth) {
   let res = {};
   let seen = /* @__PURE__ */ new Set();
   let c2;
@@ -15091,7 +15097,7 @@ function parseInlineTable(str2, ptr) {
           ptr
         });
       }
-      let [value, valueEndPtr] = extractValue(str2, keyEndPtr, "}");
+      let [value, valueEndPtr] = extractValue(str2, keyEndPtr, "}", depth - 1);
       seen.add(value);
       t[k] = value;
       ptr = valueEndPtr;
@@ -15112,7 +15118,7 @@ function parseInlineTable(str2, ptr) {
   }
   return [res, ptr];
 }
-function parseArray(str2, ptr) {
+function parseArray(str2, ptr, depth) {
   let res = [];
   let c2;
   ptr++;
@@ -15125,7 +15131,7 @@ function parseArray(str2, ptr) {
     } else if (c2 === "#")
       ptr = skipComment(str2, ptr);
     else if (c2 !== " " && c2 !== "	" && c2 !== "\n" && c2 !== "\r") {
-      let e = extractValue(str2, ptr - 1, "]");
+      let e = extractValue(str2, ptr - 1, "]", depth - 1);
       res.push(e[0]);
       ptr = e[1];
     }
@@ -15199,7 +15205,8 @@ function peekTable(key2, table, meta, type2) {
   }
   return [k, t, state.c];
 }
-function parse4(toml) {
+function parse4(toml, opts) {
+  let maxDepth = opts?.maxDepth ?? 1e3;
   let res = {};
   let meta = {};
   let tbl = res;
@@ -15248,7 +15255,7 @@ function parse4(toml) {
           ptr
         });
       }
-      let v = extractValue(toml, k[1]);
+      let v = extractValue(toml, k[1], void 0, maxDepth);
       p[1][p[0]] = v[0];
       ptr = v[1];
     }
