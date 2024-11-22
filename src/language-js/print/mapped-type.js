@@ -75,7 +75,7 @@ function printTypescriptMappedType(path, options, print) {
           node.typeAnnotation ? ": " : "",
           print("typeAnnotation"),
         ]),
-        options.semi ? ifBreak(";") : "",
+        /*options.semi ? ifBreak(";") :*/ "",
       ]),
       printDanglingComments(path, options),
       options.bracketSpacing ? line : softline,
