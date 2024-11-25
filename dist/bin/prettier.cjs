@@ -2,6 +2,10 @@
 "use strict";
 
 // bin/prettier.cjs
+var nodeModule = require("module");
+if (typeof nodeModule.enableCompileCache === "function") {
+  nodeModule.enableCompileCache();
+}
 function runCli(cli) {
   return cli.run();
 }

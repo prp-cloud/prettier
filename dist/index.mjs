@@ -7945,7 +7945,11 @@ var require_vendors = __commonJS({
       {
         name: "Appcircle",
         constant: "APPCIRCLE",
-        env: "AC_APPCIRCLE"
+        env: "AC_APPCIRCLE",
+        pr: {
+          env: "AC_GIT_PR",
+          ne: "false"
+        }
       },
       {
         name: "AppVeyor",
@@ -7956,7 +7960,15 @@ var require_vendors = __commonJS({
       {
         name: "AWS CodeBuild",
         constant: "CODEBUILD",
-        env: "CODEBUILD_BUILD_ARN"
+        env: "CODEBUILD_BUILD_ARN",
+        pr: {
+          env: "CODEBUILD_WEBHOOK_EVENT",
+          any: [
+            "PULL_REQUEST_CREATED",
+            "PULL_REQUEST_UPDATED",
+            "PULL_REQUEST_REOPENED"
+          ]
+        }
       },
       {
         name: "Azure Pipelines",
@@ -8287,6 +8299,7 @@ var require_ci_info = __commonJS({
     });
     exports.name = null;
     exports.isPR = null;
+    exports.id = null;
     vendors.forEach(function(vendor) {
       const envs = Array.isArray(vendor.env) ? vendor.env : [vendor.env];
       const isCI2 = envs.every(function(obj) {
@@ -8297,24 +8310,8 @@ var require_ci_info = __commonJS({
         return;
       }
       exports.name = vendor.name;
-      switch (typeof vendor.pr) {
-        case "string":
-          exports.isPR = !!env2[vendor.pr];
-          break;
-        case "object":
-          if ("env" in vendor.pr) {
-            exports.isPR = vendor.pr.env in env2 && env2[vendor.pr.env] !== vendor.pr.ne;
-          } else if ("any" in vendor.pr) {
-            exports.isPR = vendor.pr.any.some(function(key2) {
-              return !!env2[key2];
-            });
-          } else {
-            exports.isPR = checkEnv(vendor.pr);
-          }
-          break;
-        default:
-          exports.isPR = null;
-      }
+      exports.isPR = checkPR(vendor);
+      exports.id = vendor.constant;
     });
     exports.isCI = !!(env2.CI !== "false" && // Bypass all checks if CI env is explicitly set to 'false'
     (env2.BUILD_ID || // Jenkins, Cloudbees
@@ -8340,6 +8337,30 @@ var require_ci_info = __commonJS({
       return Object.keys(obj).every(function(k) {
         return env2[k] === obj[k];
       });
+    }
+    function checkPR(vendor) {
+      switch (typeof vendor.pr) {
+        case "string":
+          return !!env2[vendor.pr];
+        case "object":
+          if ("env" in vendor.pr) {
+            if ("any" in vendor.pr) {
+              return vendor.pr.any.some(function(key2) {
+                return env2[vendor.pr.env] === key2;
+              });
+            } else {
+              return vendor.pr.env in env2 && env2[vendor.pr.env] !== vendor.pr.ne;
+            }
+          } else if ("any" in vendor.pr) {
+            return vendor.pr.any.some(function(key2) {
+              return !!env2[key2];
+            });
+          } else {
+            return checkEnv(vendor.pr);
+          }
+        default:
+          return null;
+      }
     }
   }
 });
@@ -16793,11 +16814,16 @@ var require_from_file_default = requireFromFile;
 var requireErrorCodesShouldBeIgnored = /* @__PURE__ */ new Set([
   "MODULE_NOT_FOUND",
   "ERR_REQUIRE_ESM",
-  "ERR_PACKAGE_PATH_NOT_EXPORTED"
+  "ERR_PACKAGE_PATH_NOT_EXPORTED",
+  "ERR_REQUIRE_ASYNC_MODULE"
 ]);
 async function loadExternalConfig(externalConfig, configFile) {
   try {
-    return require_from_file_default(externalConfig, configFile);
+    const required = require_from_file_default(externalConfig, configFile);
+    if (process.features.require_module && required.__esModule) {
+      return required.default;
+    }
+    return required;
   } catch (error) {
     if (!requireErrorCodesShouldBeIgnored.has(error?.code)) {
       throw error;
