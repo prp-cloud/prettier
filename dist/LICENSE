@@ -2662,7 +2662,7 @@ Author: Yoan Arnaudov <jonidev@gmail.com>
 
 ----------------------------------------
 
-### nanoid@v3.3.7
+### nanoid@v3.3.8
 
 > A tiny (116 bytes), secure URL-friendly unique string ID generator
 
@@ -3591,7 +3591,7 @@ Contributors:
 
 ----------------------------------------
 
-### ts-api-utils@v1.4.1
+### ts-api-utils@v1.4.2
 
 > Utility functions for working with TypeScript's API. Successor to the wonderful tsutils. 🛠️️
 
