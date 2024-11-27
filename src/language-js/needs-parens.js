@@ -834,6 +834,10 @@ function needsParens(path, options) {
         return false;
       }
 
+      if (key === "node" && parent.type === "JsExpressionRoot") {
+        return false;
+      }
+
       return true;
     }
     case "ConditionalExpression":
