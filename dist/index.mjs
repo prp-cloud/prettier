@@ -17955,7 +17955,8 @@ function fits(next, restCommands, width, hasLineSuffix, groupModeMap, mustBeFlat
       case DOC_TYPE_ARRAY:
       case DOC_TYPE_FILL: {
         const parts = docType === DOC_TYPE_ARRAY ? doc2 : doc2.parts;
-        for (let i = parts.length - 1; i >= 0; i--) {
+        const end = doc2[DOC_FILL_PRINTED_LENGTH] ?? 0;
+        for (let i = parts.length - 1; i >= end; i--) {
           cmds.push({ mode, doc: parts[i] });
         }
         break;
