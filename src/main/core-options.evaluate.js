@@ -1,5 +1,4 @@
 import { outdent } from "outdent";
-
 import {
   CATEGORY_CONFIG,
   CATEGORY_EDITOR,
@@ -17,7 +16,7 @@ import {
  * @property {OptionRangeInfo} [range] - for type int
  * @property {string} description
  * @property {string} [deprecated] - deprecated since version
- * @property {OptionRedirectInfo} [redirect] - redirect deprecated option
+ * @property {OptionRedirectInfo | string} [redirect] - redirect deprecated option
  * @property {(value: any) => boolean} [exception]
  * @property {OptionChoiceInfo[]} [choices] - for type choice
  * @property {string} [cliName]
@@ -62,17 +61,15 @@ const options = {
     choices: [
       {
         value: "lf",
-        description:
-          "Line Feed only (\\n), common on Linux and macOS as well as inside git repos",
+        description: String.raw`Line Feed only (\n), common on Linux and macOS as well as inside git repos`,
       },
       {
         value: "crlf",
-        description:
-          "Carriage Return + Line Feed characters (\\r\\n), common on Windows",
+        description: String.raw`Carriage Return + Line Feed characters (\r\n), common on Windows`,
       },
       {
         value: "cr",
-        description: "Carriage Return character only (\\r), used very rarely",
+        description: String.raw`Carriage Return character only (\r), used very rarely`,
       },
       {
         value: "auto",

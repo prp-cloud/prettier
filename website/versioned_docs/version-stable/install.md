@@ -25,6 +25,12 @@ yarn add --dev --exact prettier
 pnpm add --save-dev --save-exact prettier
 ```
 
+<!--bun-->
+
+```bash
+bun add --dev --exact prettier
+```
+
 <!--END_DOCUSAURUS_CODE_TABS-->
 
 Then, create an empty config file to let editors and other tools know you are using Prettier:
@@ -42,10 +48,8 @@ node --eval "fs.writeFileSync('.prettierrc','{}\n')"
 
 Next, create a [.prettierignore](ignore.md) file to let the Prettier CLI and editors know which files to _not_ format. Here’s an example:
 
-```text
-# Ignore artifacts:
-build
-coverage
+```bash
+node --eval "fs.writeFileSync('.prettierignore','# Ignore artifacts:\nbuild\ncoverage\n')"
 ```
 
 > Tip! Prettier will follow rules specified in .gitignore if it exists in the same directory from which it is run. You can also base your .prettierignore on .eslintignore (if you have one).
@@ -80,6 +84,14 @@ pnpm exec prettier . --write
 ```
 
 > What is `pnpm` doing at the start? `pnpm prettier` runs the locally installed version of Prettier. We’ll leave off the `pnpm` part for brevity throughout the rest of this file!
+
+<!--bun-->
+
+```bash
+bun prettier . --write
+```
+
+> What is `bun` doing at the start? `bun prettier` runs the locally installed version of Prettier. We’ll leave off the `bun` part for brevity throughout the rest of this file!
 
 <!--END_DOCUSAURUS_CODE_TABS-->
 
@@ -122,18 +134,16 @@ For example, you can do the following to have Prettier run before each commit:
 
    ```bash
    npm install --save-dev husky lint-staged
-   npx husky install
-   npm pkg set scripts.prepare="husky install"
-   npx husky add .husky/pre-commit "npx lint-staged"
+   npx husky init
+   node --eval "fs.writeFileSync('.husky/pre-commit','npx lint-staged\n')"
    ```
 
    <!--yarn-->
 
    ```bash
    yarn add --dev husky lint-staged
-   npx husky install
-   npm pkg set scripts.prepare="husky install"
-   npx husky add .husky/pre-commit "npx lint-staged"
+   npx husky init
+   node --eval "fs.writeFileSync('.husky/pre-commit','yarn lint-staged\n')"
    ```
 
    > If you use Yarn 2, see https://typicode.github.io/husky/#/?id=yarn-2
@@ -142,9 +152,16 @@ For example, you can do the following to have Prettier run before each commit:
 
    ```bash
    pnpm add --save-dev husky lint-staged
-   pnpm exec husky install
-   npm pkg set scripts.prepare="husky install"
-   pnpm exec husky add .husky/pre-commit "pnpm exec lint-staged"
+   npx husky init
+   node --eval "fs.writeFileSync('.husky/pre-commit','pnpm exec lint-staged\n')"
+   ```
+
+   <!--bun-->
+
+   ```bash
+   bun add --dev husky lint-staged
+   bunx husky init
+   bun --eval "fs.writeFileSync('.husky/pre-commit','bunx lint-staged\n')"
    ```
 
    <!--END_DOCUSAURUS_CODE_TABS-->

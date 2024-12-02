@@ -1,10 +1,8 @@
 import fs from "node:fs";
 import path from "node:path";
 import url from "node:url";
-
 import createEsmUtils from "esm-utils";
 import { temporaryDirectory as getTemporaryDirectory } from "tempy";
-
 import prettier from "../../config/prettier-entry.js";
 
 const { __dirname } = createEsmUtils(import.meta);
@@ -130,9 +128,11 @@ test("API getFileInfo with filepath only", async () => {
     ignored: false,
     inferredParser: "markdown",
   });
-  await expect(prettier.getFileInfo("tsconfig.json")).resolves.toEqual({
+  await expect(
+    prettier.getFileInfo("tsconfig.json", { resolveConfig: false }),
+  ).resolves.toEqual({
     ignored: false,
-    inferredParser: "jsonc",
+    inferredParser: "json",
   });
 });
 

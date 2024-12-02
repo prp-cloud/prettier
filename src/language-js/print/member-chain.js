@@ -8,7 +8,6 @@ import {
   indent,
   join,
   label,
-  softline,
 } from "../../document/builders.js";
 import { willBreak } from "../../document/utils.js";
 import { printComments } from "../../main/comments/print.js";
@@ -37,7 +36,7 @@ import {
 } from "./misc.js";
 
 /**
- * @typedef {import("../../document/builders.js").Doc} Doc
+ * @import {Doc} from "../../document/builders.js"
  * @typedef {{ node: any, printed: Doc, needsParens?: boolean, shouldInline?: boolean, hasTrailingEmptyLine?: boolean }} PrintedNode
  */
 
@@ -97,11 +96,11 @@ function printMemberChain(path, options, print) {
     return isNextLineEmpty(node, options);
   }
 
-  function rec(path) {
+  function rec() {
     const { node } = path;
 
     if (node.type === "ChainExpression") {
-      return path.call(() => rec(path), "expression");
+      return path.call(rec, "expression");
     }
 
     if (
@@ -125,7 +124,7 @@ function printMemberChain(path, options, print) {
           hasTrailingEmptyLine ? hardline : "",
         ],
       });
-      path.call((callee) => rec(callee), "callee");
+      path.call(rec, "callee");
     } else if (isMemberish(node)) {
       printedNodes.unshift({
         node,
@@ -138,13 +137,13 @@ function printMemberChain(path, options, print) {
           options,
         ),
       });
-      path.call((object) => rec(object), "object");
+      path.call(rec, "object");
     } else if (node.type === "TSNonNullExpression") {
       printedNodes.unshift({
         node,
         printed: printComments(path, "!", options),
       });
-      path.call((expression) => rec(expression), "expression");
+      path.call(rec, "expression");
     } else {
       printedNodes.unshift({
         node,
@@ -166,7 +165,7 @@ function printMemberChain(path, options, print) {
   });
 
   if (node.callee) {
-    path.call((callee) => rec(callee), "callee");
+    path.call(rec, "callee");
   }
 
   // Once we have a linear list of printed nodes, we want to create groups out
@@ -279,7 +278,7 @@ function printMemberChain(path, options, print) {
   // likely to be factories.
   function isFactory(name) {
     return false;
-    return /^[A-Z]|^[$_]+$/.test(name);
+    return /^[A-Z]|^[$_]+$/u.test(name);
   }
 
   // In case the Identifier is shorter than tab width, we can keep the
@@ -335,7 +334,7 @@ function printMemberChain(path, options, print) {
     if (groups.length === 0) {
       return "";
     }
-    return indent([softline, join(softline, groups.map(printGroup))]);
+    return indent([hardline, join(hardline, groups.map(printGroup))]);
   }
 
   const printedGroups = groups.map(printGroup);
@@ -382,7 +381,6 @@ function printMemberChain(path, options, print) {
   ];
 
   const callExpressions = printedNodes
-    .slice(1)
     .map(({ node }) => node)
     .filter(isCallExpression);
 
@@ -408,14 +406,12 @@ function printMemberChain(path, options, print) {
   //  * the last call's arguments have a hard line and other calls have non-trivial arguments.
   if (
     nodeHasComment ||
-    (callExpressions.length > 1 /*2*/ &&
-      (callExpressions.some(
+    /*(callExpressions.length > 2 &&
+      callExpressions.some(
         (expr) => !expr.arguments.every((arg) => isSimpleCallArgument(arg)),
-      ) ||
-        printedGroups.some(willBreak))) /*||
-    (callExpressions.length > 1 &&
-      printedGroups.slice(0, -1).some(willBreak)) ||
-    lastGroupWillBreakAndOtherCallsHaveFunctionArguments()*/
+      )) ||*/
+    printedGroups.slice(0, -1).some(willBreak) ||
+    lastGroupWillBreakAndOtherCallsHaveFunctionArguments()
   ) {
     result = group(expanded);
   } else {

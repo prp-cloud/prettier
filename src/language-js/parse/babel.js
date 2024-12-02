@@ -1,5 +1,4 @@
 import { parse as babelParse, parseExpression } from "@babel/parser";
-
 import getNextNonSpaceNonCommentCharacterIndex from "../../utils/get-next-non-space-non-comment-character-index.js";
 import tryCombinations from "../../utils/try-combinations.js";
 import getShebang from "../utils/get-shebang.js";
@@ -11,10 +10,10 @@ import wrapBabelExpression from "./utils/wrap-babel-expression.js";
 
 const createBabelParser = (options) => createParser(createParse(options));
 
+/** @import {ParserOptions, ParserPlugin} from "@babel/parser" */
+
 /**
- * @typedef {import("@babel/parser").parse | import("@babel/parser").parseExpression} Parse
- * @typedef {import("@babel/parser").ParserOptions} ParserOptions
- * @typedef {import("@babel/parser").ParserPlugin} ParserPlugin
+ * @typedef {typeof babelParse | typeof parseExpression} Parse
  */
 
 /** @type {ParserOptions} */
@@ -38,25 +37,19 @@ const parseOptions = {
     "throwExpressions",
     "partialApplication",
     "decorators",
-    "decimal",
     "moduleBlocks",
     "asyncDoExpressions",
-    "regexpUnicodeSets",
     "destructuringPrivate",
     "decoratorAutoAccessors",
-    "importReflection",
     "explicitResourceManagement",
-    ["importAttributes", { deprecatedAssertSyntax: true }],
     "sourcePhaseImports",
     "deferredImportEvaluation",
     ["optionalChainingAssign", { version: "2023-07" }],
+    "recordAndTuple",
   ],
   tokens: true,
   ranges: true,
 };
-
-/** @type {ParserPlugin} */
-const recordAndTuplePlugin = ["recordAndTuple", { syntaxType: "hash" }];
 
 /** @type {ParserPlugin} */
 const v8intrinsicPlugin = "v8intrinsic";
@@ -64,7 +57,6 @@ const v8intrinsicPlugin = "v8intrinsic";
 /** @type {Array<ParserPlugin>} */
 const pipelineOperatorPlugins = [
   ["pipelineOperator", { proposal: "hack", topicToken: "%" }],
-  ["pipelineOperator", { proposal: "minimal" }],
   ["pipelineOperator", { proposal: "fsharp" }],
 ];
 
@@ -75,7 +67,7 @@ const appendPlugins = (plugins, options = parseOptions) => ({
 
 // Similar to babel
 // https://github.com/babel/babel/pull/7934/files#diff-a739835084910b0ee3ea649df5a4d223R67
-const FLOW_PRAGMA_REGEX = /@(?:no)?flow\b/;
+const FLOW_PRAGMA_REGEX = /@(?:no)?flow\b/u;
 function isFlowFile(text, options) {
   if (options.filepath?.endsWith(".js.flow")) {
     return true;
@@ -126,13 +118,7 @@ function createParse({ isExpression = false, optionsCombinations }) {
       }));
     }
 
-    if (/#[[{]/.test(text)) {
-      combinations = combinations.map((options) =>
-        appendPlugins([recordAndTuplePlugin], options),
-      );
-    }
-
-    const shouldEnableV8intrinsicPlugin = /%[A-Z]/.test(text);
+    const shouldEnableV8intrinsicPlugin = /%[A-Z]/u.test(text);
     if (text.includes("|>")) {
       const conflictsPlugins = shouldEnableV8intrinsicPlugin
         ? [...pipelineOperatorPlugins, v8intrinsicPlugin]
@@ -183,14 +169,13 @@ const allowedReasonCodes = new Set([
   "StrictEvalArguments",
   "StrictEvalArgumentsBinding",
   "StrictFunction",
+  "ForInOfLoopInitializer",
 
   "EmptyTypeArguments",
   "EmptyTypeParameters",
   "ConstructorHasTypeParameters",
 
   "UnsupportedParameterPropertyKind",
-
-  "DuplicateAccessibilityModifier",
 
   "DecoratorExportClass",
   "ParamDupe",
@@ -208,12 +193,20 @@ const allowedReasonCodes = new Set([
   "OptionalBindingPattern",
   "DeclareClassFieldHasInitializer",
   "TypeImportCannotSpecifyDefaultAndNamed",
-  "DeclareFunctionHasImplementation",
   "ConstructorClassField",
 
   "VarRedeclaration",
   "InvalidPrivateFieldResolution",
   "DuplicateExport",
+
+  /*
+  Legacy syntax
+
+  ```js
+  import json from "./json.json" assert {type: "json"};
+  ```
+  */
+  "ImportAttributesUseAssert",
 ]);
 
 const babelParserOptionsCombinations = [appendPlugins(["jsx"])];
@@ -236,11 +229,7 @@ const babelTSExpression = createBabelParser({
 });
 const babelFlow = createBabelParser({
   optionsCombinations: [
-    appendPlugins([
-      "jsx",
-      ["flow", { all: true, enums: true }],
-      "flowComments",
-    ]),
+    appendPlugins(["jsx", ["flow", { all: true }], "flowComments"]),
   ],
 });
 const babelEstree = createBabelParser({

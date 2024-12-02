@@ -1,17 +1,20 @@
 function printNumber(rawNumber) {
+  if (rawNumber.length === 1) {
+    return rawNumber;
+  }
   return (
     rawNumber
       .toLowerCase()
       // Remove unnecessary plus and zeroes from scientific notation.
-      .replace(/^([+-]?[\d.]+e)(?:\+|(-))?0*(?=\d)/, "$1$2")
+      .replace(/^([+-]?[\d.]+e)(?:\+|(-))?0*(?=\d)/u, "$1$2")
       // Remove unnecessary scientific notation (1e0).
-      .replace(/^([+-]?[\d.]+)e[+-]?0+$/, "$1")
+      .replace(/^([+-]?[\d.]+)e[+-]?0+$/u, "$1")
       // Make sure numbers never start with a zero.
-      .replace(/^([+-])?0?\./, "$1.")
+      .replace(/^([+-])?0?\./u, "$1.")
       // Remove extraneous trailing decimal zeroes.
-      .replace(/(\.\d+?)0+(?=e|$)/, "$1")
+      .replace(/(\.\d+?)0+(?=e|$)/u, "$1")
       // Remove trailing dot.
-      .replace(/\.(?=e|$)/, "")
+      .replace(/\.(?=e|$)/u, "")
   );
 }
 

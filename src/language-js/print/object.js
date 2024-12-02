@@ -24,7 +24,7 @@ import { shouldHugTheOnlyFunctionParameter } from "./function-parameters.js";
 import { printOptionalToken } from "./misc.js";
 import { printTypeAnnotationProperty } from "./type-annotation.js";
 
-/** @typedef {import("../../document/builders.js").Doc} Doc */
+/** @import {Doc} from "../../document/builders.js" */
 
 function printObject(path, options, print) {
   const semi = options.semi ? ";" : "";
@@ -35,6 +35,7 @@ function printObject(path, options, print) {
     node.type === "TSEnumDeclaration" ||
     node.type === "EnumBooleanBody" ||
     node.type === "EnumNumberBody" ||
+    node.type === "EnumBigIntBody" ||
     node.type === "EnumStringBody" ||
     node.type === "EnumSymbolBody";
   const fields = [
@@ -102,7 +103,7 @@ function printObject(path, options, print) {
   const separator = isFlowInterfaceLikeBody
     ? ";"
     : node.type === "TSInterfaceBody" || node.type === "TSTypeLiteral"
-    ? ifBreak("", ",")
+      ? ifBreak("", ",")
       : ",";
   const leftBrace =
     node.type === "RecordExpression" ? "#{" : node.exact ? "{|" : "{";

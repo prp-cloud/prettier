@@ -1,4 +1,3 @@
-import findLast from "../../scripts/build/shims/array-find-last.js";
 import * as prettier from "../index.js";
 import Context from "./context.js";
 import logFileInfoOrDie from "./file-info.js";
@@ -9,12 +8,6 @@ import { parseArgvWithoutPlugins } from "./options/parse-cli-arguments.js";
 import printSupportInfo from "./print-support-info.js";
 import { createDetailedUsage, createUsage } from "./usage.js";
 import { printToScreen } from "./utils.js";
-
-if (!Array.prototype.findLast) {
-  Array.prototype.findLast = function (callback) {
-    return findLast(false, this, callback);
-  };
-}
 
 async function run(rawArguments = process.argv.slice(2)) {
   // Create a default level logger, so we can log errors during `logLevel` parsing

@@ -1,7 +1,6 @@
 import { VISITOR_KEYS as babelVisitorKeys } from "@babel/types";
 import { visitorKeys as tsVisitorKeys } from "@typescript-eslint/visitor-keys";
 import flowVisitorKeys from "hermes-parser/dist/generated/ESTreeVisitorKeys.js";
-
 import unionVisitorKeys from "./union-visitor-keys.js";
 
 const angularVisitorKeys = {
@@ -66,6 +65,16 @@ const excludeKeys = {
   ExportAllDeclaration: ["assertions"],
   ExportNamedDeclaration: ["assertions"],
   ImportDeclaration: ["assertions"],
+  ImportExpression: ["attributes"],
+
+  // `key` and `constraint` added in `@typescript-eslint/typescript-estree` v8
+  // https://github.com/typescript-eslint/typescript-eslint/pull/7065
+  // TODO: Use the new AST properties instead
+  TSMappedType: ["key", "constraint"],
+  // `body` added in `@typescript-eslint/typescript-estree` v8
+  // https://github.com/typescript-eslint/typescript-eslint/pull/8920
+  // TODO: Use the new AST properties instead
+  TSEnumDeclaration: ["body"],
 };
 
 const visitorKeys = Object.fromEntries(
@@ -85,15 +94,9 @@ const visitorKeys = Object.fromEntries(
   ]),
 );
 
-// Unsupported
-for (const type of [
-  "ComponentDeclaration",
-  "ComponentParameter",
-  "ComponentTypeAnnotation",
-  "ComponentTypeParameter",
-  "DeclareComponent",
-]) {
-  delete visitorKeys[type];
-}
+// Babel will remove this in v8
+delete visitorKeys.DecimalLiteral;
+// Won't exist since we use `createImportExpressions` when parsing with babel
+delete visitorKeys.Import;
 
 export default visitorKeys;

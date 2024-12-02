@@ -1,5 +1,4 @@
 import assert from "node:assert";
-
 import {
   group,
   hardline,
@@ -21,6 +20,7 @@ import {
   isBinaryish,
   isCallExpression,
   isJsxElement,
+  isMethod,
 } from "../utils/index.js";
 import {
   printFunctionParameters,
@@ -32,24 +32,20 @@ import { printPropertyKey } from "./property.js";
 import { printTypeAnnotationProperty } from "./type-annotation.js";
 
 /**
- * @typedef {import("../../common/ast-path.js").default} AstPath
- * @typedef {import("../../document/builders.js").Doc} Doc
+ * @import AstPath from "../../common/ast-path.js"
+ * @import {Doc} from "../../document/builders.js"
  */
 
-const isMethod = (node) =>
-  node.type === "ObjectMethod" ||
-  node.type === "ClassMethod" ||
-  node.type === "ClassPrivateMethod" ||
-  node.type === "MethodDefinition" ||
-  node.type === "TSAbstractMethodDefinition" ||
-  node.type === "TSDeclareMethod" ||
-  ((node.type === "Property" || node.type === "ObjectProperty") &&
-    (node.method || node.kind === "get" || node.kind === "set"));
-
-const isMethodValue = (path) =>
-  path.node.type === "FunctionExpression" &&
-  path.key === "value" &&
-  isMethod(path.parent);
+const isMethodValue = ({ node, key, parent }) =>
+  key === "value" &&
+  node.type === "FunctionExpression" &&
+  (parent.type === "ObjectMethod" ||
+    parent.type === "ClassMethod" ||
+    parent.type === "ClassPrivateMethod" ||
+    parent.type === "MethodDefinition" ||
+    parent.type === "TSAbstractMethodDefinition" ||
+    parent.type === "TSDeclareMethod" ||
+    (parent.type === "Property" && isMethod(parent)));
 
 /*
 - "FunctionDeclaration"
@@ -151,7 +147,10 @@ function printMethod(path, options, print) {
   parts.push(
     printPropertyKey(path, options, print),
     node.optional || node.key.optional ? "?" : "",
-    node === value ? printMethodValue(path, options, print) : [" ", print("value")],
+    [
+      " ",
+      node === value ? printMethodValue(path, options, print) : print("value"),
+    ],
   );
 
   return parts;

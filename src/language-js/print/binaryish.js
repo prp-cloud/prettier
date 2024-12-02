@@ -8,7 +8,7 @@ import {
   softline,
 } from "../../document/builders.js";
 import { DOC_TYPE_FILL, DOC_TYPE_GROUP } from "../../document/constants.js";
-import { cleanDoc, getDocParts } from "../../document/utils.js";
+import { cleanDoc } from "../../document/utils.js";
 import { printComments } from "../../main/comments/print.js";
 import {
   CommentCheckFlags,
@@ -24,7 +24,7 @@ import {
   shouldFlatten,
 } from "../utils/index.js";
 
-/** @typedef {import("../../document/builders.js").Doc} Doc */
+/** @import {Doc} from "../../document/builders.js" */
 
 let uid = 0;
 function printBinaryishExpression(path, options, print) {
@@ -301,11 +301,11 @@ function printBinaryishExpressions(
   if (isNested && hasComment(node)) {
     const printed = cleanDoc(printComments(path, parts, options));
     /* c8 ignore next 3 */
-    if (Array.isArray(printed) || printed.type === DOC_TYPE_FILL) {
-      return getDocParts(printed);
+    if (printed.type === DOC_TYPE_FILL) {
+      return printed.parts;
     }
 
-    return [printed];
+    return Array.isArray(printed) ? printed : [printed];
   }
 
   return parts;

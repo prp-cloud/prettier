@@ -10,6 +10,8 @@ If you want to run Prettier programmatically, check this page out.
 import * as prettier from "prettier";
 ```
 
+Our public APIs are all asynchronous, if you must use synchronous version for some reason, you can try [`@prettier/sync`](https://github.com/prettier/prettier-synchronized).
+
 ## `prettier.format(source, options)`
 
 `format` is used to format text using Prettier. `options.parser` must be set according to the language you are formatting (see the [list of available parsers](options.md#parser)). Alternatively, `options.filepath` can be specified for Prettier to infer the parser from the file extension. Other [options](options.md) may be provided to override the defaults.
@@ -48,7 +50,10 @@ If `options.useCache` is `false`, all caching will be bypassed.
 ```js
 const text = await fs.readFile(filePath, "utf8");
 const options = await prettier.resolveConfig(filePath);
-const formatted = await prettier.format(text, options);
+const formatted = await prettier.format(text, {
+  ...options,
+  filepath: filePath,
+});
 ```
 
 If `options.editorconfig` is `true` and an [`.editorconfig` file](https://editorconfig.org/) is in your project, Prettier will parse it and convert its properties to the corresponding Prettier configuration. This configuration will be overridden by `.prettierrc`, etc. Currently, the following EditorConfig properties are supported:

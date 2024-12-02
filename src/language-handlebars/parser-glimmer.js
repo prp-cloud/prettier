@@ -1,6 +1,5 @@
 import { preprocess as parseGlimmer } from "@glimmer/syntax";
 import { LinesAndColumns } from "lines-and-columns";
-
 import createError from "../common/parser-create-error.js";
 import { locEnd, locStart } from "./loc.js";
 
@@ -17,7 +16,7 @@ function addBackslash(node) {
         childrenOrBody[i + 1].type === "MustacheStatement"
       ) {
         childrenOrBody[i].chars = childrenOrBody[i].chars.replace(
-          /\\$/,
+          /\\$/u,
           "\\\\",
         );
       }
@@ -88,8 +87,8 @@ function getErrorMessage(error) {
   */
   if (
     lines.length >= 4 &&
-    /^Parse error on line \d+:$/.test(lines[0]) &&
-    /^-*\^$/.test(lines.at(-2))
+    /^Parse error on line \d+:$/u.test(lines[0]) &&
+    /^-*\^$/u.test(lines.at(-2))
   ) {
     return lines.at(-1);
   }
@@ -109,8 +108,8 @@ function getErrorMessage(error) {
   */
   if (
     lines.length >= 4 &&
-    /:\s?$/.test(lines[0]) &&
-    /^\(error occurred in '.*?' @ line \d+ : column \d+\)$/.test(
+    /:\s?$/u.test(lines[0]) &&
+    /^\(error occurred in '.*?' @ line \d+ : column \d+\)$/u.test(
       lines.at(-1),
     ) &&
     lines[1] === "" &&
