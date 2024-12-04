@@ -6,6 +6,7 @@ import {
   isNumericLiteral,
 } from "../utils/index.js";
 import { printOptionalToken } from "./misc.js";
+import printMemberChain from "./member-chain.js";
 
 const isCallExpressionWithArguments = (node) => {
   if (node.type === "ChainExpression" || node.type === "TSNonNullExpression") {
@@ -16,7 +17,7 @@ const isCallExpressionWithArguments = (node) => {
 
 function printMemberExpression(path, options, print) {
   const objectDoc = print("object");
-  const lookupDoc = printMemberLookup(path, options, print);
+  const lookupDoc = printMemberChain(path, options, print);
   const { node } = path;
   const firstNonMemberParent = path.findAncestor(
     (node) =>

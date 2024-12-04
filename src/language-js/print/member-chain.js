@@ -153,17 +153,33 @@ function printMemberChain(path, options, print) {
   // need to extract this first call without printing them as they would
   // if handled inside of the recursive call.
   const { node } = path;
+  const debugObj = {
+    type: node.type,
+    ...(node.callee
+      ? {
+          callee: `${node.callee.object.name ?? node.callee.object.type}.${node.callee.property.name}`,
+        }
+      : { value: `${node.object.type}.${node.property.name}` }),
+  };
+  console.log(debugObj);
+  const debug = debugObj.value === "CallExpression.length";
   printedNodes.unshift({
     node,
-    printed: [
-      printOptionalToken(path),
-      printFunctionTypeParameters(path, options, print),
-      printCallArguments(path, options, print),
-    ],
+    printed:
+      node.type === "CallExpression"
+        ? [
+            printOptionalToken(path),
+            printFunctionTypeParameters(path, options, print),
+            printCallArguments(path, options, print),
+          ]
+        : [],
   });
 
   if (node.callee) {
     path.call(rec, "callee");
+  }
+  if (node.object) {
+    path.call(rec, "object");
   }
 
   // Once we have a linear list of printed nodes, we want to create groups out
@@ -192,6 +208,18 @@ function printMemberChain(path, options, print) {
   //       < this.items >.something()
   /** @type {PrintedNode[][]} */
   const groups = [];
+  if (printedNodes[0].node.name === "input")
+    console.log(
+      debugObj,
+      printedNodes.map(({ node: { type, name, property } }) =>
+        type === "Identifier"
+          ? name
+          : type === "MemberExpression" && property.type === "Identifier"
+            ? property.name
+            : type,
+      ),
+    );
+
   let currentGroup = [printedNodes[0]];
   let i = 1;
   for (; i < printedNodes.length; ++i) {
@@ -312,10 +340,20 @@ function printMemberChain(path, options, print) {
     );
   }
 
-  const shouldMerge =
-    groups.length >= 2 &&
+  const shouldMerge = groups.length >= 2; /*&&
     !hasComment(groups[1][0].node) &&
-    shouldNotWrap(groups);
+    shouldNotWrap(groups)*/
+  /*console.log({
+    "groups.length": groups.length,
+    shouldMerge,
+    groups: groups.map((group) =>
+      group.map(({ node: { type, property } }) =>
+        type === "MemberExpression" && property.type === "Identifier"
+          ? property.name
+          : type,
+      ),
+    ),
+  });*/
 
   function printGroup(printedGroup) {
     const printed = printedGroup.map((tuple) => tuple.printed);
