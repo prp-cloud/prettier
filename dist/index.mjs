@@ -15367,6 +15367,9 @@ ${error.message}`;
   ".js": loadJs,
   ".mjs": loadJs,
   ".cjs": loadJs,
+  ".ts": loadJs,
+  ".mts": loadJs,
+  ".cts": loadJs,
   ".yaml": loadYaml,
   ".yml": loadYaml,
   // No extension
@@ -15384,11 +15387,17 @@ var CONFIG_FILE_NAMES = [
   ".prettierrc.yml",
   ".prettierrc.json5",
   ".prettierrc.js",
+  ".prettierrc.ts",
   ".prettierrc.mjs",
+  ".prettierrc.mts",
   ".prettierrc.cjs",
+  ".prettierrc.cts",
   "prettier.config.js",
+  "prettier.config.ts",
   "prettier.config.mjs",
+  "prettier.config.mts",
   "prettier.config.cjs",
+  "prettier.config.cts",
   ".prettierrc.toml"
 ];
 async function filter({ name, path: file }) {
