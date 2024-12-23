@@ -4320,17 +4320,19 @@ var require_queue = __commonJS({
         return p;
       }
       function drained() {
-        if (queue.idle()) {
-          return new Promise(function(resolve3) {
-            resolve3();
-          });
-        }
-        var previousDrain = queue.drain;
         var p = new Promise(function(resolve3) {
-          queue.drain = function() {
-            previousDrain();
-            resolve3();
-          };
+          process.nextTick(function() {
+            if (queue.idle()) {
+              resolve3();
+            } else {
+              var previousDrain = queue.drain;
+              queue.drain = function() {
+                if (typeof previousDrain === "function") previousDrain();
+                resolve3();
+                queue.drain = previousDrain;
+              };
+            }
+          });
         });
         return p;
       }
