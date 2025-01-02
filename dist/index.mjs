@@ -19967,7 +19967,7 @@ async function printAstToDoc(ast, options8) {
       }
     }
   };
-  if (!/(?:^|\/)package(?:-lock)?\.json$/.test(options8.filepath)) {
+  if (!/(?:^|\/)package(?:-lock)?\.json$/u.test(options8.filepath) && Array.isArray(doc2)) {
     findAndRemoveLastLinebreak(doc2);
   }
   if (options8.nodeAfterCursor && !options8.nodeBeforeCursor) {
