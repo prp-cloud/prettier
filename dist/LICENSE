@@ -419,7 +419,7 @@ Author: Alex Bell <alex@bellandwhistle.net>
 
 ----------------------------------------
 
-### @typescript-eslint/types@v8.18.1
+### @typescript-eslint/types@v8.19.1
 
 > Types for the TypeScript-ESTree AST spec
 
@@ -451,7 +451,7 @@ Repository: <https://github.com/typescript-eslint/typescript-eslint.git>
 
 ----------------------------------------
 
-### @typescript-eslint/typescript-estree@v8.18.1
+### @typescript-eslint/typescript-estree@v8.19.1
 
 > A parser that converts TypeScript source code into an ESTree compatible form
 
@@ -1198,7 +1198,7 @@ Contributors:
 
 ----------------------------------------
 
-### fast-glob@v3.3.2
+### fast-glob@v3.3.3
 
 > It's a very fast and efficient glob library for Node.js
 
@@ -1597,7 +1597,7 @@ Repository: <https://github.com/graphql/graphql-js.git>
 
 ----------------------------------------
 
-### ignore@v6.0.2
+### ignore@v7.0.0
 
 > Ignore is a manager and filter for .gitignore rules, the one used by eslint, gitbook and many others.
 
@@ -2525,7 +2525,7 @@ Repository: <git@github.com:teambition/merge2.git>
 
 ----------------------------------------
 
-### meriyah@v6.0.3
+### meriyah@v6.0.4
 
 > A 100% compliant, self-hosted javascript parser with high focus on both performance and stability
 
@@ -3584,7 +3584,7 @@ Contributors:
 
 ----------------------------------------
 
-### ts-api-utils@v1.4.3
+### ts-api-utils@v2.0.0
 
 > Utility functions for working with TypeScript's API. Successor to the wonderful tsutils. 🛠️️
 
