@@ -5,6 +5,13 @@ const require = __prettierCreateRequire(import.meta.url);
 const __filename = __prettierFileUrlToPath(import.meta.url);
 const __dirname = __prettierDirname(__filename);
 
+import { createRequire as __prettierCreateRequire } from "module";
+import { fileURLToPath as __prettierFileUrlToPath } from "url";
+import { dirname as __prettierDirname } from "path";
+const require = __prettierCreateRequire(import.meta.url);
+const __filename = __prettierFileUrlToPath(import.meta.url);
+const __dirname = __prettierDirname(__filename);
+
 var __create = Object.create;
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
