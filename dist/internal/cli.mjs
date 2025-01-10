@@ -2582,7 +2582,7 @@ import path6 from "path";
 import path5 from "path";
 import { fileURLToPath as fileURLToPath2 } from "url";
 
-// node_modules/pkg-dir/node_modules/locate-path/index.js
+// node_modules/locate-path/index.js
 import process3 from "process";
 import path4 from "path";
 import fs2, { promises as fsPromises } from "fs";
@@ -3304,7 +3304,7 @@ ${error2.message}`
 // src/cli/logger.js
 import readline from "readline";
 
-// node_modules/ansi-regex/index.js
+// node_modules/strip-ansi/node_modules/ansi-regex/index.js
 function ansiRegex({ onlyFirst = false } = {}) {
   const ST = "(?:\\u0007|\\u001B\\u005C|\\u009C)";
   const pattern = [
