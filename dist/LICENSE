@@ -1262,7 +1262,7 @@ Author: James Halliday <mail@substack.net> (http://substack.net)
 
 ----------------------------------------
 
-### fastq@v1.17.1
+### fastq@v1.18.0
 
 > Fast, in memory work queue
 
@@ -2655,7 +2655,7 @@ Author: Yoan Arnaudov <jonidev@gmail.com>
 
 ----------------------------------------
 
-### nanoid@v3.3.7
+### nanoid@v3.3.8
 
 > A tiny (116 bytes), secure URL-friendly unique string ID generator
 
@@ -3509,12 +3509,10 @@ Contributors:
 
 ----------------------------------------
 
-### trim@v1.0.1
+### trim@v0.0.1
 
 > Trim string whitespace
 
-License: MIT
-Repository: <https://github.com/Trott/trim.git>
 Author: TJ Holowaychuk <tj@vision-media.ca>
 
 ----------------------------------------

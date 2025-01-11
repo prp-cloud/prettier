@@ -307,9 +307,9 @@ var require_is_glob = __commonJS({
   }
 });
 
-// node_modules/glob-parent/index.js
+// node_modules/fast-glob/node_modules/glob-parent/index.js
 var require_glob_parent = __commonJS({
-  "node_modules/glob-parent/index.js"(exports, module) {
+  "node_modules/fast-glob/node_modules/glob-parent/index.js"(exports, module) {
     "use strict";
     var isGlob = require_is_glob();
     var pathPosixDirname = __require("path").posix.dirname;
@@ -4337,17 +4337,19 @@ var require_queue = __commonJS({
         return p;
       }
       function drained() {
-        if (queue.idle()) {
-          return new Promise(function(resolve3) {
-            resolve3();
-          });
-        }
-        var previousDrain = queue.drain;
         var p = new Promise(function(resolve3) {
-          queue.drain = function() {
-            previousDrain();
-            resolve3();
-          };
+          process.nextTick(function() {
+            if (queue.idle()) {
+              resolve3();
+            } else {
+              var previousDrain = queue.drain;
+              queue.drain = function() {
+                if (typeof previousDrain === "function") previousDrain();
+                resolve3();
+                queue.drain = previousDrain;
+              };
+            }
+          });
         });
         return p;
       }
@@ -6064,9 +6066,9 @@ var require_map = __commonJS({
   }
 });
 
-// node_modules/editorconfig/node_modules/yallist/yallist.js
+// node_modules/yallist/yallist.js
 var require_yallist = __commonJS({
-  "node_modules/editorconfig/node_modules/yallist/yallist.js"(exports, module) {
+  "node_modules/yallist/yallist.js"(exports, module) {
     module.exports = Yallist;
     Yallist.Node = Node;
     Yallist.create = Yallist;
@@ -6390,9 +6392,9 @@ var require_yallist = __commonJS({
   }
 });
 
-// node_modules/editorconfig/node_modules/lru-cache/index.js
+// node_modules/lru-cache/index.js
 var require_lru_cache = __commonJS({
-  "node_modules/editorconfig/node_modules/lru-cache/index.js"(exports, module) {
+  "node_modules/lru-cache/index.js"(exports, module) {
     "use strict";
     module.exports = LRUCache;
     var Map2 = require_map();
