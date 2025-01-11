@@ -17135,7 +17135,7 @@ async function createSingleIsIgnoredFunction(ignoreFile, withNodeModules) {
     return;
   }
   const ignore = ignore_default({ allowRelativePaths: true }).add(content);
-  return (file) => ignore.ignores(slash(getRelativePath(file, ignoreFile)));
+  return (file) => ignore.checkIgnore(slash(getRelativePath(file, ignoreFile))).ignored;
 }
 async function createIsIgnoredFunction(ignoreFiles, withNodeModules) {
   if (ignoreFiles.length === 0 && !withNodeModules) {

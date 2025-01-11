@@ -2772,11 +2772,9 @@ var FormatResultsCache = class {
    */
   constructor(cacheFileLocation, cacheStrategy) {
     const useChecksum = cacheStrategy === "content";
-    this.#fileEntryCache = import_file_entry_cache.default.create(
-      /* cacheId */
+    this.#fileEntryCache = import_file_entry_cache.default.createFromFile(
+      /* filePath */
       cacheFileLocation,
-      /* directory */
-      void 0,
       useChecksum
     );
   }
@@ -2786,13 +2784,11 @@ var FormatResultsCache = class {
    */
   existsAvailableFormatResultsCache(filePath, options) {
     const fileDescriptor = this.#fileEntryCache.getFileDescriptor(filePath);
-    if (fileDescriptor.notFound) {
+    if (fileDescriptor.notFound || fileDescriptor.changed) {
       return false;
     }
-    const hashOfOptions = getHashOfOptions(options);
-    const meta = getMetadataFromFileDescriptor(fileDescriptor);
-    const changed = fileDescriptor.changed || meta.hashOfOptions !== hashOfOptions;
-    return !changed;
+    const { hashOfOptions } = getMetadataFromFileDescriptor(fileDescriptor);
+    return hashOfOptions && hashOfOptions === getHashOfOptions(options);
   }
   /**
    * @param {string} filePath
@@ -2800,8 +2796,8 @@ var FormatResultsCache = class {
    */
   setFormatResultsCache(filePath, options) {
     const fileDescriptor = this.#fileEntryCache.getFileDescriptor(filePath);
-    const meta = getMetadataFromFileDescriptor(fileDescriptor);
-    if (fileDescriptor && !fileDescriptor.notFound) {
+    if (!fileDescriptor.notFound) {
+      const meta = getMetadataFromFileDescriptor(fileDescriptor);
       meta.hashOfOptions = getHashOfOptions(options);
     }
   }
