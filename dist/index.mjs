@@ -20057,17 +20057,20 @@ async function printAstToDoc(ast, options8) {
   );
   ensureAllCommentsPrinted(options8);
   const findAndRemoveLastLinebreak = (doc3) => {
-    for (const [i, item] of [...doc3.entries()].reverse()) {
-      if ([item, [{ type: "line", hard: true }, { type: "break-parent" }]].map(JSON.stringify).reduce((a, b) => a === b)) {
-        doc3.splice(i, 1);
-        return true;
-      }
-      if (typeof item === "object" && findAndRemoveLastLinebreak(item.contents ?? item)) {
-        return true;
+    const contents = doc3.contents ?? doc3;
+    if (Array.isArray(contents)) {
+      for (const [i, item] of [...contents.entries()].reverse()) {
+        if ([item, [{ type: "line", hard: true }, { type: "break-parent" }]].map(JSON.stringify).reduce((a, b) => a === b)) {
+          contents.splice(i, 1);
+          return true;
+        }
+        if (typeof item === "string" && item !== "" || typeof item === "object" && findAndRemoveLastLinebreak(item)) {
+          return true;
+        }
       }
     }
   };
-  if (!/(?:^|\/)package(?:-lock)?\.json$/u.test(options8.filepath) && Array.isArray(doc2)) {
+  if (!/(?:^|\/)package(?:-lock)?\.json$/u.test(options8.filepath)) {
     findAndRemoveLastLinebreak(doc2);
   }
   if (options8.nodeAfterCursor && !options8.nodeBeforeCursor) {
