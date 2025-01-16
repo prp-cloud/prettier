@@ -6,9 +6,10 @@ import readline from "node:readline";
 import chalk from "chalk";
 import createEsmUtils from "esm-utils";
 import prettyBytes from "pretty-bytes";
-import { DIST_DIR } from "../utils/index.js";
+import { DIST_DIR, PROJECT_ROOT } from "../utils/index.js";
 import files from "./config.js";
 import parseArguments from "./parse-arguments.js";
+import { execSync } from "node:child_process";
 
 const { require } = createEsmUtils(import.meta);
 
@@ -149,6 +150,16 @@ async function run() {
   console.log(chalk.inverse(" Building packages "));
 
   const results = [];
+  const packageJsonPath = `${PROJECT_ROOT}/package.json`;
+  const packageJson = JSON.parse(await fs.readFile(packageJsonPath));
+  packageJson.version = packageJson.version.replace(
+    /(-.+)?$/u,
+    `-${execSync("git log --pretty=format:%h -1")}`,
+  );
+  await fs.writeFile(
+    packageJsonPath,
+    `${JSON.stringify(packageJson, null, 2)}\n`,
+  );
   for (const file of files) {
     const result = await buildFile({ file, files, cliOptions, results });
     results.push(result);
