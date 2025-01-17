@@ -265,6 +265,40 @@ Repository: <git+https://github.com/handlebars-lang/handlebars-parser.git>
 
 ----------------------------------------
 
+### @keyv/serialize@v1.0.2
+
+> Serialization for Keyv
+
+License: MIT
+Homepage: <https://github.com/jaredwray/keyv>
+Repository: <git+https://github.com/jaredwray/keyv.git>
+Author: Jared Wray <me@jaredwray.com> (https://jaredwray.com)
+
+> MIT License
+>
+> Copyright (c) 2017-2021 Luke Childs
+> Copyright (c) 2021-2022 Jared Wray
+>
+> Permission is hereby granted, free of charge, to any person obtaining a copy
+> of this software and associated documentation files (the "Software"), to deal
+> in the Software without restriction, including without limitation the rights
+> to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+> copies of the Software, and to permit persons to whom the Software is
+> furnished to do so, subject to the following conditions:
+>
+> The above copyright notice and this permission notice shall be included in all
+> copies or substantial portions of the Software.
+>
+> THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+> IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+> FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+> AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+> LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+> OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+> SOFTWARE.
+
+----------------------------------------
+
 ### @nodelib/fs.scandir@v2.1.5
 
 > List files and directories inside the specified directory
@@ -697,6 +731,36 @@ Contributors:
 > LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 > OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 > THE SOFTWARE.
+
+----------------------------------------
+
+### cacheable@v1.8.7
+
+> High Performance Layer 1 / Layer 2 Caching with Keyv Storage
+
+License: MIT
+Repository: <git+https://github.com/jaredwray/cacheable.git>
+Author: Jared Wray <me@jaredwray.com>
+
+> MIT License & © Jared Wray 
+>
+> Permission is hereby granted, free of charge, to any person obtaining a copy
+> of this software and associated documentation files (the "Software"), to
+> deal in the Software without restriction, including without limitation the
+> rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+> sell copies of the Software, and to permit persons to whom the Software is
+> furnished to do so, subject to the following conditions:
+>
+> The above copyright notice and this permission notice shall be included in
+> all copies or substantial portions of the Software.
+>
+> THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+> IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+> FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+> AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+> LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+> FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+> DEALINGS IN THE SOFTWARE.
 
 ----------------------------------------
 
@@ -1287,34 +1351,33 @@ Author: Matteo Collina <hello@matteocollina.com>
 
 ----------------------------------------
 
-### file-entry-cache@v9.1.0
+### file-entry-cache@v10.0.5
 
-> Super simple cache for file metadata, useful for process that work o a given series of files and that only need to repeat the job on the changed ones since the previous run of the process
+> A lightweight cache for file metadata, ideal for processes that work on a specific set of files and only need to reprocess files that have changed since the last run
 
 License: MIT
-Author: Jared Wray (https://jaredwray.com)
+Repository: <git+https://github.com/jaredwray/cacheable.git>
+Author: Jared Wray <me@jaredwray.com>
 
-> The MIT License (MIT)
->
-> Copyright (c) Roy Riojas & Jared Wray
+> MIT License & © Jared Wray 
 >
 > Permission is hereby granted, free of charge, to any person obtaining a copy
-> of this software and associated documentation files (the "Software"), to deal
-> in the Software without restriction, including without limitation the rights
-> to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-> copies of the Software, and to permit persons to whom the Software is
+> of this software and associated documentation files (the "Software"), to
+> deal in the Software without restriction, including without limitation the
+> rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+> sell copies of the Software, and to permit persons to whom the Software is
 > furnished to do so, subject to the following conditions:
 >
-> The above copyright notice and this permission notice shall be included in all
-> copies or substantial portions of the Software.
+> The above copyright notice and this permission notice shall be included in
+> all copies or substantial portions of the Software.
 >
 > THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 > IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 > FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 > AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-> LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-> OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-> SOFTWARE.
+> LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+> FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+> DEALINGS IN THE SOFTWARE.
 
 ----------------------------------------
 
@@ -1395,34 +1458,33 @@ Author: Sindre Sorhus <sindresorhus@gmail.com> (https://sindresorhus.com)
 
 ----------------------------------------
 
-### flat-cache@v5.0.0
+### flat-cache@v6.1.5
 
-> A stupidly simple key/value storage using files to persist some data
+> A simple key/value storage using files to persist the data
 
 License: MIT
-Author: Jared Wray (https://jaredwray.com)
+Repository: <git+https://github.com/jaredwray/cacheable.git>
+Author: Jared Wray <me@jaredwray.com>
 
-> The MIT License (MIT)
->
-> Copyright (c) Roy Riojas and Jared Wray
+> MIT License & © Jared Wray 
 >
 > Permission is hereby granted, free of charge, to any person obtaining a copy
-> of this software and associated documentation files (the "Software"), to deal
-> in the Software without restriction, including without limitation the rights
-> to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-> copies of the Software, and to permit persons to whom the Software is
+> of this software and associated documentation files (the "Software"), to
+> deal in the Software without restriction, including without limitation the
+> rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+> sell copies of the Software, and to permit persons to whom the Software is
 > furnished to do so, subject to the following conditions:
 >
-> The above copyright notice and this permission notice shall be included in all
-> copies or substantial portions of the Software.
+> The above copyright notice and this permission notice shall be included in
+> all copies or substantial portions of the Software.
 >
 > THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 > IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 > FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 > AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-> LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-> OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-> SOFTWARE.
+> LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+> FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+> DEALINGS IN THE SOFTWARE.
 
 ----------------------------------------
 
@@ -1576,6 +1638,37 @@ Repository: <https://github.com/graphql/graphql-js.git>
 > MIT License
 >
 > Copyright (c) GraphQL Contributors
+>
+> Permission is hereby granted, free of charge, to any person obtaining a copy
+> of this software and associated documentation files (the "Software"), to deal
+> in the Software without restriction, including without limitation the rights
+> to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+> copies of the Software, and to permit persons to whom the Software is
+> furnished to do so, subject to the following conditions:
+>
+> The above copyright notice and this permission notice shall be included in all
+> copies or substantial portions of the Software.
+>
+> THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+> IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+> FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+> AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+> LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+> OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+> SOFTWARE.
+
+----------------------------------------
+
+### hookified@v1.6.0
+
+> Event and Middleware Hooks
+
+License: MIT
+Homepage: <https://github.com/jaredwray/hookified#readme>
+Repository: <git+https://github.com/jaredwray/hookified.git>
+Author: Jared Wray <me@jaredwray.com>
+
+> MIT License & © Jared Wray
 >
 > Permission is hereby granted, free of charge, to any person obtaining a copy
 > of this software and associated documentation files (the "Software"), to deal
@@ -2279,40 +2372,6 @@ Contributors:
 
 ----------------------------------------
 
-### json-buffer@v3.0.1
-
-> JSON parse & stringify that supports binary via bops & base64
-
-License: MIT
-Homepage: <https://github.com/dominictarr/json-buffer>
-Repository: <git://github.com/dominictarr/json-buffer.git>
-Author: Dominic Tarr <dominic.tarr@gmail.com> (http://dominictarr.com)
-
-> Copyright (c) 2013 Dominic Tarr
->
-> Permission is hereby granted, free of charge, 
-> to any person obtaining a copy of this software and 
-> associated documentation files (the "Software"), to 
-> deal in the Software without restriction, including 
-> without limitation the rights to use, copy, modify, 
-> merge, publish, distribute, sublicense, and/or sell 
-> copies of the Software, and to permit persons to whom 
-> the Software is furnished to do so, 
-> subject to the following conditions:
->
-> The above copyright notice and this permission notice 
-> shall be included in all copies or substantial portions of the Software.
->
-> THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
-> EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES 
-> OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. 
-> IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR 
-> ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, 
-> TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
-> SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-----------------------------------------
-
 ### json5@v2.2.3
 
 > JSON for Humans
@@ -2352,7 +2411,7 @@ Contributors:
 
 ----------------------------------------
 
-### keyv@v4.5.4
+### keyv@v5.2.3
 
 > Simple key-value storage with support for multiple backends
 
@@ -2360,6 +2419,29 @@ License: MIT
 Homepage: <https://github.com/jaredwray/keyv>
 Repository: <git+https://github.com/jaredwray/keyv.git>
 Author: Jared Wray <me@jaredwray.com> (http://jaredwray.com)
+
+> MIT License
+>
+> Copyright (c) 2017-2021 Luke Childs
+> Copyright (c) 2021-2022 Jared Wray
+>
+> Permission is hereby granted, free of charge, to any person obtaining a copy
+> of this software and associated documentation files (the "Software"), to deal
+> in the Software without restriction, including without limitation the rights
+> to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+> copies of the Software, and to permit persons to whom the Software is
+> furnished to do so, subject to the following conditions:
+>
+> The above copyright notice and this permission notice shall be included in all
+> copies or substantial portions of the Software.
+>
+> THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+> IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+> FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+> AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+> LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+> OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+> SOFTWARE.
 
 ----------------------------------------
 
@@ -2871,7 +2953,7 @@ Author: Sindre Sorhus <sindresorhus@gmail.com> (https://sindresorhus.com)
 
 ----------------------------------------
 
-### postcss@v8.4.49
+### postcss@v8.5.1
 
 > Tool for transforming styles with JS plugins
 
