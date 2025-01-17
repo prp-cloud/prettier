@@ -1,5 +1,6 @@
+import { existsSync } from "node:fs";
 import path from "node:path";
-import { DIST_DIR, PROJECT_ROOT, readJson, writeJson } from "../utils/index.js";
+import { PROJECT_ROOT, readJson, writeJson } from "../utils/index.js";
 
 const keysToKeep = [
   "name",
@@ -23,22 +24,8 @@ const keysToKeep = [
 async function buildPackageJson({ file, files }) {
   const packageJson = await readJson(path.join(PROJECT_ROOT, file.input));
 
-  /*const bin = files.find(
-    (file) =>
-      path.join(PROJECT_ROOT, packageJson.bin) ===
-      path.join(PROJECT_ROOT, file.input),
-  ).output.file;*/
-
   const overrides = {
-    // bin: `./${bin}`,
     main: "./index.cjs",
-    engines: {
-      ...packageJson.engines,
-      // https://github.com/prettier/prettier/pull/13118#discussion_r922708068
-      // Don't delete, comment out if we don't want override
-      node: ">=14",
-    },
-    type: "commonjs",
     exports: {
       ".": {
         types: "./index.d.ts",
@@ -93,15 +80,20 @@ async function buildPackageJson({ file, files }) {
       ),
     },
     files: files.map(({ output: { file } }) => file).sort(),
-    scripts: {
-      prepublishOnly:
-        "node -e \"assert.equal(require('.').version, require('..').version)\"",
-    },
   };
 
+  const adjustPaths = (val) =>
+    typeof val === "string"
+      ? val.replace(/^(\.\/)?/u, "$&dist/")
+      : Array.isArray(val)
+        ? val.map(adjustPaths)
+        : Object.fromEntries(
+            Object.entries(val).map(([key, val]) => [key, adjustPaths(val)]),
+          );
+
   await writeJson(
-    path.join(DIST_DIR, file.output.file),
-    Object.assign(pick(packageJson, keysToKeep), overrides),
+    path.join(PROJECT_ROOT, file.output.file),
+    Object.assign(pick(packageJson, keysToKeep), adjustPaths(overrides)),
   );
 }
 
