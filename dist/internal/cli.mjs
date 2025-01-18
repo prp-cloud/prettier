@@ -2108,9 +2108,34 @@ var Eventified = class {
 };
 var Hookified = class extends Eventified {
   _hooks;
-  constructor() {
+  _throwHookErrors = false;
+  constructor(options) {
     super();
     this._hooks = /* @__PURE__ */ new Map();
+    if (options?.throwHookErrors !== void 0) {
+      this._throwHookErrors = options.throwHookErrors;
+    }
+  }
+  /**
+   * Gets all hooks
+   * @returns {Map<string, Hook[]>}
+   */
+  get hooks() {
+    return this._hooks;
+  }
+  /**
+   * Gets whether an error should be thrown when a hook throws an error. Default is false and only emits an error event.
+   * @returns {boolean}
+   */
+  get throwHookErrors() {
+    return this._throwHookErrors;
+  }
+  /**
+   * Sets whether an error should be thrown when a hook throws an error. Default is false and only emits an error event.
+   * @param {boolean} value
+   */
+  set throwHookErrors(value) {
+    this._throwHookErrors = value;
   }
   /**
    * Adds a handler function for a specific event
@@ -2192,17 +2217,14 @@ var Hookified = class extends Eventified {
         try {
           await handler(...arguments_);
         } catch (error) {
-          this.emit("error", new Error(`Error in hook handler for event "${event}": ${error.message}`));
+          const message = `${event}: ${error.message}`;
+          this.emit("error", new Error(message));
+          if (this._throwHookErrors) {
+            throw new Error(message);
+          }
         }
       }
     }
-  }
-  /**
-   * Gets all hooks
-   * @returns {Map<string, Hook[]>}
-   */
-  get hooks() {
-    return this._hooks;
   }
   /**
    * Gets all hooks for a specific event
