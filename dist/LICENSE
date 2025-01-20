@@ -116,7 +116,7 @@ Author: The Babel Team (https://babel.dev/team)
 
 ----------------------------------------
 
-### @babel/parser@v7.26.3
+### @babel/parser@v7.26.5
 
 > A JavaScript parser
 
@@ -453,7 +453,7 @@ Author: Alex Bell <alex@bellandwhistle.net>
 
 ----------------------------------------
 
-### @typescript-eslint/types@v8.19.1
+### @typescript-eslint/types@v8.20.0
 
 > Types for the TypeScript-ESTree AST spec
 
@@ -485,7 +485,7 @@ Repository: <https://github.com/typescript-eslint/typescript-eslint.git>
 
 ----------------------------------------
 
-### @typescript-eslint/typescript-estree@v8.19.1
+### @typescript-eslint/typescript-estree@v8.20.0
 
 > A parser that converts TypeScript source code into an ESTree compatible form
 
@@ -817,7 +817,7 @@ Contributors:
 
 ----------------------------------------
 
-### chalk@v5.3.0
+### chalk@v5.4.1
 
 > Terminal string styling done right
 
@@ -1550,7 +1550,7 @@ Contributors:
 
 ----------------------------------------
 
-### flow-parser@v0.258.1
+### flow-parser@v0.259.1
 
 > JavaScript parser written in OCaml. Produces ESTree AST
 
@@ -1690,7 +1690,7 @@ Author: Jared Wray <me@jaredwray.com>
 
 ----------------------------------------
 
-### ignore@v7.0.0
+### ignore@v7.0.3
 
 > Ignore is a manager and filter for .gitignore rules, the one used by eslint, gitbook and many others.
 
