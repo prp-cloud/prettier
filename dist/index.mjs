@@ -21870,10 +21870,14 @@ import * as doc from "./doc.mjs";
 
 // src/main/version.evaluate.cjs
 <<<<<<< HEAD
+<<<<<<< HEAD
 var version_evaluate_default = "3.5.0-2a0816b09";
 =======
 var version_evaluate_default = "3.5.0-3f415c8d3";
 >>>>>>> 91d0b6a82971c97861ae8d75967fa946fbeae9c2
+=======
+var version_evaluate_default = "3.5.0-91d0b6a82";
+>>>>>>> 78e3547e9ece433ae9cd77bfd315f6c4e22d92ea
 
 // src/utils/public.js
 var public_exports = {};
