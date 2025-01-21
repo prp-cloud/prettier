@@ -21869,19 +21869,7 @@ var object_omit_default = omit;
 import * as doc from "./doc.mjs";
 
 // src/main/version.evaluate.cjs
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-var version_evaluate_default = "3.5.0-2a0816b09";
-=======
-var version_evaluate_default = "3.5.0-3f415c8d3";
->>>>>>> 91d0b6a82971c97861ae8d75967fa946fbeae9c2
-=======
-var version_evaluate_default = "3.5.0-91d0b6a82";
->>>>>>> 78e3547e9ece433ae9cd77bfd315f6c4e22d92ea
-=======
-var version_evaluate_default = "3.5.0-4845e42f7";
->>>>>>> c596bcb6c92cd99533af4e27974fb0704e7720fa
+var version_evaluate_default = "3.5.0-0f925e97e";
 
 // src/utils/public.js
 var public_exports = {};

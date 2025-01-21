@@ -1,4 +1,3 @@
-import { existsSync } from "node:fs";
 import path from "node:path";
 import { PROJECT_ROOT, readJson, writeJson } from "../utils/index.js";
 
@@ -96,7 +95,7 @@ async function buildPackageJson({ file, files }) {
 
   await writeJson(
     path.join(PROJECT_ROOT, file.output.file),
-    Object.assign(pick(packageJson, keysToKeep), adjustPaths(overrides)),
+    Object.assign(packageJson, adjustPaths(overrides)),
   );
 }
 
