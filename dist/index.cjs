@@ -613,6 +613,7 @@ var require_version_evaluate = __commonJS({
   "src/main/version.evaluate.cjs"(exports2, module2) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     module2.exports = "3.5.0-2a0816b09";
 =======
     module2.exports = "3.5.0-3f415c8d3";
@@ -620,6 +621,9 @@ var require_version_evaluate = __commonJS({
 =======
     module2.exports = "3.5.0-91d0b6a82";
 >>>>>>> 78e3547e9ece433ae9cd77bfd315f6c4e22d92ea
+=======
+    module2.exports = "3.5.0-4845e42f7";
+>>>>>>> c596bcb6c92cd99533af4e27974fb0704e7720fa
   }
 });
 
