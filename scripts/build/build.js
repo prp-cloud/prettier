@@ -1,12 +1,13 @@
 #!/usr/bin/env node
 
+import { execSync } from "node:child_process";
 import fs from "node:fs/promises";
 import path from "node:path";
 import readline from "node:readline";
 import chalk from "chalk";
 import createEsmUtils from "esm-utils";
 import prettyBytes from "pretty-bytes";
-import { DIST_DIR } from "../utils/index.js";
+import { DIST_DIR, PROJECT_ROOT } from "../utils/index.js";
 import files from "./config.js";
 import parseArguments from "./parse-arguments.js";
 
@@ -147,6 +148,23 @@ async function run() {
   }
 
   console.log(chalk.inverse(" Building packages "));
+
+  await Promise.all(
+    Object.entries({
+      "": (contents) => [contents],
+      "-lock": (contents) => [contents, contents.packages[""]],
+    }).map(async ([postfix, fn]) => {
+      const path = `${PROJECT_ROOT}/package${postfix}.json`;
+      const contents = JSON.parse(await fs.readFile(path));
+      for (const obj of fn(contents)) {
+        obj.version = obj.version.replace(
+          /(-.+)?$/u,
+          `-${execSync("git log --pretty=format:%h -1")}`,
+        );
+      }
+      await fs.writeFile(path, `${JSON.stringify(contents, null, 2)}\n`);
+    }),
+  );
 
   const results = [];
   for (const file of files) {
