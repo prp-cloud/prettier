@@ -1,6 +1,6 @@
 {
   "name": "prettier",
-  "version": "3.5.0-0f925e97e",
+  "version": "3.5.0-046208f8a",
   "description": "Prettier is an opinionated code formatter",
   "bin": "./dist/bin/prettier.cjs",
   "repository": "prettier/prettier",
@@ -212,7 +212,7 @@
     "dist/standalone.mjs"
   ],
   "devDependencies": {
-    "@angular/compiler": "19.1.1",
+    "@angular/compiler": "19.1.2",
     "@babel/code-frame": "7.26.2",
     "@babel/generator": "7.26.5",
     "@babel/parser": "7.26.5",
