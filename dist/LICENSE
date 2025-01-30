@@ -116,7 +116,7 @@ Author: The Babel Team (https://babel.dev/team)
 
 ----------------------------------------
 
-### @babel/parser@v7.26.5
+### @babel/parser@v7.26.7
 
 > A JavaScript parser
 
@@ -147,37 +147,10 @@ Author: The Babel Team (https://babel.dev/team)
 
 ----------------------------------------
 
-### @glimmer/env@v0.1.7
-
-> Glimmer application environment variables stub
+### @glimmer/syntax@v0.94.1
 
 License: MIT
-
-> Copyright (c) 2017 Martin Muñoz and contributors.
->
-> Permission is hereby granted, free of charge, to any person obtaining a copy of
-> this software and associated documentation files (the "Software"), to deal in
-> the Software without restriction, including without limitation the rights to
-> use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-> of the Software, and to permit persons to whom the Software is furnished to do
-> so, subject to the following conditions:
->
-> The above copyright notice and this permission notice shall be included in all
-> copies or substantial portions of the Software.
->
-> THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-> IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-> FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-> AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-> LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-> OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-> SOFTWARE.
-
-----------------------------------------
-
-### @glimmer/syntax@v0.93.1
-
-License: MIT
+Repository: <git+https://github.com/glimmerjs/glimmer-vm.git>
 
 > Copyright (c) 2015 Tilde, Inc.
 >
@@ -201,11 +174,12 @@ License: MIT
 
 ----------------------------------------
 
-### @glimmer/util@v0.93.1
+### @glimmer/util@v0.94.1
 
 > Common utilities used in Glimmer
 
 License: MIT
+Repository: <git+https://github.com/glimmerjs/glimmer-vm.git>
 
 > Copyright (c) 2015 Tilde, Inc.
 >
@@ -229,9 +203,10 @@ License: MIT
 
 ----------------------------------------
 
-### @glimmer/wire-format@v0.93.1
+### @glimmer/wire-format@v0.94.1
 
 License: MIT
+Repository: <git+https://github.com/glimmerjs/glimmer-vm.git>
 
 > Copyright (c) 2015 Tilde, Inc.
 >
@@ -1351,7 +1326,7 @@ Author: Matteo Collina <hello@matteocollina.com>
 
 ----------------------------------------
 
-### file-entry-cache@v10.0.5
+### file-entry-cache@v10.0.6
 
 > A lightweight cache for file metadata, ideal for processes that work on a specific set of files and only need to reprocess files that have changed since the last run
 
@@ -2276,7 +2251,7 @@ Author: fisker Cheung <lionkay@gmail.com> (https://www.fiskercheung.com/)
 
 ----------------------------------------
 
-### jest-docblock@v30.0.0-alpha.6
+### jest-docblock@v30.0.0-alpha.7
 
 License: MIT
 Repository: <https://github.com/jestjs/jest.git>
@@ -3366,7 +3341,7 @@ Author: Sindre Sorhus <sindresorhus@gmail.com> (https://sindresorhus.com)
 
 ----------------------------------------
 
-### semver@v7.6.3
+### semver@v7.7.0
 
 > The semantic version parser used by npm.
 

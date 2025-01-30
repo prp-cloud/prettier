@@ -5839,6 +5839,17 @@ var require_semver = __commonJS({
       // preminor will bump the version up to the next minor release, and immediately
       // down to pre-release. premajor and prepatch work the same way.
       inc(release, identifier, identifierBase) {
+        if (release.startsWith("pre")) {
+          if (!identifier && identifierBase === false) {
+            throw new Error("invalid increment argument: identifier is empty");
+          }
+          if (identifier) {
+            const match = `-${identifier}`.match(this.options.loose ? re[t.PRERELEASELOOSE] : re[t.PRERELEASE]);
+            if (!match || match[1] !== identifier) {
+              throw new Error(`invalid identifier: ${identifier}`);
+            }
+          }
+        }
         switch (release) {
           case "premajor":
             this.prerelease.length = 0;
@@ -5866,6 +5877,12 @@ var require_semver = __commonJS({
             }
             this.inc("pre", identifier, identifierBase);
             break;
+          case "release":
+            if (this.prerelease.length === 0) {
+              throw new Error(`version ${this.raw} is not a prerelease`);
+            }
+            this.prerelease.length = 0;
+            break;
           case "major":
             if (this.minor !== 0 || this.patch !== 0 || this.prerelease.length === 0) {
               this.major++;
@@ -5891,9 +5908,6 @@ var require_semver = __commonJS({
           // 1.0.0 'pre' would become 1.0.0-0 which is the wrong direction.
           case "pre": {
             const base = Number(identifierBase) ? 1 : 0;
-            if (!identifier && identifierBase === false) {
-              throw new Error("invalid increment argument: identifier is empty");
-            }
             if (this.prerelease.length === 0) {
               this.prerelease = [base];
             } else {
@@ -15427,12 +15441,25 @@ ${error.message}`;
     throw error;
   }
 }
-async function loadJs(file) {
+async function importModuleDefault(file) {
   const module = await import(pathToFileURL2(file).href);
   return module.default;
 }
+async function readPackageJson(file) {
+  try {
+    return await readJson(file);
+  } catch (error) {
+    if (process.versions.bun) {
+      try {
+        return await importModuleDefault(file);
+      } catch {
+      }
+    }
+    throw error;
+  }
+}
 async function loadConfigFromPackageJson(file) {
-  const { prettier } = await readJson(file);
+  const { prettier } = await readPackageJson(file);
   return prettier;
 }
 async function loadConfigFromPackageYaml(file) {
@@ -15471,12 +15498,12 @@ ${error.message}`;
     }
   },
   ".json": readJson,
-  ".js": loadJs,
-  ".mjs": loadJs,
-  ".cjs": loadJs,
-  ".ts": loadJs,
-  ".mts": loadJs,
-  ".cts": loadJs,
+  ".js": importModuleDefault,
+  ".mjs": importModuleDefault,
+  ".cjs": importModuleDefault,
+  ".ts": importModuleDefault,
+  ".mts": importModuleDefault,
+  ".cts": importModuleDefault,
   ".yaml": loadYaml,
   ".yml": loadYaml,
   // No extension
@@ -21869,7 +21896,7 @@ var object_omit_default = omit;
 import * as doc from "./doc.mjs";
 
 // src/main/version.evaluate.cjs
-var version_evaluate_default = "3.5.0-098cc13b5";
+var version_evaluate_default = "3.5.0-cf3fc9d32";
 
 // src/utils/public.js
 var public_exports = {};
