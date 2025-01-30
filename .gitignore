@@ -17,6 +17,7 @@
 /website/i18n
 /website/static/playground.js
 /website/static/lib
+/website/.docusaurus
 .DS_Store
 /coverage
 .idea
