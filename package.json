@@ -1,6 +1,6 @@
 {
   "name": "prettier",
-  "version": "3.6.0-2bf3be69a",
+  "version": "3.6.0-b12c51ca0",
   "description": "Prettier is an opinionated code formatter",
   "bin": "./dist/bin/prettier.cjs",
   "repository": "prettier/prettier",
@@ -310,7 +310,7 @@
     "postcss-scss": "4.0.9",
     "postcss-selector-parser": "2.2.3",
     "postcss-values-parser": "2.0.1",
-		"prettier": "3.5.1",
+    "prettier": "3.5.1",
     "pretty-bytes": "6.1.1",
     "regexp-util": "2.0.0",
     "remark-footnotes": "2.0.0",
