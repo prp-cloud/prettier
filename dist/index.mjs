@@ -21696,6 +21696,8 @@ var languages_evaluate_default8 = [
     "vscodeLanguageIds": [
       "yaml",
       "ansible",
+      "dockercompose",
+      "github-actions-workflow",
       "home-assistant"
     ]
   }
@@ -21899,7 +21901,7 @@ var object_omit_default = omit;
 import * as doc from "./doc.mjs";
 
 // src/main/version.evaluate.cjs
-var version_evaluate_default = "3.6.0-c8b4b1c59";
+var version_evaluate_default = "3.6.0-2bf3be69a";
 
 // src/utils/public.js
 var public_exports = {};
