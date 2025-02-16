@@ -19980,7 +19980,7 @@ async function printEmbeddedLanguages(path13, genericPrint, options8, printAstTo
   }
   if (embed.length > 2) {
     throw new Error(
-      "printer.embed has too many parameters. The API changed in Prettier v3. Please update your plugin. See https://prettier.io/docs/en/plugins.html#optional-embed"
+      "printer.embed has too many parameters. The API changed in Prettier v3. Please update your plugin. See https://prettier.io/docs/plugins#optional-embed"
     );
   }
   const getVisitorKeys = create_get_visitor_keys_function_default(
@@ -21901,7 +21901,7 @@ var object_omit_default = omit;
 import * as doc from "./doc.mjs";
 
 // src/main/version.evaluate.cjs
-var version_evaluate_default = "3.6.0-e2ce05fa2";
+var version_evaluate_default = "3.6.0-8b673f9c8";
 
 // src/utils/public.js
 var public_exports = {};

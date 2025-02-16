@@ -102,7 +102,7 @@ Author: The Babel Team (https://babel.dev/team)
 
 ----------------------------------------
 
-## @babel/parser@v7.26.8
+## @babel/parser@v7.26.9
 
 > A JavaScript parser
 
@@ -133,7 +133,7 @@ Author: The Babel Team (https://babel.dev/team)
 
 ----------------------------------------
 
-## @glimmer/syntax@v0.94.3
+## @glimmer/syntax@v0.94.7
 
 License: MIT  
 Repository: <git+https://github.com/glimmerjs/glimmer-vm.git>  
@@ -160,7 +160,7 @@ Repository: <git+https://github.com/glimmerjs/glimmer-vm.git>
 
 ----------------------------------------
 
-## @glimmer/util@v0.94.3
+## @glimmer/util@v0.94.6
 
 > Common utilities used in Glimmer
 
@@ -189,7 +189,7 @@ Repository: <git+https://github.com/glimmerjs/glimmer-vm.git>
 
 ----------------------------------------
 
-## @glimmer/wire-format@v0.94.3
+## @glimmer/wire-format@v0.94.6
 
 License: MIT  
 Repository: <git+https://github.com/glimmerjs/glimmer-vm.git>  
@@ -2914,7 +2914,7 @@ Author: Sindre Sorhus <sindresorhus@gmail.com> (https://sindresorhus.com)
 
 ----------------------------------------
 
-## postcss@v8.5.1
+## postcss@v8.5.2
 
 > Tool for transforming styles with JS plugins
 
