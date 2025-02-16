@@ -1620,9 +1620,9 @@ Repository: <https://github.com/graphql/graphql-js.git>
 
 ----------------------------------------
 
-## hookified@v1.7.0
+## hookified@v1.7.1
 
-> Event and Middleware Hooks
+> Event Emitting and Middleware Hooks
 
 License: MIT  
 Homepage: <https://github.com/jaredwray/hookified#readme>  
