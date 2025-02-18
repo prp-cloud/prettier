@@ -226,7 +226,7 @@ Repository: <git+https://github.com/handlebars-lang/handlebars-parser.git>
 
 ----------------------------------------
 
-## @keyv/serialize@v1.0.2
+## @keyv/serialize@v1.0.3
 
 > Serialization for Keyv
 
@@ -1449,7 +1449,7 @@ Author: Jared Wray <me@jaredwray.com>
 
 ----------------------------------------
 
-## flatted@v3.3.2
+## flatted@v3.3.3
 
 > A super light and fast circular JSON parser.
 
