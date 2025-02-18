@@ -21901,7 +21901,7 @@ var object_omit_default = omit;
 import * as doc from "./doc.mjs";
 
 // src/main/version.evaluate.cjs
-var version_evaluate_default = "3.6.0-b6dd42440";
+var version_evaluate_default = "3.6.0-f894cafa6";
 
 // src/utils/public.js
 var public_exports = {};
