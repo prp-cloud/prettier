@@ -1,6 +1,6 @@
 {
   "name": "prettier",
-  "version": "3.6.0-f894cafa6",
+  "version": "3.6.0-0fa9be1e0",
   "description": "Prettier is an opinionated code formatter",
   "bin": "./dist/bin/prettier.cjs",
   "repository": "prettier/prettier",
