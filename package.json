@@ -15,7 +15,6 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "module-sync": "./dist/index.mjs",
       "require": "./dist/index.cjs",
       "browser": {
         "import": "./dist/standalone.mjs",
@@ -26,91 +25,76 @@
     "./*": "./dist/*",
     "./doc": {
       "types": "./dist/doc.d.ts",
-      "module-sync": "./dist/doc.mjs",
       "require": "./dist/doc.js",
       "default": "./dist/doc.mjs"
     },
     "./standalone": {
       "types": "./dist/standalone.d.ts",
-      "module-sync": "./dist/standalone.mjs",
       "require": "./dist/standalone.js",
       "default": "./dist/standalone.mjs"
     },
     "./plugins/estree": {
       "types": "./dist/plugins/estree.d.ts",
-      "module-sync": "./dist/plugins/estree.mjs",
       "require": "./dist/plugins/estree.js",
       "default": "./dist/plugins/estree.mjs"
     },
     "./plugins/babel": {
       "types": "./dist/plugins/babel.d.ts",
-      "module-sync": "./dist/plugins/babel.mjs",
       "require": "./dist/plugins/babel.js",
       "default": "./dist/plugins/babel.mjs"
     },
     "./plugins/flow": {
       "types": "./dist/plugins/flow.d.ts",
-      "module-sync": "./dist/plugins/flow.mjs",
       "require": "./dist/plugins/flow.js",
       "default": "./dist/plugins/flow.mjs"
     },
     "./plugins/typescript": {
       "types": "./dist/plugins/typescript.d.ts",
-      "module-sync": "./dist/plugins/typescript.mjs",
       "require": "./dist/plugins/typescript.js",
       "default": "./dist/plugins/typescript.mjs"
     },
     "./plugins/acorn": {
       "types": "./dist/plugins/acorn.d.ts",
-      "module-sync": "./dist/plugins/acorn.mjs",
       "require": "./dist/plugins/acorn.js",
       "default": "./dist/plugins/acorn.mjs"
     },
     "./plugins/meriyah": {
       "types": "./dist/plugins/meriyah.d.ts",
-      "module-sync": "./dist/plugins/meriyah.mjs",
       "require": "./dist/plugins/meriyah.js",
       "default": "./dist/plugins/meriyah.mjs"
     },
     "./plugins/angular": {
       "types": "./dist/plugins/angular.d.ts",
-      "module-sync": "./dist/plugins/angular.mjs",
       "require": "./dist/plugins/angular.js",
       "default": "./dist/plugins/angular.mjs"
     },
     "./plugins/postcss": {
       "types": "./dist/plugins/postcss.d.ts",
-      "module-sync": "./dist/plugins/postcss.mjs",
       "require": "./dist/plugins/postcss.js",
       "default": "./dist/plugins/postcss.mjs"
     },
     "./plugins/graphql": {
       "types": "./dist/plugins/graphql.d.ts",
-      "module-sync": "./dist/plugins/graphql.mjs",
       "require": "./dist/plugins/graphql.js",
       "default": "./dist/plugins/graphql.mjs"
     },
     "./plugins/markdown": {
       "types": "./dist/plugins/markdown.d.ts",
-      "module-sync": "./dist/plugins/markdown.mjs",
       "require": "./dist/plugins/markdown.js",
       "default": "./dist/plugins/markdown.mjs"
     },
     "./plugins/glimmer": {
       "types": "./dist/plugins/glimmer.d.ts",
-      "module-sync": "./dist/plugins/glimmer.mjs",
       "require": "./dist/plugins/glimmer.js",
       "default": "./dist/plugins/glimmer.mjs"
     },
     "./plugins/html": {
       "types": "./dist/plugins/html.d.ts",
-      "module-sync": "./dist/plugins/html.mjs",
       "require": "./dist/plugins/html.js",
       "default": "./dist/plugins/html.mjs"
     },
     "./plugins/yaml": {
       "types": "./dist/plugins/yaml.d.ts",
-      "module-sync": "./dist/plugins/yaml.mjs",
       "require": "./dist/plugins/yaml.js",
       "default": "./dist/plugins/yaml.mjs"
     },
@@ -308,7 +292,7 @@
     "postcss-scss": "4.0.9",
     "postcss-selector-parser": "2.2.3",
     "postcss-values-parser": "2.0.1",
-    "prettier": "3.5.1",
+		"prettier": "3.5.2",
     "pretty-bytes": "6.1.1",
     "regexp-util": "2.0.0",
     "remark-footnotes": "2.0.0",
