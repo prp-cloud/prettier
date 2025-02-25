@@ -17058,6 +17058,7 @@ async function loadPrettierConfig2(file, options8) {
   if (!configFile) {
     return;
   }
+  configFile = toPath(configFile);
   const config = await loadPrettierConfig(configFile, { shouldCache });
   return { config, configFile };
 }
@@ -17285,7 +17286,10 @@ async function getFileInfo(file, options8) {
 async function getParser(file, options8) {
   let config;
   if (options8.resolveConfig !== false) {
-    config = await resolveConfig(file);
+    config = await resolveConfig(file, {
+      // No need read `.editorconfig`
+      editorconfig: false
+    });
   }
   return config?.parser ?? infer_parser_default(options8, { physicalFile: file });
 }
@@ -21853,6 +21857,9 @@ var import_from_directory_default = importFromDirectory;
 
 // src/main/plugins/load-plugin.js
 async function importPlugin(name, cwd) {
+  if (isUrl(name)) {
+    return import(name);
+  }
   if (path12.isAbsolute(name)) {
     return import(pathToFileURL5(name).href);
   }
@@ -21868,7 +21875,7 @@ async function loadPluginWithoutCache(plugin, cwd) {
 }
 var cache2 = /* @__PURE__ */ new Map();
 function loadPlugin(plugin) {
-  if (typeof plugin !== "string") {
+  if (typeof plugin !== "string" && !(plugin instanceof URL)) {
     return plugin;
   }
   const cwd = process.cwd();
@@ -21901,7 +21908,7 @@ var object_omit_default = omit;
 import * as doc from "./doc.mjs";
 
 // src/main/version.evaluate.cjs
-var version_evaluate_default = "3.6.0-a3081829a";
+var version_evaluate_default = "3.6.0-21445a5a7";
 
 // src/utils/public.js
 var public_exports = {};
