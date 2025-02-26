@@ -21160,7 +21160,6 @@ var languages_evaluate_default5 = [
       ".cjs",
       ".es",
       ".es6",
-      ".frag",
       ".gs",
       ".jake",
       ".javascript",
@@ -21178,10 +21177,14 @@ var languages_evaluate_default5 = [
       ".ssjs",
       ".xsjs",
       ".xsjslib",
+      ".start.frag",
+      ".end.frag",
       ".wxs"
     ],
     "filenames": [
-      "Jakefile"
+      "Jakefile",
+      "start.frag",
+      "end.frag"
     ],
     "interpreters": [
       "chakra",
@@ -21908,7 +21911,7 @@ var object_omit_default = omit;
 import * as doc from "./doc.mjs";
 
 // src/main/version.evaluate.cjs
-var version_evaluate_default = "3.6.0-4e892063f";
+var version_evaluate_default = "3.6.0-fb59cbb86";
 
 // src/utils/public.js
 var public_exports = {};
