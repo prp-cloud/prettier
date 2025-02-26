@@ -1287,7 +1287,7 @@ Author: James Halliday <mail@substack.net> (http://substack.net)
 
 ----------------------------------------
 
-## fastq@v1.19.0
+## fastq@v1.19.1
 
 > Fast, in memory work queue
 
@@ -3243,7 +3243,7 @@ Contributors:
 
 ----------------------------------------
 
-## reusify@v1.0.4
+## reusify@v1.1.0
 
 > Reuse objects and functions with style
 
@@ -3254,7 +3254,7 @@ Author: Matteo Collina <hello@matteocollina.com>
 
 > The MIT License (MIT)
 >
-> Copyright (c) 2015 Matteo Collina
+> Copyright (c) 2015-2024 Matteo Collina
 >
 > Permission is hereby granted, free of charge, to any person obtaining a copy
 > of this software and associated documentation files (the "Software"), to deal
