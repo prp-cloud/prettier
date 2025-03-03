@@ -2372,7 +2372,7 @@ Contributors:
 
 ----------------------------------------
 
-## keyv@v5.2.3
+## keyv@v5.3.1
 
 > Simple key-value storage with support for multiple backends
 
