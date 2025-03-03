@@ -3658,7 +3658,7 @@ Author: JoshuaKGoldberg <npm@joshuakgoldberg.com>
 
 ----------------------------------------
 
-## typescript@v5.7.3
+## typescript@v5.8.2
 
 > TypeScript is a language for application scale JavaScript development
 
