@@ -695,7 +695,7 @@ Contributors:
 
 ----------------------------------------
 
-## cacheable@v1.8.8
+## cacheable@v1.8.9
 
 > High Performance Layer 1 / Layer 2 Caching with Keyv Storage
 
@@ -1419,7 +1419,7 @@ Author: Sindre Sorhus <sindresorhus@gmail.com> (https://sindresorhus.com)
 
 ----------------------------------------
 
-## flat-cache@v6.1.6
+## flat-cache@v6.1.7
 
 > A simple key/value storage using files to persist the data
 
