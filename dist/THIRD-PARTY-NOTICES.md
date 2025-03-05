@@ -1312,7 +1312,7 @@ Author: Matteo Collina <hello@matteocollina.com>
 
 ----------------------------------------
 
-## file-entry-cache@v10.0.6
+## file-entry-cache@v10.0.7
 
 > A lightweight cache for file metadata, ideal for processes that work on a specific set of files and only need to reprocess files that have changed since the last run
 
