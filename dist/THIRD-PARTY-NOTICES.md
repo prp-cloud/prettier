@@ -4333,7 +4333,7 @@ Author: Ika <ikatyang@gmail.com> (https://github.com/ikatyang)
 
 ----------------------------------------
 
-## yocto-queue@v1.1.1
+## yocto-queue@v1.2.0
 
 > Tiny queue data structure
 
