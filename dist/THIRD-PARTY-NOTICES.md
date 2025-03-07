@@ -133,7 +133,7 @@ Author: The Babel Team (https://babel.dev/team)
 
 ----------------------------------------
 
-## @glimmer/syntax@v0.94.7
+## @glimmer/syntax@v0.94.8
 
 License: MIT  
 Repository: <git+https://github.com/glimmerjs/glimmer-vm.git>  
@@ -160,7 +160,7 @@ Repository: <git+https://github.com/glimmerjs/glimmer-vm.git>
 
 ----------------------------------------
 
-## @glimmer/util@v0.94.6
+## @glimmer/util@v0.94.7
 
 > Common utilities used in Glimmer
 
@@ -189,7 +189,7 @@ Repository: <git+https://github.com/glimmerjs/glimmer-vm.git>
 
 ----------------------------------------
 
-## @glimmer/wire-format@v0.94.6
+## @glimmer/wire-format@v0.94.7
 
 License: MIT  
 Repository: <git+https://github.com/glimmerjs/glimmer-vm.git>  
@@ -478,7 +478,7 @@ Repository: <https://github.com/typescript-eslint/typescript-eslint.git>
 
 ----------------------------------------
 
-## acorn@v8.14.0
+## acorn@v8.14.1
 
 > ECMAScript parser
 
