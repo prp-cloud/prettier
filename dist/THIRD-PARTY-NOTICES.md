@@ -2698,7 +2698,7 @@ Author: Yoan Arnaudov <jonidev@gmail.com>
 
 ----------------------------------------
 
-## nanoid@v3.3.8
+## nanoid@v3.3.9
 
 > A tiny (116 bytes), secure URL-friendly unique string ID generator
 
