@@ -4142,12 +4142,12 @@ Contributors:
 
 ----------------------------------------
 
-## vnopts@v2.0.0
+## vnopts@v2.0.2
 
 > validate and normalize options
 
 License: MIT  
-Homepage: <https://github.com/ikatyang/vnopts#readme>  
+Homepage: <https://github.com/ikatyang-collab/vnopts#readme>  
 Author: Ika <ikatyang@gmail.com> (https://github.com/ikatyang)  
 
 > MIT License
