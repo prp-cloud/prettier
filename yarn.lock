@@ -2791,7 +2791,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chalk@npm:5.4.1, chalk@npm:^5.2.0, chalk@npm:^5.3.0, chalk@npm:^5.4.1":
+"chalk@npm:5.4.1, chalk@npm:^5.2.0, chalk@npm:^5.4.1":
   version: 5.4.1
   resolution: "chalk@npm:5.4.1"
   checksum: 10/29df3ffcdf25656fed6e95962e2ef86d14dfe03cd50e7074b06bad9ffbbf6089adbb40f75c00744d843685c8d008adaf3aed31476780312553caf07fa86e5bc7
@@ -2864,13 +2864,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cjk-regex@npm:3.2.0":
-  version: 3.2.0
-  resolution: "cjk-regex@npm:3.2.0"
+"cjk-regex@npm:3.2.1":
+  version: 3.2.1
+  resolution: "cjk-regex@npm:3.2.1"
   dependencies:
     regexp-util: "npm:^2.0.1"
     unicode-regex: "npm:^4.1.0"
-  checksum: 10/e38da00a2bcb65024d7acce6447cc96a8f2927b7257d6e168a9ed51fa32364b55b765e7b64a02506a02fd76b346e78d208eda478e0f3efc2b92f151d01143fbd
+  checksum: 10/957d2206332678eb0b7622b2fb151f1de8955eef52f1138c7ecf2e2929bbca148a2815a36e24616fa72e3d25584b48e4ffaf87712a77e54f3499adcd6ca64596
   languageName: node
   linkType: hard
 
@@ -4578,12 +4578,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"has-ansi@npm:^5.0.1":
-  version: 5.0.1
-  resolution: "has-ansi@npm:5.0.1"
+"has-ansi@npm:^6.0.0":
+  version: 6.0.0
+  resolution: "has-ansi@npm:6.0.0"
   dependencies:
     ansi-regex: "npm:^6.0.1"
-  checksum: 10/3edc00033f1b67191a8bf051ae7787bbe609ed08be27aaf58c03f77c68ce4b18c376b8a6901a7beead2d2e0e07358063c87aa4e3e1d47ac614ee940efec2e01a
+  checksum: 10/5f839cceb7d5df380aa07ca059b2281cdf327578d48738ee5e28ca2f062f9a526008e6c67dae1ee9fff86471105aa98858dbaf0620b3def1fa4f4eef8aaa2915
   languageName: node
   linkType: hard
 
@@ -5549,13 +5549,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jest-snapshot-serializer-ansi@npm:2.1.0":
-  version: 2.1.0
-  resolution: "jest-snapshot-serializer-ansi@npm:2.1.0"
+"jest-snapshot-serializer-ansi@npm:2.1.2":
+  version: 2.1.2
+  resolution: "jest-snapshot-serializer-ansi@npm:2.1.2"
   dependencies:
-    has-ansi: "npm:^5.0.1"
+    has-ansi: "npm:^6.0.0"
     strip-ansi: "npm:^7.1.0"
-  checksum: 10/6f67679c308662c83585bbc3cb443718cc85c1c837d60510dd08fdb21a9cc622be93fa46f72270c8f5583385e0334c6e228279ad1e4005f7341a3abdc2e1c0c7
+  checksum: 10/86205f32132f6b140ffdba3d531d2b27f1791df3dc232433f1586f4b10cfd9c05c70c6f48a9c509b8a67109c2c888a32d53d0bcd3e22fc51e14b327972e90d73
   languageName: node
   linkType: hard
 
@@ -6893,7 +6893,7 @@ __metadata:
     camelcase: "npm:8.0.0"
     chalk: "npm:5.4.1"
     ci-info: "npm:4.1.0"
-    cjk-regex: "npm:3.2.0"
+    cjk-regex: "npm:3.2.1"
     collapse-white-space: "npm:1.0.6"
     cross-env: "npm:7.0.3"
     cspell: "npm:8.17.2"
@@ -6937,7 +6937,7 @@ __metadata:
     jest: "npm:30.0.0-alpha.7"
     jest-docblock: "npm:30.0.0-alpha.7"
     jest-light-runner: "npm:0.6.0"
-    jest-snapshot-serializer-ansi: "npm:2.1.0"
+    jest-snapshot-serializer-ansi: "npm:2.1.2"
     jest-snapshot-serializer-raw: "npm:2.0.0"
     jest-watch-typeahead: "npm:2.2.2"
     js-yaml: "npm:4.1.0"
@@ -6965,7 +6965,7 @@ __metadata:
     postcss-values-parser: "npm:2.0.1"
     prettier: "npm:3.5.3"
     pretty-bytes: "npm:6.1.1"
-    regexp-util: "npm:2.0.1"
+    regexp-util: "npm:2.0.3"
     remark-footnotes: "npm:2.0.0"
     remark-math: "npm:3.0.1"
     remark-parse: "npm:8.0.3"
@@ -6981,10 +6981,10 @@ __metadata:
     to-fast-properties: "npm:4.0.0"
     ts-expect: "npm:1.3.0"
     typescript: "npm:5.8.2"
-    unicode-regex: "npm:4.1.0"
+    unicode-regex: "npm:4.1.2"
     unified: "npm:9.2.2"
     url-or-path: "npm:2.3.2"
-    vnopts: "npm:2.0.0"
+    vnopts: "npm:2.0.2"
     wcwidth.js: "npm:2.0.0"
     yaml-unist-parser: "npm:2.0.1"
   bin:
@@ -7153,10 +7153,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"regexp-util@npm:2.0.1, regexp-util@npm:^2.0.1":
-  version: 2.0.1
-  resolution: "regexp-util@npm:2.0.1"
-  checksum: 10/934345a752cc1226a0b8a83f496e196439fe427c2f173d8d61512b437921dcad0c3cc9b44dd84c85547ec5a15e917071a2f4271ee08964300c7b835718d01ba0
+"regexp-util@npm:2.0.3, regexp-util@npm:^2.0.1":
+  version: 2.0.3
+  resolution: "regexp-util@npm:2.0.3"
+  checksum: 10/8380aa27dc61013b21a01ce1679d61323e6930ce0d3776171045c1ed73e3ba70c5da1cf02d65d9f1f97d1b944de617ff0d609eadce7832344ed8f096919a55ba
   languageName: node
   linkType: hard
 
@@ -7992,7 +7992,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tslib@npm:^2.3.0, tslib@npm:^2.4.0, tslib@npm:^2.6.0, tslib@npm:^2.6.2, tslib@npm:^2.8.1":
+"tslib@npm:^2.3.0, tslib@npm:^2.4.0, tslib@npm:^2.6.2, tslib@npm:^2.8.1":
   version: 2.8.1
   resolution: "tslib@npm:2.8.1"
   checksum: 10/3e2e043d5c2316461cb54e5c7fe02c30ef6dccb3384717ca22ae5c6b5bc95232a6241df19c622d9c73b809bea33b187f6dbc73030963e29950c2141bc32a79f7
@@ -8087,12 +8087,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"unicode-regex@npm:4.1.0, unicode-regex@npm:^4.1.0":
-  version: 4.1.0
-  resolution: "unicode-regex@npm:4.1.0"
+"unicode-regex@npm:4.1.2, unicode-regex@npm:^4.1.0":
+  version: 4.1.2
+  resolution: "unicode-regex@npm:4.1.2"
   dependencies:
     regexp-util: "npm:^2.0.1"
-  checksum: 10/581fe6275d01ab84f47d14043f62edc2f1bfd7115bbb8993e36f418bd86e8ab4a03fc8acca6270004bb90a8f4e2613d6988062da65b13cd8d39e328b55302314
+  checksum: 10/c2611ab760cd6a76ab775edc47a7d68827a413fd9057f501ea051015f2573322699242b15db83199c28cdabe16428e97927ec874c2567f3bb1065d209ee74e7d
   languageName: node
   linkType: hard
 
@@ -8277,14 +8277,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vnopts@npm:2.0.0":
-  version: 2.0.0
-  resolution: "vnopts@npm:2.0.0"
+"vnopts@npm:2.0.2":
+  version: 2.0.2
+  resolution: "vnopts@npm:2.0.2"
   dependencies:
-    chalk: "npm:^5.3.0"
     leven: "npm:^4.0.0"
-    tslib: "npm:^2.6.0"
-  checksum: 10/005c75ceb49892413a5c1831d7dda1d9c4c3cb48f192efe6840ce3e63121401fe55f8e3ba4edc713653cdeedcd98762437c22ca97eaac25ca53a646304858c7c
+    picocolors: "npm:^1.1.1"
+  checksum: 10/aec69bf34f4cbb4cd426641ec30489945e823ba1e2f20d8cffa08ad82f4b05ebc92c20958c3c88b745d0ee2df588aad81cf14825c6fb77776a76a137564256c8
   languageName: node
   linkType: hard
 
