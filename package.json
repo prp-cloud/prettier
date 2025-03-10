@@ -1,6 +1,6 @@
 {
   "name": "prettier",
-  "version": "3.6.0-b0cfb40b6",
+  "version": "3.6.0-10f8ebd49",
   "description": "Prettier is an opinionated code formatter",
   "bin": "./dist/bin/prettier.cjs",
   "repository": "prettier/prettier",
@@ -265,7 +265,7 @@
     "jest": "30.0.0-alpha.7",
     "jest-docblock": "30.0.0-alpha.7",
     "jest-light-runner": "0.6.0",
-		"jest-snapshot-serializer-ansi": "2.2.1",
+    "jest-snapshot-serializer-ansi": "2.2.1",
     "jest-snapshot-serializer-raw": "2.0.0",
     "jest-watch-typeahead": "2.2.2",
     "js-yaml": "4.1.0",
