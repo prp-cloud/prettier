@@ -880,7 +880,7 @@ Contributors:
 
 ----------------------------------------
 
-## ci-info@v4.1.0
+## ci-info@v4.2.0
 
 > Get details about the current Continuous Integration environment
 

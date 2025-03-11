@@ -8153,6 +8153,11 @@ var require_vendors = __commonJS({
         pr: "CIRRUS_PR"
       },
       {
+        name: "Cloudflare Pages",
+        constant: "CLOUDFLARE_PAGES",
+        env: "CF_PAGES"
+      },
+      {
         name: "Codefresh",
         constant: "CODEFRESH",
         env: "CF_BUILD_ID",
@@ -8446,7 +8451,7 @@ var require_ci_info = __commonJS({
     exports.isCI = !!(env.CI !== "false" && // Bypass all checks if CI env is explicitly set to 'false'
     (env.BUILD_ID || // Jenkins, Cloudbees
     env.BUILD_NUMBER || // Jenkins, TeamCity
-    env.CI || // Travis CI, CircleCI, Cirrus CI, Gitlab CI, Appveyor, CodeShip, dsari
+    env.CI || // Travis CI, CircleCI, Cirrus CI, Gitlab CI, Appveyor, CodeShip, dsari, Cloudflare Pages
     env.CI_APP_ID || // Appflow
     env.CI_BUILD_ID || // Appflow
     env.CI_BUILD_NUMBER || // Appflow
@@ -8693,11 +8698,11 @@ var require_lib2 = __commonJS({
   "node_modules/@babel/code-frame/lib/index.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var picocolors4 = require_picocolors();
+    var picocolors5 = require_picocolors();
     var jsTokens = require_js_tokens();
     var helperValidatorIdentifier = require_lib();
     function isColorSupported() {
-      return typeof process === "object" && (process.env.FORCE_COLOR === "0" || process.env.FORCE_COLOR === "false") ? false : picocolors4.isColorSupported;
+      return typeof process === "object" && (process.env.FORCE_COLOR === "0" || process.env.FORCE_COLOR === "false") ? false : picocolors5.isColorSupported;
     }
     var compose = (f, g) => (v) => f(g(v));
     function buildDefs(colors) {
@@ -8717,8 +8722,8 @@ var require_lib2 = __commonJS({
         reset: colors.reset
       };
     }
-    var defsOn = buildDefs(picocolors4.createColors(true));
-    var defsOff = buildDefs(picocolors4.createColors(false));
+    var defsOn = buildDefs(picocolors5.createColors(true));
+    var defsOff = buildDefs(picocolors5.createColors(false));
     function getDefs(enabled) {
       return enabled ? defsOn : defsOff;
     }
@@ -10303,6 +10308,59 @@ function splitLines(text) {
 // src/index.js
 var import_fast_glob = __toESM(require_out4(), 1);
 
+// node_modules/leven/index.js
+var array = [];
+var characterCodeCache = [];
+function leven(first, second) {
+  if (first === second) {
+    return 0;
+  }
+  const swap = first;
+  if (first.length > second.length) {
+    first = second;
+    second = swap;
+  }
+  let firstLength = first.length;
+  let secondLength = second.length;
+  while (firstLength > 0 && first.charCodeAt(~-firstLength) === second.charCodeAt(~-secondLength)) {
+    firstLength--;
+    secondLength--;
+  }
+  let start = 0;
+  while (start < firstLength && first.charCodeAt(start) === second.charCodeAt(start)) {
+    start++;
+  }
+  firstLength -= start;
+  secondLength -= start;
+  if (firstLength === 0) {
+    return secondLength;
+  }
+  let bCharacterCode;
+  let result;
+  let temporary;
+  let temporary2;
+  let index = 0;
+  let index2 = 0;
+  while (index < firstLength) {
+    characterCodeCache[index] = first.charCodeAt(start + index);
+    array[index] = ++index;
+  }
+  while (index2 < secondLength) {
+    bCharacterCode = second.charCodeAt(start + index2);
+    temporary = index2++;
+    result = index2;
+    for (index = 0; index < firstLength; index++) {
+      temporary2 = bCharacterCode === characterCodeCache[index] ? temporary : temporary + 1;
+      temporary = array[index];
+      result = array[index] = temporary > result ? temporary2 > result ? result + 1 : temporary2 : temporary2 > temporary ? temporary + 1 : temporary2;
+    }
+  }
+  return result;
+}
+
+// src/index.js
+var import_picocolors4 = __toESM(require_picocolors(), 1);
+
 // node_modules/vnopts/lib/descriptors/api.js
 var apiDescriptor = {
   key: (key2) => /^[$_a-zA-Z][$_a-zA-Z0-9]*$/.test(key2) ? key2 : JSON.stringify(key2),
@@ -10379,58 +10437,6 @@ function chooseDescription(descriptions, printWidth) {
 
 // node_modules/vnopts/lib/handlers/unknown/leven.js
 var import_picocolors3 = __toESM(require_picocolors(), 1);
-
-// node_modules/leven/index.js
-var array = [];
-var characterCodeCache = [];
-function leven(first, second) {
-  if (first === second) {
-    return 0;
-  }
-  const swap = first;
-  if (first.length > second.length) {
-    first = second;
-    second = swap;
-  }
-  let firstLength = first.length;
-  let secondLength = second.length;
-  while (firstLength > 0 && first.charCodeAt(~-firstLength) === second.charCodeAt(~-secondLength)) {
-    firstLength--;
-    secondLength--;
-  }
-  let start = 0;
-  while (start < firstLength && first.charCodeAt(start) === second.charCodeAt(start)) {
-    start++;
-  }
-  firstLength -= start;
-  secondLength -= start;
-  if (firstLength === 0) {
-    return secondLength;
-  }
-  let bCharacterCode;
-  let result;
-  let temporary;
-  let temporary2;
-  let index = 0;
-  let index2 = 0;
-  while (index < firstLength) {
-    characterCodeCache[index] = first.charCodeAt(start + index);
-    array[index] = ++index;
-  }
-  while (index2 < secondLength) {
-    bCharacterCode = second.charCodeAt(start + index2);
-    temporary = index2++;
-    result = index2;
-    for (index = 0; index < firstLength; index++) {
-      temporary2 = bCharacterCode === characterCodeCache[index] ? temporary : temporary + 1;
-      temporary = array[index];
-      result = array[index] = temporary > result ? temporary2 > result ? result + 1 : temporary2 : temporary2 > temporary ? temporary + 1 : temporary2;
-    }
-  }
-  return result;
-}
-
-// node_modules/vnopts/lib/handlers/unknown/leven.js
 var levenUnknownHandler = (key2, value, { descriptor, logger, schemas }) => {
   const messages2 = [
     `Ignored unknown option ${import_picocolors3.default.yellow(descriptor.pair({ key: key2, value }))}.`
@@ -20329,7 +20335,7 @@ var languages_evaluate_default = [
     "aceMode": "css",
     "codemirrorMode": "css",
     "codemirrorMimeType": "text/css",
-    "color": "#563d7c",
+    "color": "#663399",
     "extensions": [
       ".css",
       ".wxss"
@@ -20612,7 +20618,7 @@ var languages_evaluate_default4 = [
     "extensions": [
       ".vue"
     ],
-    "tmScope": "text.html.vue",
+    "tmScope": "source.vue",
     "aceMode": "html",
     "parsers": [
       "vue"
@@ -20806,7 +20812,8 @@ var languages_evaluate_default5 = [
     ],
     "interpreters": [
       "deno",
-      "ts-node"
+      "ts-node",
+      "tsx"
     ],
     "extensions": [
       ".ts",
@@ -20968,6 +20975,7 @@ var languages_evaluate_default6 = [
     "aliases": [
       "geojson",
       "jsonl",
+      "sarif",
       "topojson"
     ],
     "extensions": [
@@ -20997,6 +21005,7 @@ var languages_evaluate_default6 = [
     "aliases": [
       "geojson",
       "jsonl",
+      "sarif",
       "topojson"
     ],
     "extensions": [
@@ -21009,7 +21018,10 @@ var languages_evaluate_default6 = [
       ".har",
       ".ice",
       ".JSON-tmLanguage",
+      ".json.example",
       ".mcmeta",
+      ".sarif",
+      ".tact",
       ".tfstate",
       ".tfstate.backup",
       ".topojson",
@@ -21029,8 +21041,10 @@ var languages_evaluate_default6 = [
       ".tern-config",
       ".tern-project",
       ".watchmanconfig",
+      "MODULE.bazel.lock",
       "Pipfile.lock",
       "composer.lock",
+      "deno.lock",
       "flake.lock",
       "mcmod.info",
       ".babelrc",
@@ -21052,7 +21066,7 @@ var languages_evaluate_default6 = [
     "type": "data",
     "color": "#292929",
     "group": "JSON",
-    "tmScope": "source.js",
+    "tmScope": "source.json.comments",
     "aceMode": "javascript",
     "codemirrorMode": "javascript",
     "codemirrorMimeType": "text/javascript",
@@ -21064,6 +21078,7 @@ var languages_evaluate_default6 = [
       ".code-snippets",
       ".code-workspace",
       ".sublime-build",
+      ".sublime-color-scheme",
       ".sublime-commands",
       ".sublime-completions",
       ".sublime-keymap",
@@ -21206,9 +21221,11 @@ var languages_evaluate_default8 = [
     "filenames": [
       ".clang-format",
       ".clang-tidy",
+      ".clangd",
       ".gemrc",
       "CITATION.cff",
       "glide.lock",
+      "pixi.lock",
       ".prettierrc",
       ".stylelintrc",
       ".lintstagedrc"
@@ -21430,7 +21447,7 @@ var object_omit_default = omit;
 import * as doc from "./doc.mjs";
 
 // src/main/version.evaluate.cjs
-var version_evaluate_default = "3.6.0-d2147a777";
+var version_evaluate_default = "3.6.0-0417b0b8b";
 
 // src/utils/public.js
 var public_exports = {};
@@ -21714,6 +21731,8 @@ var sharedWithCli = {
   },
   fastGlob: import_fast_glob.default,
   createTwoFilesPatch,
+  picocolors: import_picocolors4.default,
+  leven,
   utils: {
     omit: object_omit_default
   },

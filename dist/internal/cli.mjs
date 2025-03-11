@@ -270,78 +270,6 @@ var require_minimist = __commonJS({
   }
 });
 
-// node_modules/picocolors/picocolors.js
-var require_picocolors = __commonJS({
-  "node_modules/picocolors/picocolors.js"(exports, module) {
-    var p = process || {};
-    var argv = p.argv || [];
-    var env2 = p.env || {};
-    var isColorSupported = !(!!env2.NO_COLOR || argv.includes("--no-color")) && (!!env2.FORCE_COLOR || argv.includes("--color") || p.platform === "win32" || (p.stdout || {}).isTTY && env2.TERM !== "dumb" || !!env2.CI);
-    var formatter = (open, close, replace = open) => (input) => {
-      let string = "" + input, index = string.indexOf(close, open.length);
-      return ~index ? open + replaceClose(string, close, replace, index) + close : open + string + close;
-    };
-    var replaceClose = (string, close, replace, index) => {
-      let result = "", cursor = 0;
-      do {
-        result += string.substring(cursor, index) + replace;
-        cursor = index + close.length;
-        index = string.indexOf(close, cursor);
-      } while (~index);
-      return result + string.substring(cursor);
-    };
-    var createColors = (enabled = isColorSupported) => {
-      let f = enabled ? formatter : () => String;
-      return {
-        isColorSupported: enabled,
-        reset: f("\x1B[0m", "\x1B[0m"),
-        bold: f("\x1B[1m", "\x1B[22m", "\x1B[22m\x1B[1m"),
-        dim: f("\x1B[2m", "\x1B[22m", "\x1B[22m\x1B[2m"),
-        italic: f("\x1B[3m", "\x1B[23m"),
-        underline: f("\x1B[4m", "\x1B[24m"),
-        inverse: f("\x1B[7m", "\x1B[27m"),
-        hidden: f("\x1B[8m", "\x1B[28m"),
-        strikethrough: f("\x1B[9m", "\x1B[29m"),
-        black: f("\x1B[30m", "\x1B[39m"),
-        red: f("\x1B[31m", "\x1B[39m"),
-        green: f("\x1B[32m", "\x1B[39m"),
-        yellow: f("\x1B[33m", "\x1B[39m"),
-        blue: f("\x1B[34m", "\x1B[39m"),
-        magenta: f("\x1B[35m", "\x1B[39m"),
-        cyan: f("\x1B[36m", "\x1B[39m"),
-        white: f("\x1B[37m", "\x1B[39m"),
-        gray: f("\x1B[90m", "\x1B[39m"),
-        bgBlack: f("\x1B[40m", "\x1B[49m"),
-        bgRed: f("\x1B[41m", "\x1B[49m"),
-        bgGreen: f("\x1B[42m", "\x1B[49m"),
-        bgYellow: f("\x1B[43m", "\x1B[49m"),
-        bgBlue: f("\x1B[44m", "\x1B[49m"),
-        bgMagenta: f("\x1B[45m", "\x1B[49m"),
-        bgCyan: f("\x1B[46m", "\x1B[49m"),
-        bgWhite: f("\x1B[47m", "\x1B[49m"),
-        blackBright: f("\x1B[90m", "\x1B[39m"),
-        redBright: f("\x1B[91m", "\x1B[39m"),
-        greenBright: f("\x1B[92m", "\x1B[39m"),
-        yellowBright: f("\x1B[93m", "\x1B[39m"),
-        blueBright: f("\x1B[94m", "\x1B[39m"),
-        magentaBright: f("\x1B[95m", "\x1B[39m"),
-        cyanBright: f("\x1B[96m", "\x1B[39m"),
-        whiteBright: f("\x1B[97m", "\x1B[39m"),
-        bgBlackBright: f("\x1B[100m", "\x1B[49m"),
-        bgRedBright: f("\x1B[101m", "\x1B[49m"),
-        bgGreenBright: f("\x1B[102m", "\x1B[49m"),
-        bgYellowBright: f("\x1B[103m", "\x1B[49m"),
-        bgBlueBright: f("\x1B[104m", "\x1B[49m"),
-        bgMagentaBright: f("\x1B[105m", "\x1B[49m"),
-        bgCyanBright: f("\x1B[106m", "\x1B[49m"),
-        bgWhiteBright: f("\x1B[107m", "\x1B[49m")
-      };
-    };
-    module.exports = createColors();
-    module.exports.createColors = createColors;
-  }
-});
-
 // node_modules/fast-json-stable-stringify/index.js
 var require_fast_json_stable_stringify = __commonJS({
   "node_modules/fast-json-stable-stringify/index.js"(exports, module) {
@@ -630,7 +558,9 @@ var {
   vnopts,
   fastGlob,
   createTwoFilesPatch,
-  mockable
+  mockable,
+  picocolors,
+  leven
 } = sharedWithCli;
 
 // src/cli/options/get-context-options.js
@@ -824,9 +754,9 @@ function sdbm(string) {
 // src/cli/utils.js
 import { __internal as sharedWithCli2 } from "../index.mjs";
 var printToScreen = console.log.bind(console);
-function groupBy(array2, iteratee) {
+function groupBy(array, iteratee) {
   const result = /* @__PURE__ */ Object.create(null);
-  for (const value of array2) {
+  for (const value of array) {
     const key = iteratee(value);
     if (Array.isArray(result[key])) {
       result[key].push(value);
@@ -922,58 +852,7 @@ function minimistParse(args, options) {
   );
 }
 
-// node_modules/leven/index.js
-var array = [];
-var characterCodeCache = [];
-function leven(first, second) {
-  if (first === second) {
-    return 0;
-  }
-  const swap = first;
-  if (first.length > second.length) {
-    first = second;
-    second = swap;
-  }
-  let firstLength = first.length;
-  let secondLength = second.length;
-  while (firstLength > 0 && first.charCodeAt(~-firstLength) === second.charCodeAt(~-secondLength)) {
-    firstLength--;
-    secondLength--;
-  }
-  let start = 0;
-  while (start < firstLength && first.charCodeAt(start) === second.charCodeAt(start)) {
-    start++;
-  }
-  firstLength -= start;
-  secondLength -= start;
-  if (firstLength === 0) {
-    return secondLength;
-  }
-  let bCharacterCode;
-  let result;
-  let temporary;
-  let temporary2;
-  let index = 0;
-  let index2 = 0;
-  while (index < firstLength) {
-    characterCodeCache[index] = first.charCodeAt(start + index);
-    array[index] = ++index;
-  }
-  while (index2 < secondLength) {
-    bCharacterCode = second.charCodeAt(start + index2);
-    temporary = index2++;
-    result = index2;
-    for (index = 0; index < firstLength; index++) {
-      temporary2 = bCharacterCode === characterCodeCache[index] ? temporary : temporary + 1;
-      temporary = array[index];
-      result = array[index] = temporary > result ? temporary2 > result ? result + 1 : temporary2 : temporary2 > temporary ? temporary + 1 : temporary2;
-    }
-  }
-  return result;
-}
-
 // src/cli/options/normalize-cli-options.js
-var import_picocolors = __toESM(require_picocolors(), 1);
 var descriptor = {
   key: (key) => key.length === 1 ? `-${key}` : `--${key}`,
   value: (value) => vnopts.apiDescriptor.value(value),
@@ -991,8 +870,8 @@ var FlagSchema = class extends vnopts.ChoiceSchema {
       if (suggestion) {
         utils.logger.warn(
           [
-            `Unknown flag ${import_picocolors.default.yellow(utils.descriptor.value(value))},`,
-            `did you mean ${import_picocolors.default.blue(utils.descriptor.value(suggestion))}?`
+            `Unknown flag ${picocolors.yellow(utils.descriptor.value(value))},`,
+            `did you mean ${picocolors.blue(utils.descriptor.value(suggestion))}?`
           ].join(" ")
         );
         return suggestion;
@@ -1144,7 +1023,6 @@ async function logResolvedConfigPathOrDie(context) {
 var find_config_path_default = logResolvedConfigPathOrDie;
 
 // src/cli/format.js
-var import_picocolors2 = __toESM(require_picocolors(), 1);
 import fs8 from "fs/promises";
 import path11 from "path";
 import * as prettier from "../index.mjs";
@@ -3803,7 +3681,7 @@ ${error2.message}`
           process.exitCode = 2;
         }
       } else if (!context.argv.check && !context.argv.listDifferent) {
-        const message = `${import_picocolors2.default.gray(fileNameToDisplay)} ${Date.now() - start}ms (unchanged)`;
+        const message = `${picocolors.gray(fileNameToDisplay)} ${Date.now() - start}ms (unchanged)`;
         if (isCacheExists) {
           context.logger.log(`${message} (cached)`);
         } else {
@@ -3850,7 +3728,6 @@ ${error2.message}`
 }
 
 // src/cli/logger.js
-var import_picocolors3 = __toESM(require_picocolors(), 1);
 import readline from "readline";
 
 // node_modules/ansi-regex/index.js
@@ -4115,7 +3992,7 @@ function createLogger(logLevel = "log") {
       return () => emptyLogResult;
     }
     const stream = process[loggerName === "log" ? "stdout" : "stderr"];
-    const prefix = color ? `[${import_picocolors3.default[color](loggerName)}] ` : "";
+    const prefix = color ? `[${picocolors[color](loggerName)}] ` : "";
     return (message, options) => {
       options = {
         newline: true,
@@ -4166,7 +4043,7 @@ var logger_default = createLogger;
 // src/cli/print-support-info.js
 var import_fast_json_stable_stringify3 = __toESM(require_fast_json_stable_stringify(), 1);
 import { format as format4, getSupportInfo as getSupportInfo2 } from "../index.mjs";
-var sortByName = (array2) => array2.sort((a, b) => a.name.localeCompare(b.name));
+var sortByName = (array) => array.sort((a, b) => a.name.localeCompare(b.name));
 async function printSupportInfo() {
   const { languages, options } = await getSupportInfo2();
   const supportInfo = {
