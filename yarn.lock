@@ -2850,10 +2850,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ci-info@npm:4.1.0, ci-info@npm:^4.0.0, ci-info@npm:^4.1.0":
-  version: 4.1.0
-  resolution: "ci-info@npm:4.1.0"
-  checksum: 10/546628efd04e37da3182a58b6995a3313deb86ec7c8112e22ffb644317a61296b89bbfa128219e5bfcce43d9613a434ed89907ed8e752db947f7291e0405125f
+"ci-info@npm:4.2.0, ci-info@npm:^4.0.0, ci-info@npm:^4.1.0":
+  version: 4.2.0
+  resolution: "ci-info@npm:4.2.0"
+  checksum: 10/928d8457f3476ffc4a66dec93b9cdf1944d5e60dba69fbd6a0fc95b652386f6ef64857f6e32372533210ef6d8954634af2c7693d7c07778ee015f3629a5e0dd9
   languageName: node
   linkType: hard
 
@@ -5959,10 +5959,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"linguist-languages@npm:7.27.0":
-  version: 7.27.0
-  resolution: "linguist-languages@npm:7.27.0"
-  checksum: 10/158cdb25410da9becfb0d418f5c86925d3d1df24ae02ffe71d1f047eea88bf8d8d820ce574966375e8428e754f940a9e88f72a30321e8cf93f08ff31e7a475b4
+"linguist-languages@npm:7.29.0":
+  version: 7.29.0
+  resolution: "linguist-languages@npm:7.29.0"
+  checksum: 10/ee7edf50bfca28b8c2a0b3fc092d41fdc5ff4a537a9fd6fcec5edb4fa3b3ad9cc54be3d78b6ce1649298a2a1c912ac6f4e44fa192f63da97e66783aab2b48f47
   languageName: node
   linkType: hard
 
@@ -6891,7 +6891,7 @@ __metadata:
     browserslist-to-esbuild: "npm:2.1.1"
     c8: "npm:10.1.3"
     camelcase: "npm:8.0.0"
-    ci-info: "npm:4.1.0"
+    ci-info: "npm:4.2.0"
     cjk-regex: "npm:3.2.1"
     collapse-white-space: "npm:1.0.6"
     cross-env: "npm:7.0.3"
@@ -6944,7 +6944,7 @@ __metadata:
     knip: "npm:5.44.4"
     leven: "npm:4.0.0"
     lines-and-columns: "npm:2.0.4"
-    linguist-languages: "npm:7.27.0"
+    linguist-languages: "npm:7.29.0"
     magic-string: "npm:0.30.17"
     meriyah: "npm:6.0.5"
     micromatch: "npm:4.0.8"
