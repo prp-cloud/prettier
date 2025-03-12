@@ -1,6 +1,6 @@
 {
   "name": "prettier",
-  "version": "3.6.0-1b7a78303",
+  "version": "3.6.0-56d97d8ed",
   "description": "Prettier is an opinionated code formatter",
   "bin": "./dist/bin/prettier.cjs",
   "repository": "prettier/prettier",
@@ -199,7 +199,7 @@
   "devDependencies": {
     "@angular/compiler": "19.1.2",
     "@babel/code-frame": "7.26.2",
-		"@babel/generator": "7.26.10",
+    "@babel/generator": "7.26.10",
     "@babel/parser": "7.26.10",
     "@babel/types": "7.26.10",
     "@eslint-react/eslint-plugin": "1.27.0",
