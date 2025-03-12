@@ -541,12 +541,12 @@ Author: Ika <ikatyang@gmail.com> (https://github.com/ikatyang)
 
 ----------------------------------------
 
-## angular-html-parser@v8.0.1
+## angular-html-parser@v8.1.0
 
 > A HTML parser extracted from Angular with some modifications
 
 License: MIT  
-Homepage: <https://github.com/prettier/angular-html-parser/blob/master/packages/angular-html-parser#readme>  
+Homepage: <https://github.com/prettier/angular-html-parser/blob/HEAD/packages/angular-html-parser#readme>  
 Author: Ika <ikatyang@gmail.com> (https://github.com/ikatyang)  
 
 > MIT License
