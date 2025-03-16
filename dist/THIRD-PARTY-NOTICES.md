@@ -1571,7 +1571,7 @@ Repository: <https://github.com/graphql/graphql-js.git>
 
 ----------------------------------------
 
-## hookified@v1.7.1
+## hookified@v1.8.1
 
 > Event Emitting and Middleware Hooks
 
@@ -2354,7 +2354,7 @@ Contributors:
 
 ----------------------------------------
 
-## keyv@v5.3.1
+## keyv@v5.3.2
 
 > Simple key-value storage with support for multiple backends
 
@@ -2680,7 +2680,7 @@ Author: Yoan Arnaudov <jonidev@gmail.com>
 
 ----------------------------------------
 
-## nanoid@v3.3.9
+## nanoid@v3.3.10
 
 > A tiny (116 bytes), secure URL-friendly unique string ID generator
 

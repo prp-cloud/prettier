@@ -1367,341 +1367,135 @@ import path9 from "path";
 import fs5 from "fs";
 
 // node_modules/hookified/dist/node/index.js
-var Eventified = class {
+var n = class {
   _eventListeners;
   _maxListeners;
-  constructor() {
-    this._eventListeners = /* @__PURE__ */ new Map();
-    this._maxListeners = 100;
+  _logger;
+  constructor(e) {
+    this._eventListeners = /* @__PURE__ */ new Map(), this._maxListeners = 100, this._logger = e?.logger;
   }
-  /**
-   * Adds a handler function for a specific event that will run only once
-   * @param {string | symbol} eventName
-   * @param {EventListener} listener
-   * @returns {IEventEmitter} returns the instance of the class for chaining
-   */
-  once(eventName, listener) {
-    const onceListener = (...arguments_) => {
-      this.off(eventName, onceListener);
-      listener(...arguments_);
+  once(e, s) {
+    let t = (...r) => {
+      this.off(e, t), s(...r);
     };
-    this.on(eventName, onceListener);
-    return this;
+    return this.on(e, t), this;
   }
-  /**
-   * Gets the number of listeners for a specific event. If no event is provided, it returns the total number of listeners
-   * @param {string} eventName The event name. Not required
-   * @returns {number} The number of listeners
-   */
-  listenerCount(eventName) {
-    if (!eventName) {
-      return this.getAllListeners().length;
-    }
-    const listeners = this._eventListeners.get(eventName);
-    return listeners ? listeners.length : 0;
+  listenerCount(e) {
+    if (!e) return this.getAllListeners().length;
+    let s = this._eventListeners.get(e);
+    return s ? s.length : 0;
   }
-  /**
-   * Gets an array of event names
-   * @returns {Array<string | symbol>} An array of event names
-   */
   eventNames() {
     return Array.from(this._eventListeners.keys());
   }
-  /**
-   * Gets an array of listeners for a specific event. If no event is provided, it returns all listeners
-   * @param {string} [event] (Optional) The event name
-   * @returns {EventListener[]} An array of listeners
-   */
-  rawListeners(event) {
-    if (!event) {
-      return this.getAllListeners();
-    }
-    return this._eventListeners.get(event) ?? [];
+  rawListeners(e) {
+    return e ? this._eventListeners.get(e) ?? [] : this.getAllListeners();
   }
-  /**
-   * Prepends a listener to the beginning of the listeners array for the specified event
-   * @param {string | symbol} eventName
-   * @param {EventListener} listener
-   * @returns {IEventEmitter} returns the instance of the class for chaining
-   */
-  prependListener(eventName, listener) {
-    const listeners = this._eventListeners.get(eventName) ?? [];
-    listeners.unshift(listener);
-    this._eventListeners.set(eventName, listeners);
-    return this;
+  prependListener(e, s) {
+    let t = this._eventListeners.get(e) ?? [];
+    return t.unshift(s), this._eventListeners.set(e, t), this;
   }
-  /**
-   * Prepends a one-time listener to the beginning of the listeners array for the specified event
-   * @param {string | symbol} eventName
-   * @param {EventListener} listener
-   * @returns {IEventEmitter} returns the instance of the class for chaining
-   */
-  prependOnceListener(eventName, listener) {
-    const onceListener = (...arguments_) => {
-      this.off(eventName, onceListener);
-      listener(...arguments_);
+  prependOnceListener(e, s) {
+    let t = (...r) => {
+      this.off(e, t), s(...r);
     };
-    this.prependListener(eventName, onceListener);
-    return this;
+    return this.prependListener(e, t), this;
   }
-  /**
-   * Gets the maximum number of listeners that can be added for a single event
-   * @returns {number} The maximum number of listeners
-   */
   maxListeners() {
     return this._maxListeners;
   }
-  /**
-   * Adds a listener for a specific event. It is an alias for the on() method
-   * @param {string | symbol} event
-   * @param {EventListener} listener
-   * @returns {IEventEmitter} returns the instance of the class for chaining
-   */
-  addListener(event, listener) {
-    this.on(event, listener);
-    return this;
+  addListener(e, s) {
+    return this.on(e, s), this;
   }
-  /**
-   * Adds a listener for a specific event
-   * @param {string | symbol} event
-   * @param {EventListener} listener
-   * @returns {IEventEmitter} returns the instance of the class for chaining
-   */
-  on(event, listener) {
-    if (!this._eventListeners.has(event)) {
-      this._eventListeners.set(event, []);
-    }
-    const listeners = this._eventListeners.get(event);
-    if (listeners) {
-      if (listeners.length >= this._maxListeners) {
-        console.warn(`MaxListenersExceededWarning: Possible event memory leak detected. ${listeners.length + 1} ${event} listeners added. Use setMaxListeners() to increase limit.`);
-      }
-      listeners.push(listener);
-    }
-    return this;
+  on(e, s) {
+    this._eventListeners.has(e) || this._eventListeners.set(e, []);
+    let t = this._eventListeners.get(e);
+    return t && (t.length >= this._maxListeners && console.warn(`MaxListenersExceededWarning: Possible event memory leak detected. ${t.length + 1} ${e} listeners added. Use setMaxListeners() to increase limit.`), t.push(s)), this;
   }
-  /**
-   * Removes a listener for a specific event. It is an alias for the off() method
-   * @param {string | symbol} event
-   * @param {EventListener} listener
-   * @returns {IEventEmitter} returns the instance of the class for chaining
-   */
-  removeListener(event, listener) {
-    this.off(event, listener);
-    return this;
+  removeListener(e, s) {
+    return this.off(e, s), this;
   }
-  /**
-   * Removes a listener for a specific event
-   * @param {string | symbol} event
-   * @param {EventListener} listener
-   * @returns {IEventEmitter} returns the instance of the class for chaining
-   */
-  off(event, listener) {
-    const listeners = this._eventListeners.get(event) ?? [];
-    const index = listeners.indexOf(listener);
-    if (index !== -1) {
-      listeners.splice(index, 1);
-    }
-    if (listeners.length === 0) {
-      this._eventListeners.delete(event);
-    }
-    return this;
+  off(e, s) {
+    let t = this._eventListeners.get(e) ?? [], r = t.indexOf(s);
+    return r !== -1 && t.splice(r, 1), t.length === 0 && this._eventListeners.delete(e), this;
   }
-  /**
-   * Calls all listeners for a specific event
-   * @param {string | symbol} event
-   * @param arguments_ The arguments to pass to the listeners
-   * @returns {boolean} Returns true if the event had listeners, false otherwise
-   */
-  emit(event, ...arguments_) {
-    let result = false;
-    const listeners = this._eventListeners.get(event);
-    if (listeners && listeners.length > 0) {
-      for (const listener of listeners) {
-        listener(...arguments_);
-        result = true;
-      }
-    }
-    return result;
+  emit(e, ...s) {
+    let t = false, r = this._eventListeners.get(e);
+    if (r && r.length > 0) for (let i of r) i(...s), t = true;
+    return t;
   }
-  /**
-   * Gets all listeners for a specific event. If no event is provided, it returns all listeners
-   * @param {string} [event] (Optional) The event name
-   * @returns {EventListener[]} An array of listeners
-   */
-  listeners(event) {
-    return this._eventListeners.get(event) ?? [];
+  listeners(e) {
+    return this._eventListeners.get(e) ?? [];
   }
-  /**
-   * Removes all listeners for a specific event. If no event is provided, it removes all listeners
-   * @param {string} [event] (Optional) The event name
-   * @returns {IEventEmitter} returns the instance of the class for chaining
-   */
-  removeAllListeners(event) {
-    if (event) {
-      this._eventListeners.delete(event);
-    } else {
-      this._eventListeners.clear();
-    }
-    return this;
+  removeAllListeners(e) {
+    return e ? this._eventListeners.delete(e) : this._eventListeners.clear(), this;
   }
-  /**
-   * Sets the maximum number of listeners that can be added for a single event
-   * @param {number} n The maximum number of listeners
-   * @returns {void}
-   */
-  setMaxListeners(n) {
-    this._maxListeners = n;
-    for (const listeners of this._eventListeners.values()) {
-      if (listeners.length > n) {
-        listeners.splice(n);
-      }
-    }
+  setMaxListeners(e) {
+    this._maxListeners = e;
+    for (let s of this._eventListeners.values()) s.length > e && s.splice(e);
   }
-  /**
-   * Gets all listeners
-   * @returns {EventListener[]} An array of listeners
-   */
   getAllListeners() {
-    let result = new Array();
-    for (const listeners of this._eventListeners.values()) {
-      result = result.concat(listeners);
-    }
-    return result;
+    let e = new Array();
+    for (let s of this._eventListeners.values()) e = e.concat(s);
+    return e;
   }
 };
-var Hookified = class extends Eventified {
+var l = class extends n {
   _hooks;
   _throwHookErrors = false;
-  constructor(options) {
-    super();
-    this._hooks = /* @__PURE__ */ new Map();
-    if (options?.throwHookErrors !== void 0) {
-      this._throwHookErrors = options.throwHookErrors;
-    }
+  constructor(e) {
+    super({ logger: e?.logger }), this._hooks = /* @__PURE__ */ new Map(), e?.throwHookErrors !== void 0 && (this._throwHookErrors = e.throwHookErrors);
   }
-  /**
-   * Gets all hooks
-   * @returns {Map<string, Hook[]>}
-   */
   get hooks() {
     return this._hooks;
   }
-  /**
-   * Gets whether an error should be thrown when a hook throws an error. Default is false and only emits an error event.
-   * @returns {boolean}
-   */
   get throwHookErrors() {
     return this._throwHookErrors;
   }
-  /**
-   * Sets whether an error should be thrown when a hook throws an error. Default is false and only emits an error event.
-   * @param {boolean} value
-   */
-  set throwHookErrors(value) {
-    this._throwHookErrors = value;
+  set throwHookErrors(e) {
+    this._throwHookErrors = e;
   }
-  /**
-   * Adds a handler function for a specific event
-   * @param {string} event
-   * @param {Hook} handler - this can be async or sync
-   * @returns {void}
-   */
-  onHook(event, handler) {
-    const eventHandlers = this._hooks.get(event);
-    if (eventHandlers) {
-      eventHandlers.push(handler);
-    } else {
-      this._hooks.set(event, [handler]);
+  get logger() {
+    return this._logger;
+  }
+  set logger(e) {
+    this._logger = e;
+  }
+  onHook(e, s) {
+    let t = this._hooks.get(e);
+    t ? t.push(s) : this._hooks.set(e, [s]);
+  }
+  prependHook(e, s) {
+    let t = this._hooks.get(e);
+    t ? t.unshift(s) : this._hooks.set(e, [s]);
+  }
+  prependOnceHook(e, s) {
+    let t = async (...r) => (this.removeHook(e, t), s(...r));
+    this.prependHook(e, t);
+  }
+  onceHook(e, s) {
+    let t = async (...r) => (this.removeHook(e, t), s(...r));
+    this.onHook(e, t);
+  }
+  removeHook(e, s) {
+    let t = this._hooks.get(e);
+    if (t) {
+      let r = t.indexOf(s);
+      r !== -1 && t.splice(r, 1);
     }
   }
-  /**
-   * Adds a handler function for a specific event that runs before all other handlers
-   * @param {string} event
-   * @param {Hook} handler - this can be async or sync
-   * @returns {void}
-   */
-  prependHook(event, handler) {
-    const eventHandlers = this._hooks.get(event);
-    if (eventHandlers) {
-      eventHandlers.unshift(handler);
-    } else {
-      this._hooks.set(event, [handler]);
+  async hook(e, ...s) {
+    let t = this._hooks.get(e);
+    if (t) for (let r of t) try {
+      await r(...s);
+    } catch (i) {
+      let o = `${e}: ${i.message}`;
+      if (this.emit("error", new Error(o)), this._logger && this._logger.error(o), this._throwHookErrors) throw new Error(o);
     }
   }
-  /**
-   * Adds a handler that only executes once for a specific event before all other handlers
-   * @param event
-   * @param handler
-   */
-  prependOnceHook(event, handler) {
-    const hook = async (...arguments_) => {
-      this.removeHook(event, hook);
-      return handler(...arguments_);
-    };
-    this.prependHook(event, hook);
+  getHooks(e) {
+    return this._hooks.get(e);
   }
-  /**
-   * Adds a handler that only executes once for a specific event
-   * @param event
-   * @param handler
-   */
-  onceHook(event, handler) {
-    const hook = async (...arguments_) => {
-      this.removeHook(event, hook);
-      return handler(...arguments_);
-    };
-    this.onHook(event, hook);
-  }
-  /**
-   * Removes a handler function for a specific event
-   * @param {string} event
-   * @param {Hook} handler
-   * @returns {void}
-   */
-  removeHook(event, handler) {
-    const eventHandlers = this._hooks.get(event);
-    if (eventHandlers) {
-      const index = eventHandlers.indexOf(handler);
-      if (index !== -1) {
-        eventHandlers.splice(index, 1);
-      }
-    }
-  }
-  /**
-   * Calls all handlers for a specific event
-   * @param {string} event
-   * @param {T[]} arguments_
-   * @returns {Promise<void>}
-   */
-  async hook(event, ...arguments_) {
-    const eventHandlers = this._hooks.get(event);
-    if (eventHandlers) {
-      for (const handler of eventHandlers) {
-        try {
-          await handler(...arguments_);
-        } catch (error) {
-          const message = `${event}: ${error.message}`;
-          this.emit("error", new Error(message));
-          if (this._throwHookErrors) {
-            throw new Error(message);
-          }
-        }
-      }
-    }
-  }
-  /**
-   * Gets all hooks for a specific event
-   * @param {string} event
-   * @returns {Hook[]}
-   */
-  getHooks(event) {
-    return this._hooks.get(event);
-  }
-  /**
-   * Removes all hooks
-   * @returns {void}
-   */
   clearHooks() {
     this._hooks.clear();
   }
@@ -1880,7 +1674,7 @@ var DoublyLinkedList = class {
     return this.nodesMap.size;
   }
 };
-var CacheableMemory = class extends Hookified {
+var CacheableMemory = class extends l {
   _lru = new DoublyLinkedList();
   _hashCache = /* @__PURE__ */ new Map();
   _hash0 = /* @__PURE__ */ new Map();
@@ -2481,7 +2275,7 @@ var stringify2 = (value, replacer, space) => {
 };
 
 // node_modules/flat-cache/dist/index.js
-var FlatCache = class extends Hookified {
+var FlatCache = class extends l {
   _cache = new CacheableMemory();
   _cacheDir = ".cache";
   _cacheId = "cache1";
@@ -3928,23 +3722,23 @@ function wcwidth(ucs, opts) {
 }
 function wcswidth(str, opts) {
   let h;
-  let l;
+  let l2;
   let s = 0;
-  let n;
+  let n2;
   if (typeof str !== "string") return wcwidth(str, opts);
   for (let i = 0; i < str.length; i++) {
     h = str.charCodeAt(i);
     if (h >= 55296 && h <= 56319) {
-      l = str.charCodeAt(++i);
-      if (l >= 56320 && l <= 57343) {
-        h = (h - 55296) * 1024 + (l - 56320) + 65536;
+      l2 = str.charCodeAt(++i);
+      if (l2 >= 56320 && l2 <= 57343) {
+        h = (h - 55296) * 1024 + (l2 - 56320) + 65536;
       } else {
         i--;
       }
     }
-    n = wcwidth(h, opts);
-    if (n < 0) return -1;
-    s += n;
+    n2 = wcwidth(h, opts);
+    if (n2 < 0) return -1;
+    s += n2;
   }
   return s;
 }
