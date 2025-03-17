@@ -3,7 +3,7 @@
 The published Prettier artifact additionally contains code with the following licenses:
 MIT, ISC, BSD-3-Clause, BSD-2-Clause, and Apache-2.0.
 
-## @angular/compiler@v19.1.2
+## @angular/compiler@v19.2.2
 
 > Angular - the compiler library
 
@@ -509,7 +509,7 @@ Repository: <https://github.com/acornjs/acorn-jsx>
 
 ----------------------------------------
 
-## angular-estree-parser@v10.2.0
+## angular-estree-parser@v11.1.1
 
 > A parser that converts Angular source code into an ESTree-compatible form
 
@@ -3539,6 +3539,25 @@ Contributors:
 > Trim string whitespace
 
 Author: TJ Holowaychuk <tj@vision-media.ca>  
+
+----------------------------------------
+
+## trim-newlines@v5.0.0
+
+> Trim newlines from the start and/or end of a string
+
+License: MIT  
+Author: Sindre Sorhus <sindresorhus@gmail.com> (https://sindresorhus.com)  
+
+> MIT License
+>
+> Copyright (c) Sindre Sorhus <sindresorhus@gmail.com> (https://sindresorhus.com)
+>
+> Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+>
+> The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+>
+> THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 ----------------------------------------
 

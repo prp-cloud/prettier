@@ -16910,6 +16910,15 @@ var at = (isOptionalObject, object, index) => {
 };
 var at_default = at;
 
+// node_modules/trim-newlines/index.js
+function trimNewlinesEnd(string) {
+  let end = string.length;
+  while (end > 0 && (string[end - 1] === "\r" || string[end - 1] === "\n")) {
+    end--;
+  }
+  return end < string.length ? string.slice(0, end) : string;
+}
+
 // src/document/utils/get-doc-type.js
 function getDocType(doc2) {
   if (typeof doc2 === "string") {
@@ -17167,7 +17176,7 @@ function stripTrailingHardlineFromDoc(doc2) {
     case DOC_TYPE_ARRAY:
       return stripTrailingHardlineFromParts(doc2);
     case DOC_TYPE_STRING:
-      return doc2.replace(/[\n\r]*$/u, "");
+      return trimNewlinesEnd(doc2);
     case DOC_TYPE_ALIGN:
     case DOC_TYPE_CURSOR:
     case DOC_TYPE_TRIM:
@@ -19576,7 +19585,11 @@ async function textToDoc(text, partialNextOptions, parentOptions, printAstToDoc2
       ...parentOptions,
       ...partialNextOptions,
       parentParser: parentOptions.parser,
-      originalText: text
+      originalText: text,
+      // Improve this if we calculate the relative index
+      cursorOffset: void 0,
+      rangeStart: void 0,
+      rangeEnd: void 0
     },
     { passThrough: true }
   );
@@ -19639,11 +19652,13 @@ async function printAstToDoc(ast, options8) {
   if (!/(?:^|\/)package(?:-lock)?\.json$/u.test(options8.filepath)) {
     findAndRemoveLastLinebreak(doc2);
   }
-  if (options8.nodeAfterCursor && !options8.nodeBeforeCursor) {
-    return [cursor, doc2];
-  }
-  if (options8.nodeBeforeCursor && !options8.nodeAfterCursor) {
-    return [doc2, cursor];
+  if (options8.cursorOffset >= 0) {
+    if (options8.nodeAfterCursor && !options8.nodeBeforeCursor) {
+      return [cursor, doc2];
+    }
+    if (options8.nodeBeforeCursor && !options8.nodeAfterCursor) {
+      return [doc2, cursor];
+    }
   }
   return doc2;
   function mainPrint(selector, args) {
@@ -20291,6 +20306,12 @@ async function formatDoc(doc2, options8) {
 async function printToDoc(originalText, options8) {
   options8 = await normalize_format_options_default(options8);
   const { ast } = await parse_default(originalText, options8);
+  if (options8.cursorOffset >= 0) {
+    options8 = {
+      ...options8,
+      ...get_cursor_node_default(ast, options8)
+    };
+  }
   return printAstToDoc(ast, options8);
 }
 async function printDocToString2(doc2, options8) {
@@ -21450,7 +21471,7 @@ var object_omit_default = omit;
 import * as doc from "./doc.mjs";
 
 // src/main/version.evaluate.cjs
-var version_evaluate_default = "3.6.0-d338fdbd3";
+var version_evaluate_default = "3.6.0-f2840155e";
 
 // src/utils/public.js
 var public_exports = {};
