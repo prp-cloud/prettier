@@ -17422,6 +17422,9 @@ function printDocToDebug(doc2) {
     if (doc3.type === DOC_TYPE_LABEL) {
       return `label(${JSON.stringify(doc3.label)}, ${printDoc(doc3.contents)})`;
     }
+    if (doc3.type === DOC_TYPE_CURSOR) {
+      return "cursor";
+    }
     throw new Error("Unknown doc type " + doc3.type);
   }
   function printGroupId(id) {
@@ -21447,7 +21450,7 @@ var object_omit_default = omit;
 import * as doc from "./doc.mjs";
 
 // src/main/version.evaluate.cjs
-var version_evaluate_default = "3.6.0-596ccc50f";
+var version_evaluate_default = "3.6.0-d338fdbd3";
 
 // src/utils/public.js
 var public_exports = {};
