@@ -611,7 +611,7 @@ var init_public = __esm({
 // src/main/version.evaluate.cjs
 var require_version_evaluate = __commonJS({
   "src/main/version.evaluate.cjs"(exports2, module2) {
-    module2.exports = "3.6.0-f513667e3";
+    module2.exports = "3.6.0-6fddc5c83";
   }
 });
 

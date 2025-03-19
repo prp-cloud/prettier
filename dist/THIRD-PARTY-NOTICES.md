@@ -133,7 +133,7 @@ Author: The Babel Team (https://babel.dev/team)
 
 ----------------------------------------
 
-## @glimmer/syntax@v0.94.8
+## @glimmer/syntax@v0.94.9
 
 License: MIT  
 Repository: <git+https://github.com/glimmerjs/glimmer-vm.git>  
@@ -160,7 +160,7 @@ Repository: <git+https://github.com/glimmerjs/glimmer-vm.git>
 
 ----------------------------------------
 
-## @glimmer/util@v0.94.7
+## @glimmer/util@v0.94.8
 
 > Common utilities used in Glimmer
 
@@ -189,7 +189,7 @@ Repository: <git+https://github.com/glimmerjs/glimmer-vm.git>
 
 ----------------------------------------
 
-## @glimmer/wire-format@v0.94.7
+## @glimmer/wire-format@v0.94.8
 
 License: MIT  
 Repository: <git+https://github.com/glimmerjs/glimmer-vm.git>  
