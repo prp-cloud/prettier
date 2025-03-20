@@ -3628,7 +3628,7 @@ Contributors:
 
 ----------------------------------------
 
-## ts-api-utils@v2.0.1
+## ts-api-utils@v2.1.0
 
 > Utility functions for working with TypeScript's API. Successor to the wonderful tsutils. 🛠️️
 
