@@ -18537,8 +18537,6 @@ function attachComments(ast, options8) {
   }
   const tiesToBreak = [];
   const {
-    locStart,
-    locEnd,
     printer: {
       experimentalFeatures: {
         // TODO: Make this as default behavior
@@ -18572,16 +18570,6 @@ function attachComments(ast, options8) {
       ast: ast2,
       isLastComment
     } = context;
-    if (options9.parser === "json" || options9.parser === "json5" || options9.parser === "jsonc" || options9.parser === "__js_expression" || options9.parser === "__ts_expression" || options9.parser === "__vue_expression" || options9.parser === "__vue_ts_expression") {
-      if (locStart(comment) - locStart(ast2) <= 0) {
-        addLeadingComment(ast2, comment);
-        continue;
-      }
-      if (locEnd(comment) - locEnd(ast2) >= 0) {
-        addTrailingComment(ast2, comment);
-        continue;
-      }
-    }
     let args;
     if (avoidAstMutation) {
       args = [context];
@@ -21471,7 +21459,7 @@ var object_omit_default = omit;
 import * as doc from "./doc.mjs";
 
 // src/main/version.evaluate.cjs
-var version_evaluate_default = "3.6.0-51ebf3ef1";
+var version_evaluate_default = "3.6.0-9a1cac41e";
 
 // src/utils/public.js
 var public_exports = {};
