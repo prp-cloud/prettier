@@ -283,7 +283,7 @@
     "npm-run-all2": "7.0.2",
     "node-style-text": "0.0.7",
     "outdent": "0.8.0",
-    "parse-json": "8.1.0",
+    "parse-json": "8.2.0",
     "picocolors": "1.1.1",
     "postcss": "8.5.3",
     "postcss-less": "6.0.0",
@@ -315,7 +315,7 @@
     "url-or-path": "2.3.2",
     "vnopts": "2.0.2",
     "wcwidth.js": "2.0.0",
-    "yaml-unist-parser": "2.0.1"
+    "yaml-unist-parser": "2.0.3"
   },
   "resolutions": {
     "trim": "1.0.1"

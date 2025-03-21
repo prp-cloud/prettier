@@ -38,7 +38,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/code-frame@npm:7.26.2, @babel/code-frame@npm:^7.0.0, @babel/code-frame@npm:^7.12.13, @babel/code-frame@npm:^7.22.13, @babel/code-frame@npm:^7.25.9, @babel/code-frame@npm:^7.26.0":
+"@babel/code-frame@npm:7.26.2, @babel/code-frame@npm:^7.0.0, @babel/code-frame@npm:^7.12.13, @babel/code-frame@npm:^7.25.9, @babel/code-frame@npm:^7.26.0, @babel/code-frame@npm:^7.26.2":
   version: 7.26.2
   resolution: "@babel/code-frame@npm:7.26.2"
   dependencies:
@@ -4782,10 +4782,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"index-to-position@npm:^0.1.2":
-  version: 0.1.2
-  resolution: "index-to-position@npm:0.1.2"
-  checksum: 10/ae8e2304ed7c959bc6d1121712e9f625634ed884e32ef93fc0795c6aab1131b10198929a50c7d16d470dab37be7438eccb0afe021d79f69116273d500898daee
+"index-to-position@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "index-to-position@npm:1.0.0"
+  checksum: 10/4a24b8f0728da8ec6ffea85556acf809a71317d5291d31148db7c2dececa10432abf3c87a932481a2e326af66221bcf77d8dc1f0abfd11537e7f3cc21432a525
   languageName: node
   linkType: hard
 
@@ -5943,7 +5943,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lines-and-columns@npm:2.0.4, lines-and-columns@npm:^2.0.3":
+"lines-and-columns@npm:2.0.4":
   version: 2.0.4
   resolution: "lines-and-columns@npm:2.0.4"
   checksum: 10/81ac2f943f5428a46bd4ea2561c74ba674a107d8e6cc70cd317d16892a36ff3ba0dc6e599aca8b6f8668d26c85288394c6edf7a40e985ca843acab3701b80d4c
@@ -6624,14 +6624,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"parse-json@npm:8.1.0, parse-json@npm:^8.0.0":
-  version: 8.1.0
-  resolution: "parse-json@npm:8.1.0"
+"parse-json@npm:8.2.0, parse-json@npm:^8.0.0":
+  version: 8.2.0
+  resolution: "parse-json@npm:8.2.0"
   dependencies:
-    "@babel/code-frame": "npm:^7.22.13"
-    index-to-position: "npm:^0.1.2"
-    type-fest: "npm:^4.7.1"
-  checksum: 10/efc4256c91e835b1340e2b4f535272247f174fcba85eead15ff938be23b3ca2d521a04c76e564d1dc2f61c0c9ebcb6157d5433d459c7e736c81d014b49577b31
+    "@babel/code-frame": "npm:^7.26.2"
+    index-to-position: "npm:^1.0.0"
+    type-fest: "npm:^4.37.0"
+  checksum: 10/7238fe443668b4e0c278b53d80863062c84a0ed326a79f40f2cdf6ba98a3f43f452ce4bae470cb8a859069daf457b2ae30f4e7560b61742442959157e22b5813
   languageName: node
   linkType: hard
 
@@ -6952,7 +6952,7 @@ __metadata:
     node-style-text: "npm:0.0.7"
     npm-run-all2: "npm:7.0.2"
     outdent: "npm:0.8.0"
-    parse-json: "npm:8.1.0"
+    parse-json: "npm:8.2.0"
     picocolors: "npm:1.1.1"
     please-upgrade-node: "npm:3.2.0"
     postcss: "npm:8.5.3"
@@ -6985,7 +6985,7 @@ __metadata:
     url-or-path: "npm:2.3.2"
     vnopts: "npm:2.0.2"
     wcwidth.js: "npm:2.0.0"
-    yaml-unist-parser: "npm:2.0.1"
+    yaml-unist-parser: "npm:2.0.3"
   bin:
     prettier: ./bin/prettier.cjs
   languageName: unknown
@@ -7998,7 +7998,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tslib@npm:^2.3.0, tslib@npm:^2.4.0, tslib@npm:^2.6.2":
+"tslib@npm:^2.3.0, tslib@npm:^2.6.2":
   version: 2.8.1
   resolution: "tslib@npm:2.8.1"
   checksum: 10/3e2e043d5c2316461cb54e5c7fe02c30ef6dccb3384717ca22ae5c6b5bc95232a6241df19c622d9c73b809bea33b187f6dbc73030963e29950c2141bc32a79f7
@@ -8042,7 +8042,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"type-fest@npm:^4.35.0, type-fest@npm:^4.6.0, type-fest@npm:^4.7.1":
+"type-fest@npm:^4.35.0, type-fest@npm:^4.37.0, type-fest@npm:^4.6.0":
   version: 4.37.0
   resolution: "type-fest@npm:4.37.0"
   checksum: 10/882cf05374d7c635cbbbc50cb89863dad3d27a77c426d062144ba32b23a44087193213c5bbd64f3ab8be04215005c950286567be06fecca9d09c66abd290ef01
@@ -8463,18 +8463,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"yaml-unist-parser@npm:2.0.1":
-  version: 2.0.1
-  resolution: "yaml-unist-parser@npm:2.0.1"
+"yaml-unist-parser@npm:2.0.3":
+  version: 2.0.3
+  resolution: "yaml-unist-parser@npm:2.0.3"
   dependencies:
-    lines-and-columns: "npm:^2.0.3"
-    tslib: "npm:^2.4.0"
-    yaml: "npm:^1.10.0"
-  checksum: 10/4f6564526e26738f467109b6259e881885412791d70d270bd94b9d378de507371b8a2aaa48f0998956324b3fc401aa96b447f5223b896f29cbef495918066059
+    yaml: "npm:^1.10.2"
+  checksum: 10/dfe0f82570fbf805a3d54d75b0e556fc833e764ff66920ddfe5072b29ea11af2a787638e622312d91b4922ab7a429e85f762ba02149e29828e4584244a7c4d6d
   languageName: node
   linkType: hard
 
-"yaml@npm:^1.10.0":
+"yaml@npm:^1.10.2":
   version: 1.10.2
   resolution: "yaml@npm:1.10.2"
   checksum: 10/e088b37b4d4885b70b50c9fa1b7e54bd2e27f5c87205f9deaffd1fb293ab263d9c964feadb9817a7b129a5bf30a06582cb08750f810568ecc14f3cdbabb79cb3
