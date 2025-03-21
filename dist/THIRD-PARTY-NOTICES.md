@@ -1720,7 +1720,7 @@ Contributors:
 
 ----------------------------------------
 
-## index-to-position@v0.1.2
+## index-to-position@v1.0.0
 
 > Convert a string index to its line and column position
 
@@ -2407,39 +2407,6 @@ Author: Sindre Sorhus <sindresorhus@gmail.com> (https://sindresorhus.com)
 
 ----------------------------------------
 
-## lines-and-columns@v2.0.4
-
-> Maps lines and columns to character offsets and back.
-
-License: MIT  
-Homepage: <https://github.com/eventualbuddha/lines-and-columns#readme>  
-Repository: <https://github.com/eventualbuddha/lines-and-columns.git>  
-Author: Brian Donovan <brian@donovans.cc>  
-
-> The MIT License (MIT)
->
-> Copyright (c) 2015 Brian Donovan
->
-> Permission is hereby granted, free of charge, to any person obtaining a copy
-> of this software and associated documentation files (the "Software"), to deal
-> in the Software without restriction, including without limitation the rights
-> to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-> copies of the Software, and to permit persons to whom the Software is
-> furnished to do so, subject to the following conditions:
->
-> The above copyright notice and this permission notice shall be included in
-> all copies or substantial portions of the Software.
->
-> THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-> IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-> FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-> AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-> LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-> OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-> THE SOFTWARE.
-
-----------------------------------------
-
 ## locate-path@v7.2.0
 
 > Get the first path that exists on disk of multiple paths
@@ -2782,7 +2749,7 @@ Contributors:
 
 ----------------------------------------
 
-## parse-json@v8.1.0
+## parse-json@v8.2.0
 
 > Parse JSON with more helpful errors
 
@@ -4302,7 +4269,7 @@ Author: Eemeli Aro <eemeli@gmail.com>
 
 ----------------------------------------
 
-## yaml-unist-parser@v2.0.1
+## yaml-unist-parser@v2.0.3
 
 > A YAML parser that produces output compatible with unist
 

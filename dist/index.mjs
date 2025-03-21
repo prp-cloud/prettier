@@ -14156,6 +14156,12 @@ function getPosition(text, textIndex) {
   return { line: line3, column: column2 };
 }
 function indexToLineColumn(text, textIndex, { oneBased = false } = {}) {
+  if (typeof text !== "string") {
+    throw new TypeError("Text parameter should be a string");
+  }
+  if (!Number.isInteger(textIndex)) {
+    throw new TypeError("Index parameter should be an integer");
+  }
   if (textIndex < 0 || textIndex >= text.length && text.length > 0) {
     throw new RangeError("Index out of bounds");
   }
@@ -14168,17 +14174,28 @@ var getCodePoint = (character) => `\\u{${character.codePointAt(0).toString(16)}}
 var JSONError = class _JSONError extends Error {
   name = "JSONError";
   fileName;
-  codeFrame;
-  rawCodeFrame;
+  #input;
+  #jsonParseError;
   #message;
-  constructor(message) {
-    super();
-    this.#message = message;
+  #codeFrame;
+  #rawCodeFrame;
+  constructor(messageOrOptions) {
+    if (typeof messageOrOptions === "string") {
+      super();
+      this.#message = messageOrOptions;
+    } else {
+      const { jsonParseError, fileName, input } = messageOrOptions;
+      super(void 0, { cause: jsonParseError });
+      this.#input = input;
+      this.#jsonParseError = jsonParseError;
+      this.fileName = fileName;
+    }
     Error.captureStackTrace?.(this, _JSONError);
   }
   get message() {
-    const { fileName, codeFrame } = this;
-    return `${this.#message}${fileName ? ` in ${fileName}` : ""}${codeFrame ? `
+    this.#message ??= `${addCodePointToUnexpectedToken(this.#jsonParseError.message)}${this.#input === "" ? " while parsing empty string" : ""}`;
+    const { codeFrame } = this;
+    return `${this.#message}${this.fileName ? ` in ${this.fileName}` : ""}${codeFrame ? `
 
 ${codeFrame}
 ` : ""}`;
@@ -14186,8 +14203,32 @@ ${codeFrame}
   set message(message) {
     this.#message = message;
   }
+  #getCodeFrame(highlightCode) {
+    if (!this.#jsonParseError) {
+      return;
+    }
+    const input = this.#input;
+    const location = getErrorLocation(input, this.#jsonParseError.message);
+    if (!location) {
+      return;
+    }
+    return (0, import_code_frame.codeFrameColumns)(input, { start: location }, { highlightCode });
+  }
+  get codeFrame() {
+    this.#codeFrame ??= this.#getCodeFrame(
+      /* highlightCode */
+      true
+    );
+    return this.#codeFrame;
+  }
+  get rawCodeFrame() {
+    this.#rawCodeFrame ??= this.#getCodeFrame(
+      /* highlightCode */
+      false
+    );
+    return this.#rawCodeFrame;
+  }
 };
-var generateCodeFrame = (string, location, highlightCode = true) => (0, import_code_frame.codeFrameColumns)(string, { start: location }, { highlightCode });
 var getErrorLocation = (string, message) => {
   const match = message.match(/in JSON at position (?<index>\d+)(?: \(line (?<line>\d+) column (?<column>\d+)\))?$/);
   if (!match) {
@@ -14214,31 +14255,15 @@ function parseJson(string, reviver, fileName) {
     fileName = reviver;
     reviver = void 0;
   }
-  let message;
   try {
     return JSON.parse(string, reviver);
   } catch (error) {
-    message = error.message;
+    throw new JSONError({
+      jsonParseError: error,
+      fileName,
+      input: string
+    });
   }
-  let location;
-  if (string) {
-    location = getErrorLocation(string, message);
-    message = addCodePointToUnexpectedToken(message);
-  } else {
-    message += " while parsing empty string";
-  }
-  const jsonError = new JSONError(message);
-  jsonError.fileName = fileName;
-  if (location) {
-    jsonError.codeFrame = generateCodeFrame(string, location);
-    jsonError.rawCodeFrame = generateCodeFrame(
-      string,
-      location,
-      /* highlightCode */
-      false
-    );
-  }
-  throw jsonError;
 }
 
 // node_modules/smol-toml/dist/error.js
@@ -21459,7 +21484,7 @@ var object_omit_default = omit;
 import * as doc from "./doc.mjs";
 
 // src/main/version.evaluate.cjs
-var version_evaluate_default = "3.6.0-e73916e93";
+var version_evaluate_default = "3.6.0-c7d0f96e6";
 
 // src/utils/public.js
 var public_exports = {};
