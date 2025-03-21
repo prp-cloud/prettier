@@ -4269,7 +4269,7 @@ Author: Eemeli Aro <eemeli@gmail.com>
 
 ----------------------------------------
 
-## yaml-unist-parser@v2.0.3
+## yaml-unist-parser@v2.0.5
 
 > A YAML parser that produces output compatible with unist
 
