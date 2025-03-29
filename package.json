@@ -207,7 +207,7 @@
     "@glimmer/syntax": "0.94.9",
     "@prettier/parse-srcset": "3.1.0",
     "@stylistic/eslint-plugin-js": "4.0.1",
-    "@types/estree": "1.0.6",
+		"@types/estree": "1.0.7",
     "@typescript-eslint/eslint-plugin": "8.25.0",
     "@typescript-eslint/typescript-estree": "8.25.0",
     "@typescript-eslint/visitor-keys": "8.25.0",
@@ -376,7 +376,7 @@
     "not op_mini all"
   ],
   "preferUnplugged": true,
-  "packageManager": "yarn@4.7.0",
+  "packageManager": "yarn@4.8.0",
   "overrides": {
     "jest": "$jest",
     "typescript": "5.8.2"
