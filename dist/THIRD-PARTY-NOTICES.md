@@ -3,7 +3,7 @@
 The published Prettier artifact additionally contains code with the following licenses:
 MIT, ISC, BSD-3-Clause, BSD-2-Clause, and Apache-2.0.
 
-## @angular/compiler@v19.2.2
+## @angular/compiler@v19.2.5
 
 > Angular - the compiler library
 
@@ -383,7 +383,7 @@ Author: Alex Bell <alex@bellandwhistle.net>
 
 ----------------------------------------
 
-## @typescript-eslint/types@v8.25.0
+## @typescript-eslint/types@v8.29.0
 
 > Types for the TypeScript-ESTree AST spec
 
@@ -415,7 +415,7 @@ Repository: <https://github.com/typescript-eslint/typescript-eslint.git>
 
 ----------------------------------------
 
-## @typescript-eslint/typescript-estree@v8.25.0
+## @typescript-eslint/typescript-estree@v8.29.0
 
 > A parser that converts TypeScript source code into an ESTree compatible form
 
@@ -1263,7 +1263,7 @@ Author: Matteo Collina <hello@matteocollina.com>
 
 ----------------------------------------
 
-## file-entry-cache@v10.0.7
+## file-entry-cache@v10.0.8
 
 > A lightweight cache for file metadata, ideal for processes that work on a specific set of files and only need to reprocess files that have changed since the last run
 
@@ -1462,7 +1462,7 @@ Contributors:
 
 ----------------------------------------
 
-## flow-parser@v0.259.1
+## flow-parser@v0.266.1
 
 > JavaScript parser written in OCaml. Produces ESTree AST
 
@@ -2517,7 +2517,7 @@ Repository: <git@github.com:teambition/merge2.git>
 
 ----------------------------------------
 
-## meriyah@v6.0.5
+## meriyah@v6.0.6
 
 > A 100% compliant, self-hosted javascript parser with high focus on both performance and stability
 
@@ -3626,7 +3626,7 @@ Author: JoshuaKGoldberg <npm@joshuakgoldberg.com>
 
 ----------------------------------------
 
-## typescript@v5.8.2
+## typescript@v5.8.3
 
 > TypeScript is a language for application scale JavaScript development
 
