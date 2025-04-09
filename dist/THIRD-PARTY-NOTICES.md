@@ -1720,7 +1720,7 @@ Contributors:
 
 ----------------------------------------
 
-## index-to-position@v1.0.0
+## index-to-position@v1.1.0
 
 > Convert a string index to its line and column position
 

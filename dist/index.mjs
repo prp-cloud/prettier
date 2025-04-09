@@ -14145,24 +14145,21 @@ var dist_default = { parse: parse2 };
 var import_code_frame = __toESM(require_lib2(), 1);
 
 // node_modules/index-to-position/index.js
-var safeLastIndexOf = (string, searchString, index) => index < 0 ? -1 : string.lastIndexOf(searchString, index);
 function getPosition(text, textIndex) {
-  const lineBreakBefore = safeLastIndexOf(text, "\n", textIndex - 1);
-  const column2 = textIndex - lineBreakBefore - 1;
-  let line3 = 0;
-  for (let index = lineBreakBefore; index >= 0; index = safeLastIndexOf(text, "\n", index - 1)) {
-    line3++;
-  }
-  return { line: line3, column: column2 };
+  const lineBreakBefore = textIndex === 0 ? -1 : text.lastIndexOf("\n", textIndex - 1);
+  return {
+    line: lineBreakBefore === -1 ? 0 : text.slice(0, lineBreakBefore + 1).match(/\n/g).length,
+    column: textIndex - lineBreakBefore - 1
+  };
 }
-function indexToLineColumn(text, textIndex, { oneBased = false } = {}) {
+function indexToPosition(text, textIndex, { oneBased = false } = {}) {
   if (typeof text !== "string") {
     throw new TypeError("Text parameter should be a string");
   }
   if (!Number.isInteger(textIndex)) {
     throw new TypeError("Index parameter should be an integer");
   }
-  if (textIndex < 0 || textIndex >= text.length && text.length > 0) {
+  if (textIndex < 0 || textIndex > text.length) {
     throw new RangeError("Index out of bounds");
   }
   const position = getPosition(text, textIndex);
@@ -14240,10 +14237,10 @@ var getErrorLocation = (string, message) => {
   }
   index = Number(index);
   if (index === string.length) {
-    const { line: line4, column: column3 } = indexToLineColumn(string, string.length - 1, { oneBased: true });
+    const { line: line4, column: column3 } = indexToPosition(string, string.length - 1, { oneBased: true });
     return { line: line4, column: column3 + 1 };
   }
-  return indexToLineColumn(string, index, { oneBased: true });
+  return indexToPosition(string, index, { oneBased: true });
 };
 var addCodePointToUnexpectedToken = (message) => message.replace(
   // TODO[engine:node@>=20]: The token always quoted after Node.js 20
@@ -21484,7 +21481,7 @@ var object_omit_default = omit;
 import * as doc from "./doc.mjs";
 
 // src/main/version.evaluate.cjs
-var version_evaluate_default = "3.6.0-5a17bc3f8";
+var version_evaluate_default = "3.6.0-6aeb3e6fa";
 
 // src/utils/public.js
 var public_exports = {};
