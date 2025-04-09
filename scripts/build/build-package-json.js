@@ -86,7 +86,10 @@ async function buildPackageJson({ packageConfig, file }) {
 
   const adjustPaths = (val) =>
     typeof val === "string"
-      ? val.replace(/^(\.\/)?/u, "$&dist/")
+      ? val.replace(
+          /^(\.\/)?/u,
+          `$&${distDirectory.replace(`${path.resolve(import.meta.dirname, "../..")}/`, "")}/`,
+        )
       : Array.isArray(val)
         ? val.map(adjustPaths)
         : Object.fromEntries(
@@ -94,7 +97,7 @@ async function buildPackageJson({ packageConfig, file }) {
           );
 
   await writeJson(
-    path.join(distDirectory, file.output.file),
+    path.join(PROJECT_ROOT, file.output.file),
     Object.assign(packageJson, adjustPaths(overrides)),
   );
 }
