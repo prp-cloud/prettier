@@ -326,8 +326,8 @@ function printFunctionType(path, options, print) {
 
   let parametersDoc = printFunctionParameters(
     path,
-    print,
     options,
+    print,
     /* expandArg */ false,
     /* printTypeParams */ true,
   );

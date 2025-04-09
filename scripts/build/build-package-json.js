@@ -20,7 +20,8 @@ const keysToKeep = [
   "preferUnplugged",
 ];
 
-async function buildPackageJson({ file, files }) {
+async function buildPackageJson({ packageConfig, file }) {
+  const { distDirectory, files } = packageConfig;
   const packageJson = await readJson(path.join(PROJECT_ROOT, file.input));
 
   const overrides = {
@@ -93,7 +94,7 @@ async function buildPackageJson({ file, files }) {
           );
 
   await writeJson(
-    path.join(PROJECT_ROOT, file.output.file),
+    path.join(distDirectory, file.output.file),
     Object.assign(packageJson, adjustPaths(overrides)),
   );
 }
