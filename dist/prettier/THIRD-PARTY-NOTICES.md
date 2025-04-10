@@ -2692,7 +2692,7 @@ Contributors:
 
 ----------------------------------------
 
-## parse-json@v8.2.0
+## parse-json@v8.3.0
 
 > Parse JSON with more helpful errors
 
