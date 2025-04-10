@@ -332,8 +332,8 @@ var require_common_path_prefix = __commonJS({
     "use strict";
     var { sep: DEFAULT_SEPARATOR } = __require("path");
     var determineSeparator = (paths) => {
-      for (const path12 of paths) {
-        const match = /(\/|\\)/.exec(path12);
+      for (const path11 of paths) {
+        const match = /(\/|\\)/.exec(path11);
         if (match !== null) return match[0];
       }
       return DEFAULT_SEPARATOR;
@@ -343,8 +343,8 @@ var require_common_path_prefix = __commonJS({
       if (first === "" || remaining.length === 0) return "";
       const parts = first.split(sep);
       let endOfPrefix = parts.length;
-      for (const path12 of remaining) {
-        const compare = path12.split(sep);
+      for (const path11 of remaining) {
+        const compare = path11.split(sep);
         for (let i = 0; i < endOfPrefix; i++) {
           if (compare[i] !== parts[i]) {
             endOfPrefix = i;
@@ -1004,7 +1004,8 @@ async function logFileInfoOrDie(context) {
     plugins,
     resolveConfig: config !== false
   });
-  printToScreen(await format((0, import_fast_json_stable_stringify.default)(fileInfo), { parser: "json" }));
+  const result = await format((0, import_fast_json_stable_stringify.default)(fileInfo), { parser: "json" });
+  printToScreen(result.trim());
 }
 var file_info_default = logFileInfoOrDie;
 
@@ -1024,7 +1025,7 @@ var find_config_path_default = logResolvedConfigPathOrDie;
 
 // src/cli/format.js
 import fs8 from "fs/promises";
-import path11 from "path";
+import path10 from "path";
 import * as prettier from "../index.mjs";
 
 // src/cli/expand-patterns.js
@@ -1146,7 +1147,7 @@ function containsIgnoredPathSegment(absolutePath, cwd2, ignoredDirectories) {
 function sortPaths(paths) {
   return paths.sort((a, b) => a.localeCompare(b));
 }
-function escapePathForGlob(path12) {
+function escapePathForGlob(path11) {
   return string_replace_all_default(
     /* isOptionalObject */
     false,
@@ -1157,7 +1158,7 @@ function escapePathForGlob(path12) {
         string_replace_all_default(
           /* isOptionalObject */
           false,
-          path12,
+          path11,
           "\\",
           "\0"
         )
@@ -1175,113 +1176,59 @@ var fixWindowsSlashes = normalizeToPosix;
 // src/cli/find-cache-file.js
 import fs4 from "fs/promises";
 import os from "os";
-import path8 from "path";
+import path7 from "path";
 
-// node_modules/find-cache-dir/index.js
+// node_modules/find-cache-directory/index.js
 var import_common_path_prefix = __toESM(require_common_path_prefix(), 1);
 import process3 from "process";
-import path7 from "path";
+import path6 from "path";
 import fs3 from "fs";
 
 // node_modules/pkg-dir/index.js
-import path6 from "path";
-
-// node_modules/pkg-dir/node_modules/find-up/index.js
 import path5 from "path";
-import { fileURLToPath as fileURLToPath2 } from "url";
 
-// node_modules/pkg-dir/node_modules/locate-path/index.js
+// node_modules/find-up-simple/index.js
 import process2 from "process";
-import path4 from "path";
-import fs2, { promises as fsPromises } from "fs";
 import { fileURLToPath } from "url";
-var typeMappings = {
-  directory: "isDirectory",
-  file: "isFile"
-};
-function checkType(type) {
-  if (Object.hasOwnProperty.call(typeMappings, type)) {
-    return;
-  }
-  throw new Error(`Invalid type specified: ${type}`);
-}
-var matchType = (type, stat) => stat[typeMappings[type]]();
+import fs2 from "fs";
+import path4 from "path";
 var toPath = (urlOrPath) => urlOrPath instanceof URL ? fileURLToPath(urlOrPath) : urlOrPath;
-function locatePathSync(paths, {
+function findUpSync(name, {
   cwd: cwd2 = process2.cwd(),
   type = "file",
-  allowSymlinks = true
+  stopAt
 } = {}) {
-  checkType(type);
-  cwd2 = toPath(cwd2);
-  const statFunction = allowSymlinks ? fs2.statSync : fs2.lstatSync;
-  for (const path_ of paths) {
+  let directory = path4.resolve(toPath(cwd2) ?? "");
+  const { root } = path4.parse(directory);
+  stopAt = path4.resolve(directory, toPath(stopAt) ?? root);
+  const isAbsoluteName = path4.isAbsolute(name);
+  while (directory) {
+    const filePath = isAbsoluteName ? name : path4.join(directory, name);
     try {
-      const stat = statFunction(path4.resolve(cwd2, path_), {
-        throwIfNoEntry: false
-      });
-      if (!stat) {
-        continue;
-      }
-      if (matchType(type, stat)) {
-        return path_;
+      const stats = fs2.statSync(filePath, { throwIfNoEntry: false });
+      if (type === "file" && stats?.isFile() || type === "directory" && stats?.isDirectory()) {
+        return filePath;
       }
     } catch {
     }
-  }
-}
-
-// node_modules/pkg-dir/node_modules/find-up/index.js
-var toPath2 = (urlOrPath) => urlOrPath instanceof URL ? fileURLToPath2(urlOrPath) : urlOrPath;
-var findUpStop = Symbol("findUpStop");
-function findUpMultipleSync(name, options = {}) {
-  let directory = path5.resolve(toPath2(options.cwd) || "");
-  const { root } = path5.parse(directory);
-  const stopAt = options.stopAt || root;
-  const limit = options.limit || Number.POSITIVE_INFINITY;
-  const paths = [name].flat();
-  const runMatcher = (locateOptions) => {
-    if (typeof name !== "function") {
-      return locatePathSync(paths, locateOptions);
-    }
-    const foundPath = name(locateOptions.cwd);
-    if (typeof foundPath === "string") {
-      return locatePathSync([foundPath], locateOptions);
-    }
-    return foundPath;
-  };
-  const matches = [];
-  while (true) {
-    const foundPath = runMatcher({ ...options, cwd: directory });
-    if (foundPath === findUpStop) {
+    if (directory === stopAt || directory === root) {
       break;
     }
-    if (foundPath) {
-      matches.push(path5.resolve(directory, foundPath));
-    }
-    if (directory === stopAt || matches.length >= limit) {
-      break;
-    }
-    directory = path5.dirname(directory);
+    directory = path4.dirname(directory);
   }
-  return matches;
-}
-function findUpSync(name, options = {}) {
-  const matches = findUpMultipleSync(name, { ...options, limit: 1 });
-  return matches[0];
 }
 
 // node_modules/pkg-dir/index.js
 function packageDirectorySync({ cwd: cwd2 } = {}) {
   const filePath = findUpSync("package.json", { cwd: cwd2 });
-  return filePath && path6.dirname(filePath);
+  return filePath && path5.dirname(filePath);
 }
 
-// node_modules/find-cache-dir/index.js
+// node_modules/find-cache-directory/index.js
 var { env, cwd } = process3;
-var isWritable = (path12) => {
+var isWritable = (path11) => {
   try {
-    fs3.accessSync(path12, fs3.constants.W_OK);
+    fs3.accessSync(path11, fs3.constants.W_OK);
     return true;
   } catch {
     return false;
@@ -1294,22 +1241,22 @@ function useDirectory(directory, options) {
   return directory;
 }
 function getNodeModuleDirectory(directory) {
-  const nodeModules = path7.join(directory, "node_modules");
-  if (!isWritable(nodeModules) && (fs3.existsSync(nodeModules) || !isWritable(path7.join(directory)))) {
+  const nodeModules = path6.join(directory, "node_modules");
+  if (!isWritable(nodeModules) && (fs3.existsSync(nodeModules) || !isWritable(path6.join(directory)))) {
     return;
   }
   return nodeModules;
 }
 function findCacheDirectory(options = {}) {
   if (env.CACHE_DIR && !["true", "false", "1", "0"].includes(env.CACHE_DIR)) {
-    return useDirectory(path7.join(env.CACHE_DIR, options.name), options);
+    return useDirectory(path6.join(env.CACHE_DIR, options.name), options);
   }
   let { cwd: directory = cwd(), files } = options;
   if (files) {
     if (!Array.isArray(files)) {
       throw new TypeError(`Expected \`files\` option to be an array, got \`${typeof files}\`.`);
     }
-    directory = (0, import_common_path_prefix.default)(files.map((file) => path7.resolve(directory, file)));
+    directory = (0, import_common_path_prefix.default)(files.map((file) => path6.resolve(directory, file)));
   }
   directory = packageDirectorySync({ cwd: directory });
   if (!directory) {
@@ -1319,17 +1266,17 @@ function findCacheDirectory(options = {}) {
   if (!nodeModules) {
     return;
   }
-  return useDirectory(path7.join(directory, "node_modules", ".cache", options.name), options);
+  return useDirectory(path6.join(directory, "node_modules", ".cache", options.name), options);
 }
 
 // src/cli/find-cache-file.js
 function findDefaultCacheFile() {
   const cacheDir = findCacheDirectory({ name: "prettier", create: true }) || os.tmpdir();
-  const cacheFilePath = path8.join(cacheDir, ".prettier-cache");
+  const cacheFilePath = path7.join(cacheDir, ".prettier-cache");
   return cacheFilePath;
 }
 async function findCacheFileFromOption(cacheLocation) {
-  const cacheFile = path8.resolve(cacheLocation);
+  const cacheFile = path7.resolve(cacheLocation);
   const stat = await statSafe(cacheFile);
   if (stat) {
     if (stat.isDirectory()) {
@@ -1360,10 +1307,10 @@ import fs7 from "fs";
 // node_modules/file-entry-cache/dist/index.js
 import crypto2 from "crypto";
 import fs6 from "fs";
-import path10 from "path";
+import path9 from "path";
 
 // node_modules/flat-cache/dist/index.js
-import path9 from "path";
+import path8 from "path";
 import fs5 from "fs";
 
 // node_modules/hookified/dist/node/index.js
@@ -2394,7 +2341,7 @@ var FlatCache = class extends l {
   // eslint-disable-next-line unicorn/prevent-abbreviations
   load(cacheId, cacheDir) {
     try {
-      const filePath = path9.resolve(`${cacheDir ?? this._cacheDir}/${cacheId ?? this._cacheId}`);
+      const filePath = path8.resolve(`${cacheDir ?? this._cacheDir}/${cacheId ?? this._cacheId}`);
       this.loadFile(filePath);
       this.emit(
         "load"
@@ -2446,7 +2393,7 @@ var FlatCache = class extends l {
    * @returns {String}
    */
   get cacheFilePath() {
-    return path9.resolve(`${this._cacheDir}/${this._cacheId}`);
+    return path8.resolve(`${this._cacheDir}/${this._cacheId}`);
   }
   /**
    * Returns the path to the cache directory
@@ -2454,7 +2401,7 @@ var FlatCache = class extends l {
    * @returns {String}
    */
   get cacheDirPath() {
-    return path9.resolve(this._cacheDir);
+    return path8.resolve(this._cacheDir);
   }
   /**
    * Returns an array with all the keys in the cache
@@ -2636,8 +2583,8 @@ function createFromFile(filePath, options) {
 
 // node_modules/file-entry-cache/dist/index.js
 function createFromFile2(filePath, useCheckSum, currentWorkingDirectory) {
-  const fname = path10.basename(filePath);
-  const directory = path10.dirname(filePath);
+  const fname = path9.basename(filePath);
+  const directory = path9.dirname(filePath);
   return create(fname, directory, useCheckSum, currentWorkingDirectory);
 }
 function create(cacheId, cacheDirectory, useCheckSum, currentWorkingDirectory) {
@@ -2742,7 +2689,7 @@ var FileEntryCache = class {
    * @returns {boolean} if the file path is a relative path, false otherwise
    */
   isRelativePath(filePath) {
-    return !path10.isAbsolute(filePath);
+    return !path9.isAbsolute(filePath);
   }
   /**
   * Delete the cache file from the disk
@@ -2950,7 +2897,7 @@ var FileEntryCache = class {
   getAbsolutePath(filePath, options) {
     if (this.isRelativePath(filePath)) {
       const currentWorkingDirectory = options?.currentWorkingDirectory ?? this._currentWorkingDirectory ?? process.cwd();
-      filePath = path10.resolve(currentWorkingDirectory, filePath);
+      filePath = path9.resolve(currentWorkingDirectory, filePath);
     }
     return filePath;
   }
@@ -3346,7 +3293,7 @@ async function formatStdin(context) {
     }
     const options = await get_options_for_file_default(
       context,
-      filepath ? path11.resolve(filepath) : void 0
+      filepath ? path10.resolve(filepath) : void 0
     );
     if (await listDifferent(context, input, options, "(stdin)")) {
       return;
@@ -3401,7 +3348,7 @@ async function formatFiles(context) {
       ...await get_options_for_file_default(context, filename),
       filepath: filename
     };
-    const fileNameToDisplay = normalizeToPosix(path11.relative(cwd2, filename));
+    const fileNameToDisplay = normalizeToPosix(path10.relative(cwd2, filename));
     let printedFilename;
     if (isTTY()) {
       printedFilename = context.logger.log(fileNameToDisplay, {
@@ -3846,7 +3793,8 @@ async function printSupportInfo() {
       (option) => omit(option, ["cliName", "cliCategory", "cliDescription"])
     )
   };
-  printToScreen(await format4((0, import_fast_json_stable_stringify3.default)(supportInfo), { parser: "json" }));
+  const result = await format4((0, import_fast_json_stable_stringify3.default)(supportInfo), { parser: "json" });
+  printToScreen(result.trim());
 }
 var print_support_info_default = printSupportInfo;
 

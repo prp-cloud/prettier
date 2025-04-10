@@ -20,7 +20,8 @@ const keysToKeep = [
   "preferUnplugged",
 ];
 
-async function buildPackageJson({ file, files }) {
+async function buildPackageJson({ packageConfig, file }) {
+  const { distDirectory, files } = packageConfig;
   const packageJson = await readJson(path.join(PROJECT_ROOT, file.input));
 
   const overrides = {
@@ -85,7 +86,10 @@ async function buildPackageJson({ file, files }) {
 
   const adjustPaths = (val) =>
     typeof val === "string"
-      ? val.replace(/^(\.\/)?/u, "$&dist/")
+      ? val.replace(
+          /^(\.\/)?/u,
+          `$&${distDirectory.replace(`${path.resolve(import.meta.dirname, "../..")}/`, "")}/`,
+        )
       : Array.isArray(val)
         ? val.map(adjustPaths)
         : Object.fromEntries(

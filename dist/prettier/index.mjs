@@ -14231,16 +14231,11 @@ var getErrorLocation = (string, message) => {
   if (!match) {
     return;
   }
-  let { index, line: line3, column: column2 } = match.groups;
+  const { index, line: line3, column: column2 } = match.groups;
   if (line3 && column2) {
     return { line: Number(line3), column: Number(column2) };
   }
-  index = Number(index);
-  if (index === string.length) {
-    const { line: line4, column: column3 } = indexToPosition(string, string.length - 1, { oneBased: true });
-    return { line: line4, column: column3 + 1 };
-  }
-  return indexToPosition(string, index, { oneBased: true });
+  return indexToPosition(string, Number(index), { oneBased: true });
 };
 var addCodePointToUnexpectedToken = (message) => message.replace(
   // TODO[engine:node@>=20]: The token always quoted after Node.js 20
@@ -21481,7 +21476,7 @@ var object_omit_default = omit;
 import * as doc from "./doc.mjs";
 
 // src/main/version.evaluate.cjs
-var version_evaluate_default = "3.6.0-6aeb3e6fa";
+var version_evaluate_default = "3.6.0-753b43f21";
 
 // src/utils/public.js
 var public_exports = {};
