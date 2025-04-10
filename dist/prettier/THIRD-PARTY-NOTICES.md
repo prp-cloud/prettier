@@ -1571,7 +1571,7 @@ Repository: <https://github.com/graphql/graphql-js.git>
 
 ----------------------------------------
 
-## hookified@v1.8.1
+## hookified@v1.8.2
 
 > Event Emitting and Middleware Hooks
 
