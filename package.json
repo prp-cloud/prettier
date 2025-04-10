@@ -283,7 +283,7 @@
     "npm-run-all2": "7.0.2",
     "node-style-text": "0.0.7",
     "outdent": "0.8.0",
-    "parse-json": "8.2.0",
+    "parse-json": "8.3.0",
     "picocolors": "1.1.1",
     "postcss": "8.5.3",
     "postcss-less": "6.0.0",
@@ -376,7 +376,7 @@
     "not op_mini all"
   ],
   "preferUnplugged": true,
-  "packageManager": "yarn@4.8.1",
+  "packageManager": "yarn@4.9.0",
   "overrides": {
     "jest": "$jest"
   }
