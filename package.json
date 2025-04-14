@@ -1,6 +1,6 @@
 {
   "name": "prettier",
-  "version": "3.6.0-a6167e330",
+  "version": "3.6.0-9b4dcda2f",
   "description": "Prettier is an opinionated code formatter",
   "bin": "./dist/prettier/bin/prettier.cjs",
   "repository": "prettier/prettier",
@@ -151,7 +151,7 @@
     "dist/prettier/index.d.ts",
     "dist/prettier/index.d.ts",
     "dist/prettier/index.mjs",
-    "dist/prettier/internal/cli.mjs",
+    "dist/prettier/internal/legacy-cli.mjs",
     "dist/prettier/package.json",
     "dist/prettier/plugins/acorn.d.ts",
     "dist/prettier/plugins/acorn.js",

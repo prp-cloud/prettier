@@ -21519,7 +21519,7 @@ var object_omit_default = omit;
 import * as doc from "./doc.mjs";
 
 // src/main/version.evaluate.cjs
-var version_evaluate_default = "3.6.0-a6167e330";
+var version_evaluate_default = "3.6.0-9b4dcda2f";
 
 // src/utils/public.js
 var public_exports = {};
@@ -21789,6 +21789,9 @@ async function clearCache3() {
 }
 var getFileInfo2 = withPlugins(get_file_info_default);
 var getSupportInfo2 = withPlugins(getSupportInfo, 0);
+var inferParser2 = withPlugins(
+  (file, options8) => infer_parser_default(options8, { physicalFile: file })
+);
 var sharedWithCli = {
   errors: errors_exports,
   optionCategories: option_categories_exports,
@@ -21797,6 +21800,7 @@ var sharedWithCli = {
   normalizeOptions: normalize_options_default,
   getSupportInfoWithoutPlugins: getSupportInfo,
   normalizeOptionSettings,
+  inferParser: (file, options8) => Promise.resolve(options8?.parser ?? inferParser2(file, options8)),
   vnopts: {
     ChoiceSchema,
     apiDescriptor
