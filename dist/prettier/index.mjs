@@ -14990,23 +14990,24 @@ async function importModuleDefault(file) {
   const module = await import(pathToFileURL2(file).href);
   return module.default;
 }
-async function readPackageJson(file) {
+async function readBunPackageJson(file) {
   try {
     return await readJson(file);
   } catch (error) {
-    if (process.versions.bun) {
-      try {
-        return await importModuleDefault(file);
-      } catch {
-      }
+    try {
+      return await importModuleDefault(file);
+    } catch {
     }
     throw error;
   }
 }
-async function loadConfigFromPackageJson(file) {
-  const { prettier } = await readPackageJson(file);
+var loadConfigFromPackageJson = process.versions.bun ? async function loadConfigFromBunPackageJson(file) {
+  const { prettier } = await readBunPackageJson(file);
   return prettier;
-}
+} : async function loadConfigFromPackageJson2(file) {
+  const { prettier } = await readJson(file);
+  return prettier;
+};
 async function loadConfigFromPackageYaml(file) {
   const { prettier } = await loadYaml(file);
   return prettier;
@@ -15021,27 +15022,29 @@ ${error.message}`;
     throw error;
   }
 }
+async function loadToml(file) {
+  const content = await read_file_default(file);
+  try {
+    return parse4(content);
+  } catch (error) {
+    error.message = `TOML Error in ${file}:
+${error.message}`;
+    throw error;
+  }
+}
+async function loadJson5(file) {
+  const content = await read_file_default(file);
+  try {
+    return dist_default.parse(content);
+  } catch (error) {
+    error.message = `JSON5 Error in ${file}:
+${error.message}`;
+    throw error;
+  }
+}
 var loaders = {
-  async ".toml"(file) {
-    const content = await read_file_default(file);
-    try {
-      return parse4(content);
-    } catch (error) {
-      error.message = `TOML Error in ${file}:
-${error.message}`;
-      throw error;
-    }
-  },
-  async ".json5"(file) {
-    const content = await read_file_default(file);
-    try {
-      return dist_default.parse(content);
-    } catch (error) {
-      error.message = `JSON5 Error in ${file}:
-${error.message}`;
-      throw error;
-    }
-  },
+  ".toml": loadToml,
+  ".json5": loadJson5,
   ".json": readJson,
   ".js": importModuleDefault,
   ".mjs": importModuleDefault,
@@ -16761,6 +16764,12 @@ function getInterpreter(file) {
 }
 var get_interpreter_default = getInterpreter;
 
+// src/utils/is-non-empty-array.js
+function isNonEmptyArray(object) {
+  return Array.isArray(object) && object.length > 0;
+}
+var is_non_empty_array_default = isNonEmptyArray;
+
 // src/utils/infer-parser.js
 var getFileBasename = (file) => String(file).split(/[/\\]/u).pop();
 function getLanguageByFileName(languages2, file) {
@@ -16784,13 +16793,26 @@ function getLanguageByInterpreter(languages2, file) {
   if (!file || getFileBasename(file).includes(".")) {
     return;
   }
+  const languagesWithInterpreters = languages2.filter(
+    ({ interpreters }) => is_non_empty_array_default(interpreters)
+  );
+  if (languagesWithInterpreters.length === 0) {
+    return;
+  }
   const interpreter = get_interpreter_default(file);
   if (!interpreter) {
     return;
   }
-  return languages2.find(
-    ({ interpreters }) => interpreters?.includes(interpreter)
+  return languagesWithInterpreters.find(
+    ({ interpreters }) => interpreters.includes(interpreter)
   );
+}
+function getLanguageByIsSupported(languages2, file) {
+  if (!file) {
+    return;
+  }
+  file = String(file);
+  return languages2.find(({ isSupported }) => isSupported?.(file));
 }
 function inferParser(options8, fileInfo) {
   const languages2 = options8.plugins.flatMap(
@@ -16799,7 +16821,7 @@ function inferParser(options8, fileInfo) {
       plugin.languages ?? []
     )
   );
-  const language = getLanguageByLanguageName(languages2, fileInfo.language) ?? getLanguageByFileName(languages2, fileInfo.physicalFile) ?? getLanguageByFileName(languages2, fileInfo.file) ?? getLanguageByInterpreter(languages2, fileInfo.physicalFile);
+  const language = getLanguageByLanguageName(languages2, fileInfo.language) ?? getLanguageByFileName(languages2, fileInfo.physicalFile) ?? getLanguageByFileName(languages2, fileInfo.file) ?? getLanguageByIsSupported(languages2, fileInfo.physicalFile) ?? getLanguageByIsSupported(languages2, fileInfo.file) ?? getLanguageByInterpreter(languages2, fileInfo.physicalFile);
   return language?.parsers[0];
 }
 var infer_parser_default = inferParser;
@@ -18412,12 +18434,6 @@ function hasNewline(text, startIndex, options8 = {}) {
 }
 var has_newline_default = hasNewline;
 
-// src/utils/is-non-empty-array.js
-function isNonEmptyArray(object) {
-  return Array.isArray(object) && object.length > 0;
-}
-var is_non_empty_array_default = isNonEmptyArray;
-
 // src/main/create-get-visitor-keys-function.js
 var nonTraversableKeys = /* @__PURE__ */ new Set([
   "tokens",
@@ -19034,6 +19050,10 @@ var core_options_evaluate_default = {
       {
         "value": "lwc",
         "description": "Lightning Web Components"
+      },
+      {
+        "value": "mjml",
+        "description": "MJML"
       }
     ]
   },
@@ -20608,8 +20628,7 @@ var languages_evaluate_default4 = [
       ".html.hl",
       ".inc",
       ".xht",
-      ".xhtml",
-      ".mjml"
+      ".xhtml"
     ],
     "parsers": [
       "html"
@@ -20638,6 +20657,30 @@ var languages_evaluate_default4 = [
       "html"
     ],
     "filenames": []
+  },
+  {
+    "linguistLanguageId": 146,
+    "name": "MJML",
+    "type": "markup",
+    "tmScope": "text.mjml.basic",
+    "aceMode": "html",
+    "codemirrorMode": "htmlmixed",
+    "codemirrorMimeType": "text/html",
+    "color": "#e34c26",
+    "aliases": [
+      "MJML",
+      "mjml"
+    ],
+    "extensions": [
+      ".mjml"
+    ],
+    "parsers": [
+      "mjml"
+    ],
+    "filenames": [],
+    "vscodeLanguageIds": [
+      "mjml"
+    ]
   },
   {
     "linguistLanguageId": 391,
@@ -21378,7 +21421,7 @@ var { parsers, printers } = createParsersAndPrinters([
   },
   {
     importPlugin: () => import("./plugins/html.mjs"),
-    parsers: ["html", "angular", "vue", "lwc"],
+    parsers: ["html", "angular", "vue", "lwc", "mjml"],
     printers: ["html"]
   },
   {
@@ -21476,7 +21519,7 @@ var object_omit_default = omit;
 import * as doc from "./doc.mjs";
 
 // src/main/version.evaluate.cjs
-var version_evaluate_default = "3.6.0-a59644871";
+var version_evaluate_default = "3.6.0-a6167e330";
 
 // src/utils/public.js
 var public_exports = {};

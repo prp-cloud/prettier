@@ -332,8 +332,8 @@ var require_common_path_prefix = __commonJS({
     "use strict";
     var { sep: DEFAULT_SEPARATOR } = __require("path");
     var determineSeparator = (paths) => {
-      for (const path11 of paths) {
-        const match = /(\/|\\)/.exec(path11);
+      for (const path13 of paths) {
+        const match = /(\/|\\)/.exec(path13);
         if (match !== null) return match[0];
       }
       return DEFAULT_SEPARATOR;
@@ -343,8 +343,8 @@ var require_common_path_prefix = __commonJS({
       if (first === "" || remaining.length === 0) return "";
       const parts = first.split(sep);
       let endOfPrefix = parts.length;
-      for (const path11 of remaining) {
-        const compare = path11.split(sep);
+      for (const path13 of remaining) {
+        const compare = path13.split(sep);
         for (let i = 0; i < endOfPrefix; i++) {
           if (compare[i] !== parts[i]) {
             endOfPrefix = i;
@@ -989,18 +989,19 @@ var context_default = Context;
 
 // src/cli/file-info.js
 var import_fast_json_stable_stringify = __toESM(require_fast_json_stable_stringify(), 1);
+import path2 from "path";
 import { format, getFileInfo } from "../index.mjs";
 async function logFileInfoOrDie(context) {
   const {
     fileInfo: file,
     ignorePath,
-    withNodeModules,
+    withNodeModules: withNodeModules2,
     plugins,
     config
   } = context.argv;
-  const fileInfo = await getFileInfo(file, {
+  const fileInfo = await getFileInfo(path2.resolve(file), {
     ignorePath,
-    withNodeModules,
+    withNodeModules: withNodeModules2,
     plugins,
     resolveConfig: config !== false
   });
@@ -1010,13 +1011,13 @@ async function logFileInfoOrDie(context) {
 var file_info_default = logFileInfoOrDie;
 
 // src/cli/find-config-path.js
-import path2 from "path";
+import path3 from "path";
 import { resolveConfigFile } from "../index.mjs";
 async function logResolvedConfigPathOrDie(context) {
   const file = context.argv.findConfigPath;
   const configFile = await resolveConfigFile(file);
   if (configFile) {
-    printToScreen(normalizeToPosix(path2.relative(process.cwd(), configFile)));
+    printToScreen(normalizeToPosix(path3.relative(process.cwd(), configFile)));
   } else {
     throw new Error(`Can not find configure file for "${file}".`);
   }
@@ -1025,11 +1026,46 @@ var find_config_path_default = logResolvedConfigPathOrDie;
 
 // src/cli/format.js
 import fs8 from "fs/promises";
-import path10 from "path";
+import path12 from "path";
 import * as prettier from "../index.mjs";
 
 // src/cli/expand-patterns.js
-import path3 from "path";
+import path5 from "path";
+
+// src/cli/directory-ignorer.js
+import path4 from "path";
+var alwaysIgnoredDirectories = [".git", ".sl", ".svn", ".hg", ".jj"];
+var withNodeModules = [...alwaysIgnoredDirectories, "node_modules"];
+var cwd = process.cwd();
+var DirectoryIgnorer = class {
+  #directories;
+  ignorePatterns;
+  constructor(shouldIgnoreNodeModules) {
+    const directories = shouldIgnoreNodeModules ? withNodeModules : alwaysIgnoredDirectories;
+    const patterns = directories.map((directory) => `**/${directory}`);
+    this.#directories = new Set(directories);
+    this.ignorePatterns = patterns;
+  }
+  /**
+   * @param {string} absolutePathOrPattern
+   */
+  shouldIgnore(absolutePathOrPattern) {
+    const directoryNames = path4.relative(cwd, absolutePathOrPattern).split(path4.sep);
+    return directoryNames.some(
+      (directoryName) => this.#directories.has(directoryName)
+    );
+  }
+};
+var directoryIgnorerWithNodeModules = new DirectoryIgnorer(
+  /* shouldIgnoreNodeModules */
+  true
+);
+var directoryIgnorerWithoutNodeModules = new DirectoryIgnorer(
+  /* shouldIgnoreNodeModules */
+  false
+);
+
+// src/cli/expand-patterns.js
 async function* expandPatterns(context) {
   const seen = /* @__PURE__ */ new Set();
   let noResults = true;
@@ -1041,7 +1077,7 @@ async function* expandPatterns(context) {
       yield { error };
       continue;
     }
-    const filename = path3.resolve(filePath);
+    const filename = path5.resolve(filePath);
     if (seen.has(filename)) {
       continue;
     }
@@ -1055,20 +1091,17 @@ async function* expandPatterns(context) {
   }
 }
 async function* expandPatternsInternal(context) {
-  const silentlyIgnoredDirs = [".git", ".sl", ".svn", ".hg", ".jj"];
-  if (context.argv.withNodeModules !== true) {
-    silentlyIgnoredDirs.push("node_modules");
-  }
+  const directoryIgnorer = context.argv.withNodeModules === true ? directoryIgnorerWithoutNodeModules : directoryIgnorerWithNodeModules;
   const globOptions = {
     dot: true,
-    ignore: silentlyIgnoredDirs.map((dir) => "**/" + dir),
+    ignore: [...directoryIgnorer.ignorePatterns],
     followSymbolicLinks: false
   };
-  const cwd2 = process.cwd();
+  const cwd3 = process.cwd();
   const entries = [];
   for (const pattern of context.filePatterns) {
-    const absolutePath = path3.resolve(cwd2, pattern);
-    if (containsIgnoredPathSegment(absolutePath, cwd2, silentlyIgnoredDirs)) {
+    const absolutePath = path5.resolve(pattern);
+    if (directoryIgnorer.shouldIgnore(absolutePath)) {
       continue;
     }
     const stat = await lstatSafe(absolutePath);
@@ -1090,7 +1123,7 @@ async function* expandPatternsInternal(context) {
           input: pattern
         });
       } else if (stat.isDirectory()) {
-        const relativePath = path3.relative(cwd2, absolutePath) || ".";
+        const relativePath = path5.relative(cwd3, absolutePath) || ".";
         const prefix = escapePathForGlob(fixWindowsSlashes(relativePath));
         entries.push({
           type: "dir",
@@ -1141,13 +1174,10 @@ var errorMessages = {
     glob: "No files matching the pattern were found"
   }
 };
-function containsIgnoredPathSegment(absolutePath, cwd2, ignoredDirectories) {
-  return path3.relative(cwd2, absolutePath).split(path3.sep).some((dir) => ignoredDirectories.includes(dir));
-}
 function sortPaths(paths) {
   return paths.sort((a, b) => a.localeCompare(b));
 }
-function escapePathForGlob(path11) {
+function escapePathForGlob(path13) {
   return string_replace_all_default(
     /* isOptionalObject */
     false,
@@ -1158,7 +1188,7 @@ function escapePathForGlob(path11) {
         string_replace_all_default(
           /* isOptionalObject */
           false,
-          path11,
+          path13,
           "\\",
           "\0"
         )
@@ -1176,34 +1206,34 @@ var fixWindowsSlashes = normalizeToPosix;
 // src/cli/find-cache-file.js
 import fs4 from "fs/promises";
 import os from "os";
-import path7 from "path";
+import path9 from "path";
 
 // node_modules/find-cache-directory/index.js
 var import_common_path_prefix = __toESM(require_common_path_prefix(), 1);
 import process3 from "process";
-import path6 from "path";
+import path8 from "path";
 import fs3 from "fs";
 
 // node_modules/pkg-dir/index.js
-import path5 from "path";
+import path7 from "path";
 
 // node_modules/find-up-simple/index.js
 import process2 from "process";
 import { fileURLToPath } from "url";
 import fs2 from "fs";
-import path4 from "path";
+import path6 from "path";
 var toPath = (urlOrPath) => urlOrPath instanceof URL ? fileURLToPath(urlOrPath) : urlOrPath;
 function findUpSync(name, {
-  cwd: cwd2 = process2.cwd(),
+  cwd: cwd3 = process2.cwd(),
   type = "file",
   stopAt
 } = {}) {
-  let directory = path4.resolve(toPath(cwd2) ?? "");
-  const { root } = path4.parse(directory);
-  stopAt = path4.resolve(directory, toPath(stopAt) ?? root);
-  const isAbsoluteName = path4.isAbsolute(name);
+  let directory = path6.resolve(toPath(cwd3) ?? "");
+  const { root } = path6.parse(directory);
+  stopAt = path6.resolve(directory, toPath(stopAt) ?? root);
+  const isAbsoluteName = path6.isAbsolute(name);
   while (directory) {
-    const filePath = isAbsoluteName ? name : path4.join(directory, name);
+    const filePath = isAbsoluteName ? name : path6.join(directory, name);
     try {
       const stats = fs2.statSync(filePath, { throwIfNoEntry: false });
       if (type === "file" && stats?.isFile() || type === "directory" && stats?.isDirectory()) {
@@ -1214,21 +1244,21 @@ function findUpSync(name, {
     if (directory === stopAt || directory === root) {
       break;
     }
-    directory = path4.dirname(directory);
+    directory = path6.dirname(directory);
   }
 }
 
 // node_modules/pkg-dir/index.js
-function packageDirectorySync({ cwd: cwd2 } = {}) {
-  const filePath = findUpSync("package.json", { cwd: cwd2 });
-  return filePath && path5.dirname(filePath);
+function packageDirectorySync({ cwd: cwd3 } = {}) {
+  const filePath = findUpSync("package.json", { cwd: cwd3 });
+  return filePath && path7.dirname(filePath);
 }
 
 // node_modules/find-cache-directory/index.js
-var { env, cwd } = process3;
-var isWritable = (path11) => {
+var { env, cwd: cwd2 } = process3;
+var isWritable = (path13) => {
   try {
-    fs3.accessSync(path11, fs3.constants.W_OK);
+    fs3.accessSync(path13, fs3.constants.W_OK);
     return true;
   } catch {
     return false;
@@ -1241,22 +1271,22 @@ function useDirectory(directory, options) {
   return directory;
 }
 function getNodeModuleDirectory(directory) {
-  const nodeModules = path6.join(directory, "node_modules");
-  if (!isWritable(nodeModules) && (fs3.existsSync(nodeModules) || !isWritable(path6.join(directory)))) {
+  const nodeModules = path8.join(directory, "node_modules");
+  if (!isWritable(nodeModules) && (fs3.existsSync(nodeModules) || !isWritable(path8.join(directory)))) {
     return;
   }
   return nodeModules;
 }
 function findCacheDirectory(options = {}) {
   if (env.CACHE_DIR && !["true", "false", "1", "0"].includes(env.CACHE_DIR)) {
-    return useDirectory(path6.join(env.CACHE_DIR, options.name), options);
+    return useDirectory(path8.join(env.CACHE_DIR, options.name), options);
   }
-  let { cwd: directory = cwd(), files } = options;
+  let { cwd: directory = cwd2(), files } = options;
   if (files) {
     if (!Array.isArray(files)) {
       throw new TypeError(`Expected \`files\` option to be an array, got \`${typeof files}\`.`);
     }
-    directory = (0, import_common_path_prefix.default)(files.map((file) => path6.resolve(directory, file)));
+    directory = (0, import_common_path_prefix.default)(files.map((file) => path8.resolve(directory, file)));
   }
   directory = packageDirectorySync({ cwd: directory });
   if (!directory) {
@@ -1266,17 +1296,17 @@ function findCacheDirectory(options = {}) {
   if (!nodeModules) {
     return;
   }
-  return useDirectory(path6.join(directory, "node_modules", ".cache", options.name), options);
+  return useDirectory(path8.join(directory, "node_modules", ".cache", options.name), options);
 }
 
 // src/cli/find-cache-file.js
 function findDefaultCacheFile() {
   const cacheDir = findCacheDirectory({ name: "prettier", create: true }) || os.tmpdir();
-  const cacheFilePath = path7.join(cacheDir, ".prettier-cache");
+  const cacheFilePath = path9.join(cacheDir, ".prettier-cache");
   return cacheFilePath;
 }
 async function findCacheFileFromOption(cacheLocation) {
-  const cacheFile = path7.resolve(cacheLocation);
+  const cacheFile = path9.resolve(cacheLocation);
   const stat = await statSafe(cacheFile);
   if (stat) {
     if (stat.isDirectory()) {
@@ -1307,10 +1337,10 @@ import fs7 from "fs";
 // node_modules/file-entry-cache/dist/index.js
 import crypto2 from "crypto";
 import fs6 from "fs";
-import path9 from "path";
+import path11 from "path";
 
 // node_modules/flat-cache/dist/index.js
-import path8 from "path";
+import path10 from "path";
 import fs5 from "fs";
 
 // node_modules/hookified/dist/node/index.js
@@ -2341,7 +2371,7 @@ var FlatCache = class extends l {
   // eslint-disable-next-line unicorn/prevent-abbreviations
   load(cacheId, cacheDir) {
     try {
-      const filePath = path8.resolve(`${cacheDir ?? this._cacheDir}/${cacheId ?? this._cacheId}`);
+      const filePath = path10.resolve(`${cacheDir ?? this._cacheDir}/${cacheId ?? this._cacheId}`);
       this.loadFile(filePath);
       this.emit(
         "load"
@@ -2393,7 +2423,7 @@ var FlatCache = class extends l {
    * @returns {String}
    */
   get cacheFilePath() {
-    return path8.resolve(`${this._cacheDir}/${this._cacheId}`);
+    return path10.resolve(`${this._cacheDir}/${this._cacheId}`);
   }
   /**
    * Returns the path to the cache directory
@@ -2401,7 +2431,7 @@ var FlatCache = class extends l {
    * @returns {String}
    */
   get cacheDirPath() {
-    return path8.resolve(this._cacheDir);
+    return path10.resolve(this._cacheDir);
   }
   /**
    * Returns an array with all the keys in the cache
@@ -2583,8 +2613,8 @@ function createFromFile(filePath, options) {
 
 // node_modules/file-entry-cache/dist/index.js
 function createFromFile2(filePath, useCheckSum, currentWorkingDirectory) {
-  const fname = path9.basename(filePath);
-  const directory = path9.dirname(filePath);
+  const fname = path11.basename(filePath);
+  const directory = path11.dirname(filePath);
   return create(fname, directory, useCheckSum, currentWorkingDirectory);
 }
 function create(cacheId, cacheDirectory, useCheckSum, currentWorkingDirectory) {
@@ -2689,7 +2719,7 @@ var FileEntryCache = class {
    * @returns {boolean} if the file path is a relative path, false otherwise
    */
   isRelativePath(filePath) {
-    return !path9.isAbsolute(filePath);
+    return !path11.isAbsolute(filePath);
   }
   /**
   * Delete the cache file from the disk
@@ -2897,7 +2927,7 @@ var FileEntryCache = class {
   getAbsolutePath(filePath, options) {
     if (this.isRelativePath(filePath)) {
       const currentWorkingDirectory = options?.currentWorkingDirectory ?? this._currentWorkingDirectory ?? process.cwd();
-      filePath = path9.resolve(currentWorkingDirectory, filePath);
+      filePath = path11.resolve(currentWorkingDirectory, filePath);
     }
     return filePath;
   }
@@ -3282,19 +3312,21 @@ async function formatStdin(context) {
   const { filepath } = context.argv;
   try {
     const input = await getStdin();
+    const absoluteFilepath = filepath ? path12.resolve(filepath) : void 0;
     let isFileIgnored = false;
-    if (filepath) {
+    if (absoluteFilepath) {
       const isIgnored = await createIsIgnoredFromContextOrDie(context);
-      isFileIgnored = isIgnored(filepath);
+      isFileIgnored = isIgnored(absoluteFilepath);
     }
     if (isFileIgnored) {
       writeOutput(context, { formatted: input });
       return;
     }
-    const options = await get_options_for_file_default(
-      context,
-      filepath ? path10.resolve(filepath) : void 0
-    );
+    const options = {
+      ...await get_options_for_file_default(context, absoluteFilepath),
+      // `getOptionsForFile` forwards `--stdin-filepath` directly, which can be a relative path
+      filepath: absoluteFilepath
+    };
     if (await listDifferent(context, input, options, "(stdin)")) {
       return;
     }
@@ -3313,7 +3345,7 @@ async function formatStdin(context) {
 }
 async function formatFiles(context) {
   const isIgnored = await createIsIgnoredFromContextOrDie(context);
-  const cwd2 = process.cwd();
+  const cwd3 = process.cwd();
   let numberOfUnformattedFilesFound = 0;
   const { performanceTestFlag } = context;
   if (context.argv.check && !performanceTestFlag) {
@@ -3348,7 +3380,7 @@ async function formatFiles(context) {
       ...await get_options_for_file_default(context, filename),
       filepath: filename
     };
-    const fileNameToDisplay = normalizeToPosix(path10.relative(cwd2, filename));
+    const fileNameToDisplay = normalizeToPosix(path12.relative(cwd3, filename));
     let printedFilename;
     if (isTTY()) {
       printedFilename = context.logger.log(fileNameToDisplay, {
