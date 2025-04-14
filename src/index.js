@@ -32,6 +32,7 @@ import {
   normalizeOptionSettings,
 } from "./main/support.js";
 import { createIsIgnoredFunction } from "./utils/ignore.js";
+import inferParserWithoutPlugins from "./utils/infer-parser.js";
 import omit from "./utils/object-omit.js";
 
 /**
@@ -88,6 +89,10 @@ const getFileInfo = withPlugins(getFileInfoWithoutPlugins);
 /** @type {typeof getSupportInfoWithoutPlugins} */
 const getSupportInfo = withPlugins(getSupportInfoWithoutPlugins, 0);
 
+const inferParser = withPlugins((file, options) =>
+  inferParserWithoutPlugins(options, { physicalFile: file }),
+);
+
 // Internal shared with cli
 const sharedWithCli = {
   errors,
@@ -97,6 +102,8 @@ const sharedWithCli = {
   normalizeOptions,
   getSupportInfoWithoutPlugins,
   normalizeOptionSettings,
+  inferParser: (file, options) =>
+    Promise.resolve(options?.parser ?? inferParser(file, options)),
   vnopts: {
     ChoiceSchema: vnopts.ChoiceSchema,
     apiDescriptor: vnopts.apiDescriptor,

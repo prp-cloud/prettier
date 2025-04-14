@@ -205,6 +205,7 @@
     "@eslint-react/eslint-plugin": "1.40.4",
     "@eslint/js": "9.24.0",
     "@glimmer/syntax": "0.94.9",
+    "@prettier/cli": "0.7.1",
     "@prettier/parse-srcset": "3.1.0",
     "@stylistic/eslint-plugin-js": "4.2.0",
     "@types/estree": "1.0.7",
@@ -322,7 +323,7 @@
   },
   "scripts": {
     "prepublishOnly": "echo \"Error: must publish from dist/\" && exit 1",
-    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --runInBand",
+    "test": "jest --runInBand",
     "test:dev-package": "cross-env INSTALL_PACKAGE=1 yarn test",
     "test:dist": "cross-env NODE_ENV=production yarn test",
     "test:dist-standalone": "cross-env TEST_STANDALONE=1 yarn test:dist",
