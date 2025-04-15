@@ -1,6 +1,6 @@
 {
   "name": "prettier",
-  "version": "3.6.0-8bfddba35",
+  "version": "3.6.0-42dec936f",
   "description": "Prettier is an opinionated code formatter",
   "bin": "./dist/prettier/bin/prettier.cjs",
   "repository": "prettier/prettier",
@@ -209,8 +209,8 @@
     "@prettier/parse-srcset": "3.1.0",
     "@stylistic/eslint-plugin-js": "4.2.0",
     "@types/estree": "1.0.7",
-		"@typescript-eslint/eslint-plugin": "8.30.1",
-		"@typescript-eslint/parser": "8.30.1",
+    "@typescript-eslint/eslint-plugin": "8.30.1",
+    "@typescript-eslint/parser": "8.30.1",
     "@typescript-eslint/typescript-estree": "8.30.1",
     "@typescript-eslint/visitor-keys": "8.30.1",
     "acorn": "8.14.1",
