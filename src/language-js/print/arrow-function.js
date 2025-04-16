@@ -20,11 +20,11 @@ import {
   getFunctionParameters,
   hasComment,
   hasLeadingOwnLineComment,
-  isArrayOrTupleExpression,
+  isArrayExpression,
   isBinaryish,
   isCallLikeExpression,
   isJsxElement,
-  isObjectOrRecordExpression,
+  isObjectExpression,
   isTemplateOnItsOwnLine,
   shouldPrintComma,
   startsWithNoLookaheadToken,
@@ -227,8 +227,8 @@ function printArrowFunctionSignature(path, options, print, args) {
  */
 function mayBreakAfterShortPrefix(functionBody, bodyDoc, options) {
   return (
-    isArrayOrTupleExpression(functionBody) ||
-    isObjectOrRecordExpression(functionBody) ||
+    isArrayExpression(functionBody) ||
+    isObjectExpression(functionBody) ||
     functionBody.type === "ArrowFunctionExpression" ||
     functionBody.type === "DoExpression" ||
     functionBody.type === "BlockStatement" ||
