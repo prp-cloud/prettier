@@ -3281,7 +3281,7 @@ Repository: <https://github.com/tildeio/simple-html-tokenizer.git>
 
 ----------------------------------------
 
-## smol-toml@v1.3.1
+## smol-toml@v1.3.3
 
 > A small, fast, and correct TOML parser/serializer
 

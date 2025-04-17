@@ -14355,7 +14355,7 @@ function getStringEnd(str2, seek) {
   seek += target.length - 1;
   do
     seek = str2.indexOf(target, ++seek);
-  while (seek > -1 && first !== "'" && str2[seek - 1] === "\\" && str2[seek - 2] !== "\\");
+  while (seek > -1 && first !== "'" && str2[seek - 1] === "\\" && (str2[seek - 2] !== "\\" || str2[seek - 3] === "\\"));
   if (seek > -1) {
     seek += target.length;
     if (target.length > 1) {
@@ -14612,7 +14612,7 @@ function sliceAndTrimEndOf(str2, startPtr, endPtr, allowNewLines) {
   }
   return [trimmed, commentIdx];
 }
-function extractValue(str2, ptr, end, depth) {
+function extractValue(str2, ptr, end, depth = -1) {
   if (depth === 0) {
     throw new TomlError("document contains excessively nested structures. aborting.", {
       toml: str2,
@@ -14737,7 +14737,7 @@ function parseKey(str2, ptr, end = "=") {
   } while (dot + 1 && dot < endPtr);
   return [parsed, skipVoid(str2, endPtr + 1, true, true)];
 }
-function parseInlineTable(str2, ptr, depth) {
+function parseInlineTable(str2, ptr, depth = -1) {
   let res = {};
   let seen = /* @__PURE__ */ new Set();
   let c2;
@@ -14805,7 +14805,7 @@ function parseInlineTable(str2, ptr, depth) {
   }
   return [res, ptr];
 }
-function parseArray(str2, ptr, depth) {
+function parseArray(str2, ptr, depth = -1) {
   let res = [];
   let c2;
   ptr++;
@@ -21519,7 +21519,7 @@ var object_omit_default = omit;
 import * as doc from "./doc.mjs";
 
 // src/main/version.evaluate.js
-var version_evaluate_default = "3.6.0-e46ed54f0";
+var version_evaluate_default = "3.6.0-dd1295298";
 
 // src/utils/public.js
 var public_exports = {};
