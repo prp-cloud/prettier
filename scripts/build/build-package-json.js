@@ -24,22 +24,8 @@ async function buildPackageJson({ packageConfig, file }) {
   const { distDirectory, files } = packageConfig;
   const packageJson = await readJson(path.join(PROJECT_ROOT, file.input));
 
-  const bin = files.find(
-    (file) =>
-      path.join(PROJECT_ROOT, packageJson.bin) ===
-      path.join(PROJECT_ROOT, file.input),
-  ).output.file;
-
   const overrides = {
-    bin: `./${bin}`,
     main: "./index.cjs",
-    engines: {
-      ...packageJson.engines,
-      // https://github.com/prettier/prettier/pull/13118#discussion_r922708068
-      // Don't delete, comment out if we don't want override
-      node: ">=14",
-    },
-    type: "commonjs",
     exports: {
       ".": {
         types: "./index.d.ts",
@@ -96,24 +82,23 @@ async function buildPackageJson({ packageConfig, file }) {
       ),
     },
     files: files.map(({ output: { file } }) => file).sort(),
-    scripts: {
-      prepublishOnly:
-        "node -e \"assert.equal(require('.').version, require('..').version)\"",
-    },
-    peerDependencies: {
-      // Add `^` here, so we don't need release Prettier user can still update CLI
-      "@prettier/cli": `^${packageJson.dependencies["@prettier/cli"]}`,
-    },
-    peerDependenciesMeta: {
-      "@prettier/cli": {
-        optional: true,
-      },
-    },
   };
 
+  const adjustPaths = (val) =>
+    typeof val === "string"
+      ? val.replace(
+          /^(\.\/)?/u,
+          `$&${distDirectory.replace(`${path.resolve(import.meta.dirname, "../..")}/`, "")}/`,
+        )
+      : Array.isArray(val)
+        ? val.map(adjustPaths)
+        : Object.fromEntries(
+            Object.entries(val).map(([key, val]) => [key, adjustPaths(val)]),
+          );
+
   await writeJson(
-    path.join(distDirectory, file.output.file),
-    Object.assign(pick(packageJson, keysToKeep), overrides),
+    path.join(PROJECT_ROOT, file.output.file),
+    Object.assign(packageJson, adjustPaths(overrides)),
   );
 }
 
