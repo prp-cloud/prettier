@@ -197,7 +197,7 @@
     "dist/prettier/standalone.mjs"
   ],
   "devDependencies": {
-    "@angular/compiler": "19.2.5",
+    "@angular/compiler": "19.2.7",
     "@babel/code-frame": "7.26.2",
     "@babel/generator": "7.26.10",
     "@babel/parser": "7.27.0",
