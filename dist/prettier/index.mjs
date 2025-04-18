@@ -18897,6 +18897,13 @@ var create_print_pre_check_function_default = createPrintPreCheckFunction;
 
 // src/main/core-options.evaluate.js
 var core_options_evaluate_default = {
+  "checkIgnorePragma": {
+    "category": "Special",
+    "type": "boolean",
+    "default": false,
+    "description": "Check whether the file's first docblock comment contains '@noprettier' or '@noformat' to determine if it should be formatted.",
+    "cliCategory": "Other"
+  },
   "cursorOffset": {
     "category": "Special",
     "type": "int",
@@ -19110,7 +19117,7 @@ var core_options_evaluate_default = {
     "category": "Special",
     "type": "boolean",
     "default": false,
-    "description": "Require either '@prettier' or '@format' to be present in the file's first docblock comment\nin order for it to be formatted.",
+    "description": "Require either '@prettier' or '@format' to be present in the file's first docblock comment in order for it to be formatted.",
     "cliCategory": "Other"
   },
   "tabWidth": {
@@ -20270,12 +20277,16 @@ async function hasPragma(text, options8) {
   const selectedParser = await resolveParser(options8);
   return !selectedParser.hasPragma || selectedParser.hasPragma(text);
 }
+async function hasIgnorePragma(text, options8) {
+  const selectedParser = await resolveParser(options8);
+  return selectedParser.hasIgnorePragma?.(text);
+}
 async function formatWithCursor(originalText, originalOptions) {
   let { hasBOM, text, options: options8 } = normalizeInputAndOptions(
     originalText,
     await normalize_format_options_default(originalOptions)
   );
-  if (options8.rangeStart >= options8.rangeEnd && text !== "" || options8.requirePragma && !await hasPragma(text, options8)) {
+  if (options8.rangeStart >= options8.rangeEnd && text !== "" || options8.requirePragma && !await hasPragma(text, options8) || options8.checkIgnorePragma && await hasIgnorePragma(text, options8)) {
     return {
       formatted: originalText,
       cursorOffset: originalOptions.cursorOffset,
@@ -21519,7 +21530,7 @@ var object_omit_default = omit;
 import * as doc from "./doc.mjs";
 
 // src/main/version.evaluate.js
-var version_evaluate_default = "3.6.0-7905f4b5c";
+var version_evaluate_default = "3.6.0-a3b1b5e9f";
 
 // src/utils/public.js
 var public_exports = {};
