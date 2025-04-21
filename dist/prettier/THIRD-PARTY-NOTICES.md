@@ -2354,7 +2354,7 @@ Contributors:
 
 ----------------------------------------
 
-## keyv@v5.3.2
+## keyv@v5.3.3
 
 > Simple key-value storage with support for multiple backends
 
