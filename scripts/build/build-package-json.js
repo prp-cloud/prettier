@@ -96,9 +96,13 @@ async function buildPackageJson({ packageConfig, file }) {
             Object.entries(val).map(([key, val]) => [key, adjustPaths(val)]),
           );
 
-  await writeJson(
-    path.join(PROJECT_ROOT, file.output.file),
-    Object.assign(packageJson, adjustPaths(overrides)),
+  await Promise.all(
+    Object.entries({
+      [PROJECT_ROOT]: Object.assign(packageJson, adjustPaths(overrides)),
+      [distDirectory]: { type: "commonjs", version: packageJson.version },
+    }).map(([dir, content]) =>
+      writeJson(path.join(dir, file.output.file), content),
+    ),
   );
 }
 
