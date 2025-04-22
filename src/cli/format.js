@@ -1,5 +1,6 @@
 import fs from "node:fs/promises";
 import path from "node:path";
+import getStdin from "get-stdin";
 import * as prettier from "../index.js";
 import { expandPatterns } from "./expand-patterns.js";
 import findCacheFile from "./find-cache-file.js";
@@ -15,7 +16,7 @@ import {
 } from "./prettier-internal.js";
 import { normalizeToPosix, statSafe } from "./utils.js";
 
-const { getStdin, writeFormattedFile } = mockable;
+const { writeFormattedFile, getTimestamp } = mockable;
 
 function diff(a, b) {
   return createTwoFilesPatch("", "", a, b, "", "", { context: 2 });
@@ -192,14 +193,11 @@ async function format(context, input, opt) {
     context.logger.debug(
       `'${performanceTestFlag.name}' found, running formatWithCursor ${repeat} times.`,
     );
-    let totalMs = 0;
+    const start = getTimestamp();
     for (let i = 0; i < repeat; ++i) {
-      // should be using `performance.now()`, but only `Date` is cross-platform enough
-      const startMs = Date.now();
       await prettier.formatWithCursor(input, opt);
-      totalMs += Date.now() - startMs;
     }
-    const averageMs = totalMs / repeat;
+    const averageMs = (getTimestamp() - start) / repeat;
     const results = {
       repeat,
       hz: 1000 / averageMs,
@@ -365,7 +363,7 @@ async function formatFiles(context) {
       continue;
     }
 
-    const start = Date.now();
+    const start = getTimestamp();
 
     const isCacheExists = formatResultsCache?.existsAvailableFormatResultsCache(
       filename,
@@ -407,11 +405,12 @@ async function formatFiles(context) {
     }
 
     if (context.argv.write) {
+      const timeToDisplay = `${Math.round(getTimestamp() - start)}ms`;
       // Don't write the file if it won't change in order not to invalidate
       // mtime based caches.
       if (isDifferent) {
         if (!context.argv.check && !context.argv.listDifferent) {
-          context.logger.log(`${fileNameToDisplay} ${Date.now() - start}ms`);
+          context.logger.log(`${fileNameToDisplay} ${timeToDisplay}`);
         }
 
         try {
@@ -428,9 +427,7 @@ async function formatFiles(context) {
           process.exitCode = 2;
         }
       } else if (!context.argv.check && !context.argv.listDifferent) {
-        const message = `${picocolors.gray(fileNameToDisplay)} ${
-          Date.now() - start
-        }ms (unchanged)`;
+        const message = `${picocolors.gray(fileNameToDisplay)} ${timeToDisplay} (unchanged)`;
         if (isCacheExists) {
           context.logger.log(`${message} (cached)`);
         } else {
