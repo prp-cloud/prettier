@@ -11241,42 +11241,15 @@ import path8 from "path";
 // src/common/mockable.js
 var import_ci_info = __toESM(require_ci_info(), 1);
 import fs2 from "fs/promises";
-
-// node_modules/get-stdin/index.js
-var { stdin } = process;
-async function getStdin() {
-  let result = "";
-  if (stdin.isTTY) {
-    return result;
-  }
-  stdin.setEncoding("utf8");
-  for await (const chunk of stdin) {
-    result += chunk;
-  }
-  return result;
-}
-getStdin.buffer = async () => {
-  const result = [];
-  let length = 0;
-  if (stdin.isTTY) {
-    return Buffer.concat([]);
-  }
-  for await (const chunk of stdin) {
-    result.push(chunk);
-    length += chunk.length;
-  }
-  return Buffer.concat(result, length);
-};
-
-// src/common/mockable.js
+import { performance } from "perf_hooks";
 function writeFormattedFile(file, data) {
   return fs2.writeFile(file, data);
 }
 var mockable = {
   getPrettierConfigSearchStopDirectory: () => void 0,
-  getStdin,
   isCI: () => import_ci_info.isCI,
-  writeFormattedFile
+  writeFormattedFile,
+  getTimestamp: performance.now.bind(performance)
 };
 var mockable_default = mockable;
 
@@ -21530,7 +21503,7 @@ var object_omit_default = omit;
 import * as doc from "./doc.mjs";
 
 // src/main/version.evaluate.js
-var version_evaluate_default = "3.6.0-dd2e2953b";
+var version_evaluate_default = "3.6.0-427d8a48d";
 
 // src/utils/public.js
 var public_exports = {};

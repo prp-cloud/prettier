@@ -1027,6 +1027,34 @@ var find_config_path_default = logResolvedConfigPathOrDie;
 // src/cli/format.js
 import fs8 from "fs/promises";
 import path12 from "path";
+
+// node_modules/get-stdin/index.js
+var { stdin } = process;
+async function getStdin() {
+  let result = "";
+  if (stdin.isTTY) {
+    return result;
+  }
+  stdin.setEncoding("utf8");
+  for await (const chunk of stdin) {
+    result += chunk;
+  }
+  return result;
+}
+getStdin.buffer = async () => {
+  const result = [];
+  let length = 0;
+  if (stdin.isTTY) {
+    return Buffer.concat([]);
+  }
+  for await (const chunk of stdin) {
+    result.push(chunk);
+    length += chunk.length;
+  }
+  return Buffer.concat(result, length);
+};
+
+// src/cli/format.js
 import * as prettier from "../index.mjs";
 
 // src/cli/expand-patterns.js
@@ -3140,7 +3168,7 @@ async function getOptionsForFile(context, filepath) {
 var get_options_for_file_default = getOptionsForFile;
 
 // src/cli/format.js
-var { getStdin, writeFormattedFile } = mockable;
+var { writeFormattedFile, getTimestamp } = mockable;
 function diff(a, b) {
   return createTwoFilesPatch("", "", a, b, "", "", { context: 2 });
 }
@@ -3275,13 +3303,11 @@ async function format3(context, input, opt) {
     context.logger.debug(
       `'${performanceTestFlag.name}' found, running formatWithCursor ${repeat} times.`
     );
-    let totalMs = 0;
+    const start = getTimestamp();
     for (let i = 0; i < repeat; ++i) {
-      const startMs = Date.now();
       await prettier.formatWithCursor(input, opt);
-      totalMs += Date.now() - startMs;
     }
-    const averageMs = totalMs / repeat;
+    const averageMs = (getTimestamp() - start) / repeat;
     const results = {
       repeat,
       hz: 1e3 / averageMs,
@@ -3405,7 +3431,7 @@ ${error2.message}`
       writeOutput(context, { formatted: input }, options);
       continue;
     }
-    const start = Date.now();
+    const start = getTimestamp();
     const isCacheExists = formatResultsCache?.existsAvailableFormatResultsCache(
       filename,
       options
@@ -3439,9 +3465,10 @@ ${error2.message}`
       return;
     }
     if (context.argv.write) {
+      const timeToDisplay = `${Math.round(getTimestamp() - start)}ms`;
       if (isDifferent) {
         if (!context.argv.check && !context.argv.listDifferent) {
-          context.logger.log(`${fileNameToDisplay} ${Date.now() - start}ms`);
+          context.logger.log(`${fileNameToDisplay} ${timeToDisplay}`);
         }
         try {
           await writeFormattedFile(filename, output);
@@ -3454,7 +3481,7 @@ ${error2.message}`
           process.exitCode = 2;
         }
       } else if (!context.argv.check && !context.argv.listDifferent) {
-        const message = `${picocolors.gray(fileNameToDisplay)} ${Date.now() - start}ms (unchanged)`;
+        const message = `${picocolors.gray(fileNameToDisplay)} ${timeToDisplay} (unchanged)`;
         if (isCacheExists) {
           context.logger.log(`${message} (cached)`);
         } else {
