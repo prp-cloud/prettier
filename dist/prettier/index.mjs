@@ -3423,8 +3423,8 @@ var require_utils3 = __commonJS({
     exports.array = array2;
     var errno = require_errno();
     exports.errno = errno;
-    var fs7 = require_fs();
-    exports.fs = fs7;
+    var fs6 = require_fs();
+    exports.fs = fs6;
     var path13 = require_path();
     exports.path = path13;
     var pattern = require_pattern();
@@ -3608,12 +3608,12 @@ var require_fs2 = __commonJS({
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.createFileSystemAdapter = exports.FILE_SYSTEM_ADAPTER = void 0;
-    var fs7 = __require("fs");
+    var fs6 = __require("fs");
     exports.FILE_SYSTEM_ADAPTER = {
-      lstat: fs7.lstat,
-      stat: fs7.stat,
-      lstatSync: fs7.lstatSync,
-      statSync: fs7.statSync
+      lstat: fs6.lstat,
+      stat: fs6.stat,
+      lstatSync: fs6.lstatSync,
+      statSync: fs6.statSync
     };
     function createFileSystemAdapter(fsMethods) {
       if (fsMethods === void 0) {
@@ -3630,12 +3630,12 @@ var require_settings = __commonJS({
   "node_modules/@nodelib/fs.stat/out/settings.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var fs7 = require_fs2();
+    var fs6 = require_fs2();
     var Settings = class {
       constructor(_options = {}) {
         this._options = _options;
         this.followSymbolicLink = this._getValue(this._options.followSymbolicLink, true);
-        this.fs = fs7.createFileSystemAdapter(this._options.fs);
+        this.fs = fs6.createFileSystemAdapter(this._options.fs);
         this.markSymbolicLink = this._getValue(this._options.markSymbolicLink, false);
         this.throwErrorOnBrokenSymbolicLink = this._getValue(this._options.throwErrorOnBrokenSymbolicLink, true);
       }
@@ -3790,8 +3790,8 @@ var require_utils4 = __commonJS({
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.fs = void 0;
-    var fs7 = require_fs3();
-    exports.fs = fs7;
+    var fs6 = require_fs3();
+    exports.fs = fs6;
   }
 });
 
@@ -3986,14 +3986,14 @@ var require_fs4 = __commonJS({
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.createFileSystemAdapter = exports.FILE_SYSTEM_ADAPTER = void 0;
-    var fs7 = __require("fs");
+    var fs6 = __require("fs");
     exports.FILE_SYSTEM_ADAPTER = {
-      lstat: fs7.lstat,
-      stat: fs7.stat,
-      lstatSync: fs7.lstatSync,
-      statSync: fs7.statSync,
-      readdir: fs7.readdir,
-      readdirSync: fs7.readdirSync
+      lstat: fs6.lstat,
+      stat: fs6.stat,
+      lstatSync: fs6.lstatSync,
+      statSync: fs6.statSync,
+      readdir: fs6.readdir,
+      readdirSync: fs6.readdirSync
     };
     function createFileSystemAdapter(fsMethods) {
       if (fsMethods === void 0) {
@@ -4012,12 +4012,12 @@ var require_settings2 = __commonJS({
     Object.defineProperty(exports, "__esModule", { value: true });
     var path13 = __require("path");
     var fsStat = require_out();
-    var fs7 = require_fs4();
+    var fs6 = require_fs4();
     var Settings = class {
       constructor(_options = {}) {
         this._options = _options;
         this.followSymbolicLinks = this._getValue(this._options.followSymbolicLinks, false);
-        this.fs = fs7.createFileSystemAdapter(this._options.fs);
+        this.fs = fs6.createFileSystemAdapter(this._options.fs);
         this.pathSegmentSeparator = this._getValue(this._options.pathSegmentSeparator, path13.sep);
         this.stats = this._getValue(this._options.stats, false);
         this.throwErrorOnBrokenSymbolicLink = this._getValue(this._options.throwErrorOnBrokenSymbolicLink, true);
@@ -5375,16 +5375,16 @@ var require_settings4 = __commonJS({
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.DEFAULT_FILE_SYSTEM_ADAPTER = void 0;
-    var fs7 = __require("fs");
+    var fs6 = __require("fs");
     var os = __require("os");
     var CPU_COUNT = Math.max(os.cpus().length, 1);
     exports.DEFAULT_FILE_SYSTEM_ADAPTER = {
-      lstat: fs7.lstat,
-      lstatSync: fs7.lstatSync,
-      stat: fs7.stat,
-      statSync: fs7.statSync,
-      readdir: fs7.readdir,
-      readdirSync: fs7.readdirSync
+      lstat: fs6.lstat,
+      lstatSync: fs6.lstatSync,
+      stat: fs6.stat,
+      statSync: fs6.statSync,
+      readdir: fs6.readdir,
+      readdirSync: fs6.readdirSync
     };
     var Settings = class {
       constructor(_options = {}) {
@@ -7614,7 +7614,7 @@ var require_ini = __commonJS({
       return result;
     };
     Object.defineProperty(exports, "__esModule", { value: true });
-    var fs7 = __importStar(__require("fs"));
+    var fs6 = __importStar(__require("fs"));
     var regex = {
       section: /^\s*\[(([^#;]|\\#|\\;)+)\]\s*([#;].*)?$/,
       param: /^\s*([\w\.\-\_]+)\s*[=:]\s*(.*?)\s*([#;].*)?$/,
@@ -7624,7 +7624,7 @@ var require_ini = __commonJS({
       return __awaiter(this, void 0, void 0, function() {
         return __generator(this, function(_a) {
           return [2, new Promise(function(resolve3, reject) {
-            fs7.readFile(file, "utf8", function(err, data) {
+            fs6.readFile(file, "utf8", function(err, data) {
               if (err) {
                 reject(err);
                 return;
@@ -7637,7 +7637,7 @@ var require_ini = __commonJS({
     }
     exports.parse = parse7;
     function parseSync(file) {
-      return parseString2(fs7.readFileSync(file, "utf8"));
+      return parseString2(fs6.readFileSync(file, "utf8"));
     }
     exports.parseSync = parseSync;
     function parseString2(data) {
@@ -7841,7 +7841,7 @@ var require_src = __commonJS({
       return mod && mod.__esModule ? mod : { "default": mod };
     };
     Object.defineProperty(exports, "__esModule", { value: true });
-    var fs7 = __importStar(__require("fs"));
+    var fs6 = __importStar(__require("fs"));
     var path13 = __importStar(__require("path"));
     var semver = {
       gte: require_gte()
@@ -7973,7 +7973,7 @@ var require_src = __commonJS({
         return __generator(this, function(_a) {
           return [2, Promise.all(filepaths.map(function(name) {
             return new Promise(function(resolve3) {
-              fs7.readFile(name, "utf8", function(err, data) {
+              fs6.readFile(name, "utf8", function(err, data) {
                 resolve3({
                   name,
                   contents: err ? "" : data
@@ -7989,7 +7989,7 @@ var require_src = __commonJS({
       var file;
       filepaths.forEach(function(filepath) {
         try {
-          file = fs7.readFileSync(filepath, "utf8");
+          file = fs6.readFileSync(filepath, "utf8");
         } catch (e) {
           file = "";
         }
@@ -8059,444 +8059,6 @@ var require_src = __commonJS({
       return parseFromConfigs(getConfigsForFiles(files), resolvedFilePath, processedOptions);
     }
     exports.parseSync = parseSync;
-  }
-});
-
-// node_modules/ci-info/vendors.json
-var require_vendors = __commonJS({
-  "node_modules/ci-info/vendors.json"(exports, module) {
-    module.exports = [
-      {
-        name: "Agola CI",
-        constant: "AGOLA",
-        env: "AGOLA_GIT_REF",
-        pr: "AGOLA_PULL_REQUEST_ID"
-      },
-      {
-        name: "Appcircle",
-        constant: "APPCIRCLE",
-        env: "AC_APPCIRCLE",
-        pr: {
-          env: "AC_GIT_PR",
-          ne: "false"
-        }
-      },
-      {
-        name: "AppVeyor",
-        constant: "APPVEYOR",
-        env: "APPVEYOR",
-        pr: "APPVEYOR_PULL_REQUEST_NUMBER"
-      },
-      {
-        name: "AWS CodeBuild",
-        constant: "CODEBUILD",
-        env: "CODEBUILD_BUILD_ARN",
-        pr: {
-          env: "CODEBUILD_WEBHOOK_EVENT",
-          any: [
-            "PULL_REQUEST_CREATED",
-            "PULL_REQUEST_UPDATED",
-            "PULL_REQUEST_REOPENED"
-          ]
-        }
-      },
-      {
-        name: "Azure Pipelines",
-        constant: "AZURE_PIPELINES",
-        env: "TF_BUILD",
-        pr: {
-          BUILD_REASON: "PullRequest"
-        }
-      },
-      {
-        name: "Bamboo",
-        constant: "BAMBOO",
-        env: "bamboo_planKey"
-      },
-      {
-        name: "Bitbucket Pipelines",
-        constant: "BITBUCKET",
-        env: "BITBUCKET_COMMIT",
-        pr: "BITBUCKET_PR_ID"
-      },
-      {
-        name: "Bitrise",
-        constant: "BITRISE",
-        env: "BITRISE_IO",
-        pr: "BITRISE_PULL_REQUEST"
-      },
-      {
-        name: "Buddy",
-        constant: "BUDDY",
-        env: "BUDDY_WORKSPACE_ID",
-        pr: "BUDDY_EXECUTION_PULL_REQUEST_ID"
-      },
-      {
-        name: "Buildkite",
-        constant: "BUILDKITE",
-        env: "BUILDKITE",
-        pr: {
-          env: "BUILDKITE_PULL_REQUEST",
-          ne: "false"
-        }
-      },
-      {
-        name: "CircleCI",
-        constant: "CIRCLE",
-        env: "CIRCLECI",
-        pr: "CIRCLE_PULL_REQUEST"
-      },
-      {
-        name: "Cirrus CI",
-        constant: "CIRRUS",
-        env: "CIRRUS_CI",
-        pr: "CIRRUS_PR"
-      },
-      {
-        name: "Cloudflare Pages",
-        constant: "CLOUDFLARE_PAGES",
-        env: "CF_PAGES"
-      },
-      {
-        name: "Codefresh",
-        constant: "CODEFRESH",
-        env: "CF_BUILD_ID",
-        pr: {
-          any: [
-            "CF_PULL_REQUEST_NUMBER",
-            "CF_PULL_REQUEST_ID"
-          ]
-        }
-      },
-      {
-        name: "Codemagic",
-        constant: "CODEMAGIC",
-        env: "CM_BUILD_ID",
-        pr: "CM_PULL_REQUEST"
-      },
-      {
-        name: "Codeship",
-        constant: "CODESHIP",
-        env: {
-          CI_NAME: "codeship"
-        }
-      },
-      {
-        name: "Drone",
-        constant: "DRONE",
-        env: "DRONE",
-        pr: {
-          DRONE_BUILD_EVENT: "pull_request"
-        }
-      },
-      {
-        name: "dsari",
-        constant: "DSARI",
-        env: "DSARI"
-      },
-      {
-        name: "Earthly",
-        constant: "EARTHLY",
-        env: "EARTHLY_CI"
-      },
-      {
-        name: "Expo Application Services",
-        constant: "EAS",
-        env: "EAS_BUILD"
-      },
-      {
-        name: "Gerrit",
-        constant: "GERRIT",
-        env: "GERRIT_PROJECT"
-      },
-      {
-        name: "Gitea Actions",
-        constant: "GITEA_ACTIONS",
-        env: "GITEA_ACTIONS"
-      },
-      {
-        name: "GitHub Actions",
-        constant: "GITHUB_ACTIONS",
-        env: "GITHUB_ACTIONS",
-        pr: {
-          GITHUB_EVENT_NAME: "pull_request"
-        }
-      },
-      {
-        name: "GitLab CI",
-        constant: "GITLAB",
-        env: "GITLAB_CI",
-        pr: "CI_MERGE_REQUEST_ID"
-      },
-      {
-        name: "GoCD",
-        constant: "GOCD",
-        env: "GO_PIPELINE_LABEL"
-      },
-      {
-        name: "Google Cloud Build",
-        constant: "GOOGLE_CLOUD_BUILD",
-        env: "BUILDER_OUTPUT"
-      },
-      {
-        name: "Harness CI",
-        constant: "HARNESS",
-        env: "HARNESS_BUILD_ID"
-      },
-      {
-        name: "Heroku",
-        constant: "HEROKU",
-        env: {
-          env: "NODE",
-          includes: "/app/.heroku/node/bin/node"
-        }
-      },
-      {
-        name: "Hudson",
-        constant: "HUDSON",
-        env: "HUDSON_URL"
-      },
-      {
-        name: "Jenkins",
-        constant: "JENKINS",
-        env: [
-          "JENKINS_URL",
-          "BUILD_ID"
-        ],
-        pr: {
-          any: [
-            "ghprbPullId",
-            "CHANGE_ID"
-          ]
-        }
-      },
-      {
-        name: "LayerCI",
-        constant: "LAYERCI",
-        env: "LAYERCI",
-        pr: "LAYERCI_PULL_REQUEST"
-      },
-      {
-        name: "Magnum CI",
-        constant: "MAGNUM",
-        env: "MAGNUM"
-      },
-      {
-        name: "Netlify CI",
-        constant: "NETLIFY",
-        env: "NETLIFY",
-        pr: {
-          env: "PULL_REQUEST",
-          ne: "false"
-        }
-      },
-      {
-        name: "Nevercode",
-        constant: "NEVERCODE",
-        env: "NEVERCODE",
-        pr: {
-          env: "NEVERCODE_PULL_REQUEST",
-          ne: "false"
-        }
-      },
-      {
-        name: "Prow",
-        constant: "PROW",
-        env: "PROW_JOB_ID"
-      },
-      {
-        name: "ReleaseHub",
-        constant: "RELEASEHUB",
-        env: "RELEASE_BUILD_ID"
-      },
-      {
-        name: "Render",
-        constant: "RENDER",
-        env: "RENDER",
-        pr: {
-          IS_PULL_REQUEST: "true"
-        }
-      },
-      {
-        name: "Sail CI",
-        constant: "SAIL",
-        env: "SAILCI",
-        pr: "SAIL_PULL_REQUEST_NUMBER"
-      },
-      {
-        name: "Screwdriver",
-        constant: "SCREWDRIVER",
-        env: "SCREWDRIVER",
-        pr: {
-          env: "SD_PULL_REQUEST",
-          ne: "false"
-        }
-      },
-      {
-        name: "Semaphore",
-        constant: "SEMAPHORE",
-        env: "SEMAPHORE",
-        pr: "PULL_REQUEST_NUMBER"
-      },
-      {
-        name: "Sourcehut",
-        constant: "SOURCEHUT",
-        env: {
-          CI_NAME: "sourcehut"
-        }
-      },
-      {
-        name: "Strider CD",
-        constant: "STRIDER",
-        env: "STRIDER"
-      },
-      {
-        name: "TaskCluster",
-        constant: "TASKCLUSTER",
-        env: [
-          "TASK_ID",
-          "RUN_ID"
-        ]
-      },
-      {
-        name: "TeamCity",
-        constant: "TEAMCITY",
-        env: "TEAMCITY_VERSION"
-      },
-      {
-        name: "Travis CI",
-        constant: "TRAVIS",
-        env: "TRAVIS",
-        pr: {
-          env: "TRAVIS_PULL_REQUEST",
-          ne: "false"
-        }
-      },
-      {
-        name: "Vela",
-        constant: "VELA",
-        env: "VELA",
-        pr: {
-          VELA_PULL_REQUEST: "1"
-        }
-      },
-      {
-        name: "Vercel",
-        constant: "VERCEL",
-        env: {
-          any: [
-            "NOW_BUILDER",
-            "VERCEL"
-          ]
-        },
-        pr: "VERCEL_GIT_PULL_REQUEST_ID"
-      },
-      {
-        name: "Visual Studio App Center",
-        constant: "APPCENTER",
-        env: "APPCENTER_BUILD_ID"
-      },
-      {
-        name: "Woodpecker",
-        constant: "WOODPECKER",
-        env: {
-          CI: "woodpecker"
-        },
-        pr: {
-          CI_BUILD_EVENT: "pull_request"
-        }
-      },
-      {
-        name: "Xcode Cloud",
-        constant: "XCODE_CLOUD",
-        env: "CI_XCODE_PROJECT",
-        pr: "CI_PULL_REQUEST_NUMBER"
-      },
-      {
-        name: "Xcode Server",
-        constant: "XCODE_SERVER",
-        env: "XCS"
-      }
-    ];
-  }
-});
-
-// node_modules/ci-info/index.js
-var require_ci_info = __commonJS({
-  "node_modules/ci-info/index.js"(exports) {
-    "use strict";
-    var vendors = require_vendors();
-    var env = process.env;
-    Object.defineProperty(exports, "_vendors", {
-      value: vendors.map(function(v) {
-        return v.constant;
-      })
-    });
-    exports.name = null;
-    exports.isPR = null;
-    exports.id = null;
-    vendors.forEach(function(vendor) {
-      const envs = Array.isArray(vendor.env) ? vendor.env : [vendor.env];
-      const isCI2 = envs.every(function(obj) {
-        return checkEnv(obj);
-      });
-      exports[vendor.constant] = isCI2;
-      if (!isCI2) {
-        return;
-      }
-      exports.name = vendor.name;
-      exports.isPR = checkPR(vendor);
-      exports.id = vendor.constant;
-    });
-    exports.isCI = !!(env.CI !== "false" && // Bypass all checks if CI env is explicitly set to 'false'
-    (env.BUILD_ID || // Jenkins, Cloudbees
-    env.BUILD_NUMBER || // Jenkins, TeamCity
-    env.CI || // Travis CI, CircleCI, Cirrus CI, Gitlab CI, Appveyor, CodeShip, dsari, Cloudflare Pages
-    env.CI_APP_ID || // Appflow
-    env.CI_BUILD_ID || // Appflow
-    env.CI_BUILD_NUMBER || // Appflow
-    env.CI_NAME || // Codeship and others
-    env.CONTINUOUS_INTEGRATION || // Travis CI, Cirrus CI
-    env.RUN_ID || // TaskCluster, dsari
-    exports.name || false));
-    function checkEnv(obj) {
-      if (typeof obj === "string") return !!env[obj];
-      if ("env" in obj) {
-        return env[obj.env] && env[obj.env].includes(obj.includes);
-      }
-      if ("any" in obj) {
-        return obj.any.some(function(k) {
-          return !!env[k];
-        });
-      }
-      return Object.keys(obj).every(function(k) {
-        return env[k] === obj[k];
-      });
-    }
-    function checkPR(vendor) {
-      switch (typeof vendor.pr) {
-        case "string":
-          return !!env[vendor.pr];
-        case "object":
-          if ("env" in vendor.pr) {
-            if ("any" in vendor.pr) {
-              return vendor.pr.any.some(function(key2) {
-                return env[vendor.pr.env] === key2;
-              });
-            } else {
-              return vendor.pr.env in env && env[vendor.pr.env] !== vendor.pr.ne;
-            }
-          } else if ("any" in vendor.pr) {
-            return vendor.pr.any.some(function(key2) {
-              return !!env[key2];
-            });
-          } else {
-            return checkEnv(vendor.pr);
-          }
-        default:
-          return null;
-      }
-    }
   }
 });
 
@@ -9365,7 +8927,7 @@ var require_ignore = __commonJS({
 var require_readlines = __commonJS({
   "node_modules/n-readlines/readlines.js"(exports, module) {
     "use strict";
-    var fs7 = __require("fs");
+    var fs6 = __require("fs");
     var LineByLine = class {
       constructor(file, options8) {
         options8 = options8 || {};
@@ -9378,7 +8940,7 @@ var require_readlines = __commonJS({
         if (typeof file === "number") {
           this.fd = file;
         } else {
-          this.fd = fs7.openSync(file, "r");
+          this.fd = fs6.openSync(file, "r");
         }
         this.options = options8;
         this.newLineCharacter = options8.newLineCharacter;
@@ -9401,7 +8963,7 @@ var require_readlines = __commonJS({
         this.fdPosition = 0;
       }
       close() {
-        fs7.closeSync(this.fd);
+        fs6.closeSync(this.fd);
         this.fd = null;
       }
       _extractLines(buffer2) {
@@ -9431,7 +8993,7 @@ var require_readlines = __commonJS({
         const buffers = [];
         do {
           const readBuffer = Buffer.alloc(this.options.readChunk);
-          bytesRead = fs7.readSync(this.fd, readBuffer, 0, this.options.readChunk, this.fdPosition);
+          bytesRead = fs6.readSync(this.fd, readBuffer, 0, this.options.readChunk, this.fdPosition);
           totalBytesRead = totalBytesRead + bytesRead;
           this.fdPosition = this.fdPosition + bytesRead;
           buffers.push(readBuffer);
@@ -11238,28 +10800,48 @@ function loadEditorconfig(file, { shouldCache }) {
 // src/config/prettier-config/index.js
 import path8 from "path";
 
-// src/common/mockable.js
-var import_ci_info = __toESM(require_ci_info(), 1);
-import fs2 from "fs/promises";
-import { performance } from "perf_hooks";
-function writeFormattedFile(file, data) {
-  return fs2.writeFile(file, data);
+// src/utils/create-mockable.js
+function createMockable(implementations) {
+  const mocked = { ...implementations };
+  const mockImplementation = (functionality, implementation) => {
+    if (!Object.prototype.hasOwnProperty.call(implementations, functionality)) {
+      throw new Error(`Unexpected mock '${functionality}'.`);
+    }
+    mocked[functionality] = implementation;
+  };
+  const mockImplementations = (overrideImplementations) => {
+    for (const [functionality, implementation] of Object.entries(
+      overrideImplementations
+    )) {
+      mockImplementation(functionality, implementation);
+    }
+  };
+  const mockRestore = () => {
+    Object.assign(mocked, implementations);
+  };
+  return {
+    mocked,
+    implementations,
+    mockImplementation,
+    mockImplementations,
+    mockRestore
+  };
 }
-var mockable = {
-  getPrettierConfigSearchStopDirectory: () => void 0,
-  isCI: () => import_ci_info.isCI,
-  writeFormattedFile,
-  getTimestamp: performance.now.bind(performance)
-};
-var mockable_default = mockable;
+var create_mockable_default = createMockable;
+
+// src/common/mockable.js
+var mockable = create_mockable_default({
+  getPrettierConfigSearchStopDirectory: () => void 0
+});
+var mockable_default = mockable.mocked;
 
 // src/utils/is-file.js
-import fs3 from "fs/promises";
+import fs2 from "fs/promises";
 async function isFile(file, options8) {
   const allowSymlinks = options8?.allowSymlinks ?? true;
   let stats;
   try {
-    stats = await (allowSymlinks ? fs3.stat : fs3.lstat)(toPath(file));
+    stats = await (allowSymlinks ? fs2.stat : fs2.lstat)(toPath(file));
   } catch {
     return false;
   }
@@ -14932,13 +14514,13 @@ function parse4(toml, opts) {
 }
 
 // src/utils/read-file.js
-import fs4 from "fs/promises";
+import fs3 from "fs/promises";
 async function readFile(file) {
   if (isUrlString(file)) {
     file = new URL(file);
   }
   try {
-    return await fs4.readFile(file, "utf8");
+    return await fs3.readFile(file, "utf8");
   } catch (error) {
     if (error.code === "ENOENT") {
       return;
@@ -15098,7 +14680,7 @@ import { builtinModules } from "module";
 import { fileURLToPath as fileURLToPath3 } from "url";
 
 // node_modules/import-meta-resolve/lib/package-json-reader.js
-import fs5 from "fs";
+import fs4 from "fs";
 import path5 from "path";
 import { fileURLToPath as fileURLToPath2 } from "url";
 
@@ -15450,7 +15032,7 @@ function read2(jsonPath, { base, specifier }) {
   }
   let string;
   try {
-    string = fs5.readFileSync(path5.toNamespacedPath(jsonPath), "utf8");
+    string = fs4.readFileSync(path5.toNamespacedPath(jsonPath), "utf8");
   } catch (error) {
     const exception2 = (
       /** @type {ErrnoException} */
@@ -16709,11 +16291,11 @@ async function isIgnored(file, options8) {
 
 // src/utils/get-interpreter.js
 var import_n_readlines = __toESM(require_readlines(), 1);
-import fs6 from "fs";
+import fs5 from "fs";
 function getInterpreter(file) {
   let fd;
   try {
-    fd = fs6.openSync(file, "r");
+    fd = fs5.openSync(file, "r");
   } catch {
     return;
   }
@@ -16730,7 +16312,7 @@ function getInterpreter(file) {
     }
   } finally {
     try {
-      fs6.closeSync(fd);
+      fs5.closeSync(fd);
     } catch {
     }
   }
@@ -21503,7 +21085,7 @@ var object_omit_default = omit;
 import * as doc from "./doc.mjs";
 
 // src/main/version.evaluate.js
-var version_evaluate_default = "3.6.0-427d8a48d";
+var version_evaluate_default = "3.6.0-799ee8c76";
 
 // src/utils/public.js
 var public_exports = {};
@@ -21794,9 +21376,9 @@ var sharedWithCli = {
   picocolors: import_picocolors4.default,
   leven,
   utils: {
-    omit: object_omit_default
-  },
-  mockable: mockable_default
+    omit: object_omit_default,
+    createMockable: create_mockable_default
+  }
 };
 var debugApis = {
   parse: withPlugins(parse6),
@@ -21804,7 +21386,8 @@ var debugApis = {
   formatDoc: withPlugins(formatDoc),
   printToDoc: withPlugins(printToDoc),
   printDocToString: withPlugins(printDocToString2),
-  mockable: mockable_default
+  // Exposed for tests
+  mockable
 };
 
 // with-default-export:src/index.js

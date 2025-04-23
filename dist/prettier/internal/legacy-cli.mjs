@@ -358,6 +358,444 @@ var require_common_path_prefix = __commonJS({
   }
 });
 
+// node_modules/ci-info/vendors.json
+var require_vendors = __commonJS({
+  "node_modules/ci-info/vendors.json"(exports, module) {
+    module.exports = [
+      {
+        name: "Agola CI",
+        constant: "AGOLA",
+        env: "AGOLA_GIT_REF",
+        pr: "AGOLA_PULL_REQUEST_ID"
+      },
+      {
+        name: "Appcircle",
+        constant: "APPCIRCLE",
+        env: "AC_APPCIRCLE",
+        pr: {
+          env: "AC_GIT_PR",
+          ne: "false"
+        }
+      },
+      {
+        name: "AppVeyor",
+        constant: "APPVEYOR",
+        env: "APPVEYOR",
+        pr: "APPVEYOR_PULL_REQUEST_NUMBER"
+      },
+      {
+        name: "AWS CodeBuild",
+        constant: "CODEBUILD",
+        env: "CODEBUILD_BUILD_ARN",
+        pr: {
+          env: "CODEBUILD_WEBHOOK_EVENT",
+          any: [
+            "PULL_REQUEST_CREATED",
+            "PULL_REQUEST_UPDATED",
+            "PULL_REQUEST_REOPENED"
+          ]
+        }
+      },
+      {
+        name: "Azure Pipelines",
+        constant: "AZURE_PIPELINES",
+        env: "TF_BUILD",
+        pr: {
+          BUILD_REASON: "PullRequest"
+        }
+      },
+      {
+        name: "Bamboo",
+        constant: "BAMBOO",
+        env: "bamboo_planKey"
+      },
+      {
+        name: "Bitbucket Pipelines",
+        constant: "BITBUCKET",
+        env: "BITBUCKET_COMMIT",
+        pr: "BITBUCKET_PR_ID"
+      },
+      {
+        name: "Bitrise",
+        constant: "BITRISE",
+        env: "BITRISE_IO",
+        pr: "BITRISE_PULL_REQUEST"
+      },
+      {
+        name: "Buddy",
+        constant: "BUDDY",
+        env: "BUDDY_WORKSPACE_ID",
+        pr: "BUDDY_EXECUTION_PULL_REQUEST_ID"
+      },
+      {
+        name: "Buildkite",
+        constant: "BUILDKITE",
+        env: "BUILDKITE",
+        pr: {
+          env: "BUILDKITE_PULL_REQUEST",
+          ne: "false"
+        }
+      },
+      {
+        name: "CircleCI",
+        constant: "CIRCLE",
+        env: "CIRCLECI",
+        pr: "CIRCLE_PULL_REQUEST"
+      },
+      {
+        name: "Cirrus CI",
+        constant: "CIRRUS",
+        env: "CIRRUS_CI",
+        pr: "CIRRUS_PR"
+      },
+      {
+        name: "Cloudflare Pages",
+        constant: "CLOUDFLARE_PAGES",
+        env: "CF_PAGES"
+      },
+      {
+        name: "Codefresh",
+        constant: "CODEFRESH",
+        env: "CF_BUILD_ID",
+        pr: {
+          any: [
+            "CF_PULL_REQUEST_NUMBER",
+            "CF_PULL_REQUEST_ID"
+          ]
+        }
+      },
+      {
+        name: "Codemagic",
+        constant: "CODEMAGIC",
+        env: "CM_BUILD_ID",
+        pr: "CM_PULL_REQUEST"
+      },
+      {
+        name: "Codeship",
+        constant: "CODESHIP",
+        env: {
+          CI_NAME: "codeship"
+        }
+      },
+      {
+        name: "Drone",
+        constant: "DRONE",
+        env: "DRONE",
+        pr: {
+          DRONE_BUILD_EVENT: "pull_request"
+        }
+      },
+      {
+        name: "dsari",
+        constant: "DSARI",
+        env: "DSARI"
+      },
+      {
+        name: "Earthly",
+        constant: "EARTHLY",
+        env: "EARTHLY_CI"
+      },
+      {
+        name: "Expo Application Services",
+        constant: "EAS",
+        env: "EAS_BUILD"
+      },
+      {
+        name: "Gerrit",
+        constant: "GERRIT",
+        env: "GERRIT_PROJECT"
+      },
+      {
+        name: "Gitea Actions",
+        constant: "GITEA_ACTIONS",
+        env: "GITEA_ACTIONS"
+      },
+      {
+        name: "GitHub Actions",
+        constant: "GITHUB_ACTIONS",
+        env: "GITHUB_ACTIONS",
+        pr: {
+          GITHUB_EVENT_NAME: "pull_request"
+        }
+      },
+      {
+        name: "GitLab CI",
+        constant: "GITLAB",
+        env: "GITLAB_CI",
+        pr: "CI_MERGE_REQUEST_ID"
+      },
+      {
+        name: "GoCD",
+        constant: "GOCD",
+        env: "GO_PIPELINE_LABEL"
+      },
+      {
+        name: "Google Cloud Build",
+        constant: "GOOGLE_CLOUD_BUILD",
+        env: "BUILDER_OUTPUT"
+      },
+      {
+        name: "Harness CI",
+        constant: "HARNESS",
+        env: "HARNESS_BUILD_ID"
+      },
+      {
+        name: "Heroku",
+        constant: "HEROKU",
+        env: {
+          env: "NODE",
+          includes: "/app/.heroku/node/bin/node"
+        }
+      },
+      {
+        name: "Hudson",
+        constant: "HUDSON",
+        env: "HUDSON_URL"
+      },
+      {
+        name: "Jenkins",
+        constant: "JENKINS",
+        env: [
+          "JENKINS_URL",
+          "BUILD_ID"
+        ],
+        pr: {
+          any: [
+            "ghprbPullId",
+            "CHANGE_ID"
+          ]
+        }
+      },
+      {
+        name: "LayerCI",
+        constant: "LAYERCI",
+        env: "LAYERCI",
+        pr: "LAYERCI_PULL_REQUEST"
+      },
+      {
+        name: "Magnum CI",
+        constant: "MAGNUM",
+        env: "MAGNUM"
+      },
+      {
+        name: "Netlify CI",
+        constant: "NETLIFY",
+        env: "NETLIFY",
+        pr: {
+          env: "PULL_REQUEST",
+          ne: "false"
+        }
+      },
+      {
+        name: "Nevercode",
+        constant: "NEVERCODE",
+        env: "NEVERCODE",
+        pr: {
+          env: "NEVERCODE_PULL_REQUEST",
+          ne: "false"
+        }
+      },
+      {
+        name: "Prow",
+        constant: "PROW",
+        env: "PROW_JOB_ID"
+      },
+      {
+        name: "ReleaseHub",
+        constant: "RELEASEHUB",
+        env: "RELEASE_BUILD_ID"
+      },
+      {
+        name: "Render",
+        constant: "RENDER",
+        env: "RENDER",
+        pr: {
+          IS_PULL_REQUEST: "true"
+        }
+      },
+      {
+        name: "Sail CI",
+        constant: "SAIL",
+        env: "SAILCI",
+        pr: "SAIL_PULL_REQUEST_NUMBER"
+      },
+      {
+        name: "Screwdriver",
+        constant: "SCREWDRIVER",
+        env: "SCREWDRIVER",
+        pr: {
+          env: "SD_PULL_REQUEST",
+          ne: "false"
+        }
+      },
+      {
+        name: "Semaphore",
+        constant: "SEMAPHORE",
+        env: "SEMAPHORE",
+        pr: "PULL_REQUEST_NUMBER"
+      },
+      {
+        name: "Sourcehut",
+        constant: "SOURCEHUT",
+        env: {
+          CI_NAME: "sourcehut"
+        }
+      },
+      {
+        name: "Strider CD",
+        constant: "STRIDER",
+        env: "STRIDER"
+      },
+      {
+        name: "TaskCluster",
+        constant: "TASKCLUSTER",
+        env: [
+          "TASK_ID",
+          "RUN_ID"
+        ]
+      },
+      {
+        name: "TeamCity",
+        constant: "TEAMCITY",
+        env: "TEAMCITY_VERSION"
+      },
+      {
+        name: "Travis CI",
+        constant: "TRAVIS",
+        env: "TRAVIS",
+        pr: {
+          env: "TRAVIS_PULL_REQUEST",
+          ne: "false"
+        }
+      },
+      {
+        name: "Vela",
+        constant: "VELA",
+        env: "VELA",
+        pr: {
+          VELA_PULL_REQUEST: "1"
+        }
+      },
+      {
+        name: "Vercel",
+        constant: "VERCEL",
+        env: {
+          any: [
+            "NOW_BUILDER",
+            "VERCEL"
+          ]
+        },
+        pr: "VERCEL_GIT_PULL_REQUEST_ID"
+      },
+      {
+        name: "Visual Studio App Center",
+        constant: "APPCENTER",
+        env: "APPCENTER_BUILD_ID"
+      },
+      {
+        name: "Woodpecker",
+        constant: "WOODPECKER",
+        env: {
+          CI: "woodpecker"
+        },
+        pr: {
+          CI_BUILD_EVENT: "pull_request"
+        }
+      },
+      {
+        name: "Xcode Cloud",
+        constant: "XCODE_CLOUD",
+        env: "CI_XCODE_PROJECT",
+        pr: "CI_PULL_REQUEST_NUMBER"
+      },
+      {
+        name: "Xcode Server",
+        constant: "XCODE_SERVER",
+        env: "XCS"
+      }
+    ];
+  }
+});
+
+// node_modules/ci-info/index.js
+var require_ci_info = __commonJS({
+  "node_modules/ci-info/index.js"(exports) {
+    "use strict";
+    var vendors = require_vendors();
+    var env2 = process.env;
+    Object.defineProperty(exports, "_vendors", {
+      value: vendors.map(function(v) {
+        return v.constant;
+      })
+    });
+    exports.name = null;
+    exports.isPR = null;
+    exports.id = null;
+    vendors.forEach(function(vendor) {
+      const envs = Array.isArray(vendor.env) ? vendor.env : [vendor.env];
+      const isCI2 = envs.every(function(obj) {
+        return checkEnv(obj);
+      });
+      exports[vendor.constant] = isCI2;
+      if (!isCI2) {
+        return;
+      }
+      exports.name = vendor.name;
+      exports.isPR = checkPR(vendor);
+      exports.id = vendor.constant;
+    });
+    exports.isCI = !!(env2.CI !== "false" && // Bypass all checks if CI env is explicitly set to 'false'
+    (env2.BUILD_ID || // Jenkins, Cloudbees
+    env2.BUILD_NUMBER || // Jenkins, TeamCity
+    env2.CI || // Travis CI, CircleCI, Cirrus CI, Gitlab CI, Appveyor, CodeShip, dsari, Cloudflare Pages
+    env2.CI_APP_ID || // Appflow
+    env2.CI_BUILD_ID || // Appflow
+    env2.CI_BUILD_NUMBER || // Appflow
+    env2.CI_NAME || // Codeship and others
+    env2.CONTINUOUS_INTEGRATION || // Travis CI, Cirrus CI
+    env2.RUN_ID || // TaskCluster, dsari
+    exports.name || false));
+    function checkEnv(obj) {
+      if (typeof obj === "string") return !!env2[obj];
+      if ("env" in obj) {
+        return env2[obj.env] && env2[obj.env].includes(obj.includes);
+      }
+      if ("any" in obj) {
+        return obj.any.some(function(k) {
+          return !!env2[k];
+        });
+      }
+      return Object.keys(obj).every(function(k) {
+        return env2[k] === obj[k];
+      });
+    }
+    function checkPR(vendor) {
+      switch (typeof vendor.pr) {
+        case "string":
+          return !!env2[vendor.pr];
+        case "object":
+          if ("env" in vendor.pr) {
+            if ("any" in vendor.pr) {
+              return vendor.pr.any.some(function(key) {
+                return env2[vendor.pr.env] === key;
+              });
+            } else {
+              return vendor.pr.env in env2 && env2[vendor.pr.env] !== vendor.pr.ne;
+            }
+          } else if ("any" in vendor.pr) {
+            return vendor.pr.any.some(function(key) {
+              return !!env2[key];
+            });
+          } else {
+            return checkEnv(vendor.pr);
+          }
+        default:
+          return null;
+      }
+    }
+  }
+});
+
 // src/cli/index.js
 import * as prettier2 from "../index.mjs";
 
@@ -558,7 +996,6 @@ var {
   vnopts,
   fastGlob,
   createTwoFilesPatch,
-  mockable,
   picocolors,
   leven
 } = sharedWithCli;
@@ -1025,7 +1462,7 @@ async function logResolvedConfigPathOrDie(context) {
 var find_config_path_default = logResolvedConfigPathOrDie;
 
 // src/cli/format.js
-import fs8 from "fs/promises";
+import fs9 from "fs/promises";
 import path12 from "path";
 
 // node_modules/get-stdin/index.js
@@ -3055,479 +3492,13 @@ var FormatResultsCache = class {
 };
 var format_results_cache_default = FormatResultsCache;
 
-// src/cli/is-tty.js
-function isTTY() {
-  return process.stdout.isTTY && !mockable.isCI();
-}
+// src/cli/mockable.js
+var import_ci_info = __toESM(require_ci_info(), 1);
+import fs8 from "fs/promises";
+import { performance } from "perf_hooks";
+import { __internal as sharedWithCli3 } from "../index.mjs";
 
-// src/cli/options/get-options-for-file.js
-var import_dashify2 = __toESM(require_dashify(), 1);
-import { resolveConfig } from "../index.mjs";
-function getOptions(argv, detailedOptions) {
-  return Object.fromEntries(
-    detailedOptions.filter(({ forwardToApi }) => forwardToApi).map(({ forwardToApi, name }) => [forwardToApi, argv[name]])
-  );
-}
-function cliifyOptions(object2, apiDetailedOptionMap) {
-  return Object.fromEntries(
-    Object.entries(object2 || {}).map(([key, value]) => {
-      const apiOption = apiDetailedOptionMap[key];
-      const cliKey = apiOption ? apiOption.name : key;
-      return [(0, import_dashify2.default)(cliKey), value];
-    })
-  );
-}
-function createApiDetailedOptionMap(detailedOptions) {
-  return Object.fromEntries(
-    detailedOptions.filter(
-      (option) => option.forwardToApi && option.forwardToApi !== option.name
-    ).map((option) => [option.forwardToApi, option])
-  );
-}
-function parseArgsToOptions(context, overrideDefaults) {
-  const minimistOptions = createMinimistOptions(context.detailedOptions);
-  const apiDetailedOptionMap = createApiDetailedOptionMap(
-    context.detailedOptions
-  );
-  return getOptions(
-    normalize_cli_options_default(
-      minimistParse(context.rawArguments, {
-        string: minimistOptions.string,
-        boolean: minimistOptions.boolean,
-        default: cliifyOptions(overrideDefaults, apiDetailedOptionMap)
-      }),
-      context.detailedOptions,
-      { logger: false }
-    ),
-    context.detailedOptions
-  );
-}
-async function getOptionsOrDie(context, filePath) {
-  try {
-    if (context.argv.config === false) {
-      context.logger.debug(
-        "'--no-config' option found, skip loading config file."
-      );
-      return null;
-    }
-    context.logger.debug(
-      context.argv.config ? `load config file from '${context.argv.config}'` : `resolve config from '${filePath}'`
-    );
-    const options = await resolveConfig(filePath, {
-      editorconfig: context.argv.editorconfig,
-      config: context.argv.config
-    });
-    context.logger.debug("loaded options `" + JSON.stringify(options) + "`");
-    return options;
-  } catch (error) {
-    context.logger.error(
-      `Invalid configuration${filePath ? ` for file "${filePath}"` : ""}:
-` + error.message
-    );
-    process.exit(2);
-  }
-}
-function applyConfigPrecedence(context, options) {
-  try {
-    switch (context.argv.configPrecedence) {
-      case "cli-override":
-        return parseArgsToOptions(context, options);
-      case "file-override":
-        return { ...parseArgsToOptions(context), ...options };
-      case "prefer-file":
-        return options || parseArgsToOptions(context);
-    }
-  } catch (error) {
-    context.logger.error(error.toString());
-    process.exit(2);
-  }
-}
-async function getOptionsForFile(context, filepath) {
-  const options = await getOptionsOrDie(context, filepath);
-  const hasPlugins = options?.plugins;
-  if (hasPlugins) {
-    await context.pushContextPlugins(options.plugins);
-  }
-  const appliedOptions = {
-    filepath,
-    ...applyConfigPrecedence(
-      context,
-      options && normalizeOptions(options, context.supportOptions, {
-        logger: context.logger
-      })
-    )
-  };
-  context.logger.debug(
-    `applied config-precedence (${context.argv.configPrecedence}): ${JSON.stringify(appliedOptions)}`
-  );
-  if (hasPlugins) {
-    context.popContextPlugins();
-  }
-  return appliedOptions;
-}
-var get_options_for_file_default = getOptionsForFile;
-
-// src/cli/format.js
-var { writeFormattedFile, getTimestamp } = mockable;
-function diff(a, b) {
-  return createTwoFilesPatch("", "", a, b, "", "", { context: 2 });
-}
-var DebugError = class extends Error {
-  name = "DebugError";
-};
-function handleError(context, filename, error, printedFilename, ignoreUnknown) {
-  ignoreUnknown ||= context.argv.ignoreUnknown;
-  const errorIsUndefinedParseError = error instanceof errors.UndefinedParserError;
-  if (printedFilename) {
-    if ((context.argv.write || ignoreUnknown) && errorIsUndefinedParseError) {
-      printedFilename.clear();
-    } else {
-      process.stdout.write("\n");
-    }
-  }
-  if (errorIsUndefinedParseError) {
-    if (ignoreUnknown) {
-      return;
-    }
-    if (!context.argv.check && !context.argv.listDifferent) {
-      process.exitCode = 2;
-    }
-    context.logger.error(error.message);
-    return;
-  }
-  const isParseError = Boolean(error?.loc);
-  const isValidationError = /^Invalid \S+ value\./u.test(error?.message);
-  if (isParseError) {
-    context.logger.error(`${filename}: ${String(error)}`);
-  } else if (isValidationError || error instanceof errors.ConfigError) {
-    context.logger.error(error.message);
-    process.exit(1);
-  } else if (error instanceof DebugError) {
-    context.logger.error(`${filename}: ${error.message}`);
-  } else {
-    context.logger.error(filename + ": " + (error.stack || error));
-  }
-  process.exitCode = 2;
-}
-function writeOutput(context, result, options) {
-  process.stdout.write(
-    context.argv.debugCheck ? result.filepath : result.formatted
-  );
-  if (options && options.cursorOffset >= 0) {
-    process.stderr.write(result.cursorOffset + "\n");
-  }
-}
-async function listDifferent(context, input, options, filename) {
-  if (!context.argv.check && !context.argv.listDifferent) {
-    return;
-  }
-  try {
-    if (!await prettier.check(input, options) && !context.argv.write) {
-      context.logger.log(filename);
-      process.exitCode = 1;
-    }
-  } catch (error) {
-    context.logger.error(error.message);
-  }
-  return true;
-}
-async function format3(context, input, opt) {
-  if (context.argv.debugPrintDoc) {
-    const doc = await prettier.__debug.printToDoc(input, opt);
-    return { formatted: await prettier.__debug.formatDoc(doc) + "\n" };
-  }
-  if (context.argv.debugPrintComments) {
-    return {
-      formatted: await prettier.format(
-        JSON.stringify(
-          (await prettier.formatWithCursor(input, opt)).comments || []
-        ),
-        { parser: "json" }
-      )
-    };
-  }
-  if (context.argv.debugPrintAst) {
-    const { ast } = await prettier.__debug.parse(input, opt);
-    return {
-      formatted: JSON.stringify(ast)
-    };
-  }
-  if (context.argv.debugCheck) {
-    const pp = await prettier.format(input, opt);
-    const pppp = await prettier.format(pp, opt);
-    if (pp !== pppp) {
-      throw new DebugError(
-        "prettier(input) !== prettier(prettier(input))\n" + diff(pp, pppp)
-      );
-    } else {
-      const stringify5 = (obj) => JSON.stringify(obj, null, 2);
-      const ast = stringify5(
-        (await prettier.__debug.parse(input, opt, { massage: true })).ast
-      );
-      const past = stringify5(
-        (await prettier.__debug.parse(pp, opt, { massage: true })).ast
-      );
-      if (ast !== past) {
-        const MAX_AST_SIZE = 2097152;
-        const astDiff = ast.length > MAX_AST_SIZE || past.length > MAX_AST_SIZE ? "AST diff too large to render" : diff(ast, past);
-        throw new DebugError(
-          "ast(input) !== ast(prettier(input))\n" + astDiff + "\n" + diff(input, pp)
-        );
-      }
-    }
-    return { formatted: pp, filepath: opt.filepath || "(stdin)\n" };
-  }
-  const { performanceTestFlag } = context;
-  if (performanceTestFlag?.debugBenchmark) {
-    let Bench;
-    try {
-      ({ Bench } = await import("tinybench"));
-    } catch {
-      context.logger.debug(
-        "'--debug-benchmark' requires the 'tinybench' package to be installed."
-      );
-      process.exit(2);
-    }
-    context.logger.debug(
-      "'--debug-benchmark' option found, measuring formatWithCursor with 'tinybench' module."
-    );
-    const bench = new Bench();
-    bench.add("Format", () => prettier.formatWithCursor(input, opt));
-    await bench.run();
-    const [result] = bench.table();
-    context.logger.debug(
-      "'--debug-benchmark' measurements for formatWithCursor: " + JSON.stringify(result, void 0, 2)
-    );
-  } else if (performanceTestFlag?.debugRepeat) {
-    const repeat = performanceTestFlag.debugRepeat;
-    context.logger.debug(
-      `'${performanceTestFlag.name}' found, running formatWithCursor ${repeat} times.`
-    );
-    const start = getTimestamp();
-    for (let i = 0; i < repeat; ++i) {
-      await prettier.formatWithCursor(input, opt);
-    }
-    const averageMs = (getTimestamp() - start) / repeat;
-    const results = {
-      repeat,
-      hz: 1e3 / averageMs,
-      ms: averageMs
-    };
-    context.logger.debug(
-      `'${performanceTestFlag.name}' measurements for formatWithCursor: ${JSON.stringify(
-        results,
-        null,
-        2
-      )}`
-    );
-  }
-  return prettier.formatWithCursor(input, opt);
-}
-async function createIsIgnoredFromContextOrDie(context) {
-  try {
-    return await createIsIgnoredFunction(
-      context.argv.ignorePath,
-      context.argv.withNodeModules
-    );
-  } catch (e) {
-    context.logger.error(e.message);
-    process.exit(2);
-  }
-}
-async function formatStdin(context) {
-  const { filepath } = context.argv;
-  try {
-    const input = await getStdin();
-    const absoluteFilepath = filepath ? path12.resolve(filepath) : void 0;
-    let isFileIgnored = false;
-    if (absoluteFilepath) {
-      const isIgnored = await createIsIgnoredFromContextOrDie(context);
-      isFileIgnored = isIgnored(absoluteFilepath);
-    }
-    if (isFileIgnored) {
-      writeOutput(context, { formatted: input });
-      return;
-    }
-    const options = {
-      ...await get_options_for_file_default(context, absoluteFilepath),
-      // `getOptionsForFile` forwards `--stdin-filepath` directly, which can be a relative path
-      filepath: absoluteFilepath
-    };
-    if (await listDifferent(context, input, options, "(stdin)")) {
-      return;
-    }
-    const formatted = await format3(context, input, options);
-    const { performanceTestFlag } = context;
-    if (performanceTestFlag) {
-      context.logger.log(
-        `'${performanceTestFlag.name}' option found, skipped print code to screen.`
-      );
-      return;
-    }
-    writeOutput(context, formatted, options);
-  } catch (error) {
-    handleError(context, filepath || "stdin", error);
-  }
-}
-async function formatFiles(context) {
-  const isIgnored = await createIsIgnoredFromContextOrDie(context);
-  const cwd3 = process.cwd();
-  let numberOfUnformattedFilesFound = 0;
-  const { performanceTestFlag } = context;
-  if (context.argv.check && !performanceTestFlag) {
-    context.logger.log("Checking formatting...");
-  }
-  let formatResultsCache;
-  const cacheFilePath = await find_cache_file_default(context.argv.cacheLocation);
-  if (context.argv.cache) {
-    formatResultsCache = new format_results_cache_default(
-      cacheFilePath,
-      context.argv.cacheStrategy || "content"
-    );
-  } else if (!context.argv.cacheLocation) {
-    const stat = await statSafe(cacheFilePath);
-    if (stat) {
-      await fs8.unlink(cacheFilePath);
-    }
-  }
-  for await (const { error, filename, ignoreUnknown } of expandPatterns(
-    context
-  )) {
-    if (error) {
-      context.logger.error(error);
-      process.exitCode = 2;
-      continue;
-    }
-    const isFileIgnored = isIgnored(filename);
-    if (isFileIgnored && (context.argv.debugCheck || context.argv.write || context.argv.check || context.argv.listDifferent)) {
-      continue;
-    }
-    const options = {
-      ...await get_options_for_file_default(context, filename),
-      filepath: filename
-    };
-    const fileNameToDisplay = normalizeToPosix(path12.relative(cwd3, filename));
-    let printedFilename;
-    if (isTTY()) {
-      printedFilename = context.logger.log(fileNameToDisplay, {
-        newline: false,
-        clearable: true
-      });
-    }
-    let input;
-    try {
-      input = await fs8.readFile(filename, "utf8");
-    } catch (error2) {
-      context.logger.log("");
-      context.logger.error(
-        `Unable to read file "${fileNameToDisplay}":
-${error2.message}`
-      );
-      process.exitCode = 2;
-      continue;
-    }
-    if (isFileIgnored) {
-      printedFilename?.clear();
-      writeOutput(context, { formatted: input }, options);
-      continue;
-    }
-    const start = getTimestamp();
-    const isCacheExists = formatResultsCache?.existsAvailableFormatResultsCache(
-      filename,
-      options
-    );
-    let result;
-    let output;
-    try {
-      if (isCacheExists) {
-        result = { formatted: input };
-      } else {
-        result = await format3(context, input, options);
-      }
-      output = result.formatted;
-    } catch (error2) {
-      handleError(
-        context,
-        fileNameToDisplay,
-        error2,
-        printedFilename,
-        ignoreUnknown
-      );
-      continue;
-    }
-    const isDifferent = output !== input;
-    let shouldSetCache = !isDifferent;
-    printedFilename?.clear();
-    if (performanceTestFlag) {
-      context.logger.log(
-        `'${performanceTestFlag.name}' option found, skipped print code or write files.`
-      );
-      return;
-    }
-    if (context.argv.write) {
-      const timeToDisplay = `${Math.round(getTimestamp() - start)}ms`;
-      if (isDifferent) {
-        if (!context.argv.check && !context.argv.listDifferent) {
-          context.logger.log(`${fileNameToDisplay} ${timeToDisplay}`);
-        }
-        try {
-          await writeFormattedFile(filename, output);
-          shouldSetCache = true;
-        } catch (error2) {
-          context.logger.error(
-            `Unable to write file "${fileNameToDisplay}":
-${error2.message}`
-          );
-          process.exitCode = 2;
-        }
-      } else if (!context.argv.check && !context.argv.listDifferent) {
-        const message = `${picocolors.gray(fileNameToDisplay)} ${timeToDisplay} (unchanged)`;
-        if (isCacheExists) {
-          context.logger.log(`${message} (cached)`);
-        } else {
-          context.logger.log(message);
-        }
-      }
-    } else if (context.argv.debugCheck) {
-      if (result.filepath) {
-        context.logger.log(fileNameToDisplay);
-      } else {
-        process.exitCode = 2;
-      }
-    } else if (!context.argv.check && !context.argv.listDifferent) {
-      writeOutput(context, result, options);
-    }
-    if (shouldSetCache) {
-      formatResultsCache?.setFormatResultsCache(filename, options);
-    } else {
-      formatResultsCache?.removeFormatResultsCache(filename);
-    }
-    if (isDifferent) {
-      if (context.argv.check) {
-        context.logger.warn(fileNameToDisplay);
-      } else if (context.argv.listDifferent) {
-        context.logger.log(fileNameToDisplay);
-      }
-      numberOfUnformattedFilesFound += 1;
-    }
-  }
-  formatResultsCache?.reconcile();
-  if (context.argv.check) {
-    if (numberOfUnformattedFilesFound === 0) {
-      context.logger.log("All matched files use Prettier code style!");
-    } else {
-      const files = numberOfUnformattedFilesFound === 1 ? "the above file" : `${numberOfUnformattedFilesFound} files`;
-      context.logger.warn(
-        context.argv.write ? `Code style issues fixed in ${files}.` : `Code style issues found in ${files}. Run Prettier with --write to fix.`
-      );
-    }
-  }
-  if ((context.argv.check || context.argv.listDifferent) && numberOfUnformattedFilesFound > 0 && !process.exitCode && !context.argv.write) {
-    process.exitCode = 1;
-  }
-}
-
-// src/cli/logger.js
+// src/cli/utilities/clear-stream-text.js
 import readline from "readline";
 
 // node_modules/ansi-regex/index.js
@@ -3758,7 +3729,7 @@ _.config = (opts = {}) => {
 };
 var wcwidth_default = _;
 
-// src/cli/logger.js
+// src/cli/utilities/clear-stream-text.js
 var countLines = (stream, text) => {
   const columns = stream.columns || 80;
   let lineCount = 0;
@@ -3767,7 +3738,7 @@ var countLines = (stream, text) => {
   }
   return lineCount;
 };
-var clear = (stream, text) => () => {
+function clearStreamText(stream, text) {
   const lineCount = countLines(stream, text);
   for (let line = 0; line < lineCount; line++) {
     if (line > 0) {
@@ -3776,7 +3747,487 @@ var clear = (stream, text) => () => {
     readline.clearLine(stream, 0);
     readline.cursorTo(stream, 0);
   }
+}
+var clear_stream_text_default = clearStreamText;
+
+// src/cli/mockable.js
+var mockable = sharedWithCli3.utils.createMockable({
+  clearStreamText: clear_stream_text_default,
+  getTimestamp: performance.now.bind(performance),
+  isCI: () => import_ci_info.isCI,
+  isStreamTTY: (stream) => stream.isTTY,
+  writeFormattedFile: (file, data) => fs8.writeFile(file, data)
+});
+var mockable_default = mockable.mocked;
+
+// src/cli/options/get-options-for-file.js
+var import_dashify2 = __toESM(require_dashify(), 1);
+import { resolveConfig } from "../index.mjs";
+function getOptions(argv, detailedOptions) {
+  return Object.fromEntries(
+    detailedOptions.filter(({ forwardToApi }) => forwardToApi).map(({ forwardToApi, name }) => [forwardToApi, argv[name]])
+  );
+}
+function cliifyOptions(object2, apiDetailedOptionMap) {
+  return Object.fromEntries(
+    Object.entries(object2 || {}).map(([key, value]) => {
+      const apiOption = apiDetailedOptionMap[key];
+      const cliKey = apiOption ? apiOption.name : key;
+      return [(0, import_dashify2.default)(cliKey), value];
+    })
+  );
+}
+function createApiDetailedOptionMap(detailedOptions) {
+  return Object.fromEntries(
+    detailedOptions.filter(
+      (option) => option.forwardToApi && option.forwardToApi !== option.name
+    ).map((option) => [option.forwardToApi, option])
+  );
+}
+function parseArgsToOptions(context, overrideDefaults) {
+  const minimistOptions = createMinimistOptions(context.detailedOptions);
+  const apiDetailedOptionMap = createApiDetailedOptionMap(
+    context.detailedOptions
+  );
+  return getOptions(
+    normalize_cli_options_default(
+      minimistParse(context.rawArguments, {
+        string: minimistOptions.string,
+        boolean: minimistOptions.boolean,
+        default: cliifyOptions(overrideDefaults, apiDetailedOptionMap)
+      }),
+      context.detailedOptions,
+      { logger: false }
+    ),
+    context.detailedOptions
+  );
+}
+async function getOptionsOrDie(context, filePath) {
+  try {
+    if (context.argv.config === false) {
+      context.logger.debug(
+        "'--no-config' option found, skip loading config file."
+      );
+      return null;
+    }
+    context.logger.debug(
+      context.argv.config ? `load config file from '${context.argv.config}'` : `resolve config from '${filePath}'`
+    );
+    const options = await resolveConfig(filePath, {
+      editorconfig: context.argv.editorconfig,
+      config: context.argv.config
+    });
+    context.logger.debug("loaded options `" + JSON.stringify(options) + "`");
+    return options;
+  } catch (error) {
+    context.logger.error(
+      `Invalid configuration${filePath ? ` for file "${filePath}"` : ""}:
+` + error.message
+    );
+    process.exit(2);
+  }
+}
+function applyConfigPrecedence(context, options) {
+  try {
+    switch (context.argv.configPrecedence) {
+      case "cli-override":
+        return parseArgsToOptions(context, options);
+      case "file-override":
+        return { ...parseArgsToOptions(context), ...options };
+      case "prefer-file":
+        return options || parseArgsToOptions(context);
+    }
+  } catch (error) {
+    context.logger.error(error.toString());
+    process.exit(2);
+  }
+}
+async function getOptionsForFile(context, filepath) {
+  const options = await getOptionsOrDie(context, filepath);
+  const hasPlugins = options?.plugins;
+  if (hasPlugins) {
+    await context.pushContextPlugins(options.plugins);
+  }
+  const appliedOptions = {
+    filepath,
+    ...applyConfigPrecedence(
+      context,
+      options && normalizeOptions(options, context.supportOptions, {
+        logger: context.logger
+      })
+    )
+  };
+  context.logger.debug(
+    `applied config-precedence (${context.argv.configPrecedence}): ${JSON.stringify(appliedOptions)}`
+  );
+  if (hasPlugins) {
+    context.popContextPlugins();
+  }
+  return appliedOptions;
+}
+var get_options_for_file_default = getOptionsForFile;
+
+// src/cli/format.js
+function diff(a, b) {
+  return createTwoFilesPatch("", "", a, b, "", "", { context: 2 });
+}
+var DebugError = class extends Error {
+  name = "DebugError";
 };
+function handleError(context, filename, error, printedFilename, ignoreUnknown) {
+  ignoreUnknown ||= context.argv.ignoreUnknown;
+  const errorIsUndefinedParseError = error instanceof errors.UndefinedParserError;
+  if (printedFilename) {
+    if ((context.argv.write || ignoreUnknown) && errorIsUndefinedParseError) {
+      printedFilename.clear();
+    } else {
+      process.stdout.write("\n");
+    }
+  }
+  if (errorIsUndefinedParseError) {
+    if (ignoreUnknown) {
+      return;
+    }
+    if (!context.argv.check && !context.argv.listDifferent) {
+      process.exitCode = 2;
+    }
+    context.logger.error(error.message);
+    return;
+  }
+  const isParseError = Boolean(error?.loc);
+  const isValidationError = /^Invalid \S+ value\./u.test(error?.message);
+  if (isParseError) {
+    context.logger.error(`${filename}: ${String(error)}`);
+  } else if (isValidationError || error instanceof errors.ConfigError) {
+    context.logger.error(error.message);
+    process.exit(1);
+  } else if (error instanceof DebugError) {
+    context.logger.error(`${filename}: ${error.message}`);
+  } else {
+    context.logger.error(filename + ": " + (error.stack || error));
+  }
+  process.exitCode = 2;
+}
+function writeOutput(context, result, options) {
+  process.stdout.write(
+    context.argv.debugCheck ? result.filepath : result.formatted
+  );
+  if (options && options.cursorOffset >= 0) {
+    process.stderr.write(result.cursorOffset + "\n");
+  }
+}
+async function listDifferent(context, input, options, filename) {
+  if (!context.argv.check && !context.argv.listDifferent) {
+    return;
+  }
+  try {
+    if (!await prettier.check(input, options) && !context.argv.write) {
+      context.logger.log(filename);
+      process.exitCode = 1;
+    }
+  } catch (error) {
+    context.logger.error(error.message);
+  }
+  return true;
+}
+async function format3(context, input, opt) {
+  if (context.argv.debugPrintDoc) {
+    const doc = await prettier.__debug.printToDoc(input, opt);
+    return { formatted: await prettier.__debug.formatDoc(doc) + "\n" };
+  }
+  if (context.argv.debugPrintComments) {
+    return {
+      formatted: await prettier.format(
+        JSON.stringify(
+          (await prettier.formatWithCursor(input, opt)).comments || []
+        ),
+        { parser: "json" }
+      )
+    };
+  }
+  if (context.argv.debugPrintAst) {
+    const { ast } = await prettier.__debug.parse(input, opt);
+    return {
+      formatted: JSON.stringify(ast)
+    };
+  }
+  if (context.argv.debugCheck) {
+    const pp = await prettier.format(input, opt);
+    const pppp = await prettier.format(pp, opt);
+    if (pp !== pppp) {
+      throw new DebugError(
+        "prettier(input) !== prettier(prettier(input))\n" + diff(pp, pppp)
+      );
+    } else {
+      const stringify5 = (obj) => JSON.stringify(obj, null, 2);
+      const ast = stringify5(
+        (await prettier.__debug.parse(input, opt, { massage: true })).ast
+      );
+      const past = stringify5(
+        (await prettier.__debug.parse(pp, opt, { massage: true })).ast
+      );
+      if (ast !== past) {
+        const MAX_AST_SIZE = 2097152;
+        const astDiff = ast.length > MAX_AST_SIZE || past.length > MAX_AST_SIZE ? "AST diff too large to render" : diff(ast, past);
+        throw new DebugError(
+          "ast(input) !== ast(prettier(input))\n" + astDiff + "\n" + diff(input, pp)
+        );
+      }
+    }
+    return { formatted: pp, filepath: opt.filepath || "(stdin)\n" };
+  }
+  const { performanceTestFlag } = context;
+  if (performanceTestFlag?.debugBenchmark) {
+    let Bench;
+    try {
+      ({ Bench } = await import("tinybench"));
+    } catch {
+      context.logger.debug(
+        "'--debug-benchmark' requires the 'tinybench' package to be installed."
+      );
+      process.exit(2);
+    }
+    context.logger.debug(
+      "'--debug-benchmark' option found, measuring formatWithCursor with 'tinybench' module."
+    );
+    const bench = new Bench();
+    bench.add("Format", () => prettier.formatWithCursor(input, opt));
+    await bench.run();
+    const [result] = bench.table();
+    context.logger.debug(
+      "'--debug-benchmark' measurements for formatWithCursor: " + JSON.stringify(result, void 0, 2)
+    );
+  } else if (performanceTestFlag?.debugRepeat) {
+    const repeat = performanceTestFlag.debugRepeat;
+    context.logger.debug(
+      `'${performanceTestFlag.name}' found, running formatWithCursor ${repeat} times.`
+    );
+    const start = mockable_default.getTimestamp();
+    for (let i = 0; i < repeat; ++i) {
+      await prettier.formatWithCursor(input, opt);
+    }
+    const averageMs = (mockable_default.getTimestamp() - start) / repeat;
+    const results = {
+      repeat,
+      hz: 1e3 / averageMs,
+      ms: averageMs
+    };
+    context.logger.debug(
+      `'${performanceTestFlag.name}' measurements for formatWithCursor: ${JSON.stringify(
+        results,
+        null,
+        2
+      )}`
+    );
+  }
+  return prettier.formatWithCursor(input, opt);
+}
+async function createIsIgnoredFromContextOrDie(context) {
+  try {
+    return await createIsIgnoredFunction(
+      context.argv.ignorePath,
+      context.argv.withNodeModules
+    );
+  } catch (e) {
+    context.logger.error(e.message);
+    process.exit(2);
+  }
+}
+async function formatStdin(context) {
+  const { filepath } = context.argv;
+  try {
+    const input = await getStdin();
+    const absoluteFilepath = filepath ? path12.resolve(filepath) : void 0;
+    let isFileIgnored = false;
+    if (absoluteFilepath) {
+      const isIgnored = await createIsIgnoredFromContextOrDie(context);
+      isFileIgnored = isIgnored(absoluteFilepath);
+    }
+    if (isFileIgnored) {
+      writeOutput(context, { formatted: input });
+      return;
+    }
+    const options = {
+      ...await get_options_for_file_default(context, absoluteFilepath),
+      // `getOptionsForFile` forwards `--stdin-filepath` directly, which can be a relative path
+      filepath: absoluteFilepath
+    };
+    if (await listDifferent(context, input, options, "(stdin)")) {
+      return;
+    }
+    const formatted = await format3(context, input, options);
+    const { performanceTestFlag } = context;
+    if (performanceTestFlag) {
+      context.logger.log(
+        `'${performanceTestFlag.name}' option found, skipped print code to screen.`
+      );
+      return;
+    }
+    writeOutput(context, formatted, options);
+  } catch (error) {
+    handleError(context, filepath || "stdin", error);
+  }
+}
+async function formatFiles(context) {
+  const isIgnored = await createIsIgnoredFromContextOrDie(context);
+  const cwd3 = process.cwd();
+  let numberOfUnformattedFilesFound = 0;
+  const { performanceTestFlag } = context;
+  if (context.argv.check && !performanceTestFlag) {
+    context.logger.log("Checking formatting...");
+  }
+  let formatResultsCache;
+  const cacheFilePath = await find_cache_file_default(context.argv.cacheLocation);
+  if (context.argv.cache) {
+    formatResultsCache = new format_results_cache_default(
+      cacheFilePath,
+      context.argv.cacheStrategy || "content"
+    );
+  } else if (!context.argv.cacheLocation) {
+    const stat = await statSafe(cacheFilePath);
+    if (stat) {
+      await fs9.unlink(cacheFilePath);
+    }
+  }
+  const isTTY = mockable_default.isStreamTTY(process.stdout) && !mockable_default.isCI();
+  for await (const { error, filename, ignoreUnknown } of expandPatterns(
+    context
+  )) {
+    if (error) {
+      context.logger.error(error);
+      process.exitCode = 2;
+      continue;
+    }
+    const isFileIgnored = isIgnored(filename);
+    if (isFileIgnored && (context.argv.debugCheck || context.argv.write || context.argv.check || context.argv.listDifferent)) {
+      continue;
+    }
+    const options = {
+      ...await get_options_for_file_default(context, filename),
+      filepath: filename
+    };
+    const fileNameToDisplay = normalizeToPosix(path12.relative(cwd3, filename));
+    let printedFilename;
+    if (isTTY) {
+      printedFilename = context.logger.log(fileNameToDisplay, {
+        newline: false,
+        clearable: true
+      });
+    }
+    let input;
+    try {
+      input = await fs9.readFile(filename, "utf8");
+    } catch (error2) {
+      context.logger.log("");
+      context.logger.error(
+        `Unable to read file "${fileNameToDisplay}":
+${error2.message}`
+      );
+      process.exitCode = 2;
+      continue;
+    }
+    if (isFileIgnored) {
+      printedFilename?.clear();
+      writeOutput(context, { formatted: input }, options);
+      continue;
+    }
+    const start = mockable_default.getTimestamp();
+    const isCacheExists = formatResultsCache?.existsAvailableFormatResultsCache(
+      filename,
+      options
+    );
+    let result;
+    let output;
+    try {
+      if (isCacheExists) {
+        result = { formatted: input };
+      } else {
+        result = await format3(context, input, options);
+      }
+      output = result.formatted;
+    } catch (error2) {
+      handleError(
+        context,
+        fileNameToDisplay,
+        error2,
+        printedFilename,
+        ignoreUnknown
+      );
+      continue;
+    }
+    const isDifferent = output !== input;
+    let shouldSetCache = !isDifferent;
+    printedFilename?.clear();
+    if (performanceTestFlag) {
+      context.logger.log(
+        `'${performanceTestFlag.name}' option found, skipped print code or write files.`
+      );
+      return;
+    }
+    if (context.argv.write) {
+      const timeToDisplay = `${Math.round(mockable_default.getTimestamp() - start)}ms`;
+      if (isDifferent) {
+        if (!context.argv.check && !context.argv.listDifferent) {
+          context.logger.log(`${fileNameToDisplay} ${timeToDisplay}`);
+        }
+        try {
+          await mockable_default.writeFormattedFile(filename, output);
+          shouldSetCache = true;
+        } catch (error2) {
+          context.logger.error(
+            `Unable to write file "${fileNameToDisplay}":
+${error2.message}`
+          );
+          process.exitCode = 2;
+        }
+      } else if (!context.argv.check && !context.argv.listDifferent) {
+        const message = `${picocolors.gray(fileNameToDisplay)} ${timeToDisplay} (unchanged)`;
+        if (isCacheExists) {
+          context.logger.log(`${message} (cached)`);
+        } else {
+          context.logger.log(message);
+        }
+      }
+    } else if (context.argv.debugCheck) {
+      if (result.filepath) {
+        context.logger.log(fileNameToDisplay);
+      } else {
+        process.exitCode = 2;
+      }
+    } else if (!context.argv.check && !context.argv.listDifferent) {
+      writeOutput(context, result, options);
+    }
+    if (shouldSetCache) {
+      formatResultsCache?.setFormatResultsCache(filename, options);
+    } else {
+      formatResultsCache?.removeFormatResultsCache(filename);
+    }
+    if (isDifferent) {
+      if (context.argv.check) {
+        context.logger.warn(fileNameToDisplay);
+      } else if (context.argv.listDifferent) {
+        context.logger.log(fileNameToDisplay);
+      }
+      numberOfUnformattedFilesFound += 1;
+    }
+  }
+  formatResultsCache?.reconcile();
+  if (context.argv.check) {
+    if (numberOfUnformattedFilesFound === 0) {
+      context.logger.log("All matched files use Prettier code style!");
+    } else {
+      const files = numberOfUnformattedFilesFound === 1 ? "the above file" : `${numberOfUnformattedFilesFound} files`;
+      context.logger.warn(
+        context.argv.write ? `Code style issues fixed in ${files}.` : `Code style issues found in ${files}. Run Prettier with --write to fix.`
+      );
+    }
+  }
+  if ((context.argv.check || context.argv.listDifferent) && numberOfUnformattedFilesFound > 0 && !process.exitCode && !context.argv.write) {
+    process.exitCode = 1;
+  }
+}
+
+// src/cli/logger.js
 var emptyLogResult = { clear() {
 } };
 function createLogger(logLevel = "log") {
@@ -3809,7 +4260,7 @@ function createLogger(logLevel = "log") {
       stream.write(message);
       if (options.clearable) {
         return {
-          clear: clear(stream, message)
+          clear: () => mockable_default.clearStreamText(stream, message)
         };
       }
     };
@@ -4085,7 +4536,7 @@ async function main(context) {
     return;
   }
   const hasFilePatterns = context.filePatterns.length > 0;
-  const useStdin = !hasFilePatterns && (!process.stdin.isTTY || context.argv.filepath);
+  const useStdin = !hasFilePatterns && (!mockable_default.isStreamTTY(process.stdin) || context.argv.filepath);
   if (useStdin) {
     if (context.argv.cache) {
       throw new Error("`--cache` cannot be used when formatting stdin.");
@@ -4101,5 +4552,6 @@ async function main(context) {
   printToScreen(createUsage(context));
 }
 export {
+  mockable,
   run
 };
