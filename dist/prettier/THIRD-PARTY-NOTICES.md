@@ -3,7 +3,7 @@
 The published Prettier artifact additionally contains code with the following licenses:
 MIT, ISC, BSD-3-Clause, BSD-2-Clause, and Apache-2.0.
 
-## @angular/compiler@v19.2.7
+## @angular/compiler@v19.2.8
 
 > Angular - the compiler library
 
@@ -3281,7 +3281,7 @@ Repository: <https://github.com/tildeio/simple-html-tokenizer.git>
 
 ----------------------------------------
 
-## smol-toml@v1.3.3
+## smol-toml@v1.3.4
 
 > A small, fast, and correct TOML parser/serializer
 

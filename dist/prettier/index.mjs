@@ -13893,9 +13893,7 @@ function skipUntil(str2, ptr, sep, end, banNewLines = false) {
       i = indexOfNewline(str2, i);
     } else if (c2 === sep) {
       return i + 1;
-    } else if (c2 === end) {
-      return i;
-    } else if (banNewLines && (c2 === "\n" || c2 === "\r" && str2[i + 1] === "\n")) {
+    } else if (c2 === end || banNewLines && (c2 === "\n" || c2 === "\r" && str2[i + 1] === "\n")) {
       return i;
     }
   }
@@ -13941,6 +13939,7 @@ var TomlDate = class _TomlDate extends Date {
           date = `0000-01-01T${date}`;
         }
         hasTime = !!match[2];
+        hasTime && date[10] === " " && (date = date.replace(" ", "T"));
         if (match[2] && +match[2] > 23) {
           date = "";
         } else {
@@ -14177,8 +14176,8 @@ function extractValue(str2, ptr, end, depth = -1) {
   let c2 = str2[ptr];
   if (c2 === "[" || c2 === "{") {
     let [value, endPtr2] = c2 === "[" ? parseArray(str2, ptr, depth) : parseInlineTable(str2, ptr, depth);
-    let newPtr = skipUntil(str2, endPtr2, ",", end);
-    if (end === "}") {
+    let newPtr = end ? skipUntil(str2, endPtr2, ",", end) : endPtr2;
+    if (endPtr2 - newPtr && end === "}") {
       let nextNewLine = indexOfNewline(str2, endPtr2, newPtr);
       if (nextNewLine > -1) {
         throw new TomlError("newlines are not allowed in inline tables", {
@@ -21085,7 +21084,7 @@ var object_omit_default = omit;
 import * as doc from "./doc.mjs";
 
 // src/main/version.evaluate.js
-var version_evaluate_default = "3.6.0-d2eb29d8e";
+var version_evaluate_default = "3.6.0-b277caf9a";
 
 // src/utils/public.js
 var public_exports = {};

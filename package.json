@@ -1,6 +1,6 @@
 {
   "name": "prettier",
-  "version": "3.6.0-d2eb29d8e",
+  "version": "3.6.0-b277caf9a",
   "description": "Prettier is an opinionated code formatter",
   "bin": "./dist/prettier/bin/prettier.cjs",
   "repository": "prettier/prettier",
@@ -273,7 +273,7 @@
     "jest-watch-typeahead": "2.2.2",
     "js-yaml": "4.1.0",
     "json5": "2.2.3",
-		"knip": "5.50.5",
+    "knip": "5.50.5",
     "leven": "4.0.0",
     "linguist-languages": "7.29.0",
     "magic-string": "0.30.17",
