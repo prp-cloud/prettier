@@ -1539,7 +1539,7 @@ Contributors:
 
 ----------------------------------------
 
-## graphql@v16.10.0
+## graphql@v16.11.0
 
 > A Query Language and Runtime which can target any service.
 
