@@ -1,6 +1,6 @@
 {
   "name": "prettier",
-  "version": "3.6.0-f963755ee",
+  "version": "3.6.0-bece6caa9",
   "description": "Prettier is an opinionated code formatter",
   "bin": "./dist/prettier/bin/prettier.cjs",
   "repository": "prettier/prettier",
@@ -246,7 +246,7 @@
     "eslint-plugin-regexp": "2.7.0",
     "eslint-plugin-simple-import-sort": "12.1.1",
     "eslint-plugin-unicorn": "59.0.0",
-		"esm-utils": "4.4.1",
+    "esm-utils": "4.4.1",
     "espree": "10.3.0",
     "fast-glob": "3.3.3",
     "fast-json-stable-stringify": "2.1.0",
