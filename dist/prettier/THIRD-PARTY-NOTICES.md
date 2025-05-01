@@ -69,7 +69,7 @@ Author: The Babel Team (https://babel.dev/team)
 
 ----------------------------------------
 
-## @babel/helper-validator-identifier@v7.25.9
+## @babel/helper-validator-identifier@v7.27.1
 
 > Validate identifier/keywords name
 
