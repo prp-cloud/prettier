@@ -1816,16 +1816,16 @@ var n = class {
   constructor(e) {
     this._eventListeners = /* @__PURE__ */ new Map(), this._maxListeners = 100, this._logger = e?.logger;
   }
-  once(e, s) {
-    let t = (...r) => {
-      this.off(e, t), s(...r);
+  once(e, t) {
+    let s = (...r) => {
+      this.off(e, s), t(...r);
     };
-    return this.on(e, t), this;
+    return this.on(e, s), this;
   }
   listenerCount(e) {
     if (!e) return this.getAllListeners().length;
-    let s = this._eventListeners.get(e);
-    return s ? s.length : 0;
+    let t = this._eventListeners.get(e);
+    return t ? t.length : 0;
   }
   eventNames() {
     return Array.from(this._eventListeners.keys());
@@ -1833,38 +1833,38 @@ var n = class {
   rawListeners(e) {
     return e ? this._eventListeners.get(e) ?? [] : this.getAllListeners();
   }
-  prependListener(e, s) {
-    let t = this._eventListeners.get(e) ?? [];
-    return t.unshift(s), this._eventListeners.set(e, t), this;
+  prependListener(e, t) {
+    let s = this._eventListeners.get(e) ?? [];
+    return s.unshift(t), this._eventListeners.set(e, s), this;
   }
-  prependOnceListener(e, s) {
-    let t = (...r) => {
-      this.off(e, t), s(...r);
+  prependOnceListener(e, t) {
+    let s = (...r) => {
+      this.off(e, s), t(...r);
     };
-    return this.prependListener(e, t), this;
+    return this.prependListener(e, s), this;
   }
   maxListeners() {
     return this._maxListeners;
   }
-  addListener(e, s) {
-    return this.on(e, s), this;
+  addListener(e, t) {
+    return this.on(e, t), this;
   }
-  on(e, s) {
+  on(e, t) {
     this._eventListeners.has(e) || this._eventListeners.set(e, []);
-    let t = this._eventListeners.get(e);
-    return t && (t.length >= this._maxListeners && console.warn(`MaxListenersExceededWarning: Possible event memory leak detected. ${t.length + 1} ${e} listeners added. Use setMaxListeners() to increase limit.`), t.push(s)), this;
+    let s = this._eventListeners.get(e);
+    return s && (s.length >= this._maxListeners && console.warn(`MaxListenersExceededWarning: Possible event memory leak detected. ${s.length + 1} ${e} listeners added. Use setMaxListeners() to increase limit.`), s.push(t)), this;
   }
-  removeListener(e, s) {
-    return this.off(e, s), this;
+  removeListener(e, t) {
+    return this.off(e, t), this;
   }
-  off(e, s) {
-    let t = this._eventListeners.get(e) ?? [], r = t.indexOf(s);
-    return r !== -1 && t.splice(r, 1), t.length === 0 && this._eventListeners.delete(e), this;
+  off(e, t) {
+    let s = this._eventListeners.get(e) ?? [], r = s.indexOf(t);
+    return r !== -1 && s.splice(r, 1), s.length === 0 && this._eventListeners.delete(e), this;
   }
-  emit(e, ...s) {
-    let t = false, r = this._eventListeners.get(e);
-    if (r && r.length > 0) for (let i of r) i(...s), t = true;
-    return t;
+  emit(e, ...t) {
+    let s = false, r = this._eventListeners.get(e);
+    if (r && r.length > 0) for (let i of r) i(...t), s = true;
+    return s;
   }
   listeners(e) {
     return this._eventListeners.get(e) ?? [];
@@ -1874,11 +1874,11 @@ var n = class {
   }
   setMaxListeners(e) {
     this._maxListeners = e;
-    for (let s of this._eventListeners.values()) s.length > e && s.splice(e);
+    for (let t of this._eventListeners.values()) t.length > e && t.splice(e);
   }
   getAllListeners() {
     let e = new Array();
-    for (let s of this._eventListeners.values()) e = e.concat(s);
+    for (let t of this._eventListeners.values()) e = e.concat(t);
     return e;
   }
 };
@@ -1903,33 +1903,39 @@ var l = class extends n {
   set logger(e) {
     this._logger = e;
   }
-  onHook(e, s) {
-    let t = this._hooks.get(e);
-    t ? t.push(s) : this._hooks.set(e, [s]);
+  onHook(e, t) {
+    let s = this._hooks.get(e);
+    s ? s.push(t) : this._hooks.set(e, [t]);
   }
-  prependHook(e, s) {
-    let t = this._hooks.get(e);
-    t ? t.unshift(s) : this._hooks.set(e, [s]);
+  onHooks(e) {
+    for (let t of e) this.onHook(t.event, t.handler);
   }
-  prependOnceHook(e, s) {
-    let t = async (...r) => (this.removeHook(e, t), s(...r));
-    this.prependHook(e, t);
+  prependHook(e, t) {
+    let s = this._hooks.get(e);
+    s ? s.unshift(t) : this._hooks.set(e, [t]);
   }
-  onceHook(e, s) {
-    let t = async (...r) => (this.removeHook(e, t), s(...r));
-    this.onHook(e, t);
+  prependOnceHook(e, t) {
+    let s = async (...r) => (this.removeHook(e, s), t(...r));
+    this.prependHook(e, s);
   }
-  removeHook(e, s) {
-    let t = this._hooks.get(e);
-    if (t) {
-      let r = t.indexOf(s);
-      r !== -1 && t.splice(r, 1);
+  onceHook(e, t) {
+    let s = async (...r) => (this.removeHook(e, s), t(...r));
+    this.onHook(e, s);
+  }
+  removeHook(e, t) {
+    let s = this._hooks.get(e);
+    if (s) {
+      let r = s.indexOf(t);
+      r !== -1 && s.splice(r, 1);
     }
   }
-  async hook(e, ...s) {
-    let t = this._hooks.get(e);
-    if (t) for (let r of t) try {
-      await r(...s);
+  removeHooks(e) {
+    for (let t of e) this.removeHook(t.event, t.handler);
+  }
+  async hook(e, ...t) {
+    let s = this._hooks.get(e);
+    if (s) for (let r of s) try {
+      await r(...t);
     } catch (i) {
       let o = `${e}: ${i.message}`;
       if (this.emit("error", new Error(o)), this._logger && this._logger.error(o), this._throwHookErrors) throw new Error(o);
@@ -2415,6 +2421,7 @@ var CacheableMemory = class extends l {
   delete(key) {
     const store = this.getStore(key);
     store.delete(key);
+    this._hashCache.delete(key);
   }
   /**
    * Delete the keys
@@ -2499,7 +2506,7 @@ var CacheableMemory = class extends l {
    */
   hashKey(key) {
     const cacheHashNumber = this._hashCache.get(key);
-    if (cacheHashNumber) {
+    if (typeof cacheHashNumber === "number") {
       return cacheHashNumber;
     }
     let hash2 = 0;
