@@ -18514,6 +18514,7 @@ var languages_evaluate_default5 = [
       "ts"
     ],
     "interpreters": [
+      "bun",
       "deno",
       "ts-node",
       "tsx"
@@ -18744,12 +18745,6 @@ var languages_evaluate_default6 = [
       ".tern-config",
       ".tern-project",
       ".watchmanconfig",
-      "MODULE.bazel.lock",
-      "Pipfile.lock",
-      "composer.lock",
-      "deno.lock",
-      "flake.lock",
-      "mcmod.info",
       ".babelrc",
       ".jscsrc",
       ".jshintrc",
@@ -19150,7 +19145,7 @@ var object_omit_default = omit;
 import * as doc from "./doc.mjs";
 
 // src/main/version.evaluate.js
-var version_evaluate_default = "3.6.0-d59c3a19a";
+var version_evaluate_default = "3.6.0-b1b6bdd34";
 
 // src/utils/public.js
 var public_exports = {};
