@@ -10614,7 +10614,7 @@ import path5 from "path";
 import * as path4 from "path";
 
 // node_modules/search-closest/index.js
-import process2 from "process";
+import process3 from "process";
 
 // node_modules/find-in-directory/index.js
 import * as fs from "fs/promises";
@@ -10675,16 +10675,18 @@ function findDirectory(directory, nameOrNames, predicate, options8) {
 
 // node_modules/iterate-directory-up/index.js
 import * as path3 from "path";
+import process2 from "process";
 function* iterateDirectoryUp(from, to) {
-  from = toAbsolutePath(from);
-  to = to ? toAbsolutePath(to) : path3.parse(from).root;
-  if (from !== to && !from.startsWith(to)) {
+  let directory = toAbsolutePath(from) ?? process2.cwd();
+  const stopDirectory = toAbsolutePath(to) ?? path3.parse(directory).root;
+  if (!directory.startsWith(stopDirectory)) {
     return;
   }
-  for (let directory = from; directory !== to; directory = path3.dirname(directory)) {
+  while (directory !== stopDirectory) {
     yield directory;
+    directory = path3.dirname(directory);
   }
-  yield to;
+  yield stopDirectory;
 }
 var iterate_directory_up_default = iterateDirectoryUp;
 
@@ -10718,7 +10720,7 @@ var Searcher = class {
     @returns {Promise<string | void>}
     */
   async search(startDirectory, options8) {
-    startDirectory ??= process2.cwd();
+    startDirectory ??= process3.cwd();
     for (const directory of iterate_directory_up_default(
       startDirectory,
       this.#stopDirectory
@@ -12736,7 +12738,7 @@ import { pathToFileURL as pathToFileURL4 } from "url";
 // node_modules/import-meta-resolve/lib/resolve.js
 import assert3 from "assert";
 import { statSync, realpathSync } from "fs";
-import process3 from "process";
+import process4 from "process";
 import { URL as URL2, fileURLToPath as fileURLToPath4, pathToFileURL as pathToFileURL3 } from "url";
 import path7 from "path";
 import { builtinModules } from "module";
@@ -13312,19 +13314,19 @@ var encodedSeparatorRegEx = /%2f|%5c/i;
 var emittedPackageWarnings = /* @__PURE__ */ new Set();
 var doubleSlashRegEx = /[/\\]{2}/;
 function emitInvalidSegmentDeprecation(target, request, match, packageJsonUrl, internal, base, isTarget) {
-  if (process3.noDeprecation) {
+  if (process4.noDeprecation) {
     return;
   }
   const pjsonPath = fileURLToPath4(packageJsonUrl);
   const double = doubleSlashRegEx.exec(isTarget ? target : request) !== null;
-  process3.emitWarning(
+  process4.emitWarning(
     `Use of deprecated ${double ? "double slash" : "leading or trailing slash matching"} resolving "${target}" for module request "${request}" ${request === match ? "" : `matched to "${match}" `}in the "${internal ? "imports" : "exports"}" field module resolution of the package at ${pjsonPath}${base ? ` imported from ${fileURLToPath4(base)}` : ""}.`,
     "DeprecationWarning",
     "DEP0166"
   );
 }
 function emitLegacyIndexDeprecation(url3, packageJsonUrl, base, main) {
-  if (process3.noDeprecation) {
+  if (process4.noDeprecation) {
     return;
   }
   const format3 = defaultGetFormatWithoutErrors(url3, { parentURL: base.href });
@@ -13333,7 +13335,7 @@ function emitLegacyIndexDeprecation(url3, packageJsonUrl, base, main) {
   const packagePath = fileURLToPath4(new URL2(".", packageJsonUrl));
   const basePath = fileURLToPath4(base);
   if (!main) {
-    process3.emitWarning(
+    process4.emitWarning(
       `No "main" or "exports" field defined in the package.json for ${packagePath} resolving the main entry point "${urlPath.slice(
         packagePath.length
       )}", imported from ${basePath}.
@@ -13342,7 +13344,7 @@ Default "index" lookups for the main are deprecated for ES modules.`,
       "DEP0151"
     );
   } else if (path7.resolve(packagePath, main) !== urlPath) {
-    process3.emitWarning(
+    process4.emitWarning(
       `Package ${packagePath} has a "main" field set to "${main}", excluding the full filename and extension to the resolved file at "${urlPath.slice(
         packagePath.length
       )}", imported from ${basePath}.
@@ -13703,13 +13705,13 @@ function isConditionalExportsMainSugar(exports, packageJsonUrl, base) {
   return isConditionalSugar;
 }
 function emitTrailingSlashPatternDeprecation(match, pjsonUrl, base) {
-  if (process3.noDeprecation) {
+  if (process4.noDeprecation) {
     return;
   }
   const pjsonPath = fileURLToPath4(pjsonUrl);
   if (emittedPackageWarnings.has(pjsonPath + "|" + match)) return;
   emittedPackageWarnings.add(pjsonPath + "|" + match);
-  process3.emitWarning(
+  process4.emitWarning(
     `Use of deprecated trailing slash pattern mapping "${match}" in the "exports" field module resolution of the package at ${pjsonPath}${base ? ` imported from ${fileURLToPath4(base)}` : ""}. Mapping specifiers ending in "/" is no longer supported.`,
     "DeprecationWarning",
     "DEP0155"
@@ -14699,11 +14701,11 @@ function mapDoc(doc2, cb) {
     if (mapped.has(doc3)) {
       return mapped.get(doc3);
     }
-    const result = process4(doc3);
+    const result = process5(doc3);
     mapped.set(doc3, result);
     return result;
   }
-  function process4(doc3) {
+  function process5(doc3) {
     switch (get_doc_type_default(doc3)) {
       case DOC_TYPE_ARRAY:
         return cb(doc3.map(rec));
@@ -19145,7 +19147,7 @@ var object_omit_default = omit;
 import * as doc from "./doc.mjs";
 
 // src/main/version.evaluate.js
-var version_evaluate_default = "3.6.0-b1b6bdd34";
+var version_evaluate_default = "3.6.0-b24983e41";
 
 // src/utils/public.js
 var public_exports = {};
