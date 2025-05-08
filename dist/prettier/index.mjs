@@ -5085,34 +5085,34 @@ var require_entry = __commonJS({
       _onlyDirectoryFilter(entry) {
         return this._settings.onlyDirectories && !entry.dirent.isDirectory();
       }
-      _isMatchToPatternsSet(filepath, patterns, isDirectory) {
-        const isMatched = this._isMatchToPatterns(filepath, patterns.positive.all, isDirectory);
+      _isMatchToPatternsSet(filepath, patterns, isDirectory2) {
+        const isMatched = this._isMatchToPatterns(filepath, patterns.positive.all, isDirectory2);
         if (!isMatched) {
           return false;
         }
-        const isMatchedByRelativeNegative = this._isMatchToPatterns(filepath, patterns.negative.relative, isDirectory);
+        const isMatchedByRelativeNegative = this._isMatchToPatterns(filepath, patterns.negative.relative, isDirectory2);
         if (isMatchedByRelativeNegative) {
           return false;
         }
-        const isMatchedByAbsoluteNegative = this._isMatchToAbsoluteNegative(filepath, patterns.negative.absolute, isDirectory);
+        const isMatchedByAbsoluteNegative = this._isMatchToAbsoluteNegative(filepath, patterns.negative.absolute, isDirectory2);
         if (isMatchedByAbsoluteNegative) {
           return false;
         }
         return true;
       }
-      _isMatchToAbsoluteNegative(filepath, patternsRe, isDirectory) {
+      _isMatchToAbsoluteNegative(filepath, patternsRe, isDirectory2) {
         if (patternsRe.length === 0) {
           return false;
         }
         const fullpath = utils.path.makeAbsolute(this._settings.cwd, filepath);
-        return this._isMatchToPatterns(fullpath, patternsRe, isDirectory);
+        return this._isMatchToPatterns(fullpath, patternsRe, isDirectory2);
       }
-      _isMatchToPatterns(filepath, patternsRe, isDirectory) {
+      _isMatchToPatterns(filepath, patternsRe, isDirectory2) {
         if (patternsRe.length === 0) {
           return false;
         }
         const isMatched = utils.pattern.matchAny(filepath, patternsRe);
-        if (!isMatched && isDirectory) {
+        if (!isMatched && isDirectory2) {
           return utils.pattern.matchAny(filepath + "/", patternsRe);
         }
         return isMatched;
@@ -10613,71 +10613,41 @@ import path5 from "path";
 // src/config/find-project-root.js
 import * as path4 from "path";
 
-// node_modules/search-closest/index.js
-import process3 from "process";
-
 // node_modules/find-in-directory/index.js
 import * as fs from "fs/promises";
 import * as path2 from "path";
-async function findInDirectory(directory, nameOrNames, predicate) {
-  directory = toAbsolutePath(directory);
+import process2 from "process";
+var isFile = (stats) => stats?.isFile();
+var isDirectory = (stats) => stats?.isDirectory();
+async function findInDirectory(nameOrNames, { typeCheck, cwd, allowSymlinks = true, filter: filter2 }) {
+  const directory = toAbsolutePath(cwd) ?? process2.cwd();
   const names = Array.isArray(nameOrNames) ? nameOrNames : [nameOrNames];
   for (const name of names) {
-    const file = path2.join(directory, name);
-    if (await predicate({ name, path: file })) {
-      return file;
+    const fileOrDirectory = path2.join(directory, name);
+    const stats = await safeStat(fileOrDirectory, allowSymlinks);
+    if (await typeCheck(stats) && (!filter2 || await filter2({ name, path: fileOrDirectory, stats }))) {
+      return fileOrDirectory;
     }
   }
 }
-var combinePredicates = (...predicates) => async (file) => {
-  for (const predicate of predicates) {
-    if (!predicate) {
-      continue;
-    }
-    if (await predicate(file) === false) {
-      return false;
-    }
-  }
-  return true;
-};
-async function checkType(path14, type, options8) {
-  const allowSymlinks = options8?.allowSymlinks ?? true;
-  let stats;
+async function safeStat(path14, allowSymlinks = true) {
   try {
-    stats = await (allowSymlinks ? fs.stat : fs.lstat)(path14);
+    return await (allowSymlinks ? fs.stat : fs.lstat)(path14);
   } catch {
-    return false;
   }
-  return stats[type]();
 }
-function findFile(directory, nameOrNames, predicate, options8) {
-  if (typeof predicate !== "function" && !options8) {
-    options8 = predicate;
-    predicate = void 0;
-  }
-  predicate = combinePredicates(
-    (file) => checkType(file.path, "isFile", options8),
-    predicate
-  );
-  return findInDirectory(directory, nameOrNames, predicate);
+function findFile(nameOrNames, options8) {
+  return findInDirectory(nameOrNames, { ...options8, typeCheck: isFile });
 }
-function findDirectory(directory, nameOrNames, predicate, options8) {
-  if (typeof predicate !== "function" && !options8) {
-    options8 = predicate;
-    predicate = void 0;
-  }
-  predicate = combinePredicates(
-    (file) => checkType(file.path, "isDirectory", options8),
-    predicate
-  );
-  return findInDirectory(directory, nameOrNames, predicate);
+function findDirectory(nameOrNames, options8) {
+  return findInDirectory(nameOrNames, { ...options8, typeCheck: isDirectory });
 }
 
 // node_modules/iterate-directory-up/index.js
 import * as path3 from "path";
-import process2 from "process";
+import process3 from "process";
 function* iterateDirectoryUp(from, to) {
-  let directory = toAbsolutePath(from) ?? process2.cwd();
+  let directory = toAbsolutePath(from) ?? process3.cwd();
   const stopDirectory = toAbsolutePath(to) ?? path3.parse(directory).root;
   if (!directory.startsWith(stopDirectory)) {
     return;
@@ -10695,20 +10665,25 @@ var Searcher = class {
   #stopDirectory;
   #cache;
   #resultCache = /* @__PURE__ */ new Map();
-  #searchInDirectory;
+  #searchWithoutCache;
+  /**
+  @protected
+  @type {typeof findFile | typeof findDirectory}
+  */
+  findInDirectory;
   /**
   @param {NameOrNames} nameOrNames
-  @param {GenericSearcherOptions} options
+  @param {SearcherOptions} [options]
   */
-  constructor(nameOrNames, { allowSymlinks, filter: filter2, stopDirectory, searchInDirectory, cache: cache3 }) {
+  constructor(nameOrNames, { allowSymlinks, filter: filter2, stopDirectory, cache: cache3 } = {}) {
     this.#stopDirectory = stopDirectory;
     this.#cache = cache3 ?? true;
-    this.#searchInDirectory = (directory) => searchInDirectory(directory, nameOrNames, filter2, { allowSymlinks });
+    this.#searchWithoutCache = (directory) => this.findInDirectory(nameOrNames, { cwd: directory, filter: filter2, allowSymlinks });
   }
   #search(directory, cache3 = true) {
     const resultCache = this.#resultCache;
     if (!cache3 || !resultCache.has(directory)) {
-      resultCache.set(directory, this.#searchInDirectory(directory));
+      resultCache.set(directory, this.#searchWithoutCache(directory));
     }
     return resultCache.get(directory);
   }
@@ -10717,10 +10692,9 @@ var Searcher = class {
   
     @param {OptionalUrlOrPath} [startDirectory]
     @param {SearchOptions} [options]
-    @returns {Promise<string | void>}
+    @returns {SearchResult}
     */
   async search(startDirectory, options8) {
-    startDirectory ??= process3.cwd();
     for (const directory of iterate_directory_up_default(
       startDirectory,
       this.#stopDirectory
@@ -10744,22 +10718,12 @@ var Searcher = class {
   }
 };
 var FileSearcher = class extends Searcher {
-  /**
-  @param {NameOrNames} nameOrNames
-  @param {SearcherOptions} [options]
-  */
-  constructor(nameOrNames, options8) {
-    super(nameOrNames, { ...options8, searchInDirectory: findFile });
-  }
+  /** @protected */
+  findInDirectory = findFile;
 };
 var DirectorySearcher = class extends Searcher {
-  /**
-  @param {NameOrNames} nameOrNames
-  @param {SearcherOptions} [options]
-  */
-  constructor(nameOrNames, options8) {
-    super(nameOrNames, { ...options8, searchInDirectory: findDirectory });
-  }
+  /** @protected */
+  findInDirectory = findDirectory;
 };
 
 // src/config/find-project-root.js
@@ -13362,8 +13326,8 @@ function tryStatSync(path14) {
 }
 function fileExists(url3) {
   const stats = statSync(url3, { throwIfNoEntry: false });
-  const isFile = stats ? stats.isFile() : void 0;
-  return isFile === null || isFile === void 0 ? false : isFile;
+  const isFile2 = stats ? stats.isFile() : void 0;
+  return isFile2 === null || isFile2 === void 0 ? false : isFile2;
 }
 function legacyMainResolve(packageJsonUrl, packageConfig, base) {
   let guess;
@@ -19147,7 +19111,7 @@ var object_omit_default = omit;
 import * as doc from "./doc.mjs";
 
 // src/main/version.evaluate.js
-var version_evaluate_default = "3.6.0-b24983e41";
+var version_evaluate_default = "3.6.0-f7bdacc88";
 
 // src/utils/public.js
 var public_exports = {};

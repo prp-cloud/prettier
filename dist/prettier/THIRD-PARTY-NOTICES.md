@@ -1595,7 +1595,7 @@ Author: Sindre Sorhus <sindresorhus@gmail.com> (https://sindresorhus.com)
 
 ----------------------------------------
 
-## find-in-directory@v2.0.1
+## find-in-directory@v3.0.0
 
 > Find file or directory by names in a directory.
 
@@ -3944,12 +3944,12 @@ Author: Sindre Sorhus <sindresorhus@gmail.com> (https://sindresorhus.com)
 
 ----------------------------------------
 
-## search-closest@v0.2.0
+## search-closest@v1.0.1
 
 > Find closest file or directory by names.
 
 License: MIT  
-Homepage: <https://github.com/fisker/undefined#readme>  
+Homepage: <https://github.com/fisker/search-closest#readme>  
 Author: fisker Cheung <lionkay@gmail.com> (https://www.fiskercheung.com/)  
 
 > MIT License
