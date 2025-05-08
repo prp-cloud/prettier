@@ -281,7 +281,7 @@
     "micromatch": "4.0.8",
     "minimist": "1.2.8",
     "n-readlines": "1.0.1",
-    "nano-spawn": "0.2.0",
+    "nano-spawn": "0.2.1",
     "npm-run-all2": "8.0.1",
     "node-style-text": "0.0.7",
     "outdent": "0.8.0",
