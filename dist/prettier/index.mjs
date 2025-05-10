@@ -3236,15 +3236,15 @@ var require_pattern = __commonJS({
     exports.removeDuplicateSlashes = removeDuplicateSlashes;
     function partitionAbsoluteAndRelative(patterns) {
       const absolute = [];
-      const relative = [];
+      const relative2 = [];
       for (const pattern of patterns) {
         if (isAbsolute(pattern)) {
           absolute.push(pattern);
         } else {
-          relative.push(pattern);
+          relative2.push(pattern);
         }
       }
-      return [absolute, relative];
+      return [absolute, relative2];
     }
     exports.partitionAbsoluteAndRelative = partitionAbsoluteAndRelative;
     function isAbsolute(pattern) {
@@ -10648,10 +10648,14 @@ import * as path3 from "path";
 import process3 from "process";
 function* iterateDirectoryUp(from, to) {
   let directory = toAbsolutePath(from) ?? process3.cwd();
-  const stopDirectory = toAbsolutePath(to) ?? path3.parse(directory).root;
-  if (!directory.startsWith(stopDirectory)) {
-    return;
+  let stopDirectory = toAbsolutePath(to);
+  if (stopDirectory) {
+    const relation = path3.relative(stopDirectory, directory);
+    if (relation[0] === "." || relation === directory) {
+      return;
+    }
   }
+  stopDirectory = stopDirectory ? directory.slice(0, stopDirectory.length) : path3.parse(directory).root;
   while (directory !== stopDirectory) {
     yield directory;
     directory = path3.dirname(directory);
@@ -19111,7 +19115,7 @@ var object_omit_default = omit;
 import * as doc from "./doc.mjs";
 
 // src/main/version.evaluate.js
-var version_evaluate_default = "3.6.0-ae695045a";
+var version_evaluate_default = "3.6.0-4e0e3538a";
 
 // src/utils/public.js
 var public_exports = {};

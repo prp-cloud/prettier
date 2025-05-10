@@ -2693,7 +2693,7 @@ Contributors:
 
 ----------------------------------------
 
-## iterate-directory-up@v1.3.0
+## iterate-directory-up@v1.4.0
 
 > Iterate directory up.
 
