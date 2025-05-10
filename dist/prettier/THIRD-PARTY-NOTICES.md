@@ -3944,7 +3944,7 @@ Author: Sindre Sorhus <sindresorhus@gmail.com> (https://sindresorhus.com)
 
 ----------------------------------------
 
-## search-closest@v1.0.1
+## search-closest@v1.1.0
 
 > Find closest file or directory by names.
 
