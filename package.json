@@ -283,7 +283,7 @@
     "n-readlines": "1.0.1",
     "nano-spawn": "1.0.1",
     "npm-run-all2": "8.0.1",
-    "node-style-text": "0.0.7",
+    "node-style-text": "0.0.8",
     "outdent": "0.8.0",
     "parse-json": "8.3.0",
     "picocolors": "1.1.1",
