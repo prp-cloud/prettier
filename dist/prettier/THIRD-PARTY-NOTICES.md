@@ -3976,7 +3976,7 @@ Author: fisker Cheung <lionkay@gmail.com> (https://www.fiskercheung.com/)
 
 ----------------------------------------
 
-## semver@v7.7.1
+## semver@v7.7.2
 
 > The semantic version parser used by npm.
 
