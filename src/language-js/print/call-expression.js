@@ -72,7 +72,9 @@ function printCallExpression(path, options, print) {
     printCallee(path, print),
     optional,
     printFunctionTypeParameters(path, options, print),
-    printCallArguments(path, options, print),
+    isNew && args.length === 0 && path.parent.type !== "MemberExpression"
+      ? ""
+      : printCallArguments(path, options, print),
   ];
 
   // We group here when the callee is itself a call expression.

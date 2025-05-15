@@ -96,7 +96,7 @@ function printTemplateLiteral(path, options, print) {
 
     // Breaks at the template element boundaries (${ and }) are preferred to breaking
     // in the middle of a MemberExpression
-    if (
+      /*if (
       interpolationHasNewline &&
       (hasComment(expression) ||
         expression.type === "Identifier" ||
@@ -105,9 +105,9 @@ function printTemplateLiteral(path, options, print) {
         expression.type === "SequenceExpression" ||
         isBinaryCastExpression(expression) ||
         isBinaryish(expression))
-    ) {
+      ) {*/
       expressionDoc = [indent([softline, expressionDoc]), softline];
-    }
+    //}
 
     const aligned =
       indentSize === 0 && text.endsWith("\n")
