@@ -114,7 +114,7 @@ var require_minimist = __commonJS({
         }
       });
       var defaults = opts.default || {};
-      var argv = { _: [] };
+      var argv2 = { _: [] };
       function argDefined(key2, arg2) {
         return flags.allBools && /^--[^=]+$/.test(arg2) || flags.strings[key2] || flags.bools[key2] || aliases[key2];
       }
@@ -161,9 +161,9 @@ var require_minimist = __commonJS({
           }
         }
         var value2 = !flags.strings[key2] && isNumber(val) ? Number(val) : val;
-        setKey(argv, key2.split("."), value2);
+        setKey(argv2, key2.split("."), value2);
         (aliases[key2] || []).forEach(function(x) {
-          setKey(argv, x.split("."), value2);
+          setKey(argv2, x.split("."), value2);
         });
       }
       Object.keys(flags.bools).forEach(function(key2) {
@@ -242,30 +242,30 @@ var require_minimist = __commonJS({
           }
         } else {
           if (!flags.unknownFn || flags.unknownFn(arg) !== false) {
-            argv._.push(flags.strings._ || !isNumber(arg) ? arg : Number(arg));
+            argv2._.push(flags.strings._ || !isNumber(arg) ? arg : Number(arg));
           }
           if (opts.stopEarly) {
-            argv._.push.apply(argv._, args.slice(i + 1));
+            argv2._.push.apply(argv2._, args.slice(i + 1));
             break;
           }
         }
       }
       Object.keys(defaults).forEach(function(k) {
-        if (!hasKey(argv, k.split("."))) {
-          setKey(argv, k.split("."), defaults[k]);
+        if (!hasKey(argv2, k.split("."))) {
+          setKey(argv2, k.split("."), defaults[k]);
           (aliases[k] || []).forEach(function(x) {
-            setKey(argv, x.split("."), defaults[k]);
+            setKey(argv2, x.split("."), defaults[k]);
           });
         }
       });
       if (opts["--"]) {
-        argv["--"] = notFlags.slice();
+        argv2["--"] = notFlags.slice();
       } else {
         notFlags.forEach(function(k) {
-          argv._.push(k);
+          argv2._.push(k);
         });
       }
-      return argv;
+      return argv2;
     };
   }
 });
@@ -722,7 +722,7 @@ var require_ci_info = __commonJS({
   "node_modules/ci-info/index.js"(exports) {
     "use strict";
     var vendors = require_vendors();
-    var env2 = process.env;
+    var env3 = process.env;
     Object.defineProperty(exports, "_vendors", {
       value: vendors.map(function(v) {
         return v.constant;
@@ -744,47 +744,47 @@ var require_ci_info = __commonJS({
       exports.isPR = checkPR(vendor);
       exports.id = vendor.constant;
     });
-    exports.isCI = !!(env2.CI !== "false" && // Bypass all checks if CI env is explicitly set to 'false'
-    (env2.BUILD_ID || // Jenkins, Cloudbees
-    env2.BUILD_NUMBER || // Jenkins, TeamCity
-    env2.CI || // Travis CI, CircleCI, Cirrus CI, Gitlab CI, Appveyor, CodeShip, dsari, Cloudflare Pages
-    env2.CI_APP_ID || // Appflow
-    env2.CI_BUILD_ID || // Appflow
-    env2.CI_BUILD_NUMBER || // Appflow
-    env2.CI_NAME || // Codeship and others
-    env2.CONTINUOUS_INTEGRATION || // Travis CI, Cirrus CI
-    env2.RUN_ID || // TaskCluster, dsari
+    exports.isCI = !!(env3.CI !== "false" && // Bypass all checks if CI env is explicitly set to 'false'
+    (env3.BUILD_ID || // Jenkins, Cloudbees
+    env3.BUILD_NUMBER || // Jenkins, TeamCity
+    env3.CI || // Travis CI, CircleCI, Cirrus CI, Gitlab CI, Appveyor, CodeShip, dsari, Cloudflare Pages
+    env3.CI_APP_ID || // Appflow
+    env3.CI_BUILD_ID || // Appflow
+    env3.CI_BUILD_NUMBER || // Appflow
+    env3.CI_NAME || // Codeship and others
+    env3.CONTINUOUS_INTEGRATION || // Travis CI, Cirrus CI
+    env3.RUN_ID || // TaskCluster, dsari
     exports.name || false));
     function checkEnv(obj) {
-      if (typeof obj === "string") return !!env2[obj];
+      if (typeof obj === "string") return !!env3[obj];
       if ("env" in obj) {
-        return env2[obj.env] && env2[obj.env].includes(obj.includes);
+        return env3[obj.env] && env3[obj.env].includes(obj.includes);
       }
       if ("any" in obj) {
         return obj.any.some(function(k) {
-          return !!env2[k];
+          return !!env3[k];
         });
       }
       return Object.keys(obj).every(function(k) {
-        return env2[k] === obj[k];
+        return env3[k] === obj[k];
       });
     }
     function checkPR(vendor) {
       switch (typeof vendor.pr) {
         case "string":
-          return !!env2[vendor.pr];
+          return !!env3[vendor.pr];
         case "object":
           if ("env" in vendor.pr) {
             if ("any" in vendor.pr) {
               return vendor.pr.any.some(function(key) {
-                return env2[vendor.pr.env] === key;
+                return env3[vendor.pr.env] === key;
               });
             } else {
-              return vendor.pr.env in env2 && env2[vendor.pr.env] !== vendor.pr.ne;
+              return vendor.pr.env in env3 && env3[vendor.pr.env] !== vendor.pr.ne;
             }
           } else if ("any" in vendor.pr) {
             return vendor.pr.any.some(function(key) {
-              return !!env2[key];
+              return !!env3[key];
             });
           } else {
             return checkEnv(vendor.pr);
@@ -1333,14 +1333,14 @@ var normalize_cli_options_default = normalizeCliOptions;
 // src/cli/options/parse-cli-arguments.js
 function parseArgv(rawArguments, detailedOptions, logger, keys2) {
   const minimistOptions = createMinimistOptions(detailedOptions);
-  let argv = minimistParse(rawArguments, minimistOptions);
+  let argv2 = minimistParse(rawArguments, minimistOptions);
   if (keys2) {
     detailedOptions = detailedOptions.filter(
       (option) => keys2.includes(option.name)
     );
-    argv = pick(argv, keys2);
+    argv2 = pick(argv2, keys2);
   }
-  const normalized = normalize_cli_options_default(argv, detailedOptions, { logger });
+  const normalized = normalize_cli_options_default(argv2, detailedOptions, { logger });
   return {
     ...Object.fromEntries(
       Object.entries(normalized).map(([key, value]) => {
@@ -1350,7 +1350,7 @@ function parseArgv(rawArguments, detailedOptions, logger, keys2) {
     ),
     _: normalized._?.map(String),
     get __raw() {
-      return argv;
+      return argv2;
     }
   };
 }
@@ -1377,9 +1377,9 @@ var Context = class {
       "plugin"
     ]);
     await this.pushContextPlugins(plugins);
-    const argv = parseArgv(rawArguments, this.detailedOptions, logger);
-    this.argv = argv;
-    this.filePatterns = argv._;
+    const argv2 = parseArgv(rawArguments, this.detailedOptions, logger);
+    this.argv = argv2;
+    this.filePatterns = argv2._;
   }
   /**
    * @param {string[]} plugins
@@ -3770,9 +3770,9 @@ var mockable_default = mockable.mocked;
 // src/cli/options/get-options-for-file.js
 var import_dashify2 = __toESM(require_dashify(), 1);
 import { resolveConfig } from "../index.mjs";
-function getOptions(argv, detailedOptions) {
+function getOptions(argv2, detailedOptions) {
   return Object.fromEntries(
-    detailedOptions.filter(({ forwardToApi }) => forwardToApi).map(({ forwardToApi, name }) => [forwardToApi, argv[name]])
+    detailedOptions.filter(({ forwardToApi }) => forwardToApi).map(({ forwardToApi, name }) => [forwardToApi, argv2[name]])
   );
 }
 function cliifyOptions(object2, apiDetailedOptionMap) {
@@ -4235,6 +4235,9 @@ ${error2.message}`
 }
 
 // src/cli/logger.js
+var { argv, env: env2 } = process;
+var isStderrColorSupported = !(Boolean(env2.NO_COLOR) || argv.includes("--no-color")) && (Boolean(env2.FORCE_COLOR) || argv.includes("--color") || process.platform === "win32" || process.stderr.isTTY && env2.TERM !== "dumb" || Boolean(env2.CI));
+var picocolorsStderr = picocolors.createColors(isStderrColorSupported);
 var emptyLogResult = { clear() {
 } };
 function createLogger(logLevel = "log") {
@@ -4250,7 +4253,8 @@ function createLogger(logLevel = "log") {
       return () => emptyLogResult;
     }
     const stream = process[loggerName === "log" ? "stdout" : "stderr"];
-    const prefix = color ? `[${picocolors[color](loggerName)}] ` : "";
+    const colors = loggerName === "log" ? picocolors : picocolorsStderr;
+    const prefix = color ? `[${colors[color](loggerName)}] ` : "";
     return (message, options) => {
       options = {
         newline: true,
