@@ -27,6 +27,7 @@ const parseOptions = {
   errorRecovery: true,
   createParenthesizedExpressions: true,
   createImportExpressions: true,
+  attachComment: false,
   plugins: [
     // When adding a plugin, please add a test in `tests/format/js/babel-plugins`,
     // To remove plugins, remove it here and run `yarn test tests/format/js/babel-plugins` to verify
@@ -46,8 +47,10 @@ const parseOptions = {
     "deferredImportEvaluation",
     ["optionalChainingAssign", { version: "2023-07" }],
   ],
-  tokens: true,
-  ranges: true,
+  tokens: false,
+  // Ranges not available on comments, so we use `Node#{start,end}` instead
+  // https://github.com/babel/babel/issues/15115
+  ranges: false,
 };
 
 /** @type {ParserPlugin} */
@@ -151,7 +154,7 @@ function createParse({ isExpression = false, optionsCombinations }) {
       ast = wrapBabelExpression(ast, { text, rootMarker: options.rootMarker });
     }
 
-    return postprocess(ast, { parser: "babel", text });
+    return postprocess(ast, { text });
   };
 }
 

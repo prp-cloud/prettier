@@ -231,6 +231,7 @@
     "cspell": "9.0.0",
     "css-units-list": "2.1.0",
     "dashify": "2.0.0",
+    "deno-path-from-file-url": "0.0.2",
     "diff": "8.0.1",
     "editorconfig": "0.15.3",
     "emoji-regex": "10.4.0",
