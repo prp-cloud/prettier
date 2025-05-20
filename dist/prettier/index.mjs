@@ -14033,6 +14033,10 @@ function isNonEmptyArray(object) {
 }
 var is_non_empty_array_default = isNonEmptyArray;
 
+// src/utils/universal-to-path.js
+import { fileURLToPath as fileURLToPath5 } from "url";
+var universal_to_path_default = false ? fromFileUrl3 : fileURLToPath5;
+
 // src/utils/infer-parser.js
 var getFileBasename = (file) => String(file).split(/[/\\]/u).pop();
 function getLanguageByFileName(languages2, file) {
@@ -14074,8 +14078,17 @@ function getLanguageByIsSupported(languages2, file) {
   if (!file) {
     return;
   }
-  file = String(file);
-  return languages2.find(({ isSupported }) => isSupported?.(file));
+  if (String(file).startsWith("file:")) {
+    try {
+      file = universal_to_path_default(file);
+    } catch {
+      return;
+    }
+  }
+  if (typeof file !== "string") {
+    return;
+  }
+  return languages2.find(({ isSupported }) => isSupported?.({ filepath: file }));
 }
 function inferParser(options8, fileInfo) {
   const languages2 = options8.plugins.flatMap(
@@ -17056,7 +17069,6 @@ function callPluginPrintFunction(path14, options8, printPath, args, embeds) {
 async function prepareToPrint(ast, options8) {
   const comments = ast.comments ?? [];
   options8[Symbol.for("comments")] = comments;
-  options8[Symbol.for("tokens")] = ast.tokens ?? [];
   options8[Symbol.for("printedComments")] = /* @__PURE__ */ new Set();
   attachComments(ast, options8);
   const {
@@ -18832,7 +18844,7 @@ var object_omit_default = omit;
 import * as doc from "./doc.mjs";
 
 // src/main/version.evaluate.js
-var version_evaluate_default = "3.6.0-9a7d65c7c";
+var version_evaluate_default = "3.6.0-27739f5f5";
 
 // src/utils/public.js
 var public_exports = {};
