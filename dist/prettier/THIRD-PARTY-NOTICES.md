@@ -1830,7 +1830,7 @@ Contributors:
 
 ----------------------------------------
 
-## flow-parser@v0.266.1
+## flow-parser@v0.272.0
 
 > JavaScript parser written in OCaml. Produces ESTree AST
 
