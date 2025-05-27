@@ -1166,7 +1166,7 @@ License: MIT
 
 ----------------------------------------
 
-## diff@v8.0.1
+## diff@v8.0.2
 
 > A JavaScript text diff implementation.
 
