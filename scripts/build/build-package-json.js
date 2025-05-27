@@ -129,7 +129,7 @@ async function buildPluginOxcPackageJson({ packageConfig, file }) {
     type: "commonjs",
     files: files.map(({ output: { file } }) => file).sort(),
     dependencies: {
-      "oxc-parser": projectPackageJson.dependencies["oxc-parser"],
+      "oxc-parser": projectPackageJson.devDependencies["oxc-parser"],
     },
   };
 
