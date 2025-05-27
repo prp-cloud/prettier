@@ -2,6 +2,7 @@ import assert from "node:assert";
 import { locEnd, locStart } from "../../loc.js";
 import createTypeCheckFunction from "../../utils/create-type-check-function.js";
 import getRaw from "../../utils/get-raw.js";
+import getTextWithoutComments from "../../utils/get-text-without-comments.js";
 import isBlockComment from "../../utils/is-block-comment.js";
 import isIndentableBlockComment from "../../utils/is-indentable-block-comment.js";
 import isLineComment from "../../utils/is-line-comment.js";
@@ -33,6 +34,7 @@ const isNodeWithRaw = createTypeCheckFunction([
  * @param {{
  *   text: string,
  *   parser?: string,
+ *   oxcAstType?: string,
  * }} options
  */
 function postprocess(ast, options) {
@@ -46,6 +48,12 @@ function postprocess(ast, options) {
   if (interpreter) {
     ast.comments.unshift(interpreter);
     delete program.interpreter;
+  }
+
+  if (parser === "oxc" && options.oxcAstType === "ts" && ast.hashbang) {
+    const { comments, hashbang } = ast;
+    comments.unshift(hashbang);
+    delete program.hashbang;
   }
 
   if (ast.comments.length > 0) {
@@ -116,13 +124,23 @@ function postprocess(ast, options) {
         }
         break;
 
+      // This happens when use `oxc-parser` to parse `` `${foo satisfies bar}`; ``
+      // https://github.com/oxc-project/oxc/issues/11313
+      case "TemplateLiteral":
+        /* c8 ignore next 3 */
+        if (node.expressions.length !== node.quasis.length - 1) {
+          throw new Error("Malformed template literal.");
+        }
+        break;
+
       case "TemplateElement":
-        // `flow` and `typescript` follows the `espree` style positions
+        // `flow`, `typescript`, and `oxc`(with `{astType: 'ts'}`) follows the `espree` style positions
         // https://github.com/eslint/js/blob/5826877f7b33548e5ba984878dd4a8eac8448f87/packages/espree/lib/espree.js#L213
         if (
           parser === "flow" ||
           parser === "espree" ||
-          parser === "typescript"
+          parser === "typescript" ||
+          (parser === "oxc" && options.oxcAstType === "ts")
         ) {
           const start = locStart(node) + 1;
           const end = locEnd(node) - (node.tail ? 1 : 2);
@@ -145,14 +163,7 @@ function postprocess(ast, options) {
 
       case "TSTypeParameter":
         // babel-ts
-        if (typeof node.name === "string") {
-          const start = locStart(node);
-          node.name = {
-            type: "Identifier",
-            name: node.name,
-            range: [start, start + node.name.length],
-          };
-        }
+        fixBabelTSTypeParameter(node);
         break;
 
       // For hack-style pipeline
@@ -165,6 +176,43 @@ function postprocess(ast, options) {
       case "TSIntersectionType":
         if (node.types.length === 1) {
           return node.types[0];
+        }
+        break;
+
+      // Remove this when update `@babel/parser` to v8
+      // https://github.com/typescript-eslint/typescript-eslint/pull/7065
+      case "TSMappedType":
+        if (!node.constraint && !node.key) {
+          const { name: key, constraint } = fixBabelTSTypeParameter(
+            node.typeParameter,
+          );
+          node.constraint = constraint;
+          node.key = key;
+          delete node.typeParameter;
+        }
+        break;
+
+      // Remove this when update `@babel/parser` to v8
+      // https://github.com/typescript-eslint/typescript-eslint/pull/8920
+      case "TSEnumDeclaration":
+        if (!node.body) {
+          const idEnd = locEnd(node.id);
+          const { members } = node;
+          const textWithoutComments = getTextWithoutComments(
+            {
+              originalText: text,
+              [Symbol.for("comments")]: ast.comments,
+            },
+            idEnd,
+            members[0] ? locStart(members[0]) : locEnd(node),
+          );
+          const start = idEnd + textWithoutComments.indexOf("{");
+          node.body = {
+            type: "TSEnumBody",
+            members,
+            range: [start, locEnd(node)],
+          };
+          delete node.members;
         }
         break;
     }
@@ -181,6 +229,19 @@ function postprocess(ast, options) {
     ast.range = [0, text.length];
   }
   return ast;
+}
+
+function fixBabelTSTypeParameter(node) {
+  if (node.type === "TSTypeParameter" && typeof node.name === "string") {
+    const start = locStart(node);
+    node.name = {
+      type: "Identifier",
+      name: node.name,
+      range: [start, start + node.name.length],
+    };
+  }
+
+  return node;
 }
 
 function isUnbalancedLogicalTree(node) {

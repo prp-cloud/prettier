@@ -4,7 +4,10 @@ import browserslistToEsbuild from "browserslist-to-esbuild";
 import esbuild from "esbuild";
 import { nodeModulesPolyfillPlugin as esbuildPluginNodeModulePolyfills } from "esbuild-plugins-node-modules-polyfill";
 import createEsmUtils from "esm-utils";
-import { PROJECT_ROOT } from "../utils/index.js";
+import {
+  PRODUCTION_MINIMAL_NODE_JS_VERSION,
+  PROJECT_ROOT,
+} from "../utils/index.js";
 import esbuildPluginAddDefaultExport from "./esbuild-plugins/add-default-export.js";
 import esbuildPluginEvaluate from "./esbuild-plugins/evaluate.js";
 import esbuildPluginPrimitiveDefine from "./esbuild-plugins/primitive-define.js";
