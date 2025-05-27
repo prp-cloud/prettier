@@ -2757,7 +2757,7 @@ Author: fisker Cheung <lionkay@gmail.com> (https://www.fiskercheung.com/)
 
 ----------------------------------------
 
-## jest-docblock@v30.0.0-alpha.7
+## jest-docblock@v30.0.0-beta.3
 
 License: MIT  
 Repository: <https://github.com/jestjs/jest.git>  

@@ -22,7 +22,7 @@ Author: Sindre Sorhus <sindresorhus@gmail.com> (https://sindresorhus.com)
 
 ----------------------------------------
 
-## jest-docblock@v30.0.0-alpha.7
+## jest-docblock@v30.0.0-beta.3
 
 License: MIT  
 Repository: <https://github.com/jestjs/jest.git>  
@@ -52,7 +52,7 @@ Repository: <https://github.com/jestjs/jest.git>
 
 ----------------------------------------
 
-## prettier@v3.6.0-d0fb3090d
+## prettier@v3.6.0-736feddc8
 
 > Prettier is an opinionated code formatter
 
