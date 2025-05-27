@@ -17239,6 +17239,8 @@ function isSourceElement(opts, node, parentNode) {
     case "acorn":
     case "espree":
     case "meriyah":
+    case "oxc":
+    case "oxc-ts":
     case "__babel_estree":
       return isJsSourceElement(node.type, parentNode?.type);
     case "json":
@@ -18761,7 +18763,7 @@ var object_omit_default = omit;
 import * as doc from "./doc.mjs";
 
 // src/main/version.evaluate.js
-var version_evaluate_default = "3.6.0-69a223e0f";
+var version_evaluate_default = "3.6.0-d0fb3090d";
 
 // src/utils/public.js
 var public_exports = {};

@@ -3114,11 +3114,19 @@ var FileEntryDefault = class {
 var FileEntryCache = class {
   _cache = new FlatCache({ useClone: false });
   _useCheckSum = false;
+  _useModifiedTime = true;
   _currentWorkingDirectory;
   _hashAlgorithm = "md5";
+  /**
+   * Create a new FileEntryCache instance
+   * @param options - The options for the FileEntryCache
+   */
   constructor(options) {
     if (options?.cache) {
       this._cache = new FlatCache(options.cache);
+    }
+    if (options?.useModifiedTime) {
+      this._useModifiedTime = options.useModifiedTime;
     }
     if (options?.useCheckSum) {
       this._useCheckSum = options.useCheckSum;
@@ -3130,27 +3138,73 @@ var FileEntryCache = class {
       this._hashAlgorithm = options.hashAlgorithm;
     }
   }
+  /**
+   * Get the cache
+   * @returns {FlatCache} The cache
+   */
   get cache() {
     return this._cache;
   }
+  /**
+   * Set the cache
+   * @param {FlatCache} cache - The cache to set
+   */
   set cache(cache) {
     this._cache = cache;
   }
+  /**
+   * Use the hash to check if the file has changed
+   * @returns {boolean} if the hash is used to check if the file has changed
+   */
   get useCheckSum() {
     return this._useCheckSum;
   }
+  /**
+   * Set the useCheckSum value
+   * @param {boolean} value - The value to set
+   */
   set useCheckSum(value) {
     this._useCheckSum = value;
   }
+  /**
+   * Use the modified time to check if the file has changed
+   * @returns {boolean} if the modified time is used to check if the file has changed
+   */
+  get useModifiedTime() {
+    return this._useModifiedTime;
+  }
+  /**
+   * Set the useModifiedTime value
+   * @param {boolean} value - The value to set
+   */
+  set useModifiedTime(value) {
+    this._useModifiedTime = value;
+  }
+  /**
+   * Get the hash algorithm
+   * @returns {string} The hash algorithm
+   */
   get hashAlgorithm() {
     return this._hashAlgorithm;
   }
+  /**
+   * Set the hash algorithm
+   * @param {string} value - The value to set
+   */
   set hashAlgorithm(value) {
     this._hashAlgorithm = value;
   }
+  /**
+   * Get the current working directory
+   * @returns {string | undefined} The current working directory
+   */
   get currentWorkingDirectory() {
     return this._currentWorkingDirectory;
   }
+  /**
+   * Set the current working directory
+   * @param {string | undefined} value - The value to set
+   */
   set currentWorkingDirectory(value) {
     this._currentWorkingDirectory = value;
   }
@@ -3266,6 +3320,7 @@ var FileEntryCache = class {
     result.meta = this._cache.getKey(result.key) ?? {};
     filePath = this.getAbsolutePath(filePath, { currentWorkingDirectory: options?.currentWorkingDirectory });
     const useCheckSumValue = options?.useCheckSum ?? this._useCheckSum;
+    const useModifiedTimeValue = options?.useModifiedTime ?? this._useModifiedTime;
     try {
       fstat = fs6.statSync(filePath);
       result.meta = {
@@ -3298,7 +3353,10 @@ var FileEntryCache = class {
     if (result.meta.data === void 0) {
       result.meta.data = metaCache.data;
     }
-    if (metaCache?.mtime !== result.meta?.mtime || metaCache?.size !== result.meta?.size) {
+    if (useModifiedTimeValue && metaCache?.mtime !== result.meta?.mtime) {
+      result.changed = true;
+    }
+    if (metaCache?.size !== result.meta?.size) {
       result.changed = true;
     }
     if (useCheckSumValue && metaCache?.hash !== result.meta?.hash) {
@@ -3440,6 +3498,7 @@ function getMetadataFromFileDescriptor(fileDescriptor) {
   return fileDescriptor.meta;
 }
 var FormatResultsCache = class {
+  #useChecksum;
   #fileEntryCache;
   /**
    * @param {string} cacheFileLocation The path of cache file location. (default: `node_modules/.cache/prettier/.prettier-cache`)
@@ -3463,13 +3522,14 @@ var FormatResultsCache = class {
         );
       }
     }
+    this.#useChecksum = useChecksum;
   }
   /**
    * @param {string} filePath
    * @param {any} options
    */
   existsAvailableFormatResultsCache(filePath, options) {
-    const fileDescriptor = this.#fileEntryCache.getFileDescriptor(filePath);
+    const fileDescriptor = this.#getFileDescriptor(filePath);
     if (fileDescriptor.notFound || fileDescriptor.changed) {
       return false;
     }
@@ -3481,7 +3541,7 @@ var FormatResultsCache = class {
    * @param {any} options
    */
   setFormatResultsCache(filePath, options) {
-    const fileDescriptor = this.#fileEntryCache.getFileDescriptor(filePath);
+    const fileDescriptor = this.#getFileDescriptor(filePath);
     if (!fileDescriptor.notFound) {
       const meta = getMetadataFromFileDescriptor(fileDescriptor);
       meta.data = { ...meta.data, hashOfOptions: getHashOfOptions(options) };
@@ -3495,6 +3555,11 @@ var FormatResultsCache = class {
   }
   reconcile() {
     this.#fileEntryCache.reconcile();
+  }
+  #getFileDescriptor(filePath) {
+    return this.#fileEntryCache.getFileDescriptor(filePath, {
+      useModifiedTime: !this.#useChecksum
+    });
   }
 };
 var format_results_cache_default = FormatResultsCache;
@@ -4510,6 +4575,9 @@ async function run(rawArguments = process.argv.slice(2)) {
 }
 async function main(context) {
   context.logger.debug(`normalized argv: ${JSON.stringify(context.argv)}`);
+  if (context.argv.config === false && context.argv.__raw.config !== false || context.argv.config && context.rawArguments.includes("--no-config")) {
+    throw new Error("Cannot use --no-config and --config together.");
+  }
   if (context.argv.check && context.argv.listDifferent) {
     throw new Error("Cannot use --check and --list-different together.");
   }
