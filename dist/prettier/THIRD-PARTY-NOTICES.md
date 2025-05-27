@@ -102,7 +102,7 @@ Author: The Babel Team (https://babel.dev/team)
 
 ----------------------------------------
 
-## @babel/parser@v7.27.2
+## @babel/parser@v7.27.3
 
 > A JavaScript parser
 
@@ -399,7 +399,7 @@ Author: Alex Bell <alex@bellandwhistle.net>
 
 ----------------------------------------
 
-## @typescript-eslint/types@v8.32.1
+## @typescript-eslint/types@v8.33.0
 
 > Types for the TypeScript-ESTree AST spec
 
@@ -431,7 +431,7 @@ Repository: <https://github.com/typescript-eslint/typescript-eslint.git>
 
 ----------------------------------------
 
-## @typescript-eslint/typescript-estree@v8.32.1
+## @typescript-eslint/typescript-estree@v8.33.0
 
 > A parser that converts TypeScript source code into an ESTree compatible form
 
