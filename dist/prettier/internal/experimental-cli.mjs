@@ -2155,7 +2155,7 @@ var init_constants_evaluate = __esm({
       "angular",
       "lwc"
     ];
-    PRETTIER_VERSION = "3.6.0-c9bae87a4";
+    PRETTIER_VERSION = "3.6.0-d91996da2";
   }
 });
 
