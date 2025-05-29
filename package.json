@@ -199,7 +199,7 @@
     "dist/prettier/standalone.mjs"
   ],
   "devDependencies": {
-    "@angular/compiler": "19.2.8",
+    "@angular/compiler": "20.0.0",
     "@babel/code-frame": "7.27.1",
     "@babel/generator": "7.27.3",
     "@babel/parser": "7.27.3",
@@ -218,10 +218,11 @@
     "@typescript-eslint/visitor-keys": "8.33.0",
     "acorn": "8.14.1",
     "acorn-jsx": "5.3.2",
-    "angular-estree-parser": "11.1.1",
+    "angular-estree-parser": "12.1.0",
     "angular-html-parser": "8.1.0",
     "browserslist": "4.24.5",
     "browserslist-to-esbuild": "2.1.1",
+    "buffer": "6.0.3",
     "c8": "10.1.3",
     "camelcase": "8.0.0",
     "ci-info": "4.2.0",
@@ -352,9 +353,9 @@
     "build": "node ./scripts/build/build.js",
     "build:website": "node ./scripts/build-website.js",
     "gen:changelog": "node ./scripts/generate-changelog.js",
-    "debug": "node bin/prettier.js --ignore-path=.prettierignore --plugin=./packages/plugin-oxc/index.js",
-    "debug:watch": "node --watch bin/prettier.js --ignore-path=.prettierignore --plugin=./packages/plugin-oxc/index.js",
-    "debug:inspect": "node --inspect-brk bin/prettier.js --ignore-path=.prettierignore --plugin=./packages/plugin-oxc/index.js"
+    "debug": "node bin/prettier.js --ignore-path=.prettierignore --plugin=./packages/plugin-oxc/index.js --plugin=./packages/plugin-hermes/index.js",
+    "debug:watch": "node --watch bin/prettier.js --ignore-path=.prettierignore --plugin=./packages/plugin-oxc/index.js --plugin=./packages/plugin-hermes/index.js",
+    "debug:inspect": "node --inspect-brk bin/prettier.js --ignore-path=.prettierignore --plugin=./packages/plugin-oxc/index.js --plugin=./packages/plugin-hermes/index.js"
   },
   "c8": {
     "reporter": [
