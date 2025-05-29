@@ -3,7 +3,7 @@
 The published Prettier artifact additionally contains code with the following licenses:
 MIT, ISC, BSD-3-Clause, BSD-2-Clause, and Apache-2.0.
 
-## @angular/compiler@v19.2.8
+## @angular/compiler@v20.0.0
 
 > Angular - the compiler library
 
@@ -525,7 +525,7 @@ Repository: <https://github.com/acornjs/acorn-jsx>
 
 ----------------------------------------
 
-## angular-estree-parser@v11.1.1
+## angular-estree-parser@v12.1.0
 
 > A parser that converts Angular source code into an ESTree-compatible form
 

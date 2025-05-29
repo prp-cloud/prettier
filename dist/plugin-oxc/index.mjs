@@ -1303,26 +1303,27 @@ var visitor_keys_evaluate_default = {
     "typeAnnotation",
     "asserts"
   ],
-  "NGRoot": [
-    "node"
+  "NGChainedExpression": [
+    "expressions"
   ],
+  "NGEmptyExpression": [],
   "NGPipeExpression": [
     "left",
     "right",
     "arguments"
   ],
-  "NGChainedExpression": [
-    "expressions"
-  ],
-  "NGEmptyExpression": [],
   "NGMicrosyntax": [
     "body"
   ],
-  "NGMicrosyntaxKey": [],
+  "NGMicrosyntaxAs": [
+    "key",
+    "alias"
+  ],
   "NGMicrosyntaxExpression": [
     "expression",
     "alias"
   ],
+  "NGMicrosyntaxKey": [],
   "NGMicrosyntaxKeyedExpression": [
     "key",
     "expression"
@@ -1331,9 +1332,8 @@ var visitor_keys_evaluate_default = {
     "key",
     "value"
   ],
-  "NGMicrosyntaxAs": [
-    "key",
-    "alias"
+  "NGRoot": [
+    "node"
   ],
   "JsExpressionRoot": [
     "node"
@@ -1467,7 +1467,7 @@ function postprocess(ast, options) {
         }
         break;
       case "TemplateElement":
-        if (parser === "flow" || parser === "espree" || parser === "typescript" || parser === "oxc" && options.oxcAstType === "ts") {
+        if (parser === "flow" || parser === "hermes" || parser === "espree" || parser === "typescript" || parser === "oxc" && options.oxcAstType === "ts") {
           const start = locStart(node) + 1;
           const end = locEnd(node) - (node.tail ? 1 : 2);
           node.range = [start, end];
@@ -1536,6 +1536,12 @@ function postprocess(ast, options) {
             range: [start, locEnd(node)]
           };
           delete node.members;
+        }
+        break;
+      // https://github.com/facebook/hermes/issues/1712
+      case "ImportExpression":
+        if (parser === "hermes" && node.attributes && !node.options) {
+          node.options = node.attributes;
         }
         break;
     }
@@ -1739,6 +1745,9 @@ function getSourceType(filepath) {
 
 // src/language-js/parse/oxc.js
 function createParseError(error, { text }) {
+  if (!error?.labels?.[0]) {
+    return error;
+  }
   const {
     message,
     labels: [{ start: startIndex, end: endIndex }]

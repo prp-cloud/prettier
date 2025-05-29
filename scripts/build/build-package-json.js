@@ -157,7 +157,7 @@ async function buildPluginHermesPackageJson({ packageConfig, file }) {
     type: "commonjs",
     files: files.map(({ output: { file } }) => file).sort(),
     dependencies: {
-      "hermes-parser": projectPackageJson.dependencies["hermes-parser"],
+      "hermes-parser": projectPackageJson.devDependencies["hermes-parser"],
     },
   };
 

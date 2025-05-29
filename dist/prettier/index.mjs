@@ -17232,6 +17232,7 @@ function isSourceElement(opts, node, parentNode) {
   }
   switch (opts.parser) {
     case "flow":
+    case "hermes":
     case "babel":
     case "babel-flow":
     case "babel-ts":
@@ -18763,7 +18764,7 @@ var object_omit_default = omit;
 import * as doc from "./doc.mjs";
 
 // src/main/version.evaluate.js
-var version_evaluate_default = "3.6.0-45c9d8c95";
+var version_evaluate_default = "3.6.0-a2d861e2d";
 
 // src/utils/public.js
 var public_exports = {};
