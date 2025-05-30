@@ -3473,7 +3473,7 @@ Author: Sindre Sorhus <sindresorhus@gmail.com> (https://sindresorhus.com)
 
 ----------------------------------------
 
-## postcss@v8.5.3
+## postcss@v8.5.4
 
 > Tool for transforming styles with JS plugins
 
