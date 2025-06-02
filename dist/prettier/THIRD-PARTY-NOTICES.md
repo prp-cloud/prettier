@@ -102,7 +102,7 @@ Author: The Babel Team (https://babel.dev/team)
 
 ----------------------------------------
 
-## @babel/parser@v7.27.3
+## @babel/parser@v7.27.4
 
 > A JavaScript parser
 
@@ -2060,7 +2060,7 @@ Author: Jared Wray <me@jaredwray.com>
 
 ----------------------------------------
 
-## ignore@v7.0.4
+## ignore@v7.0.5
 
 > Ignore is a manager and filter for .gitignore rules, the one used by eslint, gitbook and many others.
 

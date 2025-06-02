@@ -8915,18 +8915,22 @@ var require_ignore = __commonJS({
     };
     var factory = (options8) => new Ignore(options8);
     var isPathValid = (path14) => checkPath(path14 && checkPath.convert(path14), path14, RETURN_FALSE);
-    if (
-      // Detect `process` so that it can run in browsers.
-      typeof process !== "undefined" && (process.env && process.env.IGNORE_TEST_WIN32 || process.platform === "win32")
-    ) {
+    var setupWindows = () => {
       const makePosix = (str) => /^\\\\\?\\/.test(str) || /["<>|\u0000-\u001F]+/u.test(str) ? str : str.replace(/\\/g, "/");
       checkPath.convert = makePosix;
       const REGEX_TEST_WINDOWS_PATH_ABSOLUTE = /^[a-z]:\//i;
       checkPath.isNotRelative = (path14) => REGEX_TEST_WINDOWS_PATH_ABSOLUTE.test(path14) || isNotRelative(path14);
+    };
+    if (
+      // Detect `process` so that it can run in browsers.
+      typeof process !== "undefined" && process.platform === "win32"
+    ) {
+      setupWindows();
     }
     module.exports = factory;
     factory.default = factory;
     module.exports.isPathValid = isPathValid;
+    define(module.exports, Symbol.for("setupWindows"), setupWindows);
   }
 });
 
@@ -18764,7 +18768,7 @@ var object_omit_default = omit;
 import * as doc from "./doc.mjs";
 
 // src/main/version.evaluate.js
-var version_evaluate_default = "3.6.0-786aa6a45";
+var version_evaluate_default = "3.6.0-baf6ae74f";
 
 // src/utils/public.js
 var public_exports = {};
