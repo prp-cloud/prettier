@@ -2155,7 +2155,7 @@ var init_constants_evaluate = __esm({
       "angular",
       "lwc"
     ];
-    PRETTIER_VERSION = "3.6.0-286258cfe";
+    PRETTIER_VERSION = "3.6.0-4ff43dc24";
   }
 });
 
@@ -13230,6 +13230,7 @@ var init_node3 = __esm({
       constructor(url3, options2) {
         super();
         _WorkerShim_worker.set(this, void 0);
+        url3 = url3.trim();
         const prefix = "data:text/javascript;charset=utf-8,";
         if (!url3.startsWith(prefix))
           throw new Error(`Only urls that start with "${prefix}" are supported`);
@@ -13243,18 +13244,21 @@ var init_node3 = __esm({
           this.dispatchEvent(event);
         });
         __classPrivateFieldGet2(this, _WorkerShim_worker, "f").on("error", (error) => {
-          error["type"] = "error";
-          this.dispatchEvent(error);
+          const event = new Event("error");
+          event["data"] = error;
+          this.dispatchEvent(event);
         });
-        __classPrivateFieldGet2(this, _WorkerShim_worker, "f").on("exit", () => {
+        __classPrivateFieldGet2(this, _WorkerShim_worker, "f").on("exit", (exitCode) => {
           const event = new Event("close");
+          event["data"] = Number(exitCode ?? 0);
           this.dispatchEvent(event);
         });
       }
-      postMessage(message, data = message) {
-        const event = new Event(message);
-        event["data"] = data;
-        __classPrivateFieldGet2(this, _WorkerShim_worker, "f").postMessage(event);
+      /* API */
+      postMessage(message, transfer) {
+        const event = new Event("message");
+        event["data"] = message;
+        __classPrivateFieldGet2(this, _WorkerShim_worker, "f").postMessage(event, transfer);
       }
       terminate() {
         __classPrivateFieldGet2(this, _WorkerShim_worker, "f").terminate();

@@ -1828,7 +1828,7 @@ var n = class {
     return t ? t.length : 0;
   }
   eventNames() {
-    return Array.from(this._eventListeners.keys());
+    return [...this._eventListeners.keys()];
   }
   rawListeners(e) {
     return e ? this._eventListeners.get(e) ?? [] : this.getAllListeners();
@@ -1878,7 +1878,7 @@ var n = class {
   }
   getAllListeners() {
     let e = new Array();
-    for (let t of this._eventListeners.values()) e = e.concat(t);
+    for (let t of this._eventListeners.values()) e = [...e, ...t];
     return e;
   }
 };

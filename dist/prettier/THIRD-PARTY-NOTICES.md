@@ -2029,7 +2029,7 @@ Repository: <https://github.com/graphql/graphql-js.git>
 
 ----------------------------------------
 
-## hookified@v1.9.0
+## hookified@v1.9.1
 
 > Event Emitting and Middleware Hooks
 
@@ -5364,7 +5364,7 @@ Contributors:
 
 ----------------------------------------
 
-## webworker-shim@v1.1.1
+## webworker-shim@v1.1.4
 
 > A tiny shim for WebWorker (data URI only) that works in Node.
 
