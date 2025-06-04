@@ -102,7 +102,7 @@ Author: The Babel Team (https://babel.dev/team)
 
 ----------------------------------------
 
-## @babel/parser@v7.27.4
+## @babel/parser@v7.27.5
 
 > A JavaScript parser
 
