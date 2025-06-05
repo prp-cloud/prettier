@@ -14,6 +14,7 @@ var __export = (target, all) => {
 // packages/plugin-oxc/index.js
 var index_exports = {};
 __export(index_exports, {
+  languages: () => languages_evaluate_default,
   parsers: () => oxc_exports
 });
 
@@ -159,9 +160,19 @@ var isBlockComment = create_type_check_function_default([
 var is_block_comment_default = isBlockComment;
 
 // src/language-js/utils/is-indentable-block-comment.js
-function isIndentableBlockComment(comment) {
+function isIndentableBlockCommentInternal(comment) {
+  if (!is_block_comment_default(comment)) {
+    return false;
+  }
   const lines = `*${comment.value}*`.split("\n");
   return lines.length > 1 && lines.every((line) => line.trimStart()[0] === "*");
+}
+var cache = /* @__PURE__ */ new WeakMap();
+function isIndentableBlockComment(comment) {
+  if (!cache.has(comment)) {
+    cache.set(comment, isIndentableBlockCommentInternal(comment));
+  }
+  return cache.get(comment);
 }
 var is_indentable_block_comment_default = isIndentableBlockComment;
 
@@ -182,11 +193,18 @@ var isLineComment = create_type_check_function_default([
 var is_line_comment_default = isLineComment;
 
 // src/language-js/utils/is-type-cast-comment.js
+var cache2 = /* @__PURE__ */ new WeakMap();
 function isTypeCastComment(comment) {
-  return is_block_comment_default(comment) && comment.value[0] === "*" && // TypeScript expects the type to be enclosed in curly brackets, however
-  // Closure Compiler accepts types in parens and even without any delimiters at all.
-  // That's why we just search for "@type" and "@satisfies".
-  /@(?:type|satisfies)\b/u.test(comment.value);
+  if (!cache2.has(comment)) {
+    cache2.set(
+      comment,
+      is_block_comment_default(comment) && comment.value[0] === "*" && // TypeScript expects the type to be enclosed in curly brackets, however
+      // Closure Compiler accepts types in parens and even without any delimiters at all.
+      // That's why we just search for "@type" and "@satisfies".
+      /@(?:type|satisfies)\b/u.test(comment.value)
+    );
+  }
+  return cache2.get(comment);
 }
 var is_type_cast_comment_default = isTypeCastComment;
 
@@ -1401,24 +1419,23 @@ var isNodeWithRaw = create_type_check_function_default([
   "BigIntLiteralTypeAnnotation"
 ]);
 function postprocess(ast, options) {
-  const { parser, text } = options;
+  const { parser, text, supportTypeCastComments } = options;
+  const { comments } = ast;
   const program = ast.type === "File" ? ast.program : ast;
-  const { interpreter } = program;
-  if (interpreter) {
-    ast.comments.unshift(interpreter);
+  if (program.interpreter) {
+    comments.unshift(program.interpreter);
     delete program.interpreter;
   }
   if (parser === "oxc" && options.oxcAstType === "ts" && ast.hashbang) {
-    const { comments, hashbang } = ast;
-    comments.unshift(hashbang);
-    delete program.hashbang;
+    comments.unshift(ast.hashbang);
+    delete ast.hashbang;
   }
-  if (ast.comments.length > 0) {
+  if (comments.length > 1) {
     let followingComment;
-    for (let i = ast.comments.length - 1; i >= 0; i--) {
-      const comment = ast.comments[i];
-      if (followingComment && locEnd(comment) === locStart(followingComment) && is_block_comment_default(comment) && is_block_comment_default(followingComment) && is_indentable_block_comment_default(comment) && is_indentable_block_comment_default(followingComment)) {
-        ast.comments.splice(i + 1, 1);
+    for (let i = comments.length - 1; i >= 0; i--) {
+      const comment = comments[i];
+      if (followingComment && locEnd(comment) === locStart(followingComment) && is_indentable_block_comment_default(comment) && is_indentable_block_comment_default(followingComment)) {
+        comments.splice(i + 1, 1);
         comment.value += "*//*" + followingComment.value;
         comment.range = [locStart(comment), locEnd(followingComment)];
       }
@@ -1431,6 +1448,14 @@ function postprocess(ast, options) {
       followingComment = comment;
     }
   }
+  const typeCastCommentsEnds = [];
+  if (supportTypeCastComments) {
+    for (const comment of comments) {
+      if (is_type_cast_comment_default(comment)) {
+        typeCastCommentsEnds.push(locEnd(comment));
+      }
+    }
+  }
   ast = visit_node_default(ast, (node) => {
     switch (node.type) {
       case "ParenthesizedExpression": {
@@ -1440,14 +1465,14 @@ function postprocess(ast, options) {
           expression.range = [start, locEnd(node)];
           return expression;
         }
-        const previousComment = array_find_last_default(
+        const previousCommentEnd = array_find_last_default(
           /* isOptionalObject */
           false,
-          ast.comments,
-          (comment) => locEnd(comment) <= start
+          typeCastCommentsEnds,
+          (end) => end <= start
         );
-        const keepTypeCast = previousComment && is_type_cast_comment_default(previousComment) && // check that there are only white spaces between the comment and the parenthesis
-        text.slice(locEnd(previousComment), start).trim().length === 0;
+        const keepTypeCast = previousCommentEnd && // check that there are only white spaces between the comment and the parenthesis
+        text.slice(previousCommentEnd, start).trim().length === 0;
         if (!keepTypeCast) {
           expression.extra = { ...expression.extra, parenthesized: true };
           return expression;
@@ -1524,7 +1549,7 @@ function postprocess(ast, options) {
           const textWithoutComments = get_text_without_comments_default(
             {
               originalText: text,
-              [Symbol.for("comments")]: ast.comments
+              [Symbol.for("comments")]: comments
             },
             idEnd,
             members[0] ? locStart(members[0]) : locEnd(node)
@@ -1791,7 +1816,11 @@ async function parseJs(text, options) {
     }
   );
   ast.comments = comments;
-  return postprocess_default(ast, { text, parser: "oxc" });
+  return postprocess_default(ast, {
+    text,
+    parser: "oxc",
+    supportTypeCastComments: true
+  });
 }
 async function parseTs(text, options) {
   let filepath = options?.filepath;
@@ -1833,9 +1862,156 @@ async function parseTs(text, options) {
 var oxc = create_parser_default(parseJs);
 var oxcTs = create_parser_default(parseTs);
 
+// packages/plugin-oxc/languages.evaluate.js
+var languages_evaluate_default = [
+  {
+    "linguistLanguageId": 183,
+    "name": "JavaScript",
+    "type": "programming",
+    "tmScope": "source.js",
+    "aceMode": "javascript",
+    "codemirrorMode": "javascript",
+    "codemirrorMimeType": "text/javascript",
+    "color": "#f1e05a",
+    "aliases": [
+      "js",
+      "node"
+    ],
+    "extensions": [
+      ".js",
+      "._js",
+      ".bones",
+      ".cjs",
+      ".es",
+      ".es6",
+      ".gs",
+      ".jake",
+      ".javascript",
+      ".jsb",
+      ".jscad",
+      ".jsfl",
+      ".jslib",
+      ".jsm",
+      ".jspre",
+      ".jss",
+      ".mjs",
+      ".njs",
+      ".pac",
+      ".sjs",
+      ".ssjs",
+      ".xsjs",
+      ".xsjslib",
+      ".start.frag",
+      ".end.frag",
+      ".wxs"
+    ],
+    "filenames": [
+      "Jakefile",
+      "start.frag",
+      "end.frag"
+    ],
+    "interpreters": [
+      "chakra",
+      "d8",
+      "gjs",
+      "js",
+      "node",
+      "nodejs",
+      "qjs",
+      "rhino",
+      "v8",
+      "v8-shell",
+      "zx"
+    ],
+    "parsers": [
+      "oxc",
+      "oxc-ts"
+    ],
+    "vscodeLanguageIds": [
+      "javascript",
+      "mongo"
+    ]
+  },
+  {
+    "linguistLanguageId": 183,
+    "name": "JSX",
+    "type": "programming",
+    "tmScope": "source.js.jsx",
+    "aceMode": "javascript",
+    "codemirrorMode": "jsx",
+    "codemirrorMimeType": "text/jsx",
+    "color": void 0,
+    "aliases": void 0,
+    "extensions": [
+      ".jsx"
+    ],
+    "filenames": void 0,
+    "interpreters": void 0,
+    "parsers": [
+      "oxc",
+      "oxc-ts"
+    ],
+    "vscodeLanguageIds": [
+      "javascriptreact"
+    ],
+    "group": "JavaScript"
+  },
+  {
+    "linguistLanguageId": 378,
+    "name": "TypeScript",
+    "type": "programming",
+    "color": "#3178c6",
+    "aliases": [
+      "ts"
+    ],
+    "interpreters": [
+      "bun",
+      "deno",
+      "ts-node",
+      "tsx"
+    ],
+    "extensions": [
+      ".ts",
+      ".cts",
+      ".mts"
+    ],
+    "tmScope": "source.ts",
+    "aceMode": "typescript",
+    "codemirrorMode": "javascript",
+    "codemirrorMimeType": "application/typescript",
+    "parsers": [
+      "oxc-ts"
+    ],
+    "vscodeLanguageIds": [
+      "typescript"
+    ]
+  },
+  {
+    "linguistLanguageId": 94901924,
+    "name": "TSX",
+    "type": "programming",
+    "color": "#3178c6",
+    "group": "TypeScript",
+    "extensions": [
+      ".tsx"
+    ],
+    "tmScope": "source.tsx",
+    "aceMode": "javascript",
+    "codemirrorMode": "jsx",
+    "codemirrorMimeType": "text/jsx",
+    "parsers": [
+      "oxc-ts"
+    ],
+    "vscodeLanguageIds": [
+      "typescriptreact"
+    ]
+  }
+];
+
 // with-default-export:packages/plugin-oxc/index.js
 var plugin_oxc_default = index_exports;
 export {
   plugin_oxc_default as default,
+  languages_evaluate_default as languages,
   oxc_exports as parsers
 };

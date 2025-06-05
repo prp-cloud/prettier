@@ -8477,6 +8477,127 @@ ${frame}`;
   }
 });
 
+// node_modules/n-readlines/readlines.js
+var require_readlines = __commonJS({
+  "node_modules/n-readlines/readlines.js"(exports, module) {
+    "use strict";
+    var fs5 = __require("fs");
+    var LineByLine = class {
+      constructor(file, options8) {
+        options8 = options8 || {};
+        if (!options8.readChunk) options8.readChunk = 1024;
+        if (!options8.newLineCharacter) {
+          options8.newLineCharacter = 10;
+        } else {
+          options8.newLineCharacter = options8.newLineCharacter.charCodeAt(0);
+        }
+        if (typeof file === "number") {
+          this.fd = file;
+        } else {
+          this.fd = fs5.openSync(file, "r");
+        }
+        this.options = options8;
+        this.newLineCharacter = options8.newLineCharacter;
+        this.reset();
+      }
+      _searchInBuffer(buffer2, hexNeedle) {
+        let found = -1;
+        for (let i = 0; i <= buffer2.length; i++) {
+          let b_byte = buffer2[i];
+          if (b_byte === hexNeedle) {
+            found = i;
+            break;
+          }
+        }
+        return found;
+      }
+      reset() {
+        this.eofReached = false;
+        this.linesCache = [];
+        this.fdPosition = 0;
+      }
+      close() {
+        fs5.closeSync(this.fd);
+        this.fd = null;
+      }
+      _extractLines(buffer2) {
+        let line3;
+        const lines = [];
+        let bufferPosition = 0;
+        let lastNewLineBufferPosition = 0;
+        while (true) {
+          let bufferPositionValue = buffer2[bufferPosition++];
+          if (bufferPositionValue === this.newLineCharacter) {
+            line3 = buffer2.slice(lastNewLineBufferPosition, bufferPosition);
+            lines.push(line3);
+            lastNewLineBufferPosition = bufferPosition;
+          } else if (bufferPositionValue === void 0) {
+            break;
+          }
+        }
+        let leftovers = buffer2.slice(lastNewLineBufferPosition, bufferPosition);
+        if (leftovers.length) {
+          lines.push(leftovers);
+        }
+        return lines;
+      }
+      _readChunk(lineLeftovers) {
+        let totalBytesRead = 0;
+        let bytesRead;
+        const buffers = [];
+        do {
+          const readBuffer = Buffer.alloc(this.options.readChunk);
+          bytesRead = fs5.readSync(this.fd, readBuffer, 0, this.options.readChunk, this.fdPosition);
+          totalBytesRead = totalBytesRead + bytesRead;
+          this.fdPosition = this.fdPosition + bytesRead;
+          buffers.push(readBuffer);
+        } while (bytesRead && this._searchInBuffer(buffers[buffers.length - 1], this.options.newLineCharacter) === -1);
+        let bufferData = Buffer.concat(buffers);
+        if (bytesRead < this.options.readChunk) {
+          this.eofReached = true;
+          bufferData = bufferData.slice(0, totalBytesRead);
+        }
+        if (totalBytesRead) {
+          this.linesCache = this._extractLines(bufferData);
+          if (lineLeftovers) {
+            this.linesCache[0] = Buffer.concat([lineLeftovers, this.linesCache[0]]);
+          }
+        }
+        return totalBytesRead;
+      }
+      next() {
+        if (!this.fd) return false;
+        let line3 = false;
+        if (this.eofReached && this.linesCache.length === 0) {
+          return line3;
+        }
+        let bytesRead;
+        if (!this.linesCache.length) {
+          bytesRead = this._readChunk();
+        }
+        if (this.linesCache.length) {
+          line3 = this.linesCache.shift();
+          const lastLineCharacter = line3[line3.length - 1];
+          if (lastLineCharacter !== this.newLineCharacter) {
+            bytesRead = this._readChunk(line3);
+            if (bytesRead) {
+              line3 = this.linesCache.shift();
+            }
+          }
+        }
+        if (this.eofReached && this.linesCache.length === 0) {
+          this.close();
+        }
+        if (line3 && line3[line3.length - 1] === this.newLineCharacter) {
+          line3 = line3.slice(0, line3.length - 1);
+        }
+        return line3;
+      }
+    };
+    module.exports = LineByLine;
+  }
+});
+
 // node_modules/ignore/index.js
 var require_ignore = __commonJS({
   "node_modules/ignore/index.js"(exports, module) {
@@ -8934,127 +9055,6 @@ var require_ignore = __commonJS({
   }
 });
 
-// node_modules/n-readlines/readlines.js
-var require_readlines = __commonJS({
-  "node_modules/n-readlines/readlines.js"(exports, module) {
-    "use strict";
-    var fs5 = __require("fs");
-    var LineByLine = class {
-      constructor(file, options8) {
-        options8 = options8 || {};
-        if (!options8.readChunk) options8.readChunk = 1024;
-        if (!options8.newLineCharacter) {
-          options8.newLineCharacter = 10;
-        } else {
-          options8.newLineCharacter = options8.newLineCharacter.charCodeAt(0);
-        }
-        if (typeof file === "number") {
-          this.fd = file;
-        } else {
-          this.fd = fs5.openSync(file, "r");
-        }
-        this.options = options8;
-        this.newLineCharacter = options8.newLineCharacter;
-        this.reset();
-      }
-      _searchInBuffer(buffer2, hexNeedle) {
-        let found = -1;
-        for (let i = 0; i <= buffer2.length; i++) {
-          let b_byte = buffer2[i];
-          if (b_byte === hexNeedle) {
-            found = i;
-            break;
-          }
-        }
-        return found;
-      }
-      reset() {
-        this.eofReached = false;
-        this.linesCache = [];
-        this.fdPosition = 0;
-      }
-      close() {
-        fs5.closeSync(this.fd);
-        this.fd = null;
-      }
-      _extractLines(buffer2) {
-        let line3;
-        const lines = [];
-        let bufferPosition = 0;
-        let lastNewLineBufferPosition = 0;
-        while (true) {
-          let bufferPositionValue = buffer2[bufferPosition++];
-          if (bufferPositionValue === this.newLineCharacter) {
-            line3 = buffer2.slice(lastNewLineBufferPosition, bufferPosition);
-            lines.push(line3);
-            lastNewLineBufferPosition = bufferPosition;
-          } else if (bufferPositionValue === void 0) {
-            break;
-          }
-        }
-        let leftovers = buffer2.slice(lastNewLineBufferPosition, bufferPosition);
-        if (leftovers.length) {
-          lines.push(leftovers);
-        }
-        return lines;
-      }
-      _readChunk(lineLeftovers) {
-        let totalBytesRead = 0;
-        let bytesRead;
-        const buffers = [];
-        do {
-          const readBuffer = Buffer.alloc(this.options.readChunk);
-          bytesRead = fs5.readSync(this.fd, readBuffer, 0, this.options.readChunk, this.fdPosition);
-          totalBytesRead = totalBytesRead + bytesRead;
-          this.fdPosition = this.fdPosition + bytesRead;
-          buffers.push(readBuffer);
-        } while (bytesRead && this._searchInBuffer(buffers[buffers.length - 1], this.options.newLineCharacter) === -1);
-        let bufferData = Buffer.concat(buffers);
-        if (bytesRead < this.options.readChunk) {
-          this.eofReached = true;
-          bufferData = bufferData.slice(0, totalBytesRead);
-        }
-        if (totalBytesRead) {
-          this.linesCache = this._extractLines(bufferData);
-          if (lineLeftovers) {
-            this.linesCache[0] = Buffer.concat([lineLeftovers, this.linesCache[0]]);
-          }
-        }
-        return totalBytesRead;
-      }
-      next() {
-        if (!this.fd) return false;
-        let line3 = false;
-        if (this.eofReached && this.linesCache.length === 0) {
-          return line3;
-        }
-        let bytesRead;
-        if (!this.linesCache.length) {
-          bytesRead = this._readChunk();
-        }
-        if (this.linesCache.length) {
-          line3 = this.linesCache.shift();
-          const lastLineCharacter = line3[line3.length - 1];
-          if (lastLineCharacter !== this.newLineCharacter) {
-            bytesRead = this._readChunk(line3);
-            if (bytesRead) {
-              line3 = this.linesCache.shift();
-            }
-          }
-        }
-        if (this.eofReached && this.linesCache.length === 0) {
-          this.close();
-        }
-        if (line3 && line3[line3.length - 1] === this.newLineCharacter) {
-          line3 = line3.slice(0, line3.length - 1);
-        }
-        return line3;
-      }
-    };
-    module.exports = LineByLine;
-  }
-});
-
 // src/index.js
 var index_exports = {};
 __export(index_exports, {
@@ -9065,7 +9065,7 @@ __export(index_exports, {
   doc: () => doc,
   format: () => format2,
   formatWithCursor: () => formatWithCursor2,
-  getFileInfo: () => getFileInfo2,
+  getFileInfo: () => get_file_info_default,
   getSupportInfo: () => getSupportInfo2,
   resolveConfig: () => resolveConfig,
   resolveConfigFile: () => resolveConfigFile,
@@ -10220,6 +10220,41 @@ var ArgExpansionBailout = class extends Error {
   name = "ArgExpansionBailout";
 };
 
+// src/utils/create-mockable.js
+function createMockable(implementations) {
+  const mocked = { ...implementations };
+  const mockImplementation = (functionality, implementation) => {
+    if (!Object.prototype.hasOwnProperty.call(implementations, functionality)) {
+      throw new Error(`Unexpected mock '${functionality}'.`);
+    }
+    mocked[functionality] = implementation;
+  };
+  const mockImplementations = (overrideImplementations) => {
+    for (const [functionality, implementation] of Object.entries(
+      overrideImplementations
+    )) {
+      mockImplementation(functionality, implementation);
+    }
+  };
+  const mockRestore = () => {
+    Object.assign(mocked, implementations);
+  };
+  return {
+    mocked,
+    implementations,
+    mockImplementation,
+    mockImplementations,
+    mockRestore
+  };
+}
+var create_mockable_default = createMockable;
+
+// src/common/mockable.js
+var mockable = create_mockable_default({
+  getPrettierConfigSearchStopDirectory: () => void 0
+});
+var mockable_default = mockable.mocked;
+
 // src/config/resolve-config.js
 var import_micromatch = __toESM(require_micromatch(), 1);
 import path10 from "path";
@@ -10462,41 +10497,6 @@ function loadEditorconfig(file, { shouldCache }) {
 
 // src/config/prettier-config/index.js
 import path9 from "path";
-
-// src/utils/create-mockable.js
-function createMockable(implementations) {
-  const mocked = { ...implementations };
-  const mockImplementation = (functionality, implementation) => {
-    if (!Object.prototype.hasOwnProperty.call(implementations, functionality)) {
-      throw new Error(`Unexpected mock '${functionality}'.`);
-    }
-    mocked[functionality] = implementation;
-  };
-  const mockImplementations = (overrideImplementations) => {
-    for (const [functionality, implementation] of Object.entries(
-      overrideImplementations
-    )) {
-      mockImplementation(functionality, implementation);
-    }
-  };
-  const mockRestore = () => {
-    Object.assign(mocked, implementations);
-  };
-  return {
-    mocked,
-    implementations,
-    mockImplementation,
-    mockImplementations,
-    mockRestore
-  };
-}
-var create_mockable_default = createMockable;
-
-// src/common/mockable.js
-var mockable = create_mockable_default({
-  getPrettierConfigSearchStopDirectory: () => void 0
-});
-var mockable_default = mockable.mocked;
 
 // src/config/prettier-config/loaders.js
 import { pathToFileURL as pathToFileURL2 } from "url";
@@ -13910,196 +13910,6 @@ var stringReplaceAll = (isOptionalObject, original, pattern, replacement) => {
 };
 var string_replace_all_default = stringReplaceAll;
 
-// src/utils/ignore.js
-var import_ignore = __toESM(require_ignore(), 1);
-import path11 from "path";
-import url2 from "url";
-var slash = path11.sep === "\\" ? (filePath) => string_replace_all_default(
-  /* isOptionalObject */
-  false,
-  filePath,
-  "\\",
-  "/"
-) : (filePath) => filePath;
-function getRelativePath(file, ignoreFile) {
-  const ignoreFilePath = toPath(ignoreFile);
-  const filePath = isUrl(file) ? url2.fileURLToPath(file) : path11.resolve(file);
-  return path11.relative(
-    // If there's an ignore-path set, the filename must be relative to the
-    // ignore path, not the current working directory.
-    ignoreFilePath ? path11.dirname(ignoreFilePath) : process.cwd(),
-    filePath
-  );
-}
-async function createSingleIsIgnoredFunction(ignoreFile, withNodeModules) {
-  let content = "";
-  if (ignoreFile) {
-    content += await read_file_default(ignoreFile) ?? "";
-  }
-  if (!withNodeModules) {
-    content += "\nnode_modules";
-  }
-  if (!content) {
-    return;
-  }
-  const ignore = (0, import_ignore.default)({ allowRelativePaths: true }).add(content);
-  return (file) => ignore.checkIgnore(slash(getRelativePath(file, ignoreFile))).ignored;
-}
-async function createIsIgnoredFunction(ignoreFiles, withNodeModules) {
-  if (ignoreFiles.length === 0 && !withNodeModules) {
-    ignoreFiles = [void 0];
-  }
-  const isIgnoredFunctions = (await Promise.all(
-    ignoreFiles.map(
-      (ignoreFile) => createSingleIsIgnoredFunction(ignoreFile, withNodeModules)
-    )
-  )).filter(Boolean);
-  return (file) => isIgnoredFunctions.some((isIgnored2) => isIgnored2(file));
-}
-async function isIgnored(file, options8) {
-  const { ignorePath: ignoreFiles, withNodeModules } = options8;
-  const isIgnored2 = await createIsIgnoredFunction(ignoreFiles, withNodeModules);
-  return isIgnored2(file);
-}
-
-// src/utils/get-interpreter.js
-var import_n_readlines = __toESM(require_readlines(), 1);
-import fs4 from "fs";
-function getInterpreter(file) {
-  let fd;
-  try {
-    fd = fs4.openSync(file, "r");
-  } catch {
-    return;
-  }
-  try {
-    const liner = new import_n_readlines.default(fd);
-    const firstLine = liner.next().toString("utf8");
-    const m1 = firstLine.match(/^#!\/(?:usr\/)?bin\/env\s+(\S+)/u);
-    if (m1) {
-      return m1[1];
-    }
-    const m2 = firstLine.match(/^#!\/(?:usr\/(?:local\/)?)?bin\/(\S+)/u);
-    if (m2) {
-      return m2[1];
-    }
-  } finally {
-    try {
-      fs4.closeSync(fd);
-    } catch {
-    }
-  }
-}
-var get_interpreter_default = getInterpreter;
-
-// src/utils/is-non-empty-array.js
-function isNonEmptyArray(object) {
-  return Array.isArray(object) && object.length > 0;
-}
-var is_non_empty_array_default = isNonEmptyArray;
-
-// src/utils/universal-to-path.js
-import { fileURLToPath as fileURLToPath5 } from "url";
-var universal_to_path_default = false ? fromFileUrl3 : fileURLToPath5;
-
-// src/utils/infer-parser.js
-var getFileBasename = (file) => String(file).split(/[/\\]/u).pop();
-function getLanguageByFileName(languages2, file) {
-  if (!file) {
-    return;
-  }
-  const basename = getFileBasename(file).toLowerCase();
-  return languages2.find(
-    ({ filenames }) => filenames?.some((name) => name.toLowerCase() === basename)
-  ) ?? languages2.find(
-    ({ extensions }) => extensions?.some((extension) => basename.endsWith(extension))
-  );
-}
-function getLanguageByLanguageName(languages2, languageName) {
-  if (!languageName) {
-    return;
-  }
-  return languages2.find(({ name }) => name.toLowerCase() === languageName) ?? languages2.find(({ aliases }) => aliases?.includes(languageName)) ?? languages2.find(({ extensions }) => extensions?.includes(`.${languageName}`));
-}
-function getLanguageByInterpreter(languages2, file) {
-  if (!file || getFileBasename(file).includes(".")) {
-    return;
-  }
-  const languagesWithInterpreters = languages2.filter(
-    ({ interpreters }) => is_non_empty_array_default(interpreters)
-  );
-  if (languagesWithInterpreters.length === 0) {
-    return;
-  }
-  const interpreter = get_interpreter_default(file);
-  if (!interpreter) {
-    return;
-  }
-  return languagesWithInterpreters.find(
-    ({ interpreters }) => interpreters.includes(interpreter)
-  );
-}
-function getLanguageByIsSupported(languages2, file) {
-  if (!file) {
-    return;
-  }
-  if (String(file).startsWith("file:")) {
-    try {
-      file = universal_to_path_default(file);
-    } catch {
-      return;
-    }
-  }
-  if (typeof file !== "string") {
-    return;
-  }
-  return languages2.find(({ isSupported }) => isSupported?.({ filepath: file }));
-}
-function inferParser(options8, fileInfo) {
-  const languages2 = options8.plugins.flatMap(
-    (plugin) => (
-      // @ts-expect-error -- Safe
-      plugin.languages ?? []
-    )
-  );
-  const language = getLanguageByLanguageName(languages2, fileInfo.language) ?? getLanguageByFileName(languages2, fileInfo.physicalFile) ?? getLanguageByFileName(languages2, fileInfo.file) ?? getLanguageByIsSupported(languages2, fileInfo.physicalFile) ?? getLanguageByIsSupported(languages2, fileInfo.file) ?? getLanguageByInterpreter(languages2, fileInfo.physicalFile);
-  return language?.parsers[0];
-}
-var infer_parser_default = inferParser;
-
-// src/common/get-file-info.js
-async function getFileInfo(file, options8) {
-  if (typeof file !== "string" && !(file instanceof URL)) {
-    throw new TypeError(
-      `expect \`file\` to be a string or URL, got \`${typeof file}\``
-    );
-  }
-  let { ignorePath, withNodeModules } = options8;
-  if (!Array.isArray(ignorePath)) {
-    ignorePath = [ignorePath];
-  }
-  const ignored = await isIgnored(file, { ignorePath, withNodeModules });
-  let inferredParser;
-  if (!ignored) {
-    inferredParser = await getParser(file, options8);
-  }
-  return {
-    ignored,
-    inferredParser: inferredParser ?? null
-  };
-}
-async function getParser(file, options8) {
-  let config;
-  if (options8.resolveConfig !== false) {
-    config = await resolveConfig(file, {
-      // No need read `.editorconfig`
-      editorconfig: false
-    });
-  }
-  return config?.parser ?? infer_parser_default(options8, { physicalFile: file });
-}
-var get_file_info_default = getFileInfo;
-
 // src/common/end-of-line.js
 function guessEndOfLine(text) {
   const index = text.indexOf("\r");
@@ -15675,6 +15485,12 @@ function hasNewline(text, startIndex, options8 = {}) {
 }
 var has_newline_default = hasNewline;
 
+// src/utils/is-non-empty-array.js
+function isNonEmptyArray(object) {
+  return Array.isArray(object) && object.length > 0;
+}
+var is_non_empty_array_default = isNonEmptyArray;
+
 // src/main/create-get-visitor-keys-function.js
 var nonTraversableKeys = /* @__PURE__ */ new Set([
   "tokens",
@@ -16460,6 +16276,121 @@ function normalizeOptionSettings(settings) {
   }
   return options8;
 }
+
+// scripts/build/shims/array-to-reversed.js
+var arrayToReversed = (isOptionalObject, array2) => {
+  if (isOptionalObject && (array2 === void 0 || array2 === null)) {
+    return;
+  }
+  if (array2.toReversed || !Array.isArray(array2)) {
+    return array2.toReversed();
+  }
+  return [...array2].reverse();
+};
+var array_to_reversed_default = arrayToReversed;
+
+// src/utils/get-interpreter.js
+var import_n_readlines = __toESM(require_readlines(), 1);
+import fs4 from "fs";
+function getInterpreter(file) {
+  let fd;
+  try {
+    fd = fs4.openSync(file, "r");
+  } catch {
+    return;
+  }
+  try {
+    const liner = new import_n_readlines.default(fd);
+    const firstLine = liner.next().toString("utf8");
+    const m1 = firstLine.match(/^#!\/(?:usr\/)?bin\/env\s+(\S+)/u);
+    if (m1) {
+      return m1[1];
+    }
+    const m2 = firstLine.match(/^#!\/(?:usr\/(?:local\/)?)?bin\/(\S+)/u);
+    if (m2) {
+      return m2[1];
+    }
+  } finally {
+    try {
+      fs4.closeSync(fd);
+    } catch {
+    }
+  }
+}
+var get_interpreter_default = getInterpreter;
+
+// src/utils/universal-to-path.js
+import { fileURLToPath as fileURLToPath5 } from "url";
+var universal_to_path_default = false ? fromFileUrl3 : fileURLToPath5;
+
+// src/utils/infer-parser.js
+var getFileBasename = (file) => String(file).split(/[/\\]/u).pop();
+function getLanguageByFileName(languages2, file) {
+  if (!file) {
+    return;
+  }
+  const basename = getFileBasename(file).toLowerCase();
+  return languages2.find(
+    ({ filenames }) => filenames?.some((name) => name.toLowerCase() === basename)
+  ) ?? languages2.find(
+    ({ extensions }) => extensions?.some((extension) => basename.endsWith(extension))
+  );
+}
+function getLanguageByLanguageName(languages2, languageName) {
+  if (!languageName) {
+    return;
+  }
+  return languages2.find(({ name }) => name.toLowerCase() === languageName) ?? languages2.find(({ aliases }) => aliases?.includes(languageName)) ?? languages2.find(({ extensions }) => extensions?.includes(`.${languageName}`));
+}
+function getLanguageByInterpreter(languages2, file) {
+  if (!file || getFileBasename(file).includes(".")) {
+    return;
+  }
+  const languagesWithInterpreters = languages2.filter(
+    ({ interpreters }) => is_non_empty_array_default(interpreters)
+  );
+  if (languagesWithInterpreters.length === 0) {
+    return;
+  }
+  const interpreter = get_interpreter_default(file);
+  if (!interpreter) {
+    return;
+  }
+  return languagesWithInterpreters.find(
+    ({ interpreters }) => interpreters.includes(interpreter)
+  );
+}
+function getLanguageByIsSupported(languages2, file) {
+  if (!file) {
+    return;
+  }
+  if (String(file).startsWith("file:")) {
+    try {
+      file = universal_to_path_default(file);
+    } catch {
+      return;
+    }
+  }
+  if (typeof file !== "string") {
+    return;
+  }
+  return languages2.find(({ isSupported }) => isSupported?.({ filepath: file }));
+}
+function inferParser(options8, fileInfo) {
+  const languages2 = array_to_reversed_default(
+    /* isOptionalObject */
+    false,
+    options8.plugins
+  ).flatMap(
+    (plugin) => (
+      // @ts-expect-error -- Safe
+      plugin.languages ?? []
+    )
+  );
+  const language = getLanguageByLanguageName(languages2, fileInfo.language) ?? getLanguageByFileName(languages2, fileInfo.physicalFile) ?? getLanguageByFileName(languages2, fileInfo.file) ?? getLanguageByIsSupported(languages2, fileInfo.physicalFile) ?? getLanguageByIsSupported(languages2, fileInfo.file) ?? getLanguageByInterpreter(languages2, fileInfo.physicalFile);
+  return language?.parsers[0];
+}
+var infer_parser_default = inferParser;
 
 // src/main/normalize-options.js
 var hasDeprecationWarned;
@@ -18705,13 +18636,13 @@ function loadBuiltinPlugins() {
 var load_builtin_plugins_default = loadBuiltinPlugins;
 
 // src/main/plugins/load-plugin.js
-import path13 from "path";
+import path12 from "path";
 import { pathToFileURL as pathToFileURL5 } from "url";
 
 // src/utils/import-from-directory.js
-import path12 from "path";
+import path11 from "path";
 function importFromDirectory(specifier, directory) {
-  return import_from_file_default(specifier, path12.join(directory, "noop.js"));
+  return import_from_file_default(specifier, path11.join(directory, "noop.js"));
 }
 var import_from_directory_default = importFromDirectory;
 
@@ -18720,11 +18651,11 @@ async function importPlugin(name, cwd) {
   if (isUrl(name)) {
     return import(name);
   }
-  if (path13.isAbsolute(name)) {
+  if (path12.isAbsolute(name)) {
     return import(pathToFileURL5(name).href);
   }
   try {
-    return await import(pathToFileURL5(path13.resolve(name)).href);
+    return await import(pathToFileURL5(path12.resolve(name)).href);
   } catch {
     return import_from_directory_default(name, cwd);
   }
@@ -18755,6 +18686,58 @@ function loadPlugins(plugins = []) {
 }
 var load_plugins_default = loadPlugins;
 
+// src/utils/ignore.js
+var import_ignore = __toESM(require_ignore(), 1);
+import path13 from "path";
+import url2 from "url";
+var slash = path13.sep === "\\" ? (filePath) => string_replace_all_default(
+  /* isOptionalObject */
+  false,
+  filePath,
+  "\\",
+  "/"
+) : (filePath) => filePath;
+function getRelativePath(file, ignoreFile) {
+  const ignoreFilePath = toPath(ignoreFile);
+  const filePath = isUrl(file) ? url2.fileURLToPath(file) : path13.resolve(file);
+  return path13.relative(
+    // If there's an ignore-path set, the filename must be relative to the
+    // ignore path, not the current working directory.
+    ignoreFilePath ? path13.dirname(ignoreFilePath) : process.cwd(),
+    filePath
+  );
+}
+async function createSingleIsIgnoredFunction(ignoreFile, withNodeModules) {
+  let content = "";
+  if (ignoreFile) {
+    content += await read_file_default(ignoreFile) ?? "";
+  }
+  if (!withNodeModules) {
+    content += "\nnode_modules";
+  }
+  if (!content) {
+    return;
+  }
+  const ignore = (0, import_ignore.default)({ allowRelativePaths: true }).add(content);
+  return (file) => ignore.checkIgnore(slash(getRelativePath(file, ignoreFile))).ignored;
+}
+async function createIsIgnoredFunction(ignoreFiles, withNodeModules) {
+  if (ignoreFiles.length === 0 && !withNodeModules) {
+    ignoreFiles = [void 0];
+  }
+  const isIgnoredFunctions = (await Promise.all(
+    ignoreFiles.map(
+      (ignoreFile) => createSingleIsIgnoredFunction(ignoreFile, withNodeModules)
+    )
+  )).filter(Boolean);
+  return (file) => isIgnoredFunctions.some((isIgnored2) => isIgnored2(file));
+}
+async function isIgnored(file, options8) {
+  const { ignorePath: ignoreFiles, withNodeModules } = options8;
+  const isIgnored2 = await createIsIgnoredFunction(ignoreFiles, withNodeModules);
+  return isIgnored2(file);
+}
+
 // src/utils/object-omit.js
 function omit(object, keys) {
   keys = new Set(keys);
@@ -18764,11 +18747,49 @@ function omit(object, keys) {
 }
 var object_omit_default = omit;
 
+// src/common/get-file-info.js
+async function getFileInfo(file, options8 = {}) {
+  if (typeof file !== "string" && !(file instanceof URL)) {
+    throw new TypeError(
+      `expect \`file\` to be a string or URL, got \`${typeof file}\``
+    );
+  }
+  let { ignorePath, withNodeModules } = options8;
+  if (!Array.isArray(ignorePath)) {
+    ignorePath = [ignorePath];
+  }
+  const ignored = await isIgnored(file, { ignorePath, withNodeModules });
+  let inferredParser;
+  if (!ignored) {
+    inferredParser = options8.parser ?? await getParser(file, options8);
+  }
+  return {
+    ignored,
+    inferredParser: inferredParser ?? null
+  };
+}
+async function getParser(file, options8) {
+  let config;
+  if (options8.resolveConfig !== false) {
+    config = await resolveConfig(file, {
+      // No need read `.editorconfig`
+      editorconfig: false
+    });
+  }
+  if (config?.parser) {
+    return config.parser;
+  }
+  let plugins = options8.plugins ?? config?.plugins ?? [];
+  plugins = (await Promise.all([load_builtin_plugins_default(), load_plugins_default(plugins)])).flat();
+  return infer_parser_default({ plugins }, { physicalFile: file });
+}
+var get_file_info_default = getFileInfo;
+
 // src/index.js
 import * as doc from "./doc.mjs";
 
 // src/main/version.evaluate.js
-var version_evaluate_default = "3.6.0-9a2fb8e63";
+var version_evaluate_default = "3.6.0-40e0776f1";
 
 // src/utils/public.js
 var public_exports = {};
@@ -19036,7 +19057,6 @@ async function clearCache3() {
   clearCache();
   clearCache2();
 }
-var getFileInfo2 = withPlugins(get_file_info_default);
 var getSupportInfo2 = withPlugins(getSupportInfo, 0);
 var inferParser2 = withPlugins(
   (file, options8) => infer_parser_default(options8, { physicalFile: file })
@@ -19084,7 +19104,7 @@ export {
   doc,
   format2 as format,
   formatWithCursor2 as formatWithCursor,
-  getFileInfo2 as getFileInfo,
+  get_file_info_default as getFileInfo,
   getSupportInfo2 as getSupportInfo,
   resolveConfig,
   resolveConfigFile,
