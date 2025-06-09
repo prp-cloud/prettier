@@ -463,7 +463,7 @@ Repository: <https://github.com/typescript-eslint/typescript-eslint.git>
 
 ----------------------------------------
 
-## acorn@v8.14.1
+## acorn@v8.15.0
 
 > ECMAScript parser
 
@@ -1539,7 +1539,7 @@ Author: Matteo Collina <hello@matteocollina.com>
 
 ----------------------------------------
 
-## file-entry-cache@v10.1.0
+## file-entry-cache@v10.1.1
 
 > A lightweight cache for file metadata, ideal for processes that work on a specific set of files and only need to reprocess files that have changed since the last run
 

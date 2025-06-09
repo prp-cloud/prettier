@@ -17562,57 +17562,53 @@ __export(builtin_plugins_proxy_exports, {
 // src/language-css/languages.evaluate.js
 var languages_evaluate_default = [
   {
-    "linguistLanguageId": 50,
     "name": "CSS",
     "type": "markup",
-    "tmScope": "source.css",
-    "aceMode": "css",
-    "codemirrorMode": "css",
-    "codemirrorMimeType": "text/css",
-    "color": "#663399",
     "extensions": [
       ".css",
       ".wxss"
     ],
+    "tmScope": "source.css",
+    "aceMode": "css",
+    "codemirrorMode": "css",
+    "codemirrorMimeType": "text/css",
     "parsers": [
       "css"
     ],
     "vscodeLanguageIds": [
       "css"
-    ]
+    ],
+    "linguistLanguageId": 50
   },
   {
-    "linguistLanguageId": 262764437,
     "name": "PostCSS",
     "type": "markup",
-    "color": "#dc3a0c",
-    "tmScope": "source.postcss",
-    "group": "CSS",
     "extensions": [
       ".pcss",
       ".postcss"
     ],
+    "tmScope": "source.postcss",
     "aceMode": "text",
+    "group": "CSS",
     "parsers": [
       "css"
     ],
     "vscodeLanguageIds": [
       "postcss"
-    ]
+    ],
+    "linguistLanguageId": 262764437
   },
   {
-    "linguistLanguageId": 198,
     "name": "Less",
     "type": "markup",
-    "color": "#1d365d",
-    "aliases": [
-      "less-css"
-    ],
     "extensions": [
       ".less"
     ],
     "tmScope": "source.css.less",
     "aceMode": "less",
+    "aliases": [
+      "less-css"
+    ],
     "codemirrorMode": "css",
     "codemirrorMimeType": "text/css",
     "parsers": [
@@ -17620,26 +17616,26 @@ var languages_evaluate_default = [
     ],
     "vscodeLanguageIds": [
       "less"
-    ]
+    ],
+    "linguistLanguageId": 198
   },
   {
-    "linguistLanguageId": 329,
     "name": "SCSS",
     "type": "markup",
-    "color": "#c6538c",
+    "extensions": [
+      ".scss"
+    ],
     "tmScope": "source.css.scss",
     "aceMode": "scss",
     "codemirrorMode": "css",
     "codemirrorMimeType": "text/x-scss",
-    "extensions": [
-      ".scss"
-    ],
     "parsers": [
       "scss"
     ],
     "vscodeLanguageIds": [
       "scss"
-    ]
+    ],
+    "linguistLanguageId": 329
   }
 ];
 
@@ -17717,10 +17713,8 @@ var options_default = options;
 // src/language-graphql/languages.evaluate.js
 var languages_evaluate_default2 = [
   {
-    "linguistLanguageId": 139,
     "name": "GraphQL",
     "type": "data",
-    "color": "#e10098",
     "extensions": [
       ".graphql",
       ".gql",
@@ -17733,7 +17727,8 @@ var languages_evaluate_default2 = [
     ],
     "vscodeLanguageIds": [
       "graphql"
-    ]
+    ],
+    "linguistLanguageId": 139
   }
 ];
 
@@ -17746,66 +17741,55 @@ var options_default2 = options2;
 // src/language-handlebars/languages.evaluate.js
 var languages_evaluate_default3 = [
   {
-    "linguistLanguageId": 155,
     "name": "Handlebars",
     "type": "markup",
-    "color": "#f7931e",
-    "aliases": [
-      "hbs",
-      "htmlbars"
-    ],
     "extensions": [
       ".handlebars",
       ".hbs"
     ],
     "tmScope": "text.html.handlebars",
     "aceMode": "handlebars",
+    "aliases": [
+      "hbs",
+      "htmlbars"
+    ],
     "parsers": [
       "glimmer"
     ],
     "vscodeLanguageIds": [
       "handlebars"
-    ]
+    ],
+    "linguistLanguageId": 155
   }
 ];
 
 // src/language-html/languages.evaluate.js
 var languages_evaluate_default4 = [
   {
-    "linguistLanguageId": 146,
     "name": "Angular",
     "type": "markup",
-    "tmScope": "text.html.basic",
-    "aceMode": "html",
-    "codemirrorMode": "htmlmixed",
-    "codemirrorMimeType": "text/html",
-    "color": "#e34c26",
-    "aliases": [
-      "xhtml"
-    ],
     "extensions": [
       ".component.html"
     ],
+    "tmScope": "text.html.basic",
+    "aceMode": "html",
+    "aliases": [
+      "xhtml"
+    ],
+    "codemirrorMode": "htmlmixed",
+    "codemirrorMimeType": "text/html",
     "parsers": [
       "angular"
     ],
     "vscodeLanguageIds": [
       "html"
     ],
-    "filenames": []
+    "filenames": [],
+    "linguistLanguageId": 146
   },
   {
-    "linguistLanguageId": 146,
     "name": "HTML",
     "type": "markup",
-    "tmScope": "text.html.basic",
-    "aceMode": "html",
-    "codemirrorMode": "htmlmixed",
-    "codemirrorMimeType": "text/html",
-    "color": "#e34c26",
-    "aliases": [
-      "xhtml"
-    ],
     "extensions": [
       ".html",
       ".hta",
@@ -17815,63 +17799,67 @@ var languages_evaluate_default4 = [
       ".xht",
       ".xhtml"
     ],
+    "tmScope": "text.html.basic",
+    "aceMode": "html",
+    "aliases": [
+      "xhtml"
+    ],
+    "codemirrorMode": "htmlmixed",
+    "codemirrorMimeType": "text/html",
     "parsers": [
       "html"
     ],
     "vscodeLanguageIds": [
       "html"
-    ]
+    ],
+    "linguistLanguageId": 146
   },
   {
-    "linguistLanguageId": 146,
     "name": "Lightning Web Components",
     "type": "markup",
+    "extensions": [],
     "tmScope": "text.html.basic",
     "aceMode": "html",
-    "codemirrorMode": "htmlmixed",
-    "codemirrorMimeType": "text/html",
-    "color": "#e34c26",
     "aliases": [
       "xhtml"
     ],
-    "extensions": [],
+    "codemirrorMode": "htmlmixed",
+    "codemirrorMimeType": "text/html",
     "parsers": [
       "lwc"
     ],
     "vscodeLanguageIds": [
       "html"
     ],
-    "filenames": []
+    "filenames": [],
+    "linguistLanguageId": 146
   },
   {
-    "linguistLanguageId": 146,
     "name": "MJML",
     "type": "markup",
+    "extensions": [
+      ".mjml"
+    ],
     "tmScope": "text.mjml.basic",
     "aceMode": "html",
-    "codemirrorMode": "htmlmixed",
-    "codemirrorMimeType": "text/html",
-    "color": "#e34c26",
     "aliases": [
       "MJML",
       "mjml"
     ],
-    "extensions": [
-      ".mjml"
-    ],
+    "codemirrorMode": "htmlmixed",
+    "codemirrorMimeType": "text/html",
     "parsers": [
       "mjml"
     ],
     "filenames": [],
     "vscodeLanguageIds": [
       "mjml"
-    ]
+    ],
+    "linguistLanguageId": 146
   },
   {
-    "linguistLanguageId": 391,
     "name": "Vue",
     "type": "markup",
-    "color": "#41b883",
     "extensions": [
       ".vue"
     ],
@@ -17882,7 +17870,8 @@ var languages_evaluate_default4 = [
     ],
     "vscodeLanguageIds": [
       "vue"
-    ]
+    ],
+    "linguistLanguageId": 391
   }
 ];
 
@@ -17923,18 +17912,8 @@ var options_default3 = options3;
 // src/language-js/languages.evaluate.js
 var languages_evaluate_default5 = [
   {
-    "linguistLanguageId": 183,
     "name": "JavaScript",
     "type": "programming",
-    "tmScope": "source.js",
-    "aceMode": "javascript",
-    "codemirrorMode": "javascript",
-    "codemirrorMimeType": "text/javascript",
-    "color": "#f1e05a",
-    "aliases": [
-      "js",
-      "node"
-    ],
     "extensions": [
       ".js",
       "._js",
@@ -17963,11 +17942,14 @@ var languages_evaluate_default5 = [
       ".end.frag",
       ".wxs"
     ],
-    "filenames": [
-      "Jakefile",
-      "start.frag",
-      "end.frag"
+    "tmScope": "source.js",
+    "aceMode": "javascript",
+    "aliases": [
+      "js",
+      "node"
     ],
+    "codemirrorMode": "javascript",
+    "codemirrorMimeType": "text/javascript",
     "interpreters": [
       "chakra",
       "d8",
@@ -17980,6 +17962,11 @@ var languages_evaluate_default5 = [
       "v8",
       "v8-shell",
       "zx"
+    ],
+    "filenames": [
+      "Jakefile",
+      "start.frag",
+      "end.frag"
     ],
     "parsers": [
       "babel",
@@ -17994,22 +17981,20 @@ var languages_evaluate_default5 = [
     "vscodeLanguageIds": [
       "javascript",
       "mongo"
-    ]
+    ],
+    "linguistLanguageId": 183
   },
   {
-    "linguistLanguageId": 183,
     "name": "Flow",
     "type": "programming",
-    "tmScope": "source.js",
-    "aceMode": "javascript",
-    "codemirrorMode": "javascript",
-    "codemirrorMimeType": "text/javascript",
-    "color": "#f1e05a",
-    "aliases": [],
     "extensions": [
       ".js.flow"
     ],
-    "filenames": [],
+    "tmScope": "source.js",
+    "aceMode": "javascript",
+    "aliases": [],
+    "codemirrorMode": "javascript",
+    "codemirrorMimeType": "text/javascript",
     "interpreters": [
       "chakra",
       "d8",
@@ -18022,29 +18007,29 @@ var languages_evaluate_default5 = [
       "v8",
       "v8-shell"
     ],
+    "filenames": [],
     "parsers": [
       "flow",
       "babel-flow"
     ],
     "vscodeLanguageIds": [
       "javascript"
-    ]
+    ],
+    "linguistLanguageId": 183
   },
   {
-    "linguistLanguageId": 183,
     "name": "JSX",
     "type": "programming",
-    "tmScope": "source.js.jsx",
-    "aceMode": "javascript",
-    "codemirrorMode": "jsx",
-    "codemirrorMimeType": "text/jsx",
-    "color": void 0,
-    "aliases": void 0,
     "extensions": [
       ".jsx"
     ],
-    "filenames": void 0,
+    "tmScope": "source.js.jsx",
+    "aceMode": "javascript",
+    "aliases": void 0,
+    "codemirrorMode": "jsx",
+    "codemirrorMimeType": "text/jsx",
     "interpreters": void 0,
+    "filenames": void 0,
     "parsers": [
       "babel",
       "babel-flow",
@@ -18057,22 +18042,12 @@ var languages_evaluate_default5 = [
     "vscodeLanguageIds": [
       "javascriptreact"
     ],
-    "group": "JavaScript"
+    "group": "JavaScript",
+    "linguistLanguageId": 183
   },
   {
-    "linguistLanguageId": 378,
     "name": "TypeScript",
     "type": "programming",
-    "color": "#3178c6",
-    "aliases": [
-      "ts"
-    ],
-    "interpreters": [
-      "bun",
-      "deno",
-      "ts-node",
-      "tsx"
-    ],
     "extensions": [
       ".ts",
       ".cts",
@@ -18080,22 +18055,29 @@ var languages_evaluate_default5 = [
     ],
     "tmScope": "source.ts",
     "aceMode": "typescript",
+    "aliases": [
+      "ts"
+    ],
     "codemirrorMode": "javascript",
     "codemirrorMimeType": "application/typescript",
+    "interpreters": [
+      "bun",
+      "deno",
+      "ts-node",
+      "tsx"
+    ],
     "parsers": [
       "typescript",
       "babel-ts"
     ],
     "vscodeLanguageIds": [
       "typescript"
-    ]
+    ],
+    "linguistLanguageId": 378
   },
   {
-    "linguistLanguageId": 94901924,
     "name": "TSX",
     "type": "programming",
-    "color": "#3178c6",
-    "group": "TypeScript",
     "extensions": [
       ".tsx"
     ],
@@ -18103,13 +18085,15 @@ var languages_evaluate_default5 = [
     "aceMode": "javascript",
     "codemirrorMode": "jsx",
     "codemirrorMimeType": "text/jsx",
+    "group": "TypeScript",
     "parsers": [
       "typescript",
       "babel-ts"
     ],
     "vscodeLanguageIds": [
       "typescriptreact"
-    ]
+    ],
+    "linguistLanguageId": 94901924
   }
 ];
 
@@ -18222,23 +18206,21 @@ var options_default4 = options4;
 // src/language-json/languages.evaluate.js
 var languages_evaluate_default6 = [
   {
-    "linguistLanguageId": 174,
     "name": "JSON.stringify",
     "type": "data",
-    "color": "#292929",
+    "extensions": [
+      ".importmap"
+    ],
     "tmScope": "source.json",
     "aceMode": "json",
-    "codemirrorMode": "javascript",
-    "codemirrorMimeType": "application/json",
     "aliases": [
       "geojson",
       "jsonl",
       "sarif",
       "topojson"
     ],
-    "extensions": [
-      ".importmap"
-    ],
+    "codemirrorMode": "javascript",
+    "codemirrorMimeType": "application/json",
     "filenames": [
       "package.json",
       "package-lock.json",
@@ -18249,23 +18231,12 @@ var languages_evaluate_default6 = [
     ],
     "vscodeLanguageIds": [
       "json"
-    ]
+    ],
+    "linguistLanguageId": 174
   },
   {
-    "linguistLanguageId": 174,
     "name": "JSON",
     "type": "data",
-    "color": "#292929",
-    "tmScope": "source.json",
-    "aceMode": "json",
-    "codemirrorMode": "javascript",
-    "codemirrorMimeType": "application/json",
-    "aliases": [
-      "geojson",
-      "jsonl",
-      "sarif",
-      "topojson"
-    ],
     "extensions": [
       ".json",
       ".4DForm",
@@ -18288,6 +18259,16 @@ var languages_evaluate_default6 = [
       ".yy",
       ".yyp"
     ],
+    "tmScope": "source.json",
+    "aceMode": "json",
+    "aliases": [
+      "geojson",
+      "jsonl",
+      "sarif",
+      "topojson"
+    ],
+    "codemirrorMode": "javascript",
+    "codemirrorMimeType": "application/json",
     "filenames": [
       ".all-contributorsrc",
       ".arcconfig",
@@ -18310,21 +18291,12 @@ var languages_evaluate_default6 = [
     ],
     "vscodeLanguageIds": [
       "json"
-    ]
+    ],
+    "linguistLanguageId": 174
   },
   {
-    "linguistLanguageId": 423,
     "name": "JSON with Comments",
     "type": "data",
-    "color": "#292929",
-    "group": "JSON",
-    "tmScope": "source.json.comments",
-    "aceMode": "javascript",
-    "codemirrorMode": "javascript",
-    "codemirrorMimeType": "text/javascript",
-    "aliases": [
-      "jsonc"
-    ],
     "extensions": [
       ".jsonc",
       ".code-snippets",
@@ -18344,19 +18316,26 @@ var languages_evaluate_default6 = [
       ".sublime_metrics",
       ".sublime_session"
     ],
+    "tmScope": "source.json.comments",
+    "aceMode": "javascript",
+    "aliases": [
+      "jsonc"
+    ],
+    "codemirrorMode": "javascript",
+    "codemirrorMimeType": "text/javascript",
+    "group": "JSON",
     "filenames": [],
     "parsers": [
       "jsonc"
     ],
     "vscodeLanguageIds": [
       "jsonc"
-    ]
+    ],
+    "linguistLanguageId": 423
   },
   {
-    "linguistLanguageId": 175,
     "name": "JSON5",
     "type": "data",
-    "color": "#267CB9",
     "extensions": [
       ".json5"
     ],
@@ -18369,25 +18348,16 @@ var languages_evaluate_default6 = [
     ],
     "vscodeLanguageIds": [
       "json5"
-    ]
+    ],
+    "linguistLanguageId": 175
   }
 ];
 
 // src/language-markdown/languages.evaluate.js
 var languages_evaluate_default7 = [
   {
-    "linguistLanguageId": 222,
     "name": "Markdown",
     "type": "prose",
-    "color": "#083fa1",
-    "aliases": [
-      "md",
-      "pandoc"
-    ],
-    "aceMode": "markdown",
-    "codemirrorMode": "gfm",
-    "codemirrorMimeType": "text/x-gfm",
-    "wrap": true,
     "extensions": [
       ".md",
       ".livemd",
@@ -18401,42 +18371,50 @@ var languages_evaluate_default7 = [
       ".scd",
       ".workbook"
     ],
-    "filenames": [
-      "contents.lr",
-      "README"
-    ],
     "tmScope": "text.md",
-    "parsers": [
-      "markdown"
-    ],
-    "vscodeLanguageIds": [
-      "markdown"
-    ]
-  },
-  {
-    "linguistLanguageId": 222,
-    "name": "MDX",
-    "type": "prose",
-    "color": "#083fa1",
+    "aceMode": "markdown",
     "aliases": [
       "md",
       "pandoc"
     ],
-    "aceMode": "markdown",
     "codemirrorMode": "gfm",
     "codemirrorMimeType": "text/x-gfm",
+    "filenames": [
+      "contents.lr",
+      "README"
+    ],
     "wrap": true,
+    "parsers": [
+      "markdown"
+    ],
+    "vscodeLanguageIds": [
+      "markdown"
+    ],
+    "linguistLanguageId": 222
+  },
+  {
+    "name": "MDX",
+    "type": "prose",
     "extensions": [
       ".mdx"
     ],
-    "filenames": [],
     "tmScope": "text.md",
+    "aceMode": "markdown",
+    "aliases": [
+      "md",
+      "pandoc"
+    ],
+    "codemirrorMode": "gfm",
+    "codemirrorMimeType": "text/x-gfm",
+    "filenames": [],
+    "wrap": true,
     "parsers": [
       "mdx"
     ],
     "vscodeLanguageIds": [
       "mdx"
-    ]
+    ],
+    "linguistLanguageId": 222
   }
 ];
 
@@ -18450,14 +18428,8 @@ var options_default5 = options5;
 // src/language-yaml/languages.evaluate.js
 var languages_evaluate_default8 = [
   {
-    "linguistLanguageId": 407,
     "name": "YAML",
     "type": "data",
-    "color": "#cb171e",
-    "tmScope": "source.yaml",
-    "aliases": [
-      "yml"
-    ],
     "extensions": [
       ".yml",
       ".mir",
@@ -18470,6 +18442,13 @@ var languages_evaluate_default8 = [
       ".yaml.sed",
       ".yml.mysql"
     ],
+    "tmScope": "source.yaml",
+    "aceMode": "yaml",
+    "aliases": [
+      "yml"
+    ],
+    "codemirrorMode": "yaml",
+    "codemirrorMimeType": "text/x-yaml",
     "filenames": [
       ".clang-format",
       ".clang-tidy",
@@ -18482,9 +18461,6 @@ var languages_evaluate_default8 = [
       ".stylelintrc",
       ".lintstagedrc"
     ],
-    "aceMode": "yaml",
-    "codemirrorMode": "yaml",
-    "codemirrorMimeType": "text/x-yaml",
     "parsers": [
       "yaml"
     ],
@@ -18494,7 +18470,8 @@ var languages_evaluate_default8 = [
       "dockercompose",
       "github-actions-workflow",
       "home-assistant"
-    ]
+    ],
+    "linguistLanguageId": 407
   }
 ];
 
@@ -18789,7 +18766,7 @@ var get_file_info_default = getFileInfo;
 import * as doc from "./doc.mjs";
 
 // src/main/version.evaluate.js
-var version_evaluate_default = "3.6.0-7be3aa177";
+var version_evaluate_default = "3.6.0-f9fda1dfc";
 
 // src/utils/public.js
 var public_exports = {};

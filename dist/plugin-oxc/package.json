@@ -31,6 +31,6 @@
     "package.json"
   ],
   "dependencies": {
-    "oxc-parser": "0.72.0"
+    "oxc-parser": "0.72.2"
   }
 }

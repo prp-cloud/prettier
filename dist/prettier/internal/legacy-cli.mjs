@@ -3253,7 +3253,7 @@ var FileEntryCache = class {
    * @param  {Buffer} buffer   buffer to calculate hash on
    * @return {String}          content hash digest
    */
-  // eslint-disable-next-line @typescript-eslint/ban-types
+  // eslint-disable-next-line @typescript-eslint/no-restricted-types
   getHash(buffer) {
     return crypto2.createHash(this._hashAlgorithm).update(buffer).digest("hex");
   }
@@ -3319,7 +3319,7 @@ var FileEntryCache = class {
    * @method reconcile
    */
   reconcile() {
-    const items = this._cache.items;
+    const { items } = this._cache;
     for (const item of items) {
       const fileDescriptor = this.getFileDescriptor(item.key);
       if (fileDescriptor.notFound) {
@@ -3349,6 +3349,7 @@ var FileEntryCache = class {
    * @param options - The options for getting the file descriptor
    * @returns The file descriptor
    */
+  // eslint-disable-next-line complexity
   getFileDescriptor(filePath, options) {
     let fstat;
     const result = {
