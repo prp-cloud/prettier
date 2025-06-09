@@ -85,18 +85,7 @@ const babelTsDisabledTests = new Set(
     path.join(__dirname, "../format/typescript", file),
   ),
 );
-const oxcDisabledTests = new Set(
-  [
-    // Missing `.decorators`
-    // https://github.com/oxc-project/oxc/issues/10921
-    "js/babel-plugins/decorators.js",
-    "js/decorators",
-    "js/decorators/class-expression",
-    "js/decorators-export",
-    "js/decorator-auto-accessors",
-    "js/ignore/class-expression-decorator.js",
-  ].map((file) => path.join(__dirname, "../format", file)),
-);
+const oxcDisabledTests = new Set();
 const oxcTsDisabledTests = new Set(
   [
     // https://github.com/oxc-project/oxc/issues/11029
@@ -120,6 +109,12 @@ const hermesDisabledTests = new Set([
     "js/comments/function-declaration.js",
   ].map((file) => path.join(__dirname, "../format", file)),
 ]);
+const flowDisabledTests = new Set(
+  [
+    // Parsing to different ASTs
+    "js/decorators/member-expression.js",
+  ].map((file) => path.join(__dirname, "../format", file)),
+);
 
 const isUnstable = (filename, options) => {
   const testFunction = unstableTests.get(filename);
@@ -340,6 +335,7 @@ function runFormatTest(fixtures, parsers, options) {
           (currentParser === "oxc" && oxcDisabledTests.has(filename)) ||
           (currentParser === "oxc-ts" && oxcTsDisabledTests.has(filename)) ||
           (currentParser === "hermes" && hermesDisabledTests.has(filename)) ||
+          (currentParser === "flow" && flowDisabledTests.has(filename)) ||
           (currentParser === "babel-ts" && babelTsDisabledTests.has(filename))
         ) {
           continue;
