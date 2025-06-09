@@ -2026,6 +2026,26 @@ function hash(object2, algorithm = "sha256") {
   hasher.update(objectString);
   return hasher.digest("hex");
 }
+function hashToNumber(object2, min = 0, max = 10, algorithm = "sha256") {
+  const objectString = JSON.stringify(object2);
+  if (!crypto.getHashes().includes(algorithm)) {
+    throw new Error(`Unsupported hash algorithm: '${algorithm}'`);
+  }
+  const hasher = crypto.createHash(algorithm);
+  hasher.update(objectString);
+  const hashHex = hasher.digest("hex");
+  const hashNumber = Number.parseInt(hashHex, 16);
+  const range = max - min + 1;
+  return min + hashNumber % range;
+}
+function djb2Hash(string_, min = 0, max = 10) {
+  let hash2 = 5381;
+  for (let i = 0; i < string_.length; i++) {
+    hash2 = hash2 * 33 ^ string_.charCodeAt(i);
+  }
+  const range = max - min + 1;
+  return min + Math.abs(hash2) % range;
+}
 function wrapSync(function_, options) {
   const { ttl, keyPrefix, cache } = options;
   return function(...arguments_) {
@@ -2122,19 +2142,14 @@ var DoublyLinkedList = class {
     return this.nodesMap.size;
   }
 };
+var defaultStoreHashSize = 16;
+var maximumMapSize = 16777216;
 var CacheableMemory = class extends l {
   _lru = new DoublyLinkedList();
-  _hashCache = /* @__PURE__ */ new Map();
-  _hash0 = /* @__PURE__ */ new Map();
-  _hash1 = /* @__PURE__ */ new Map();
-  _hash2 = /* @__PURE__ */ new Map();
-  _hash3 = /* @__PURE__ */ new Map();
-  _hash4 = /* @__PURE__ */ new Map();
-  _hash5 = /* @__PURE__ */ new Map();
-  _hash6 = /* @__PURE__ */ new Map();
-  _hash7 = /* @__PURE__ */ new Map();
-  _hash8 = /* @__PURE__ */ new Map();
-  _hash9 = /* @__PURE__ */ new Map();
+  _storeHashSize = defaultStoreHashSize;
+  _storeHashAlgorithm = "djb2Hash";
+  // Default is djb2Hash
+  _store = Array.from({ length: this._storeHashSize }, () => /* @__PURE__ */ new Map());
   _ttl;
   // Turned off by default
   _useClone = true;
@@ -2157,12 +2172,23 @@ var CacheableMemory = class extends l {
     if (options?.useClone !== void 0) {
       this._useClone = options.useClone;
     }
+    if (options?.storeHashSize && options.storeHashSize > 0) {
+      this._storeHashSize = options.storeHashSize;
+    }
     if (options?.lruSize) {
-      this._lruSize = options.lruSize;
+      if (options.lruSize > maximumMapSize) {
+        this.emit("error", new Error(`LRU size cannot be larger than ${maximumMapSize} due to Map limitations.`));
+      } else {
+        this._lruSize = options.lruSize;
+      }
     }
     if (options?.checkInterval) {
       this._checkInterval = options.checkInterval;
     }
+    if (options?.storeHashAlgorithm) {
+      this._storeHashAlgorithm = options.storeHashAlgorithm;
+    }
+    this._store = Array.from({ length: this._storeHashSize }, () => /* @__PURE__ */ new Map());
     this.startIntervalCheck();
   }
   /**
@@ -2195,17 +2221,25 @@ var CacheableMemory = class extends l {
   }
   /**
    * Gets the size of the LRU cache
-   * @returns {number} - The size of the LRU cache. If set to 0, it will not use LRU cache. Default is 0.
+   * @returns {number} - The size of the LRU cache. If set to 0, it will not use LRU cache. Default is 0. If you are using LRU then the limit is based on Map() size 17mm.
    */
   get lruSize() {
     return this._lruSize;
   }
   /**
    * Sets the size of the LRU cache
-   * @param {number} value - The size of the LRU cache. If set to 0, it will not use LRU cache. Default is 0.
+   * @param {number} value - The size of the LRU cache. If set to 0, it will not use LRU cache. Default is 0. If you are using LRU then the limit is based on Map() size 17mm.
    */
   set lruSize(value) {
+    if (value > maximumMapSize) {
+      this.emit("error", new Error(`LRU size cannot be larger than ${maximumMapSize} due to Map limitations.`));
+      return;
+    }
     this._lruSize = value;
+    if (this._lruSize === 0) {
+      this._lru = new DoublyLinkedList();
+      return;
+    }
     this.lruResize();
   }
   /**
@@ -2227,21 +2261,85 @@ var CacheableMemory = class extends l {
    * @returns {number} - The size of the cache
    */
   get size() {
-    return this._hash0.size + this._hash1.size + this._hash2.size + this._hash3.size + this._hash4.size + this._hash5.size + this._hash6.size + this._hash7.size + this._hash8.size + this._hash9.size;
+    let size = 0;
+    for (const store of this._store) {
+      size += store.size;
+    }
+    return size;
+  }
+  /**
+   * Gets the number of hash stores
+   * @returns {number} - The number of hash stores
+   */
+  get storeHashSize() {
+    return this._storeHashSize;
+  }
+  /**
+   * Sets the number of hash stores. This will recreate the store and all data will be cleared
+   * @param {number} value - The number of hash stores
+   */
+  set storeHashSize(value) {
+    if (value === this._storeHashSize) {
+      return;
+    }
+    this._storeHashSize = value;
+    this._store = Array.from({ length: this._storeHashSize }, () => /* @__PURE__ */ new Map());
+  }
+  /**
+   * Gets the store hash algorithm
+   * @returns {StoreHashAlgorithm | StoreHashAlgorithmFunction} - The store hash algorithm
+   */
+  get storeHashAlgorithm() {
+    return this._storeHashAlgorithm;
+  }
+  /**
+   * Sets the store hash algorithm. This will recreate the store and all data will be cleared
+   * @param {StoreHashAlgorithm | StoreHashAlgorithmFunction} value - The store hash algorithm
+   */
+  set storeHashAlgorithm(value) {
+    this._storeHashAlgorithm = value;
   }
   /**
    * Gets the keys
    * @returns {IterableIterator<string>} - The keys
    */
   get keys() {
-    return this.concatStores().keys();
+    const keys2 = new Array();
+    for (const store of this._store) {
+      for (const key of store.keys()) {
+        const item = store.get(key);
+        if (item && this.hasExpired(item)) {
+          store.delete(key);
+          continue;
+        }
+        keys2.push(key);
+      }
+    }
+    return keys2.values();
   }
   /**
    * Gets the items
    * @returns {IterableIterator<CacheableStoreItem>} - The items
    */
   get items() {
-    return this.concatStores().values();
+    const items = new Array();
+    for (const store of this._store) {
+      for (const item of store.values()) {
+        if (this.hasExpired(item)) {
+          store.delete(item.key);
+          continue;
+        }
+        items.push(item);
+      }
+    }
+    return items.values();
+  }
+  /**
+   * Gets the store
+   * @returns {Array<Map<string, CacheableStoreItem>>} - The store
+   */
+  get store() {
+    return this._store;
   }
   /**
    * Gets the value of the key
@@ -2254,7 +2352,7 @@ var CacheableMemory = class extends l {
     if (!item) {
       return void 0;
     }
-    if (item.expires && item.expires && Date.now() > item.expires) {
+    if (item.expires && Date.now() > item.expires) {
       store.delete(key);
       return void 0;
     }
@@ -2421,7 +2519,6 @@ var CacheableMemory = class extends l {
   delete(key) {
     const store = this.getStore(key);
     store.delete(key);
-    this._hashCache.delete(key);
   }
   /**
    * Delete the keys
@@ -2438,17 +2535,7 @@ var CacheableMemory = class extends l {
    * @returns {void}
    */
   clear() {
-    this._hash0.clear();
-    this._hash1.clear();
-    this._hash2.clear();
-    this._hash3.clear();
-    this._hash4.clear();
-    this._hash5.clear();
-    this._hash6.clear();
-    this._hash7.clear();
-    this._hash8.clear();
-    this._hash9.clear();
-    this._hashCache.clear();
+    this._store = Array.from({ length: this._storeHashSize }, () => /* @__PURE__ */ new Map());
     this._lru = new DoublyLinkedList();
   }
   /**
@@ -2457,66 +2544,27 @@ var CacheableMemory = class extends l {
    * @returns {CacheableHashStore} - The store
    */
   getStore(key) {
-    const hash2 = this.hashKey(key);
-    return this.getStoreFromHash(hash2);
+    const hash2 = this.getKeyStoreHash(key);
+    this._store[hash2] ||= /* @__PURE__ */ new Map();
+    return this._store[hash2];
   }
   /**
-   * Get the store based on the hash (internal use)
-   * @param {number} hash
-   * @returns {Map<string, CacheableStoreItem>}
+   * Hash the key for which store to go to (internal use)
+   * @param {string} key - The key to hash
+   * Available algorithms are: SHA256, SHA1, MD5, and djb2Hash.
+   * @returns {number} - The hashed key as a number
    */
-  getStoreFromHash(hash2) {
-    switch (hash2) {
-      case 1: {
-        return this._hash1;
-      }
-      case 2: {
-        return this._hash2;
-      }
-      case 3: {
-        return this._hash3;
-      }
-      case 4: {
-        return this._hash4;
-      }
-      case 5: {
-        return this._hash5;
-      }
-      case 6: {
-        return this._hash6;
-      }
-      case 7: {
-        return this._hash7;
-      }
-      case 8: {
-        return this._hash8;
-      }
-      case 9: {
-        return this._hash9;
-      }
-      default: {
-        return this._hash0;
-      }
+  getKeyStoreHash(key) {
+    if (this._store.length === 1) {
+      return 0;
     }
-  }
-  /**
-   * Hash the key (internal use)
-   * @param key
-   * @returns {number} from 0 to 9
-   */
-  hashKey(key) {
-    const cacheHashNumber = this._hashCache.get(key);
-    if (typeof cacheHashNumber === "number") {
-      return cacheHashNumber;
+    if (this._storeHashAlgorithm === "djb2Hash") {
+      return djb2Hash(key, 0, this._storeHashSize);
     }
-    let hash2 = 0;
-    const primeMultiplier = 31;
-    for (let i = 0; i < key.length; i++) {
-      hash2 = hash2 * primeMultiplier + key.charCodeAt(i);
+    if (typeof this._storeHashAlgorithm === "function") {
+      return this._storeHashAlgorithm(key, this._storeHashSize);
     }
-    const result = Math.abs(hash2) % 10;
-    this._hashCache.set(key, result);
-    return result;
+    return hashToNumber(key, 0, this._storeHashSize, this._storeHashAlgorithm);
   }
   /**
    * Clone the value. This is for internal use
@@ -2552,13 +2600,10 @@ var CacheableMemory = class extends l {
     this._lru.moveToFront(key);
   }
   /**
-   * Resize the LRU cache. This is for internal use
+   * Resize the LRU cache. This is for internal use.
    * @returns {void}
    */
   lruResize() {
-    if (this._lruSize === 0) {
-      return;
-    }
     while (this._lru.size > this._lruSize) {
       const oldestKey = this._lru.getOldest();
       if (oldestKey) {
@@ -2572,10 +2617,11 @@ var CacheableMemory = class extends l {
    * @returns {void}
    */
   checkExpiration() {
-    const stores = this.concatStores();
-    for (const item of stores.values()) {
-      if (item.expires && Date.now() > item.expires) {
-        this.delete(item.key);
+    for (const store of this._store) {
+      for (const item of store.values()) {
+        if (item.expires && Date.now() > item.expires) {
+          store.delete(item.key);
+        }
       }
     }
   }
@@ -2605,15 +2651,6 @@ var CacheableMemory = class extends l {
     this._checkInterval = 0;
   }
   /**
-   * Hash the object. This is for internal use
-   * @param {any} object - The object to hash
-   * @param {string} [algorithm='sha256'] - The algorithm to hash
-   * @returns {string} - The hashed string
-   */
-  hash(object2, algorithm = "sha256") {
-    return hash(object2, algorithm);
-  }
-  /**
    * Wrap the function for caching
    * @param {Function} function_ - The function to wrap
    * @param {Object} [options] - The options to wrap
@@ -2637,9 +2674,6 @@ var CacheableMemory = class extends l {
     }
     return result;
   }
-  concatStores() {
-    return new Map([...this._hash0, ...this._hash1, ...this._hash2, ...this._hash3, ...this._hash4, ...this._hash5, ...this._hash6, ...this._hash7, ...this._hash8, ...this._hash9]);
-  }
   setTtl(ttl) {
     if (typeof ttl === "string" || ttl === void 0) {
       this._ttl = ttl;
@@ -2648,6 +2682,12 @@ var CacheableMemory = class extends l {
     } else {
       this._ttl = void 0;
     }
+  }
+  hasExpired(item) {
+    if (item.expires && Date.now() > item.expires) {
+      return true;
+    }
+    return false;
   }
 };
 
@@ -2840,7 +2880,6 @@ var FlatCache = class extends l {
    * @param cacheId {String} the id of the cache, would also be used as the name of the file cache
    * @param cacheDir {String} directory for the cache entry
    */
-  // eslint-disable-next-line unicorn/prevent-abbreviations
   load(cacheId, cacheDir) {
     try {
       const filePath = path10.resolve(`${cacheDir ?? this._cacheDir}/${cacheId ?? this._cacheId}`);
@@ -2875,7 +2914,7 @@ var FlatCache = class extends l {
    */
   all() {
     const result = {};
-    const items = Array.from(this._cache.items);
+    const items = [...this._cache.items];
     for (const item of items) {
       result[item.key] = item.value;
     }
@@ -2887,7 +2926,7 @@ var FlatCache = class extends l {
    * @returns {Array}
    */
   get items() {
-    return Array.from(this._cache.items);
+    return [...this._cache.items];
   }
   /**
    * Returns the path to the file where the cache is persisted
@@ -2911,7 +2950,7 @@ var FlatCache = class extends l {
    * @returns {Array}
    */
   keys() {
-    return Array.from(this._cache.keys);
+    return [...this._cache.keys];
   }
   /**
    * (Legacy) set key method. This method will be deprecated in the future
@@ -2995,7 +3034,7 @@ var FlatCache = class extends l {
     try {
       if (this._changesSinceLastSave || force) {
         const filePath = this.cacheFilePath;
-        const items = Array.from(this._cache.items);
+        const items = [...this._cache.items];
         const data = this._stringify(items);
         if (!fs5.existsSync(this._cacheDir)) {
           fs5.mkdirSync(this._cacheDir, { recursive: true });
