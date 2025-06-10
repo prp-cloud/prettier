@@ -177,23 +177,6 @@ var isBlockComment = create_type_check_function_default([
 ]);
 var is_block_comment_default = isBlockComment;
 
-// src/language-js/utils/is-indentable-block-comment.js
-function isIndentableBlockCommentInternal(comment) {
-  if (!is_block_comment_default(comment)) {
-    return false;
-  }
-  const lines = `*${comment.value}*`.split("\n");
-  return lines.length > 1 && lines.every((line2) => line2.trimStart()[0] === "*");
-}
-var cache = /* @__PURE__ */ new WeakMap();
-function isIndentableBlockComment(comment) {
-  if (!cache.has(comment)) {
-    cache.set(comment, isIndentableBlockCommentInternal(comment));
-  }
-  return cache.get(comment);
-}
-var is_indentable_block_comment_default = isIndentableBlockComment;
-
 // src/language-js/utils/is-line-comment.js
 var isLineComment = create_type_check_function_default([
   "Line",
@@ -211,10 +194,10 @@ var isLineComment = create_type_check_function_default([
 var is_line_comment_default = isLineComment;
 
 // src/language-js/utils/is-type-cast-comment.js
-var cache2 = /* @__PURE__ */ new WeakMap();
+var cache = /* @__PURE__ */ new WeakMap();
 function isTypeCastComment(comment) {
-  if (!cache2.has(comment)) {
-    cache2.set(
+  if (!cache.has(comment)) {
+    cache.set(
       comment,
       is_block_comment_default(comment) && comment.value[0] === "*" && // TypeScript expects the type to be enclosed in curly brackets, however
       // Closure Compiler accepts types in parens and even without any delimiters at all.
@@ -222,9 +205,47 @@ function isTypeCastComment(comment) {
       /@(?:type|satisfies)\b/u.test(comment.value)
     );
   }
-  return cache2.get(comment);
+  return cache.get(comment);
 }
 var is_type_cast_comment_default = isTypeCastComment;
+
+// src/language-js/utils/is-indentable-block-comment.js
+function isIndentableBlockCommentInternal(comment) {
+  if (!is_block_comment_default(comment)) {
+    return false;
+  }
+  const lines = `*${comment.value}*`.split("\n");
+  return lines.length > 1 && lines.every((line2) => line2.trimStart()[0] === "*");
+}
+var cache2 = /* @__PURE__ */ new WeakMap();
+function isIndentableBlockComment(comment) {
+  if (!cache2.has(comment)) {
+    cache2.set(comment, isIndentableBlockCommentInternal(comment));
+  }
+  return cache2.get(comment);
+}
+var is_indentable_block_comment_default = isIndentableBlockComment;
+
+// src/language-js/parse/postprocess/merge-nestled-jsdoc-comments.js
+function mergeNestledJsdocComments(comments) {
+  if (comments.length < 2) {
+    return;
+  }
+  let followingComment;
+  for (let i = comments.length - 1; i >= 0; i--) {
+    const comment = comments[i];
+    if (followingComment && locEnd(comment) === locStart(followingComment) && is_indentable_block_comment_default(comment) && is_indentable_block_comment_default(followingComment)) {
+      comments.splice(i + 1, 1);
+      comment.value += "*//*" + followingComment.value;
+      comment.range = [locStart(comment), locEnd(followingComment)];
+    }
+    if (!is_line_comment_default(comment) && !is_block_comment_default(comment)) {
+      throw new TypeError(`Unknown comment type: "${comment.type}".`);
+    }
+    followingComment = comment;
+  }
+}
+var merge_nestled_jsdoc_comments_default = mergeNestledJsdocComments;
 
 // node_modules/to-fast-properties/index.js
 var fastProto = null;
@@ -1437,43 +1458,11 @@ var isNodeWithRaw = create_type_check_function_default([
   "BigIntLiteralTypeAnnotation"
 ]);
 function postprocess(ast, options2) {
-  const { parser, text, supportTypeCastComments } = options2;
+  const { parser, text } = options2;
   const { comments } = ast;
-  const program = ast.type === "File" ? ast.program : ast;
-  if (program.interpreter) {
-    comments.unshift(program.interpreter);
-    delete program.interpreter;
-  }
-  if (parser === "oxc" && options2.oxcAstType === "ts" && ast.hashbang) {
-    comments.unshift(ast.hashbang);
-    delete ast.hashbang;
-  }
-  if (comments.length > 1) {
-    let followingComment;
-    for (let i = comments.length - 1; i >= 0; i--) {
-      const comment = comments[i];
-      if (followingComment && locEnd(comment) === locStart(followingComment) && is_indentable_block_comment_default(comment) && is_indentable_block_comment_default(followingComment)) {
-        comments.splice(i + 1, 1);
-        comment.value += "*//*" + followingComment.value;
-        comment.range = [locStart(comment), locEnd(followingComment)];
-      }
-      if (!is_line_comment_default(comment) && !is_block_comment_default(comment)) {
-        throw new TypeError(`Unknown comment type: "${comment.type}".`);
-      }
-      if (false) {
-        assertComment(comment, text);
-      }
-      followingComment = comment;
-    }
-  }
-  const typeCastCommentsEnds = [];
-  if (supportTypeCastComments) {
-    for (const comment of comments) {
-      if (is_type_cast_comment_default(comment)) {
-        typeCastCommentsEnds.push(locEnd(comment));
-      }
-    }
-  }
+  const isOxcTs = parser === "oxc" && options2.oxcAstType === "ts";
+  merge_nestled_jsdoc_comments_default(comments);
+  let typeCastCommentsEnds;
   ast = visit_node_default(ast, (node) => {
     switch (node.type) {
       case "ParenthesizedExpression": {
@@ -1483,14 +1472,25 @@ function postprocess(ast, options2) {
           expression.range = [start, locEnd(node)];
           return expression;
         }
-        const previousCommentEnd = array_find_last_default(
-          /* isOptionalObject */
-          false,
-          typeCastCommentsEnds,
-          (end) => end <= start
-        );
-        const keepTypeCast = previousCommentEnd && // check that there are only white spaces between the comment and the parenthesis
-        text.slice(previousCommentEnd, start).trim().length === 0;
+        let keepTypeCast = false;
+        if (!isOxcTs) {
+          if (!typeCastCommentsEnds) {
+            typeCastCommentsEnds = [];
+            for (const comment of comments) {
+              if (is_type_cast_comment_default(comment)) {
+                typeCastCommentsEnds.push(locEnd(comment));
+              }
+            }
+          }
+          const previousCommentEnd = array_find_last_default(
+            /* isOptionalObject */
+            false,
+            typeCastCommentsEnds,
+            (end) => end <= start
+          );
+          keepTypeCast = previousCommentEnd && // check that there are only white spaces between the comment and the parenthesis
+          text.slice(previousCommentEnd, start).trim().length === 0;
+        }
         if (!keepTypeCast) {
           expression.extra = { ...expression.extra, parenthesized: true };
           return expression;
@@ -1510,7 +1510,7 @@ function postprocess(ast, options2) {
         }
         break;
       case "TemplateElement":
-        if (parser === "flow" || parser === "hermes" || parser === "espree" || parser === "typescript" || parser === "oxc" && options2.oxcAstType === "ts") {
+        if (parser === "flow" || parser === "hermes" || parser === "espree" || parser === "typescript" || isOxcTs) {
           const start = locStart(node) + 1;
           const end = locEnd(node) - (node.tail ? 1 : 2);
           node.range = [start, end];
@@ -1592,6 +1592,18 @@ function postprocess(ast, options2) {
       assertRaw(node, text);
     }
   });
+  const program = ast.type === "File" ? ast.program : ast;
+  if (program.interpreter) {
+    comments.unshift(program.interpreter);
+    delete program.interpreter;
+  }
+  if (isOxcTs && ast.hashbang) {
+    comments.unshift(ast.hashbang);
+    delete ast.hashbang;
+  }
+  if (false) {
+    assertComments(comments, text);
+  }
   if (ast.type === "Program") {
     ast.range = [0, text.length];
   }
@@ -1898,11 +1910,7 @@ async function parseJs(text, options2) {
     }
   );
   ast.comments = comments;
-  return postprocess_default(ast, {
-    text,
-    parser: "oxc",
-    supportTypeCastComments: true
-  });
+  return postprocess_default(ast, { text, parser: "oxc" });
 }
 async function parseTs(text, options2) {
   let filepath = options2?.filepath;
