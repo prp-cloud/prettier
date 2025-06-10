@@ -399,7 +399,7 @@ Author: Alex Bell <alex@bellandwhistle.net>
 
 ----------------------------------------
 
-## @typescript-eslint/types@v8.33.1
+## @typescript-eslint/types@v8.34.0
 
 > Types for the TypeScript-ESTree AST spec
 
@@ -431,7 +431,7 @@ Repository: <https://github.com/typescript-eslint/typescript-eslint.git>
 
 ----------------------------------------
 
-## @typescript-eslint/typescript-estree@v8.33.1
+## @typescript-eslint/typescript-estree@v8.34.0
 
 > A parser that converts TypeScript source code into an ESTree compatible form
 
@@ -2757,7 +2757,7 @@ Author: fisker Cheung <lionkay@gmail.com> (https://www.fiskercheung.com/)
 
 ----------------------------------------
 
-## jest-docblock@v30.0.0-beta.3
+## jest-docblock@v30.0.0
 
 License: MIT  
 Repository: <https://github.com/jestjs/jest.git>  
