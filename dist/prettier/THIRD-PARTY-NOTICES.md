@@ -2952,7 +2952,7 @@ License: MIT
 
 ----------------------------------------
 
-## keyv@v5.3.3
+## keyv@v5.3.4
 
 > Simple key-value storage with support for multiple backends
 
