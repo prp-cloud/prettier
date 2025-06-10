@@ -1290,12 +1290,13 @@ Author: Sindre Sorhus <sindresorhus@gmail.com> (https://sindresorhus.com)
 
 ----------------------------------------
 
-## espree@v10.3.0
+## espree@v10.4.0
 
 > An Esprima-compatible JavaScript parser built on Acorn
 
 License: BSD-2-Clause  
 Homepage: <https://github.com/eslint/js/blob/main/packages/espree/README.md>  
+Repository: <https://github.com/eslint/js.git>  
 Author: Nicholas C. Zakas <nicholas+npm@nczconsulting.com>  
 
 > BSD 2-Clause License
