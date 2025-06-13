@@ -154,7 +154,7 @@ const options = {
   printWidth: {
     category: CATEGORY_GLOBAL,
     type: "int",
-    default: 80,
+    default: 120,
     description: "The line length where Prettier will try wrap.",
     range: { start: 0, end: Number.POSITIVE_INFINITY, step: 1 },
   },
@@ -198,7 +198,7 @@ const options = {
   useTabs: {
     category: CATEGORY_GLOBAL,
     type: "boolean",
-    default: false,
+    default: true,
     description: "Indent with tabs instead of spaces.",
   },
   embeddedLanguageFormatting: {
