@@ -2953,12 +2953,12 @@ __metadata:
   linkType: hard
 
 "brace-expansion@npm:^1.1.7":
-  version: 1.1.11
-  resolution: "brace-expansion@npm:1.1.11"
+  version: 1.1.12
+  resolution: "brace-expansion@npm:1.1.12"
   dependencies:
     balanced-match: "npm:^1.0.0"
     concat-map: "npm:0.0.1"
-  checksum: 10/faf34a7bb0c3fcf4b59c7808bc5d2a96a40988addf2e7e09dfbb67a2251800e0d14cd2bfc1aa79174f2f5095c54ff27f46fb1289fe2d77dac755b5eb3434cc07
+  checksum: 10/12cb6d6310629e3048cadb003e1aca4d8c9bb5c67c3c321bafdd7e7a50155de081f78ea3e0ed92ecc75a9015e784f301efc8132383132f4f7904ad1ac529c562
   languageName: node
   linkType: hard
 
@@ -6537,10 +6537,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"meriyah@npm:6.0.6":
-  version: 6.0.6
-  resolution: "meriyah@npm:6.0.6"
-  checksum: 10/94fac707185723715557e3fdd738f71c09c342ee1dd35c7dc5a7d6c1a9eda627311018bc472e739b8f159a930906dc96fa6cc54b12d595a93f98a7da183de3af
+"meriyah@npm:6.1.0":
+  version: 6.1.0
+  resolution: "meriyah@npm:6.1.0"
+  checksum: 10/b526ba0898db2a59feb1627976f144036b093e21ac9cfe903069f9eeb5f944f181a226805985a6ad594506a65c5cbfd6d4a13ed6087004f4c49ccc8b2d3de0c5
   languageName: node
   linkType: hard
 
@@ -7271,14 +7271,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss@npm:8.5.4":
-  version: 8.5.4
-  resolution: "postcss@npm:8.5.4"
+"postcss@npm:8.5.5":
+  version: 8.5.5
+  resolution: "postcss@npm:8.5.5"
   dependencies:
     nanoid: "npm:^3.3.11"
     picocolors: "npm:^1.1.1"
     source-map-js: "npm:^1.2.1"
-  checksum: 10/b037b55182aa3aa2f7c4ffb0f37518b35855bb0107222cc46e1b6fa13a4462cb2747d88d3bf66640e7cad20f465354b18d5eafffd44eba97364683a72a336695
+  checksum: 10/c80f723c754b656bf7c983e34841fa35fe0c37a13edd27e24de64e7962cfab11ea081b3b1c900838d2dbe576a045fdecad4f17862c488f12735742f525d22cf0
   languageName: node
   linkType: hard
 
@@ -7382,7 +7382,7 @@ __metadata:
     leven: "npm:4.0.0"
     linguist-languages: "npm:8.0.0"
     magic-string: "npm:0.30.17"
-    meriyah: "npm:6.0.6"
+    meriyah: "npm:6.1.0"
     micromatch: "npm:4.0.8"
     minimist: "npm:1.2.8"
     n-readlines: "npm:1.0.1"
@@ -7394,7 +7394,7 @@ __metadata:
     parse-json: "npm:8.3.0"
     picocolors: "npm:1.1.1"
     please-upgrade-node: "npm:3.2.0"
-    postcss: "npm:8.5.4"
+    postcss: "npm:8.5.5"
     postcss-less: "npm:6.0.0"
     postcss-media-query-parser: "npm:0.2.3"
     postcss-scss: "npm:4.0.9"
