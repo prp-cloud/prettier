@@ -3155,7 +3155,7 @@ Repository: <git@github.com:teambition/merge2.git>
 
 ----------------------------------------
 
-## meriyah@v6.0.6
+## meriyah@v6.1.0
 
 > A 100% compliant, self-hosted javascript parser with high focus on both performance and stability
 
@@ -3474,7 +3474,7 @@ Author: Sindre Sorhus <sindresorhus@gmail.com> (https://sindresorhus.com)
 
 ----------------------------------------
 
-## postcss@v8.5.4
+## postcss@v8.5.5
 
 > Tool for transforming styles with JS plugins
 
