@@ -5570,7 +5570,7 @@ Author: Ika <ikatyang@gmail.com> (https://github.com/ikatyang)
 
 ----------------------------------------
 
-## zeptomatch@v2.0.1
+## zeptomatch@v2.0.2
 
 > An absurdly small glob matcher that packs a punch.
 

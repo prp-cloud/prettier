@@ -2155,7 +2155,7 @@ var init_constants_evaluate = __esm({
       "angular",
       "lwc"
     ];
-    PRETTIER_VERSION = "3.6.0-0ab653ffb";
+    PRETTIER_VERSION = "3.6.0-323ee1acc";
   }
 });
 
@@ -4179,7 +4179,7 @@ var init_range = __esm({
 });
 
 // node_modules/zeptomatch/dist/convert/grammar.js
-var Escaped, Escape, Passthrough, NegationOdd, NegationEven, Negation, StarStarBetween, StarStarStart, StarStarEnd, StarStarNone, StarStar, StarDouble, StarSingle, Star, Question, ClassOpen, ClassClose, ClassNegation, ClassRange, ClassEscape, ClassPassthrough, ClassValue, Class, RangeOpen, RangeClose, RangeNumeric, RangeAlphaLower, RangeAlphaUpper, RangeValue, Range, BracesOpen, BracesClose, BracesComma, BracesEscape, BracesPassthrough, BracesNested, BracesValue, Braces, Grammar, grammar_default;
+var Escaped, Escape, Slash, Passthrough, NegationOdd, NegationEven, Negation, StarStarBetween, StarStarStart, StarStarEnd, StarStarNone, StarStar, StarDouble, StarSingle, Star, Question, ClassOpen, ClassClose, ClassNegation, ClassRange, ClassEscape, ClassPassthrough, ClassValue, Class, RangeOpen, RangeClose, RangeNumeric, RangeAlphaLower, RangeAlphaUpper, RangeValue, Range, BracesOpen, BracesClose, BracesComma, BracesEscape, BracesPassthrough, BracesNested, BracesValue, Braces, Grammar, grammar_default;
 var init_grammar = __esm({
   "node_modules/zeptomatch/dist/convert/grammar.js"() {
     init_dist19();
@@ -4188,6 +4188,7 @@ var init_grammar = __esm({
     init_parser();
     Escaped = match(/\\./, identity2);
     Escape = match(/[$.*+?^(){}[\]\|]/, (char) => `\\${char}`);
+    Slash = match(/[\\/]/, "[\\\\/]");
     Passthrough = match(/./, identity2);
     NegationOdd = match(/^(?:!!)*!(.*)$/, (_, glob) => `(?!^${parser_default(glob)}$).*?`);
     NegationEven = match(/^(!!)+/, "");
@@ -4224,7 +4225,7 @@ var init_grammar = __esm({
     BracesNested = lazy(() => Braces);
     BracesValue = or([StarStar, Star, Question, Class, Range, BracesNested, Escaped, BracesEscape, BracesComma, BracesPassthrough]);
     Braces = and([BracesOpen, star(BracesValue), BracesClose]);
-    Grammar = star(or([Negation, StarStar, Star, Question, Class, Range, Braces, Escaped, Escape, Passthrough]));
+    Grammar = star(or([Negation, StarStar, Star, Question, Class, Range, Braces, Escaped, Escape, Slash, Passthrough]));
     grammar_default = Grammar;
   }
 });

@@ -3133,6 +3133,7 @@ var makeRangeAlpha = (start, end) => {
 // node_modules/zeptomatch/dist/convert/grammar.js
 var Escaped = match(/\\./, identity2);
 var Escape = match(/[$.*+?^(){}[\]\|]/, (char) => `\\${char}`);
+var Slash = match(/[\\/]/, "[\\\\/]");
 var Passthrough = match(/./, identity2);
 var NegationOdd = match(/^(?:!!)*!(.*)$/, (_, glob) => `(?!^${parser_default(glob)}$).*?`);
 var NegationEven = match(/^(!!)+/, "");
@@ -3169,7 +3170,7 @@ var BracesPassthrough = match(/[^}]/, identity2);
 var BracesNested = lazy(() => Braces);
 var BracesValue = or([StarStar, Star, Question, Class, Range, BracesNested, Escaped, BracesEscape, BracesComma, BracesPassthrough]);
 var Braces = and([BracesOpen, star(BracesValue), BracesClose]);
-var Grammar = star(or([Negation, StarStar, Star, Question, Class, Range, Braces, Escaped, Escape, Passthrough]));
+var Grammar = star(or([Negation, StarStar, Star, Question, Class, Range, Braces, Escaped, Escape, Slash, Passthrough]));
 var grammar_default = Grammar;
 
 // node_modules/zeptomatch/dist/convert/parser.js
