@@ -5,698 +5,6 @@ const require = __prettierCreateRequire(import.meta.url);
 const __filename = __prettierFileUrlToPath(import.meta.url);
 const __dirname = __prettierDirname(__filename);
 
-var __defProp = Object.defineProperty;
-var __getOwnPropNames = Object.getOwnPropertyNames;
-var __esm = (fn, res) => function __init() {
-  return fn && (res = (0, fn[__getOwnPropNames(fn)[0]])(fn = 0)), res;
-};
-var __export = (target, all) => {
-  for (var name in all)
-    __defProp(target, name, { get: all[name], enumerable: true });
-};
-
-// node_modules/@prettier/cli/dist/prettier_plugins_builtin.js
-var prettier_plugins_builtin_exports = {};
-__export(prettier_plugins_builtin_exports, {
-  default: () => prettier_plugins_builtin_default
-});
-function createParsersAndPrinters(modules) {
-  const parsers2 = /* @__PURE__ */ Object.create(null);
-  const printers2 = /* @__PURE__ */ Object.create(null);
-  for (const { importPlugin, parsers: parserNames = [], printers: printerNames = [] } of modules) {
-    const loadPlugin = async () => {
-      const plugin = await importPlugin();
-      Object.assign(parsers2, plugin.parsers);
-      Object.assign(printers2, plugin.printers);
-      return plugin;
-    };
-    for (const parserName of parserNames) {
-      parsers2[parserName] = async () => (await loadPlugin()).parsers[parserName];
-    }
-    for (const printerName of printerNames) {
-      printers2[printerName] = async () => (await loadPlugin()).printers[printerName];
-    }
-  }
-  return { parsers: parsers2, printers: printers2 };
-}
-var options, languages, parsers, printers, plugins, prettier_plugins_builtin_default;
-var init_prettier_plugins_builtin = __esm({
-  "node_modules/@prettier/cli/dist/prettier_plugins_builtin.js"() {
-    options = {
-      singleQuote: {
-        category: "Common",
-        type: "boolean",
-        default: false,
-        description: "Use single quotes instead of double quotes."
-      },
-      bracketSpacing: {
-        category: "Common",
-        type: "boolean",
-        default: true,
-        description: "Print spaces between brackets.",
-        oppositeDescription: "Do not print spaces between brackets."
-      },
-      bracketSameLine: {
-        category: "Common",
-        type: "boolean",
-        default: false,
-        description: "Put > of opening tags on the last line instead of on a new line."
-      },
-      htmlWhitespaceSensitivity: {
-        category: "HTML",
-        type: "choice",
-        default: "css",
-        description: "How to handle whitespaces in HTML.",
-        choices: [
-          {
-            value: "css",
-            description: "Respect the default value of CSS display property."
-          },
-          {
-            value: "strict",
-            description: "Whitespaces are considered sensitive."
-          },
-          {
-            value: "ignore",
-            description: "Whitespaces are considered insensitive."
-          }
-        ]
-      },
-      singleAttributePerLine: {
-        category: "Common",
-        type: "boolean",
-        default: false,
-        description: "Enforce single attribute per line in HTML, Vue and JSX."
-      },
-      vueIndentScriptAndStyle: {
-        category: "HTML",
-        type: "boolean",
-        default: false,
-        description: "Indent script and style tags in Vue files."
-      },
-      arrowParens: {
-        category: "JavaScript",
-        type: "choice",
-        default: "always",
-        description: "Include parentheses around a sole arrow function parameter.",
-        choices: [
-          {
-            value: "always",
-            description: "Always include parens. Example: `(x) => x`"
-          },
-          {
-            value: "avoid",
-            description: "Omit parens when possible. Example: `x => x`"
-          }
-        ]
-      },
-      jsxBracketSameLine: {
-        category: "JavaScript",
-        type: "boolean",
-        description: "Put > on the last line instead of at a new line.",
-        deprecated: "2.4.0"
-      },
-      semi: {
-        category: "JavaScript",
-        type: "boolean",
-        default: true,
-        description: "Print semicolons.",
-        oppositeDescription: "Do not print semicolons, except at the beginning of lines which may need them."
-      },
-      experimentalOperatorPosition: {
-        category: "JavaScript",
-        type: "choice",
-        default: "end",
-        description: "Where to print operators when binary expressions wrap lines.",
-        choices: [
-          {
-            value: "start",
-            description: "Print operators at the start of new lines."
-          },
-          {
-            value: "end",
-            description: "Print operators at the end of previous lines."
-          }
-        ]
-      },
-      experimentalTernaries: {
-        category: "JavaScript",
-        type: "boolean",
-        default: false,
-        description: "Use curious ternaries, with the question mark after the condition.",
-        oppositeDescription: "Default behavior of ternaries; keep question marks on the same line as the consequent."
-      },
-      jsxSingleQuote: {
-        category: "JavaScript",
-        type: "boolean",
-        default: false,
-        description: "Use single quotes in JSX."
-      },
-      quoteProps: {
-        category: "JavaScript",
-        type: "choice",
-        default: "as-needed",
-        description: "Change when properties in objects are quoted.",
-        choices: [
-          {
-            value: "as-needed",
-            description: "Only add quotes around object properties where required."
-          },
-          {
-            value: "consistent",
-            description: "If at least one property in an object requires quotes, quote all properties."
-          },
-          {
-            value: "preserve",
-            description: "Respect the input use of quotes in object properties."
-          }
-        ]
-      },
-      trailingComma: {
-        category: "JavaScript",
-        type: "choice",
-        default: "all",
-        description: "Print trailing commas wherever possible when multi-line.",
-        choices: [
-          {
-            value: "all",
-            description: "Trailing commas wherever possible (including function arguments)."
-          },
-          {
-            value: "es5",
-            description: "Trailing commas where valid in ES5 (objects, arrays, etc.)"
-          },
-          { value: "none", description: "No trailing commas." }
-        ]
-      },
-      proseWrap: {
-        category: "Common",
-        type: "choice",
-        default: "preserve",
-        description: "How to wrap prose.",
-        choices: [
-          {
-            value: "always",
-            description: "Wrap prose if it exceeds the print width."
-          },
-          { value: "never", description: "Do not wrap prose." },
-          { value: "preserve", description: "Wrap prose as-is." }
-        ]
-      },
-      objectWrap: {
-        category: "Common",
-        type: "choice",
-        default: "preserve",
-        description: "How to wrap object literals.",
-        choices: [
-          {
-            value: "preserve",
-            description: "Keep as multi-line, if there is a newline between the opening brace and first property."
-          },
-          {
-            value: "collapse",
-            description: "Fit to a single line when possible."
-          }
-        ]
-      }
-    };
-    languages = [
-      {
-        linguistLanguageId: 50,
-        name: "CSS",
-        type: "markup",
-        tmScope: "source.css",
-        aceMode: "css",
-        codemirrorMode: "css",
-        codemirrorMimeType: "text/css",
-        color: "#563d7c",
-        extensions: [".css", ".wxss"],
-        parsers: ["css"],
-        vscodeLanguageIds: ["css"]
-      },
-      {
-        linguistLanguageId: 262764437,
-        name: "PostCSS",
-        type: "markup",
-        color: "#dc3a0c",
-        tmScope: "source.postcss",
-        group: "CSS",
-        extensions: [".pcss", ".postcss"],
-        aceMode: "text",
-        parsers: ["css"],
-        vscodeLanguageIds: ["postcss"]
-      },
-      {
-        linguistLanguageId: 198,
-        name: "Less",
-        type: "markup",
-        color: "#1d365d",
-        aliases: ["less-css"],
-        extensions: [".less"],
-        tmScope: "source.css.less",
-        aceMode: "less",
-        codemirrorMode: "css",
-        codemirrorMimeType: "text/css",
-        parsers: ["less"],
-        vscodeLanguageIds: ["less"]
-      },
-      {
-        linguistLanguageId: 329,
-        name: "SCSS",
-        type: "markup",
-        color: "#c6538c",
-        tmScope: "source.css.scss",
-        aceMode: "scss",
-        codemirrorMode: "css",
-        codemirrorMimeType: "text/x-scss",
-        extensions: [".scss"],
-        parsers: ["scss"],
-        vscodeLanguageIds: ["scss"]
-      },
-      {
-        linguistLanguageId: 139,
-        name: "GraphQL",
-        type: "data",
-        color: "#e10098",
-        extensions: [".graphql", ".gql", ".graphqls"],
-        tmScope: "source.graphql",
-        aceMode: "text",
-        parsers: ["graphql"],
-        vscodeLanguageIds: ["graphql"]
-      },
-      {
-        linguistLanguageId: 155,
-        name: "Handlebars",
-        type: "markup",
-        color: "#f7931e",
-        aliases: ["hbs", "htmlbars"],
-        extensions: [".handlebars", ".hbs"],
-        tmScope: "text.html.handlebars",
-        aceMode: "handlebars",
-        parsers: ["glimmer"],
-        vscodeLanguageIds: ["handlebars"]
-      },
-      {
-        linguistLanguageId: 146,
-        name: "Angular",
-        type: "markup",
-        tmScope: "text.html.basic",
-        aceMode: "html",
-        codemirrorMode: "htmlmixed",
-        codemirrorMimeType: "text/html",
-        color: "#e34c26",
-        aliases: ["xhtml"],
-        extensions: [".component.html"],
-        parsers: ["angular"],
-        vscodeLanguageIds: ["html"],
-        filenames: []
-      },
-      {
-        linguistLanguageId: 146,
-        name: "HTML",
-        type: "markup",
-        tmScope: "text.html.basic",
-        aceMode: "html",
-        codemirrorMode: "htmlmixed",
-        codemirrorMimeType: "text/html",
-        color: "#e34c26",
-        aliases: ["xhtml"],
-        extensions: [".html", ".hta", ".htm", ".html.hl", ".inc", ".xht", ".xhtml", ".mjml"],
-        parsers: ["html"],
-        vscodeLanguageIds: ["html"]
-      },
-      {
-        linguistLanguageId: 146,
-        name: "Lightning Web Components",
-        type: "markup",
-        tmScope: "text.html.basic",
-        aceMode: "html",
-        codemirrorMode: "htmlmixed",
-        codemirrorMimeType: "text/html",
-        color: "#e34c26",
-        aliases: ["xhtml"],
-        extensions: [],
-        parsers: ["lwc"],
-        vscodeLanguageIds: ["html"],
-        filenames: []
-      },
-      {
-        linguistLanguageId: 391,
-        name: "Vue",
-        type: "markup",
-        color: "#41b883",
-        extensions: [".vue"],
-        tmScope: "text.html.vue",
-        aceMode: "html",
-        parsers: ["vue"],
-        vscodeLanguageIds: ["vue"]
-      },
-      {
-        linguistLanguageId: 183,
-        name: "JavaScript",
-        type: "programming",
-        tmScope: "source.js",
-        aceMode: "javascript",
-        codemirrorMode: "javascript",
-        codemirrorMimeType: "text/javascript",
-        color: "#f1e05a",
-        aliases: ["js", "node"],
-        extensions: [
-          ".js",
-          "._js",
-          ".bones",
-          ".cjs",
-          ".es",
-          ".es6",
-          ".frag",
-          ".gs",
-          ".jake",
-          ".javascript",
-          ".jsb",
-          ".jscad",
-          ".jsfl",
-          ".jslib",
-          ".jsm",
-          ".jspre",
-          ".jss",
-          ".mjs",
-          ".njs",
-          ".pac",
-          ".sjs",
-          ".ssjs",
-          ".xsjs",
-          ".xsjslib",
-          ".wxs"
-        ],
-        filenames: ["Jakefile"],
-        interpreters: ["chakra", "d8", "gjs", "js", "node", "nodejs", "qjs", "rhino", "v8", "v8-shell", "zx"],
-        parsers: ["babel", "acorn", "espree", "meriyah", "babel-flow", "babel-ts", "flow", "typescript"],
-        vscodeLanguageIds: ["javascript", "mongo"]
-      },
-      {
-        linguistLanguageId: 183,
-        name: "Flow",
-        type: "programming",
-        tmScope: "source.js",
-        aceMode: "javascript",
-        codemirrorMode: "javascript",
-        codemirrorMimeType: "text/javascript",
-        color: "#f1e05a",
-        aliases: [],
-        extensions: [".js.flow"],
-        filenames: [],
-        interpreters: ["chakra", "d8", "gjs", "js", "node", "nodejs", "qjs", "rhino", "v8", "v8-shell"],
-        parsers: ["flow", "babel-flow"],
-        vscodeLanguageIds: ["javascript"]
-      },
-      {
-        linguistLanguageId: 183,
-        name: "JSX",
-        type: "programming",
-        tmScope: "source.js.jsx",
-        aceMode: "javascript",
-        codemirrorMode: "jsx",
-        codemirrorMimeType: "text/jsx",
-        color: void 0,
-        aliases: void 0,
-        extensions: [".jsx"],
-        filenames: void 0,
-        interpreters: void 0,
-        parsers: ["babel", "babel-flow", "babel-ts", "flow", "typescript", "espree", "meriyah"],
-        vscodeLanguageIds: ["javascriptreact"],
-        group: "JavaScript"
-      },
-      {
-        linguistLanguageId: 378,
-        name: "TypeScript",
-        type: "programming",
-        color: "#3178c6",
-        aliases: ["ts"],
-        interpreters: ["deno", "ts-node"],
-        extensions: [".ts", ".cts", ".mts"],
-        tmScope: "source.ts",
-        aceMode: "typescript",
-        codemirrorMode: "javascript",
-        codemirrorMimeType: "application/typescript",
-        parsers: ["typescript", "babel-ts"],
-        vscodeLanguageIds: ["typescript"]
-      },
-      {
-        linguistLanguageId: 94901924,
-        name: "TSX",
-        type: "programming",
-        color: "#3178c6",
-        group: "TypeScript",
-        extensions: [".tsx"],
-        tmScope: "source.tsx",
-        aceMode: "javascript",
-        codemirrorMode: "jsx",
-        codemirrorMimeType: "text/jsx",
-        parsers: ["typescript", "babel-ts"],
-        vscodeLanguageIds: ["typescriptreact"]
-      },
-      {
-        linguistLanguageId: 174,
-        name: "JSON.stringify",
-        type: "data",
-        color: "#292929",
-        tmScope: "source.json",
-        aceMode: "json",
-        codemirrorMode: "javascript",
-        codemirrorMimeType: "application/json",
-        aliases: ["geojson", "jsonl", "topojson"],
-        extensions: [".importmap"],
-        filenames: ["package.json", "package-lock.json", "composer.json"],
-        parsers: ["json-stringify"],
-        vscodeLanguageIds: ["json"]
-      },
-      {
-        linguistLanguageId: 174,
-        name: "JSON",
-        type: "data",
-        color: "#292929",
-        tmScope: "source.json",
-        aceMode: "json",
-        codemirrorMode: "javascript",
-        codemirrorMimeType: "application/json",
-        aliases: ["geojson", "jsonl", "topojson"],
-        extensions: [
-          ".json",
-          ".4DForm",
-          ".4DProject",
-          ".avsc",
-          ".geojson",
-          ".gltf",
-          ".har",
-          ".ice",
-          ".JSON-tmLanguage",
-          ".mcmeta",
-          ".tfstate",
-          ".tfstate.backup",
-          ".topojson",
-          ".webapp",
-          ".webmanifest",
-          ".yy",
-          ".yyp"
-        ],
-        filenames: [
-          ".all-contributorsrc",
-          ".arcconfig",
-          ".auto-changelog",
-          ".c8rc",
-          ".htmlhintrc",
-          ".imgbotconfig",
-          ".nycrc",
-          ".tern-config",
-          ".tern-project",
-          ".watchmanconfig",
-          "Pipfile.lock",
-          "composer.lock",
-          "flake.lock",
-          "mcmod.info",
-          ".babelrc",
-          ".jscsrc",
-          ".jshintrc",
-          ".jslintrc",
-          ".swcrc"
-        ],
-        parsers: ["json"],
-        vscodeLanguageIds: ["json"]
-      },
-      {
-        linguistLanguageId: 423,
-        name: "JSON with Comments",
-        type: "data",
-        color: "#292929",
-        group: "JSON",
-        tmScope: "source.js",
-        aceMode: "javascript",
-        codemirrorMode: "javascript",
-        codemirrorMimeType: "text/javascript",
-        aliases: ["jsonc"],
-        extensions: [
-          ".jsonc",
-          ".code-snippets",
-          ".code-workspace",
-          ".sublime-build",
-          ".sublime-commands",
-          ".sublime-completions",
-          ".sublime-keymap",
-          ".sublime-macro",
-          ".sublime-menu",
-          ".sublime-mousemap",
-          ".sublime-project",
-          ".sublime-settings",
-          ".sublime-theme",
-          ".sublime-workspace",
-          ".sublime_metrics",
-          ".sublime_session"
-        ],
-        filenames: [],
-        parsers: ["jsonc"],
-        vscodeLanguageIds: ["jsonc"]
-      },
-      {
-        linguistLanguageId: 175,
-        name: "JSON5",
-        type: "data",
-        color: "#267CB9",
-        extensions: [".json5"],
-        tmScope: "source.js",
-        aceMode: "javascript",
-        codemirrorMode: "javascript",
-        codemirrorMimeType: "application/json",
-        parsers: ["json5"],
-        vscodeLanguageIds: ["json5"]
-      },
-      {
-        linguistLanguageId: 222,
-        name: "Markdown",
-        type: "prose",
-        color: "#083fa1",
-        aliases: ["md", "pandoc"],
-        aceMode: "markdown",
-        codemirrorMode: "gfm",
-        codemirrorMimeType: "text/x-gfm",
-        wrap: true,
-        extensions: [".md", ".livemd", ".markdown", ".mdown", ".mdwn", ".mkd", ".mkdn", ".mkdown", ".ronn", ".scd", ".workbook"],
-        filenames: ["contents.lr", "README"],
-        tmScope: "text.md",
-        parsers: ["markdown"],
-        vscodeLanguageIds: ["markdown"]
-      },
-      {
-        linguistLanguageId: 222,
-        name: "MDX",
-        type: "prose",
-        color: "#083fa1",
-        aliases: ["md", "pandoc"],
-        aceMode: "markdown",
-        codemirrorMode: "gfm",
-        codemirrorMimeType: "text/x-gfm",
-        wrap: true,
-        extensions: [".mdx"],
-        filenames: [],
-        tmScope: "text.md",
-        parsers: ["mdx"],
-        vscodeLanguageIds: ["mdx"]
-      },
-      {
-        linguistLanguageId: 407,
-        name: "YAML",
-        type: "data",
-        color: "#cb171e",
-        tmScope: "source.yaml",
-        aliases: ["yml"],
-        extensions: [".yml", ".mir", ".reek", ".rviz", ".sublime-syntax", ".syntax", ".yaml", ".yaml-tmlanguage", ".yaml.sed", ".yml.mysql"],
-        filenames: [".clang-format", ".clang-tidy", ".gemrc", "CITATION.cff", "glide.lock", ".prettierrc", ".stylelintrc", ".lintstagedrc"],
-        aceMode: "yaml",
-        codemirrorMode: "yaml",
-        codemirrorMimeType: "text/x-yaml",
-        parsers: ["yaml"],
-        vscodeLanguageIds: ["yaml", "ansible", "home-assistant"]
-      }
-    ];
-    ({ parsers, printers } = createParsersAndPrinters([
-      {
-        importPlugin: () => import("../plugins/acorn.mjs"),
-        parsers: ["acorn", "espree"]
-      },
-      {
-        importPlugin: () => import("../plugins/angular.mjs"),
-        parsers: ["__ng_action", "__ng_binding", "__ng_interpolation", "__ng_directive"]
-      },
-      {
-        importPlugin: () => import("../plugins/babel.mjs"),
-        parsers: [
-          "babel",
-          "babel-flow",
-          "babel-ts",
-          "__js_expression",
-          "__ts_expression",
-          "__vue_expression",
-          "__vue_ts_expression",
-          "__vue_event_binding",
-          "__vue_ts_event_binding",
-          "__babel_estree",
-          "json",
-          "json5",
-          "jsonc",
-          "json-stringify"
-        ]
-      },
-      {
-        importPlugin: () => import("../plugins/estree.mjs"),
-        printers: ["estree", "estree-json"]
-      },
-      {
-        importPlugin: () => import("../plugins/flow.mjs"),
-        parsers: ["flow"]
-      },
-      {
-        importPlugin: () => import("../plugins/glimmer.mjs"),
-        parsers: ["glimmer"],
-        printers: ["glimmer"]
-      },
-      {
-        importPlugin: () => import("../plugins/graphql.mjs"),
-        parsers: ["graphql"],
-        printers: ["graphql"]
-      },
-      {
-        importPlugin: () => import("../plugins/html.mjs"),
-        parsers: ["html", "angular", "vue", "lwc"],
-        printers: ["html"]
-      },
-      {
-        importPlugin: () => import("../plugins/markdown.mjs"),
-        parsers: ["markdown", "mdx", "remark"],
-        printers: ["mdast"]
-      },
-      {
-        importPlugin: () => import("../plugins/meriyah.mjs"),
-        parsers: ["meriyah"]
-      },
-      {
-        importPlugin: () => import("../plugins/postcss.mjs"),
-        parsers: ["css", "less", "scss"],
-        printers: ["postcss"]
-      },
-      {
-        importPlugin: () => import("../plugins/typescript.mjs"),
-        parsers: ["typescript"]
-      },
-      {
-        importPlugin: () => import("../plugins/yaml.mjs"),
-        parsers: ["yaml"],
-        printers: ["yaml"]
-      }
-    ]));
-    plugins = { options, languages, parsers, printers };
-    prettier_plugins_builtin_default = plugins;
-  }
-});
-
 // node_modules/atomically/dist/index.js
 import path2 from "path";
 
@@ -1080,48 +388,48 @@ node_default(Temp.purgeSyncAll);
 var temp_default = Temp;
 
 // node_modules/atomically/dist/index.js
-function readFile(filePath, options2 = DEFAULT_READ_OPTIONS) {
-  if (isString(options2))
-    return readFile(filePath, { encoding: options2 });
-  const timeout = Date.now() + ((options2.timeout ?? DEFAULT_TIMEOUT_ASYNC) || -1);
-  return dist_default.retry.readFile(timeout)(filePath, options2);
+function readFile(filePath, options = DEFAULT_READ_OPTIONS) {
+  if (isString(options))
+    return readFile(filePath, { encoding: options });
+  const timeout = Date.now() + ((options.timeout ?? DEFAULT_TIMEOUT_ASYNC) || -1);
+  return dist_default.retry.readFile(timeout)(filePath, options);
 }
-function writeFile(filePath, data, options2, callback) {
-  if (isFunction(options2))
-    return writeFile(filePath, data, DEFAULT_WRITE_OPTIONS, options2);
-  const promise = writeFileAsync(filePath, data, options2);
+function writeFile(filePath, data, options, callback) {
+  if (isFunction(options))
+    return writeFile(filePath, data, DEFAULT_WRITE_OPTIONS, options);
+  const promise = writeFileAsync(filePath, data, options);
   if (callback)
     promise.then(callback, callback);
   return promise;
 }
-async function writeFileAsync(filePath, data, options2 = DEFAULT_WRITE_OPTIONS) {
-  if (isString(options2))
-    return writeFileAsync(filePath, data, { encoding: options2 });
-  const timeout = Date.now() + ((options2.timeout ?? DEFAULT_TIMEOUT_ASYNC) || -1);
+async function writeFileAsync(filePath, data, options = DEFAULT_WRITE_OPTIONS) {
+  if (isString(options))
+    return writeFileAsync(filePath, data, { encoding: options });
+  const timeout = Date.now() + ((options.timeout ?? DEFAULT_TIMEOUT_ASYNC) || -1);
   let schedulerCustomDisposer = null;
   let schedulerDisposer = null;
   let tempDisposer = null;
   let tempPath = null;
   let fd = null;
   try {
-    if (options2.schedule)
-      schedulerCustomDisposer = await options2.schedule(filePath);
+    if (options.schedule)
+      schedulerCustomDisposer = await options.schedule(filePath);
     schedulerDisposer = await scheduler_default.schedule(filePath);
     const filePathReal = await dist_default.attempt.realpath(filePath);
     const filePathExists = !!filePathReal;
     filePath = filePathReal || filePath;
-    [tempPath, tempDisposer] = temp_default.get(filePath, options2.tmpCreate || temp_default.create, !(options2.tmpPurge === false));
-    const useStatChown = IS_POSIX && isUndefined(options2.chown);
-    const useStatMode = isUndefined(options2.mode);
+    [tempPath, tempDisposer] = temp_default.get(filePath, options.tmpCreate || temp_default.create, !(options.tmpPurge === false));
+    const useStatChown = IS_POSIX && isUndefined(options.chown);
+    const useStatMode = isUndefined(options.mode);
     if (filePathExists && (useStatChown || useStatMode)) {
       const stats = await dist_default.attempt.stat(filePath);
       if (stats) {
-        options2 = { ...options2 };
+        options = { ...options };
         if (useStatChown) {
-          options2.chown = { uid: stats.uid, gid: stats.gid };
+          options.chown = { uid: stats.uid, gid: stats.gid };
         }
         if (useStatMode) {
-          options2.mode = stats.mode;
+          options.mode = stats.mode;
         }
       }
     }
@@ -1132,17 +440,17 @@ async function writeFileAsync(filePath, data, options2 = DEFAULT_WRITE_OPTIONS) 
         recursive: true
       });
     }
-    fd = await dist_default.retry.open(timeout)(tempPath, "w", options2.mode || DEFAULT_FILE_MODE);
-    if (options2.tmpCreated) {
-      options2.tmpCreated(tempPath);
+    fd = await dist_default.retry.open(timeout)(tempPath, "w", options.mode || DEFAULT_FILE_MODE);
+    if (options.tmpCreated) {
+      options.tmpCreated(tempPath);
     }
     if (isString(data)) {
-      await dist_default.retry.write(timeout)(fd, data, 0, options2.encoding || DEFAULT_ENCODING);
+      await dist_default.retry.write(timeout)(fd, data, 0, options.encoding || DEFAULT_ENCODING);
     } else if (!isUndefined(data)) {
       await dist_default.retry.write(timeout)(fd, data, 0, data.length, 0);
     }
-    if (options2.fsync !== false) {
-      if (options2.fsyncWait !== false) {
+    if (options.fsync !== false) {
+      if (options.fsyncWait !== false) {
         await dist_default.retry.fsync(timeout)(fd);
       } else {
         dist_default.attempt.fsync(fd);
@@ -1150,11 +458,11 @@ async function writeFileAsync(filePath, data, options2 = DEFAULT_WRITE_OPTIONS) 
     }
     await dist_default.retry.close(timeout)(fd);
     fd = null;
-    if (options2.chown && (options2.chown.uid !== DEFAULT_USER_UID || options2.chown.gid !== DEFAULT_USER_GID)) {
-      await dist_default.attempt.chown(tempPath, options2.chown.uid, options2.chown.gid);
+    if (options.chown && (options.chown.uid !== DEFAULT_USER_UID || options.chown.gid !== DEFAULT_USER_GID)) {
+      await dist_default.attempt.chown(tempPath, options.chown.uid, options.chown.gid);
     }
-    if (options2.mode && options2.mode !== DEFAULT_FILE_MODE) {
-      await dist_default.attempt.chmod(tempPath, options2.mode);
+    if (options.mode && options.mode !== DEFAULT_FILE_MODE) {
+      await dist_default.attempt.chmod(tempPath, options.mode);
     }
     try {
       await dist_default.retry.rename(timeout)(tempPath, filePath);
@@ -1181,7 +489,7 @@ async function writeFileAsync(filePath, data, options2 = DEFAULT_WRITE_OPTIONS) 
 
 // node_modules/@prettier/cli/dist/prettier_serial.js
 import process8 from "process";
-import * as prettier from "../standalone.mjs";
+import * as prettier from "../index.mjs";
 
 // node_modules/function-once/dist/index.js
 var once = (fn) => {
@@ -2562,10 +1870,10 @@ var __classPrivateFieldGet = function(receiver, state, kind, f) {
 var _AbstractStore_save;
 var AbstractStore = class extends Map {
   /* CONSTRUCTOR */
-  constructor(options2) {
+  constructor(options) {
     super();
     _AbstractStore_save.set(this, void 0);
-    const { id, backend } = options2;
+    const { id, backend } = options;
     if (!/^[a-zA-Z0-9_-]+$/.test(id))
       throw new Error(`Invalid store id: "${id}"`);
     const read2 = () => attempt2(() => backend.read(id), []);
@@ -2787,8 +2095,8 @@ var memoize2 = (fn) => {
 };
 
 // node_modules/grammex/dist/index.js
-var parse = (input, rule, options2 = {}) => {
-  const state = { cache: {}, input, index: 0, indexBacktrackMax: 0, options: options2, output: [] };
+var parse = (input, rule, options = {}) => {
+  const state = { cache: {}, input, index: 0, indexBacktrackMax: 0, options, output: [] };
   const matched = resolve(rule)(state);
   const indexMax = Math.max(state.index, state.indexBacktrackMax);
   if (matched && state.index === input.length) {
@@ -3218,6 +2526,9 @@ function getModulePath(name, rootPath) {
   const modulePath = url.fileURLToPath(moduleUrl);
   return modulePath;
 }
+function identity3(value) {
+  return value;
+}
 var getPlugin = dist_default4((name) => {
   const pluginPath = getPluginPath(name);
   const plugin = getModule(pluginPath);
@@ -3232,17 +2543,17 @@ async function getPluginOrExit(name) {
 }
 function getPluginPath(name) {
   const rootPath = path6.join(process7.cwd(), "index.js");
-  const pluginPath = getModulePath(name, rootPath);
-  return pluginPath;
+  try {
+    return getModulePath(`./${name}`, rootPath);
+  } catch {
+    return getModulePath(name, rootPath);
+  }
 }
 async function getPluginsOrExit(names) {
   if (!names.length)
     return [];
   return await Promise.all(names.map((name) => getPluginOrExit(name)));
 }
-var getPluginsBuiltin = dist_default3(async () => {
-  return [(await Promise.resolve().then(() => (init_prettier_plugins_builtin(), prettier_plugins_builtin_exports))).default];
-});
 var getStdin = dist_default3(async () => {
   if (!process7.stdin.isTTY) {
     const stdin = stream2text(process7.stdin);
@@ -3253,10 +2564,18 @@ var getStdin = dist_default3(async () => {
 function isFunction4(value) {
   return typeof value === "function";
 }
+var normalizePathSeparatorsToPosix = (() => {
+  if (path6.sep === "\\") {
+    return (filePath) => {
+      return filePath.replaceAll("\\", "/");
+    };
+  } else {
+    return identity3;
+  }
+})();
 function resolve2(value) {
   return isFunction4(value) ? value() : value;
 }
-var normalizeToPosix = path6.sep === "\\" ? (filepath) => filepath.replaceAll("\\", "/") : (filepath) => filepath;
 
 // node_modules/@prettier/cli/dist/prettier_serial.js
 async function check(filePath, fileContent, formatOptions, contextOptions, pluginsDefaultOptions, pluginsCustomOptions) {
@@ -3269,18 +2588,16 @@ async function checkWithPath(filePath, formatOptions, contextOptions, pluginsDef
 }
 async function format2(filePath, fileContent, formatOptions, contextOptions, pluginsDefaultOptions, pluginsCustomOptions) {
   formatOptions = await resolve2(formatOptions);
-  const pluginsBuiltin = await getPluginsBuiltin();
-  const plugins2 = await getPluginsOrExit(formatOptions.plugins || []);
-  const pluginsOverride = contextOptions.configPrecedence !== "file-override";
-  const options2 = {
+  const plugins = await getPluginsOrExit(formatOptions.plugins || []);
+  const options = {
     ...pluginsDefaultOptions,
-    ...pluginsOverride ? formatOptions : pluginsCustomOptions,
-    ...pluginsOverride ? pluginsCustomOptions : formatOptions,
+    ...formatOptions,
+    ...pluginsCustomOptions,
     ...contextOptions,
     filepath: filePath,
-    plugins: [...pluginsBuiltin, ...plugins2]
+    plugins
   };
-  const result = await prettier.formatWithCursor(fileContent, options2);
+  const result = await prettier.formatWithCursor(fileContent, options);
   if (result.cursorOffset >= 0) {
     process8.stderr.write(`${result.cursorOffset}
 `);

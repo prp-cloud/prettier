@@ -5,15 +5,44 @@ const require = __prettierCreateRequire(import.meta.url);
 const __filename = __prettierFileUrlToPath(import.meta.url);
 const __dirname = __prettierDirname(__filename);
 
+var __create = Object.create;
 var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
+var __getProtoOf = Object.getPrototypeOf;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __require = /* @__PURE__ */ ((x) => typeof require !== "undefined" ? require : typeof Proxy !== "undefined" ? new Proxy(x, {
+  get: (a, b) => (typeof require !== "undefined" ? require : a)[b]
+}) : x)(function(x) {
+  if (typeof require !== "undefined") return require.apply(this, arguments);
+  throw Error('Dynamic require of "' + x + '" is not supported');
+});
 var __esm = (fn, res) => function __init() {
   return fn && (res = (0, fn[__getOwnPropNames(fn)[0]])(fn = 0)), res;
+};
+var __commonJS = (cb, mod) => function __require2() {
+  return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
 };
 var __export = (target, all) => {
   for (var name in all)
     __defProp(target, name, { get: all[name], enumerable: true });
 };
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key2 of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key2) && key2 !== except)
+        __defProp(to, key2, { get: () => from[key2], enumerable: !(desc = __getOwnPropDesc(from, key2)) || desc.enumerable });
+  }
+  return to;
+};
+var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
+  // If the importer is in node compatibility mode or this is not an ESM
+  // file that has been converted to a CommonJS file using a Babel-
+  // compatible transform (i.e. "__esModule" has not been set), then set
+  // "default" to the CommonJS "module.exports" for node compatibility.
+  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
+  mod
+));
 
 // node_modules/find-up-path/dist/index.js
 import fs from "fs";
@@ -66,12 +95,12 @@ var init_dist2 = __esm({
     init_dist();
     init_utils();
     findUp = (fileName, folderPath = process3.cwd(), maxDepth = 25) => {
-      const path18 = dist_default(fileName, folderPath, maxDepth);
-      if (!path18)
+      const path17 = dist_default(fileName, folderPath, maxDepth);
+      if (!path17)
         return;
-      const buffer2 = attempt(() => fs2.readFileSync(path18), Buffer2.alloc(0));
+      const buffer2 = attempt(() => fs2.readFileSync(path17), Buffer2.alloc(0));
       const content = attempt(() => JSON.parse(buffer2.toString()), {});
-      return { path: path18, buffer: buffer2, content };
+      return { path: path17, buffer: buffer2, content };
     };
     dist_default2 = findUp;
   }
@@ -303,10 +332,10 @@ var init_dist5 = __esm({
       return incompatiblesAliased;
     };
     setAliased = (target, key2, value, unary, variadic, aliases) => {
-      const set2 = variadic ? setVariadic : setNormal;
-      set2(target, key2, value, unary);
+      const set3 = variadic ? setVariadic : setNormal;
+      set3(target, key2, value, unary);
       aliases[key2]?.forEach((alias) => {
-        set2(target, alias, value, unary);
+        set3(target, alias, value, unary);
       });
     };
     parseDoubleHyphen = (argv) => {
@@ -392,25 +421,25 @@ var init_dist5 = __esm({
     unquote = (value) => {
       return value.replace(/^(['"])(\1*)(.*)(\1\2)$/, "$3");
     };
-    parseArgv = (argv, options2 = {}) => {
-      const aliases = getAliasesMap(options2.alias);
-      const booleans = getAliasedSet(aliases, options2.boolean);
-      const integers = getAliasedSet(aliases, options2.integer);
-      const numbers = getAliasedSet(aliases, options2.number);
-      const strings = getAliasedSet(aliases, options2.string);
-      const eagers = getAliasedSet(aliases, options2.eager);
-      const unarys = getAliasedSet(aliases, options2.unary);
-      const variadics = getAliasedSet(aliases, options2.variadic);
-      const defaults = getAliasedDefaults(aliases, options2.default);
-      const incompatibles = getAliasedIncompatibles(aliases, options2.incompatible);
-      const validators = getAliasedMap(aliases, options2.validators);
-      const required = options2.required || [];
+    parseArgv = (argv, options = {}) => {
+      const aliases = getAliasesMap(options.alias);
+      const booleans = getAliasedSet(aliases, options.boolean);
+      const integers = getAliasedSet(aliases, options.integer);
+      const numbers = getAliasedSet(aliases, options.number);
+      const strings = getAliasedSet(aliases, options.string);
+      const eagers = getAliasedSet(aliases, options.eager);
+      const unarys = getAliasedSet(aliases, options.unary);
+      const variadics = getAliasedSet(aliases, options.variadic);
+      const defaults = getAliasedDefaults(aliases, options.default);
+      const incompatibles = getAliasedIncompatibles(aliases, options.incompatible);
+      const validators = getAliasedMap(aliases, options.validators);
+      const required = options.required || [];
       const known = /* @__PURE__ */ new Set([...booleans, ...integers, ...numbers, ...strings, ...Object.keys(defaults)]);
       const found = [];
-      const onIncompatible = options2.onIncompatible;
-      const onInvalid = options2.onInvalid;
-      const onMissing = options2.onMissing;
-      const onUnknown = options2.onUnknown;
+      const onIncompatible = options.onIncompatible;
+      const onInvalid = options.onInvalid;
+      const onMissing = options.onMissing;
+      const onUnknown = options.onUnknown;
       const [parse8, preserve] = parseDoubleHyphen(argv);
       const parsed = { _: [], "--": preserve };
       const args = parseCharSeparator(parseImplicitSeparator(parseEqualsSeparator(parseProto(parse8))));
@@ -474,15 +503,15 @@ var init_dist5 = __esm({
         }
       }
       if (onIncompatible) {
-        const options3 = uniq(found);
+        const options2 = uniq(found);
         const pairs2 = [];
-        for (let si = 0, sl = options3.length; si < sl; si++) {
-          const source2 = options3[si];
+        for (let si = 0, sl = options2.length; si < sl; si++) {
+          const source2 = options2[si];
           const sourceIncompatibles = incompatibles[source2];
           if (!sourceIncompatibles)
             continue;
           for (let ti = si + 1, tl = sl; ti < tl; ti++) {
-            const target = options3[ti];
+            const target = options2[ti];
             if (!sourceIncompatibles.has(target))
               continue;
             pairs2.push([source2, target]);
@@ -531,10 +560,10 @@ var init_abstract = __esm({
     };
     AbstractStore = class extends Map {
       /* CONSTRUCTOR */
-      constructor(options2) {
+      constructor(options) {
         super();
         _AbstractStore_save.set(this, void 0);
-        const { id, backend } = options2;
+        const { id, backend } = options;
         if (!/^[a-zA-Z0-9_-]+$/.test(id))
           throw new Error(`Invalid store id: "${id}"`);
         const read3 = () => attempt2(() => backend.read(id), []);
@@ -1013,8 +1042,8 @@ var init_dist8 = __esm({
       ellipsis: "",
       ellipsisWidth: 0
     };
-    fastStringWidth = (input, options2 = {}) => {
-      return dist_default7(input, NO_TRUNCATION2, options2).width;
+    fastStringWidth = (input, options = {}) => {
+      return dist_default7(input, NO_TRUNCATION2, options).width;
     };
     dist_default8 = fastStringWidth;
   }
@@ -1386,9 +1415,9 @@ var init_commands = __esm({
           });
         });
       }
-      run(name, options2, argv) {
+      run(name, options, argv) {
         const command = this.getByIdOrFail(name);
-        return command.run(options2, argv);
+        return command.run(options, argv);
       }
     };
     commands_default = Commands;
@@ -1430,19 +1459,19 @@ var init_options = __esm({
     Options = class extends collection_default {
       /* API */
       print(mode) {
-        const options2 = this.getAll();
-        if (!options2.length)
+        const options = this.getAll();
+        if (!options.length)
           return;
-        const optionsVisible = options2.filter((option) => !option.hidden);
+        const optionsVisible = options.filter((option) => !option.hidden);
         if (!optionsVisible.length)
           return;
         const withoutOther = (section) => section.toLowerCase() !== "other" ? section : "";
         const optionsBySection = pushBack(groupBy(optionsVisible, (option) => withoutOther(option.section.toLowerCase())), "");
-        optionsBySection.forEach((options3, section) => {
-          if (!options3.length)
+        optionsBySection.forEach((options2, section) => {
+          if (!options2.length)
             return;
           const title = section ? `${section.toUpperCase()} OPTIONS` : optionsBySection.size > 1 ? "OTHER OPTIONS" : "OPTIONS";
-          const table = options3.map((option) => {
+          const table = options2.map((option) => {
             const withDeprecated = option.deprecated ? dist_default4.dim : identity;
             return [
               [
@@ -1516,17 +1545,17 @@ var init_command = __esm({
     init_usage();
     Command = class extends addon_default {
       /* CONSTRUCTOR */
-      constructor(bin2, options2) {
+      constructor(bin2, options) {
         super(bin2);
         this.arguments = new arguments_default(this.bin);
         this.options = new options_default(this.bin);
         this.usage = new usage_default(this.bin);
-        this.ids = [this.parse(options2.name)];
-        this.name = options2.name;
-        this.description = options2.description;
-        this.section = options2.section || "";
-        this.deprecated = !!options2.deprecated;
-        this.hidden = !!options2.hidden;
+        this.ids = [this.parse(options.name)];
+        this.name = options.name;
+        this.description = options.description;
+        this.section = options.section || "";
+        this.deprecated = !!options.deprecated;
+        this.hidden = !!options.hidden;
       }
       /* PRIVATE API */
       parse(name) {
@@ -1537,11 +1566,11 @@ var init_command = __esm({
         return name;
       }
       /* API */
-      async run(options2, argv) {
+      async run(options, argv) {
         if (!this.handler) {
           this.bin.fail(`Command handler not defined for command: "${this.name}"`);
         } else {
-          return this.handler(options2, options2._, options2["--"]);
+          return this.handler(options, options._, options["--"]);
         }
       }
     };
@@ -1566,19 +1595,19 @@ var init_command_default = __esm({
         });
       }
       /* API */
-      async run(options2, argv) {
-        const name = this.bin.commands.getById(options2._[0]) ? options2._[0] : this.name;
-        if (options2["help"] || name === "help") {
-          return this.bin.commands.run("help", options2, argv);
-        } else if (options2["version"] || options2["v"]) {
-          return this.bin.commands.run("_version", options2, argv);
+      async run(options, argv) {
+        const name = this.bin.commands.getById(options._[0]) ? options._[0] : this.name;
+        if (options["help"] || name === "help") {
+          return this.bin.commands.run("help", options, argv);
+        } else if (options["version"] || options["v"]) {
+          return this.bin.commands.run("_version", options, argv);
         } else {
           const isDefault = name === this.name;
           if (isDefault && !this.handler) {
             this.bin.fail("Command handler not defined for default command");
           }
           const command = this.bin.commands.getByIdOrFail(name);
-          const options3 = [...this.bin.command.options.getAll(), ...command.options.getAll()];
+          const options2 = [...this.bin.command.options.getAll(), ...command.options.getAll()];
           const minArgs = command.arguments.getAll().filter((arg) => arg.required).length;
           const maxArgs = sum(command.arguments.getAll().map((arg) => arg.variadic ? Infinity : 1));
           const parseArgvOptions = {
@@ -1595,21 +1624,21 @@ var init_command_default = __esm({
             default: {},
             incompatible: {},
             validators: {},
-            onIncompatible: (options4) => {
-              this.bin.fail(`Incompatible options: "${options4[0][0]}" and "${options4[0][1]}" cannot be used together`);
+            onIncompatible: (options3) => {
+              this.bin.fail(`Incompatible options: "${options3[0][0]}" and "${options3[0][1]}" cannot be used together`);
             },
-            onInvalid: (options4) => {
-              this.bin.fail(`Invalid value for "${options4[0]}" option`);
+            onInvalid: (options3) => {
+              this.bin.fail(`Invalid value for "${options3[0]}" option`);
             },
-            onMissing: (options4) => {
-              this.bin.fail(`Missing required option: "${options4[0]}"`);
+            onMissing: (options3) => {
+              this.bin.fail(`Missing required option: "${options3[0]}"`);
             },
-            onUnknown: (options4) => {
-              const closest = getClosest(parseArgvOptions.known, options4[0], 3, true);
-              this.bin.fail(`Unknown option: "${options4[0]}"${closest ? `. Did you mean "${closest}"?` : ""}`);
+            onUnknown: (options3) => {
+              const closest = getClosest(parseArgvOptions.known, options3[0], 3, true);
+              this.bin.fail(`Unknown option: "${options3[0]}"${closest ? `. Did you mean "${closest}"?` : ""}`);
             }
           };
-          options3.forEach((option) => {
+          options2.forEach((option) => {
             var _a, _b;
             parseArgvOptions.known.push(...option.data.alls);
             if (option.data.type === "boolean") {
@@ -1650,7 +1679,7 @@ var init_command_default = __esm({
             parseArgvOptions.alias[first] = rest;
           });
           const parsed = dist_default5(argv, parseArgvOptions);
-          options3.forEach((option) => {
+          options2.forEach((option) => {
             if (option.data.type !== "string")
               return;
             const name2 = option.data.alls[0];
@@ -1667,7 +1696,7 @@ var init_command_default = __esm({
               this.bin.fail(`Invalid value for "${option.data.alls[0]}" option, received "${value2}" but only ${enums.map((e) => `"${e}"`).join(", ")} are supported`);
             });
           });
-          options3.forEach((option) => {
+          options2.forEach((option) => {
             const name2 = option.data.alls[0];
             const value = parsed[name2];
             if (!isArray(value))
@@ -1714,13 +1743,13 @@ var init_argument = __esm({
     init_addon();
     Argument = class extends addon_default {
       /* CONSTRUCTOR */
-      constructor(bin2, options2) {
+      constructor(bin2, options) {
         super(bin2);
-        this.ids = [this.parse(options2.name)];
-        this.name = options2.name;
-        this.description = options2.description;
-        this.required = options2.name[0] === "<";
-        this.variadic = options2.name.includes("...");
+        this.ids = [this.parse(options.name)];
+        this.name = options.name;
+        this.description = options.description;
+        this.required = options.name[0] === "<";
+        this.variadic = options.name.includes("...");
       }
       /* PRIVATE API */
       parse(name) {
@@ -1757,10 +1786,10 @@ var init_command_help = __esm({
         return collections.some((collection) => collection.getAll().some((item) => item.description.includes("\n"))) ? "lines" : "line";
       }
       /* API */
-      async run(options2, argv) {
-        const [arg1, arg2] = options2._;
+      async run(options, argv) {
+        const [arg1, arg2] = options._;
         const hasCustomCommands = this.bin.commands.getAll().length > 3;
-        const name = arg1 === "help" ? arg2 || (options2["help"] ? arg1 : "") : hasCustomCommands ? arg1 : "";
+        const name = arg1 === "help" ? arg2 || (options["help"] ? arg1 : "") : hasCustomCommands ? arg1 : "";
         if (name) {
           const command = this.bin.commands.getByIdOrFail(name);
           const mode = this.getPrintMode([command.arguments, command.options, this.bin.command.options]);
@@ -1806,7 +1835,7 @@ var init_command_version = __esm({
         });
       }
       /* API */
-      async run(options2, argv) {
+      async run(options, argv) {
         this.stdout.print(this.bin.metadata.version);
       }
     };
@@ -1822,22 +1851,22 @@ var init_option = __esm({
     init_utils6();
     Option = class extends addon_default {
       /* CONSTRUCTOR */
-      constructor(bin2, options2) {
+      constructor(bin2, options) {
         super(bin2);
-        this.data = this.parse(options2.name, options2.type);
+        this.data = this.parse(options.name, options.type);
         this.ids = this.data.alls;
-        this.name = options2.name;
-        this.description = options2.description;
-        this.section = options2.section || "";
-        this.deprecated = !!options2.deprecated;
-        this.eager = !!options2.eager;
-        this.hidden = !!options2.hidden;
-        this.incompatible = castArray2(options2.incompatible || []);
-        this.required = !!options2.required;
-        this.variadic = options2.name.includes("...");
-        this.default = options2.default;
-        this.enum = options2.enum;
-        this.validate = options2.validate;
+        this.name = options.name;
+        this.description = options.description;
+        this.section = options.section || "";
+        this.deprecated = !!options.deprecated;
+        this.eager = !!options.eager;
+        this.hidden = !!options.hidden;
+        this.incompatible = castArray2(options.incompatible || []);
+        this.required = !!options.required;
+        this.variadic = options.name.includes("...");
+        this.default = options.default;
+        this.enum = options.enum;
+        this.validate = options.validate;
         if (this.eager && !this.data.args.length) {
           this.bin.fail(`Eager option must not be boolean: "${this.name}"`);
         }
@@ -1898,13 +1927,13 @@ var init_bin = __esm({
     init_utils6();
     Bin = class {
       /* CONSTRUCTOR */
-      constructor(options2) {
+      constructor(options) {
         this.stdout = new logger_default(this, console.log);
         this.stderr = new logger_default(this, console.error);
         this.metadata = new metadata_default(this);
         this.commands = new commands_default(this);
-        this.metadata.name = options2.name;
-        this.metadata.description = options2.description;
+        this.metadata.name = options.name;
+        this.metadata.description = options.description;
         const fallback = new command_default_default(this);
         const help = new command_help_default(this);
         const version = new command_version_default(this);
@@ -1944,8 +1973,8 @@ var init_bin = __esm({
           });
         }
         try {
-          const options2 = dist_default5(argv);
-          await this.commands.run(this.command.name, options2, argv);
+          const options = dist_default5(argv);
+          await this.commands.run(this.command.name, options, argv);
           if (this.metadata.exiter) {
             process7.exit();
           }
@@ -1969,8 +1998,8 @@ var init_chainable_bin_local = __esm({
     init_chainable_bin_global();
     ChainableBinAfterCustomCommand = class extends addon_default {
       /* API */
-      command(name, description, options2 = {}) {
-        return new chainable_bin_global_default(this.bin).command(name, description, options2);
+      command(name, description, options = {}) {
+        return new chainable_bin_global_default(this.bin).command(name, description, options);
       }
       run(argv) {
         return new chainable_bin_global_default(this.bin).run(argv);
@@ -1999,13 +2028,13 @@ var init_chainable_command = __esm({
         this.command.usage.register(usage);
         return this;
       }
-      option(name, description, options2 = {}) {
-        const option = new option_default(this.bin, { name, description, ...options2 });
-        this.command.options.register(option, !!options2.override);
+      option(name, description, options = {}) {
+        const option = new option_default(this.bin, { name, description, ...options });
+        this.command.options.register(option, !!options.override);
         return this;
       }
-      argument(name, description, options2 = {}) {
-        const argument = new argument_default(this.bin, { name, description, ...options2 });
+      argument(name, description, options = {}) {
+        const argument = new argument_default(this.bin, { name, description, ...options });
         this.command.arguments.register(argument);
         return this;
       }
@@ -2050,13 +2079,13 @@ var init_chainable_bin_global = __esm({
         this.bin.command.usage.register(usage);
         return this;
       }
-      option(name, description, options2 = {}) {
-        const option = new option_default(this.bin, { name, description, ...options2 });
-        this.bin.command.options.register(option, !!options2.override);
+      option(name, description, options = {}) {
+        const option = new option_default(this.bin, { name, description, ...options });
+        this.bin.command.options.register(option, !!options.override);
         return this;
       }
-      argument(name, description, options2 = {}) {
-        const argument = new argument_default(this.bin, { name, description, ...options2 });
+      argument(name, description, options = {}) {
+        const argument = new argument_default(this.bin, { name, description, ...options });
         this.bin.command.arguments.register(argument);
         return this;
       }
@@ -2064,8 +2093,8 @@ var init_chainable_bin_global = __esm({
         this.bin.command.handler = handler;
         return this;
       }
-      command(name, description, options2 = {}) {
-        const command = new command_default(this.bin, { name, description, ...options2 });
+      command(name, description, options = {}) {
+        const command = new command_default(this.bin, { name, description, ...options });
         this.bin.commands.register(command);
         return new chainable_command_default(this.bin, command);
       }
@@ -2128,7 +2157,7 @@ var init_dist12 = __esm({
 var CLI_VERSION, DEFAULT_PARSERS, PRETTIER_VERSION;
 var init_constants_evaluate = __esm({
   "src/experimental-cli/constants.evaluate.js"() {
-    CLI_VERSION = "0.8.0";
+    CLI_VERSION = "0.9.0";
     DEFAULT_PARSERS = [
       "flow",
       "babel",
@@ -2155,7 +2184,7 @@ var init_constants_evaluate = __esm({
       "angular",
       "lwc"
     ];
-    PRETTIER_VERSION = "3.6.0-323ee1acc";
+    PRETTIER_VERSION = "3.6.0-78377f229";
   }
 });
 
@@ -2390,8 +2419,8 @@ var init_errors = __esm({
        * @param {string} [base]
        * @param {string} [message]
        */
-      (path18, base, message) => {
-        return `Invalid package config ${path18}${base ? ` while importing ${base}` : ""}${message ? `. ${message}` : ""}`;
+      (path17, base, message) => {
+        return `Invalid package config ${path17}${base ? ` while importing ${base}` : ""}${message ? `. ${message}` : ""}`;
       },
       Error
     );
@@ -2423,8 +2452,8 @@ var init_errors = __esm({
        * @param {string} base
        * @param {boolean} [exactUrl]
        */
-      (path18, base, exactUrl = false) => {
-        return `Cannot find ${exactUrl ? "module" : "package"} '${path18}' imported from ${base}`;
+      (path17, base, exactUrl = false) => {
+        return `Cannot find ${exactUrl ? "module" : "package"} '${path17}' imported from ${base}`;
       },
       Error
     );
@@ -2475,8 +2504,8 @@ var init_errors = __esm({
        * @param {string} extension
        * @param {string} path
        */
-      (extension, path18) => {
-        return `Unknown file extension "${extension}" for ${path18}`;
+      (extension, path17) => {
+        return `Unknown file extension "${extension}" for ${path17}`;
       },
       TypeError
     );
@@ -2764,9 +2793,9 @@ Default "index" lookups for the main are deprecated for ES modules.`,
     );
   }
 }
-function tryStatSync(path18) {
+function tryStatSync(path17) {
   try {
-    return statSync(path18);
+    return statSync(path17);
   } catch {
   }
 }
@@ -3449,12 +3478,12 @@ var init_dist14 = __esm({
     memoize = (fn, resolver) => {
       const memoized = function(...args) {
         const key2 = resolver ? resolver.apply(this, args) : args[0];
-        const cache2 = memoized.cache;
-        const cached = cache2.get(key2);
-        if (cached !== void 0 || cache2.has(key2))
+        const cache3 = memoized.cache;
+        const cached = cache3.get(key2);
+        if (cached !== void 0 || cache3.has(key2))
           return cached;
         const result = fn.apply(this, args);
-        memoized.cache = cache2.set(key2, result) || cache2;
+        memoized.cache = cache3.set(key2, result) || cache3;
         return result;
       };
       memoized.cache = new (memoize.Cache || Map)();
@@ -3586,15 +3615,15 @@ var init_dist18 = __esm({
     init_dist17();
     init_constants4();
     init_utils8();
-    readdir = (rootPath, options2) => {
-      const followSymlinks = options2?.followSymlinks ?? false;
-      const maxDepth = options2?.depth ?? Infinity;
-      const maxPaths = options2?.limit ?? Infinity;
-      const ignore = options2?.ignore ?? [];
+    readdir = (rootPath, options) => {
+      const followSymlinks = options?.followSymlinks ?? false;
+      const maxDepth = options?.depth ?? Infinity;
+      const maxPaths = options?.limit ?? Infinity;
+      const ignore = options?.ignore ?? [];
       const ignores = castArray3(ignore).map((ignore2) => isFunction(ignore2) ? ignore2 : (targetPath) => ignore2.test(targetPath));
       const isIgnored = (targetPath) => ignores.some((ignore2) => ignore2(targetPath));
-      const signal = options2?.signal ?? { aborted: false };
-      const onDirents = options2?.onDirents || (() => {
+      const signal = options?.signal ?? { aborted: false };
+      const onDirents = options?.onDirents || (() => {
       });
       const directories = [];
       const directoriesNames = /* @__PURE__ */ new Set();
@@ -3804,13 +3833,13 @@ var init_utils9 = __esm({
       return value === void 0;
     };
     memoize2 = (fn) => {
-      const cache2 = /* @__PURE__ */ new Map();
+      const cache3 = /* @__PURE__ */ new Map();
       return (arg) => {
-        const cached = cache2.get(arg);
+        const cached = cache3.get(arg);
         if (cached !== void 0)
           return cached;
         const value = fn(arg);
-        cache2.set(arg, value);
+        cache3.set(arg, value);
         return value;
       };
     };
@@ -3822,8 +3851,8 @@ var parse, match, chars, regex, regexCapturing, regexNonCapturing, string, repea
 var init_dist19 = __esm({
   "node_modules/grammex/dist/index.js"() {
     init_utils9();
-    parse = (input, rule, options2 = {}) => {
-      const state = { cache: {}, input, index: 0, indexBacktrackMax: 0, options: options2, output: [] };
+    parse = (input, rule, options = {}) => {
+      const state = { cache: {}, input, index: 0, indexBacktrackMax: 0, options, output: [] };
       const matched = resolve(rule)(state);
       const indexMax = Math.max(state.index, state.indexBacktrackMax);
       if (matched && state.index === input.length) {
@@ -4041,11 +4070,11 @@ var init_dist19 = __esm({
           if (state.options.memoization === false)
             return erule(state);
           const indexStart = state.index;
-          const cache2 = (_a = state.cache)[ruleId] || (_a[ruleId] = { indexMax: -1, queue: [] });
-          const cacheQueue = cache2.queue;
-          const isPotentiallyCached = indexStart <= cache2.indexMax;
+          const cache3 = (_a = state.cache)[ruleId] || (_a[ruleId] = { indexMax: -1, queue: [] });
+          const cacheQueue = cache3.queue;
+          const isPotentiallyCached = indexStart <= cache3.indexMax;
           if (isPotentiallyCached) {
-            const cacheStore = cache2.store || (cache2.store = /* @__PURE__ */ new Map());
+            const cacheStore = cache3.store || (cache3.store = /* @__PURE__ */ new Map());
             if (cacheQueue.length) {
               for (let i = 0, l = cacheQueue.length; i < l; i += 2) {
                 const key2 = cacheQueue[i * 2];
@@ -4070,7 +4099,7 @@ var init_dist19 = __esm({
           }
           const lengthStart = state.output.length;
           const matched = erule(state);
-          cache2.indexMax = Math.max(cache2.indexMax, indexStart);
+          cache3.indexMax = Math.max(cache3.indexMax, indexStart);
           if (matched) {
             const indexEnd = state.index;
             const lengthEnd = state.output.length;
@@ -4131,9 +4160,9 @@ var init_utils10 = __esm({
       };
     };
     memoize3 = (fn) => {
-      const cache2 = {};
+      const cache3 = {};
       return (arg) => {
-        return cache2[arg] ?? (cache2[arg] = fn(arg));
+        return cache3[arg] ?? (cache3[arg] = fn(arg));
       };
     };
   }
@@ -4275,14 +4304,14 @@ var init_dist20 = __esm({
     init_parser();
     init_parser2();
     init_utils10();
-    zeptomatch = (glob, path18) => {
+    zeptomatch = (glob, path17) => {
       if (Array.isArray(glob)) {
         const res = glob.map(zeptomatch.compile);
-        const isMatch = res.some((re) => re.test(path18));
+        const isMatch = res.some((re) => re.test(path17));
         return isMatch;
       } else {
         const re = zeptomatch.compile(glob);
-        const isMatch = re.test(path18);
+        const isMatch = re.test(path17);
         return isMatch;
       }
     };
@@ -4414,14 +4443,14 @@ var init_utils11 = __esm({
         if (!paths.length) {
           paths.push("");
         }
-        for (const path18 of paths) {
-          const existing = results.find((result) => result[0].includes(path18));
+        for (const path17 of paths) {
+          const existing = results.find((result) => result[0].includes(path17));
           if (existing) {
             if (!existing[1].includes(pathsGlob)) {
               existing[1].push(pathsGlob);
             }
           } else {
-            results.push([[path18], [pathsGlob]]);
+            results.push([[path17], [pathsGlob]]);
           }
         }
       }
@@ -4494,8 +4523,8 @@ var init_utils11 = __esm({
         return sets[0];
       const result = /* @__PURE__ */ new Set();
       for (let i = 0, l = sets.length; i < l; i++) {
-        const set2 = sets[i];
-        for (const value of set2) {
+        const set3 = sets[i];
+        for (const value of set3) {
           result.add(value);
         }
       }
@@ -4545,10 +4574,10 @@ var init_dist24 = __esm({
   "node_modules/tiny-readdir-glob/dist/index.js"() {
     init_dist18();
     init_utils11();
-    readdirGlob = async (glob, options2) => {
+    readdirGlob = async (glob, options) => {
       const [globsPositive, globsNegative] = globsPartition(castArray4(glob));
-      const cwd = options2?.cwd ?? process10.cwd();
-      const ignore = [...castArray4(options2?.ignore ?? []), ...globsNegative];
+      const cwd = options?.cwd ?? process10.cwd();
+      const ignore = [...castArray4(options?.ignore ?? []), ...globsNegative];
       const bucketDirectories = [];
       const bucketFiles = [];
       const bucketSymlinks = [];
@@ -4568,12 +4597,12 @@ var init_dist24 = __esm({
           const isIgnored = ignoreCompile(rootPath, ignore);
           const isRelativeMatch = (targetPath) => isMatch(rootPath, targetPath);
           const result = await dist_default17(rootPath, {
-            depth: options2?.depth,
-            limit: options2?.limit,
-            followSymlinks: options2?.followSymlinks,
+            depth: options?.depth,
+            limit: options?.limit,
+            followSymlinks: options?.followSymlinks,
             ignore: isIgnored,
-            signal: options2?.signal,
-            onDirents: options2?.onDirents
+            signal: options?.signal,
+            onDirents: options?.onDirents
           });
           bucketDirectories.push(result.directories.filter(isRelativeMatch));
           bucketFiles.push(result.files.filter(isRelativeMatch));
@@ -4619,688 +4648,6 @@ var init_dist25 = __esm({
       };
     })();
     dist_default22 = escape;
-  }
-});
-
-// node_modules/@prettier/cli/dist/prettier_plugins_builtin.js
-var prettier_plugins_builtin_exports = {};
-__export(prettier_plugins_builtin_exports, {
-  default: () => prettier_plugins_builtin_default
-});
-function createParsersAndPrinters(modules) {
-  const parsers2 = /* @__PURE__ */ Object.create(null);
-  const printers2 = /* @__PURE__ */ Object.create(null);
-  for (const { importPlugin, parsers: parserNames = [], printers: printerNames = [] } of modules) {
-    const loadPlugin = async () => {
-      const plugin = await importPlugin();
-      Object.assign(parsers2, plugin.parsers);
-      Object.assign(printers2, plugin.printers);
-      return plugin;
-    };
-    for (const parserName of parserNames) {
-      parsers2[parserName] = async () => (await loadPlugin()).parsers[parserName];
-    }
-    for (const printerName of printerNames) {
-      printers2[printerName] = async () => (await loadPlugin()).printers[printerName];
-    }
-  }
-  return { parsers: parsers2, printers: printers2 };
-}
-var options, languages, parsers, printers, plugins, prettier_plugins_builtin_default;
-var init_prettier_plugins_builtin = __esm({
-  "node_modules/@prettier/cli/dist/prettier_plugins_builtin.js"() {
-    options = {
-      singleQuote: {
-        category: "Common",
-        type: "boolean",
-        default: false,
-        description: "Use single quotes instead of double quotes."
-      },
-      bracketSpacing: {
-        category: "Common",
-        type: "boolean",
-        default: true,
-        description: "Print spaces between brackets.",
-        oppositeDescription: "Do not print spaces between brackets."
-      },
-      bracketSameLine: {
-        category: "Common",
-        type: "boolean",
-        default: false,
-        description: "Put > of opening tags on the last line instead of on a new line."
-      },
-      htmlWhitespaceSensitivity: {
-        category: "HTML",
-        type: "choice",
-        default: "css",
-        description: "How to handle whitespaces in HTML.",
-        choices: [
-          {
-            value: "css",
-            description: "Respect the default value of CSS display property."
-          },
-          {
-            value: "strict",
-            description: "Whitespaces are considered sensitive."
-          },
-          {
-            value: "ignore",
-            description: "Whitespaces are considered insensitive."
-          }
-        ]
-      },
-      singleAttributePerLine: {
-        category: "Common",
-        type: "boolean",
-        default: false,
-        description: "Enforce single attribute per line in HTML, Vue and JSX."
-      },
-      vueIndentScriptAndStyle: {
-        category: "HTML",
-        type: "boolean",
-        default: false,
-        description: "Indent script and style tags in Vue files."
-      },
-      arrowParens: {
-        category: "JavaScript",
-        type: "choice",
-        default: "always",
-        description: "Include parentheses around a sole arrow function parameter.",
-        choices: [
-          {
-            value: "always",
-            description: "Always include parens. Example: `(x) => x`"
-          },
-          {
-            value: "avoid",
-            description: "Omit parens when possible. Example: `x => x`"
-          }
-        ]
-      },
-      jsxBracketSameLine: {
-        category: "JavaScript",
-        type: "boolean",
-        description: "Put > on the last line instead of at a new line.",
-        deprecated: "2.4.0"
-      },
-      semi: {
-        category: "JavaScript",
-        type: "boolean",
-        default: true,
-        description: "Print semicolons.",
-        oppositeDescription: "Do not print semicolons, except at the beginning of lines which may need them."
-      },
-      experimentalOperatorPosition: {
-        category: "JavaScript",
-        type: "choice",
-        default: "end",
-        description: "Where to print operators when binary expressions wrap lines.",
-        choices: [
-          {
-            value: "start",
-            description: "Print operators at the start of new lines."
-          },
-          {
-            value: "end",
-            description: "Print operators at the end of previous lines."
-          }
-        ]
-      },
-      experimentalTernaries: {
-        category: "JavaScript",
-        type: "boolean",
-        default: false,
-        description: "Use curious ternaries, with the question mark after the condition.",
-        oppositeDescription: "Default behavior of ternaries; keep question marks on the same line as the consequent."
-      },
-      jsxSingleQuote: {
-        category: "JavaScript",
-        type: "boolean",
-        default: false,
-        description: "Use single quotes in JSX."
-      },
-      quoteProps: {
-        category: "JavaScript",
-        type: "choice",
-        default: "as-needed",
-        description: "Change when properties in objects are quoted.",
-        choices: [
-          {
-            value: "as-needed",
-            description: "Only add quotes around object properties where required."
-          },
-          {
-            value: "consistent",
-            description: "If at least one property in an object requires quotes, quote all properties."
-          },
-          {
-            value: "preserve",
-            description: "Respect the input use of quotes in object properties."
-          }
-        ]
-      },
-      trailingComma: {
-        category: "JavaScript",
-        type: "choice",
-        default: "all",
-        description: "Print trailing commas wherever possible when multi-line.",
-        choices: [
-          {
-            value: "all",
-            description: "Trailing commas wherever possible (including function arguments)."
-          },
-          {
-            value: "es5",
-            description: "Trailing commas where valid in ES5 (objects, arrays, etc.)"
-          },
-          { value: "none", description: "No trailing commas." }
-        ]
-      },
-      proseWrap: {
-        category: "Common",
-        type: "choice",
-        default: "preserve",
-        description: "How to wrap prose.",
-        choices: [
-          {
-            value: "always",
-            description: "Wrap prose if it exceeds the print width."
-          },
-          { value: "never", description: "Do not wrap prose." },
-          { value: "preserve", description: "Wrap prose as-is." }
-        ]
-      },
-      objectWrap: {
-        category: "Common",
-        type: "choice",
-        default: "preserve",
-        description: "How to wrap object literals.",
-        choices: [
-          {
-            value: "preserve",
-            description: "Keep as multi-line, if there is a newline between the opening brace and first property."
-          },
-          {
-            value: "collapse",
-            description: "Fit to a single line when possible."
-          }
-        ]
-      }
-    };
-    languages = [
-      {
-        linguistLanguageId: 50,
-        name: "CSS",
-        type: "markup",
-        tmScope: "source.css",
-        aceMode: "css",
-        codemirrorMode: "css",
-        codemirrorMimeType: "text/css",
-        color: "#563d7c",
-        extensions: [".css", ".wxss"],
-        parsers: ["css"],
-        vscodeLanguageIds: ["css"]
-      },
-      {
-        linguistLanguageId: 262764437,
-        name: "PostCSS",
-        type: "markup",
-        color: "#dc3a0c",
-        tmScope: "source.postcss",
-        group: "CSS",
-        extensions: [".pcss", ".postcss"],
-        aceMode: "text",
-        parsers: ["css"],
-        vscodeLanguageIds: ["postcss"]
-      },
-      {
-        linguistLanguageId: 198,
-        name: "Less",
-        type: "markup",
-        color: "#1d365d",
-        aliases: ["less-css"],
-        extensions: [".less"],
-        tmScope: "source.css.less",
-        aceMode: "less",
-        codemirrorMode: "css",
-        codemirrorMimeType: "text/css",
-        parsers: ["less"],
-        vscodeLanguageIds: ["less"]
-      },
-      {
-        linguistLanguageId: 329,
-        name: "SCSS",
-        type: "markup",
-        color: "#c6538c",
-        tmScope: "source.css.scss",
-        aceMode: "scss",
-        codemirrorMode: "css",
-        codemirrorMimeType: "text/x-scss",
-        extensions: [".scss"],
-        parsers: ["scss"],
-        vscodeLanguageIds: ["scss"]
-      },
-      {
-        linguistLanguageId: 139,
-        name: "GraphQL",
-        type: "data",
-        color: "#e10098",
-        extensions: [".graphql", ".gql", ".graphqls"],
-        tmScope: "source.graphql",
-        aceMode: "text",
-        parsers: ["graphql"],
-        vscodeLanguageIds: ["graphql"]
-      },
-      {
-        linguistLanguageId: 155,
-        name: "Handlebars",
-        type: "markup",
-        color: "#f7931e",
-        aliases: ["hbs", "htmlbars"],
-        extensions: [".handlebars", ".hbs"],
-        tmScope: "text.html.handlebars",
-        aceMode: "handlebars",
-        parsers: ["glimmer"],
-        vscodeLanguageIds: ["handlebars"]
-      },
-      {
-        linguistLanguageId: 146,
-        name: "Angular",
-        type: "markup",
-        tmScope: "text.html.basic",
-        aceMode: "html",
-        codemirrorMode: "htmlmixed",
-        codemirrorMimeType: "text/html",
-        color: "#e34c26",
-        aliases: ["xhtml"],
-        extensions: [".component.html"],
-        parsers: ["angular"],
-        vscodeLanguageIds: ["html"],
-        filenames: []
-      },
-      {
-        linguistLanguageId: 146,
-        name: "HTML",
-        type: "markup",
-        tmScope: "text.html.basic",
-        aceMode: "html",
-        codemirrorMode: "htmlmixed",
-        codemirrorMimeType: "text/html",
-        color: "#e34c26",
-        aliases: ["xhtml"],
-        extensions: [".html", ".hta", ".htm", ".html.hl", ".inc", ".xht", ".xhtml", ".mjml"],
-        parsers: ["html"],
-        vscodeLanguageIds: ["html"]
-      },
-      {
-        linguistLanguageId: 146,
-        name: "Lightning Web Components",
-        type: "markup",
-        tmScope: "text.html.basic",
-        aceMode: "html",
-        codemirrorMode: "htmlmixed",
-        codemirrorMimeType: "text/html",
-        color: "#e34c26",
-        aliases: ["xhtml"],
-        extensions: [],
-        parsers: ["lwc"],
-        vscodeLanguageIds: ["html"],
-        filenames: []
-      },
-      {
-        linguistLanguageId: 391,
-        name: "Vue",
-        type: "markup",
-        color: "#41b883",
-        extensions: [".vue"],
-        tmScope: "text.html.vue",
-        aceMode: "html",
-        parsers: ["vue"],
-        vscodeLanguageIds: ["vue"]
-      },
-      {
-        linguistLanguageId: 183,
-        name: "JavaScript",
-        type: "programming",
-        tmScope: "source.js",
-        aceMode: "javascript",
-        codemirrorMode: "javascript",
-        codemirrorMimeType: "text/javascript",
-        color: "#f1e05a",
-        aliases: ["js", "node"],
-        extensions: [
-          ".js",
-          "._js",
-          ".bones",
-          ".cjs",
-          ".es",
-          ".es6",
-          ".frag",
-          ".gs",
-          ".jake",
-          ".javascript",
-          ".jsb",
-          ".jscad",
-          ".jsfl",
-          ".jslib",
-          ".jsm",
-          ".jspre",
-          ".jss",
-          ".mjs",
-          ".njs",
-          ".pac",
-          ".sjs",
-          ".ssjs",
-          ".xsjs",
-          ".xsjslib",
-          ".wxs"
-        ],
-        filenames: ["Jakefile"],
-        interpreters: ["chakra", "d8", "gjs", "js", "node", "nodejs", "qjs", "rhino", "v8", "v8-shell", "zx"],
-        parsers: ["babel", "acorn", "espree", "meriyah", "babel-flow", "babel-ts", "flow", "typescript"],
-        vscodeLanguageIds: ["javascript", "mongo"]
-      },
-      {
-        linguistLanguageId: 183,
-        name: "Flow",
-        type: "programming",
-        tmScope: "source.js",
-        aceMode: "javascript",
-        codemirrorMode: "javascript",
-        codemirrorMimeType: "text/javascript",
-        color: "#f1e05a",
-        aliases: [],
-        extensions: [".js.flow"],
-        filenames: [],
-        interpreters: ["chakra", "d8", "gjs", "js", "node", "nodejs", "qjs", "rhino", "v8", "v8-shell"],
-        parsers: ["flow", "babel-flow"],
-        vscodeLanguageIds: ["javascript"]
-      },
-      {
-        linguistLanguageId: 183,
-        name: "JSX",
-        type: "programming",
-        tmScope: "source.js.jsx",
-        aceMode: "javascript",
-        codemirrorMode: "jsx",
-        codemirrorMimeType: "text/jsx",
-        color: void 0,
-        aliases: void 0,
-        extensions: [".jsx"],
-        filenames: void 0,
-        interpreters: void 0,
-        parsers: ["babel", "babel-flow", "babel-ts", "flow", "typescript", "espree", "meriyah"],
-        vscodeLanguageIds: ["javascriptreact"],
-        group: "JavaScript"
-      },
-      {
-        linguistLanguageId: 378,
-        name: "TypeScript",
-        type: "programming",
-        color: "#3178c6",
-        aliases: ["ts"],
-        interpreters: ["deno", "ts-node"],
-        extensions: [".ts", ".cts", ".mts"],
-        tmScope: "source.ts",
-        aceMode: "typescript",
-        codemirrorMode: "javascript",
-        codemirrorMimeType: "application/typescript",
-        parsers: ["typescript", "babel-ts"],
-        vscodeLanguageIds: ["typescript"]
-      },
-      {
-        linguistLanguageId: 94901924,
-        name: "TSX",
-        type: "programming",
-        color: "#3178c6",
-        group: "TypeScript",
-        extensions: [".tsx"],
-        tmScope: "source.tsx",
-        aceMode: "javascript",
-        codemirrorMode: "jsx",
-        codemirrorMimeType: "text/jsx",
-        parsers: ["typescript", "babel-ts"],
-        vscodeLanguageIds: ["typescriptreact"]
-      },
-      {
-        linguistLanguageId: 174,
-        name: "JSON.stringify",
-        type: "data",
-        color: "#292929",
-        tmScope: "source.json",
-        aceMode: "json",
-        codemirrorMode: "javascript",
-        codemirrorMimeType: "application/json",
-        aliases: ["geojson", "jsonl", "topojson"],
-        extensions: [".importmap"],
-        filenames: ["package.json", "package-lock.json", "composer.json"],
-        parsers: ["json-stringify"],
-        vscodeLanguageIds: ["json"]
-      },
-      {
-        linguistLanguageId: 174,
-        name: "JSON",
-        type: "data",
-        color: "#292929",
-        tmScope: "source.json",
-        aceMode: "json",
-        codemirrorMode: "javascript",
-        codemirrorMimeType: "application/json",
-        aliases: ["geojson", "jsonl", "topojson"],
-        extensions: [
-          ".json",
-          ".4DForm",
-          ".4DProject",
-          ".avsc",
-          ".geojson",
-          ".gltf",
-          ".har",
-          ".ice",
-          ".JSON-tmLanguage",
-          ".mcmeta",
-          ".tfstate",
-          ".tfstate.backup",
-          ".topojson",
-          ".webapp",
-          ".webmanifest",
-          ".yy",
-          ".yyp"
-        ],
-        filenames: [
-          ".all-contributorsrc",
-          ".arcconfig",
-          ".auto-changelog",
-          ".c8rc",
-          ".htmlhintrc",
-          ".imgbotconfig",
-          ".nycrc",
-          ".tern-config",
-          ".tern-project",
-          ".watchmanconfig",
-          "Pipfile.lock",
-          "composer.lock",
-          "flake.lock",
-          "mcmod.info",
-          ".babelrc",
-          ".jscsrc",
-          ".jshintrc",
-          ".jslintrc",
-          ".swcrc"
-        ],
-        parsers: ["json"],
-        vscodeLanguageIds: ["json"]
-      },
-      {
-        linguistLanguageId: 423,
-        name: "JSON with Comments",
-        type: "data",
-        color: "#292929",
-        group: "JSON",
-        tmScope: "source.js",
-        aceMode: "javascript",
-        codemirrorMode: "javascript",
-        codemirrorMimeType: "text/javascript",
-        aliases: ["jsonc"],
-        extensions: [
-          ".jsonc",
-          ".code-snippets",
-          ".code-workspace",
-          ".sublime-build",
-          ".sublime-commands",
-          ".sublime-completions",
-          ".sublime-keymap",
-          ".sublime-macro",
-          ".sublime-menu",
-          ".sublime-mousemap",
-          ".sublime-project",
-          ".sublime-settings",
-          ".sublime-theme",
-          ".sublime-workspace",
-          ".sublime_metrics",
-          ".sublime_session"
-        ],
-        filenames: [],
-        parsers: ["jsonc"],
-        vscodeLanguageIds: ["jsonc"]
-      },
-      {
-        linguistLanguageId: 175,
-        name: "JSON5",
-        type: "data",
-        color: "#267CB9",
-        extensions: [".json5"],
-        tmScope: "source.js",
-        aceMode: "javascript",
-        codemirrorMode: "javascript",
-        codemirrorMimeType: "application/json",
-        parsers: ["json5"],
-        vscodeLanguageIds: ["json5"]
-      },
-      {
-        linguistLanguageId: 222,
-        name: "Markdown",
-        type: "prose",
-        color: "#083fa1",
-        aliases: ["md", "pandoc"],
-        aceMode: "markdown",
-        codemirrorMode: "gfm",
-        codemirrorMimeType: "text/x-gfm",
-        wrap: true,
-        extensions: [".md", ".livemd", ".markdown", ".mdown", ".mdwn", ".mkd", ".mkdn", ".mkdown", ".ronn", ".scd", ".workbook"],
-        filenames: ["contents.lr", "README"],
-        tmScope: "text.md",
-        parsers: ["markdown"],
-        vscodeLanguageIds: ["markdown"]
-      },
-      {
-        linguistLanguageId: 222,
-        name: "MDX",
-        type: "prose",
-        color: "#083fa1",
-        aliases: ["md", "pandoc"],
-        aceMode: "markdown",
-        codemirrorMode: "gfm",
-        codemirrorMimeType: "text/x-gfm",
-        wrap: true,
-        extensions: [".mdx"],
-        filenames: [],
-        tmScope: "text.md",
-        parsers: ["mdx"],
-        vscodeLanguageIds: ["mdx"]
-      },
-      {
-        linguistLanguageId: 407,
-        name: "YAML",
-        type: "data",
-        color: "#cb171e",
-        tmScope: "source.yaml",
-        aliases: ["yml"],
-        extensions: [".yml", ".mir", ".reek", ".rviz", ".sublime-syntax", ".syntax", ".yaml", ".yaml-tmlanguage", ".yaml.sed", ".yml.mysql"],
-        filenames: [".clang-format", ".clang-tidy", ".gemrc", "CITATION.cff", "glide.lock", ".prettierrc", ".stylelintrc", ".lintstagedrc"],
-        aceMode: "yaml",
-        codemirrorMode: "yaml",
-        codemirrorMimeType: "text/x-yaml",
-        parsers: ["yaml"],
-        vscodeLanguageIds: ["yaml", "ansible", "home-assistant"]
-      }
-    ];
-    ({ parsers, printers } = createParsersAndPrinters([
-      {
-        importPlugin: () => import("../plugins/acorn.mjs"),
-        parsers: ["acorn", "espree"]
-      },
-      {
-        importPlugin: () => import("../plugins/angular.mjs"),
-        parsers: ["__ng_action", "__ng_binding", "__ng_interpolation", "__ng_directive"]
-      },
-      {
-        importPlugin: () => import("../plugins/babel.mjs"),
-        parsers: [
-          "babel",
-          "babel-flow",
-          "babel-ts",
-          "__js_expression",
-          "__ts_expression",
-          "__vue_expression",
-          "__vue_ts_expression",
-          "__vue_event_binding",
-          "__vue_ts_event_binding",
-          "__babel_estree",
-          "json",
-          "json5",
-          "jsonc",
-          "json-stringify"
-        ]
-      },
-      {
-        importPlugin: () => import("../plugins/estree.mjs"),
-        printers: ["estree", "estree-json"]
-      },
-      {
-        importPlugin: () => import("../plugins/flow.mjs"),
-        parsers: ["flow"]
-      },
-      {
-        importPlugin: () => import("../plugins/glimmer.mjs"),
-        parsers: ["glimmer"],
-        printers: ["glimmer"]
-      },
-      {
-        importPlugin: () => import("../plugins/graphql.mjs"),
-        parsers: ["graphql"],
-        printers: ["graphql"]
-      },
-      {
-        importPlugin: () => import("../plugins/html.mjs"),
-        parsers: ["html", "angular", "vue", "lwc"],
-        printers: ["html"]
-      },
-      {
-        importPlugin: () => import("../plugins/markdown.mjs"),
-        parsers: ["markdown", "mdx", "remark"],
-        printers: ["mdast"]
-      },
-      {
-        importPlugin: () => import("../plugins/meriyah.mjs"),
-        parsers: ["meriyah"]
-      },
-      {
-        importPlugin: () => import("../plugins/postcss.mjs"),
-        parsers: ["css", "less", "scss"],
-        printers: ["postcss"]
-      },
-      {
-        importPlugin: () => import("../plugins/typescript.mjs"),
-        parsers: ["typescript"]
-      },
-      {
-        importPlugin: () => import("../plugins/yaml.mjs"),
-        parsers: ["yaml"],
-        printers: ["yaml"]
-      }
-    ]));
-    plugins = { options, languages, parsers, printers };
-    prettier_plugins_builtin_default = plugins;
   }
 });
 
@@ -5403,6 +4750,9 @@ function getModulePath(name, rootPath) {
   const modulePath = url.fileURLToPath(moduleUrl);
   return modulePath;
 }
+function identity3(value) {
+  return value;
+}
 async function getPluginOrExit(name) {
   try {
     return await getPlugin(name);
@@ -5412,8 +4762,11 @@ async function getPluginOrExit(name) {
 }
 function getPluginPath(name) {
   const rootPath = path9.join(process11.cwd(), "index.js");
-  const pluginPath = getModulePath(name, rootPath);
-  return pluginPath;
+  try {
+    return getModulePath(`./${name}`, rootPath);
+  } catch {
+    return getModulePath(name, rootPath);
+  }
 }
 function getPluginVersion(name) {
   const pluginPath = getPluginPath(name);
@@ -5504,8 +4857,12 @@ async function getTargetsPaths(rootPath, globs, withNodeModules) {
     filesNamesToPaths[fileName] = uniq3(next);
   }
   const filesExplicitPaths = targetFiles;
-  const filesFoundPaths = globResult.filesFound;
-  const foldersFoundPaths = [rootPath, ...globResult.directoriesFound];
+  const globFilesFoundPaths = globResult.filesFound;
+  const directoryFilesFoundPaths = directoriesResultsFiles.flat();
+  const filesFoundPaths = [...globFilesFoundPaths, ...directoryFilesFoundPaths];
+  const globFoldersFoundPaths = globResult.directoriesFound;
+  const directoryFoldersFoundPaths = directoriesResults.flatMap((result) => result.directories);
+  const foldersFoundPaths = [rootPath, ...globFoldersFoundPaths, ...directoryFoldersFoundPaths];
   return [filesPaths, filesNames, filesNamesToPaths, filesExplicitPaths, filesFoundPaths, foldersFoundPaths];
 }
 function isArray3(value) {
@@ -5552,18 +4909,18 @@ function negate(fn) {
 function noop2() {
   return;
 }
-async function normalizeOptions(options2, targets) {
-  if (!isObject2(options2))
+async function normalizeOptions(options, targets) {
+  if (!isObject2(options))
     exit_default("Invalid options object");
   const targetsGlobs = targets.filter(isString3);
-  const targetsStatic = "--" in options2 && Array.isArray(options2["--"]) ? options2["--"].filter(isString3).map(dist_default22) : [];
+  const targetsStatic = "--" in options && Array.isArray(options["--"]) ? options["--"].filter(isString3).map(dist_default22) : [];
   const globs = [...targetsGlobs, ...targetsStatic];
   const stdin = await getStdin();
   if (!isString3(stdin) && !globs.length)
     exit_default("Expected at least one target file/dir/glob");
-  const check = "check" in options2 && !!options2.check;
-  const list = "listDifferent" in options2 && !!options2.listDifferent;
-  const write = "write" in options2 && !!options2.write;
+  const check = "check" in options && !!options.check;
+  const list = "listDifferent" in options && !!options.listDifferent;
+  const write = "write" in options && !!options.write;
   const dump2 = !check && !list && !write;
   if (check && list)
     exit_default('The "--check" and "--list-different" flags cannot be used together');
@@ -5571,22 +4928,22 @@ async function normalizeOptions(options2, targets) {
     exit_default('The "--check" and "--write" flags cannot be used together');
   if (list && write)
     exit_default('The "--list-different" and "--write" flags cannot be used together');
-  const config = "config" in options2 ? !!options2.config : true;
-  const configPath = "configPath" in options2 && isString3(options2.configPath) ? [options2.configPath] : void 0;
-  const editorConfig = "editorconfig" in options2 ? !!options2.editorconfig : true;
-  const ignore = "ignore" in options2 ? !!options2.ignore : true;
-  const ignorePath = "ignorePath" in options2 && isArray3(options2.ignorePath) && options2.ignorePath.every(isString3) ? options2.ignorePath : void 0;
-  const withNodeModules = "withNodeModules" in options2 ? !!options2.withNodeModules : false;
-  const cache2 = "cache" in options2 ? !!options2.cache : true;
-  const cacheLocation = "cacheLocation" in options2 && isString3(options2.cacheLocation) ? options2.cacheLocation : void 0;
-  const errorOnUnmatchedPattern = "errorOnUnmatchedPattern" in options2 ? !!options2.errorOnUnmatchedPattern : true;
-  const ignoreUnknown = "ignoreUnknown" in options2 && isBoolean2(options2.ignoreUnknown) ? !!options2.ignoreUnknown : globs.some(dist_default19);
-  const logLevel = "logLevel" in options2 ? options2.logLevel || "log" : "log";
-  const parallel = "parallel" in options2 && !!options2.parallel;
-  const parallelWorkers = "parallelWorkers" in options2 && Math.round(Number(options2.parallelWorkers)) || 0;
-  const stdinFilepath = "stdinFilepath" in options2 && isString3(options2.stdinFilepath) ? options2.stdinFilepath : void 0;
-  const contextOptions = normalizeContextOptions(options2);
-  const formatOptions = normalizeFormatOptions(options2);
+  const config = "config" in options ? !!options.config : true;
+  const configPath = "configPath" in options && isString3(options.configPath) ? [options.configPath] : void 0;
+  const editorConfig = "editorconfig" in options ? !!options.editorconfig : true;
+  const ignore = "ignore" in options ? !!options.ignore : true;
+  const ignorePath = "ignorePath" in options && isArray3(options.ignorePath) && options.ignorePath.every(isString3) ? options.ignorePath : void 0;
+  const withNodeModules = "withNodeModules" in options ? !!options.withNodeModules : false;
+  const cache3 = "cache" in options ? !!options.cache : true;
+  const cacheLocation = "cacheLocation" in options && isString3(options.cacheLocation) ? options.cacheLocation : void 0;
+  const errorOnUnmatchedPattern = "errorOnUnmatchedPattern" in options ? !!options.errorOnUnmatchedPattern : true;
+  const ignoreUnknown = "ignoreUnknown" in options && isBoolean2(options.ignoreUnknown) ? !!options.ignoreUnknown : globs.some(dist_default19);
+  const logLevel = "logLevel" in options ? options.logLevel || "log" : "log";
+  const parallel = "parallel" in options && !!options.parallel;
+  const parallelWorkers = "parallelWorkers" in options && Math.round(Number(options.parallelWorkers)) || 0;
+  const stdinFilepath = "stdinFilepath" in options && isString3(options.stdinFilepath) ? options.stdinFilepath : void 0;
+  const contextOptions = normalizeContextOptions(options);
+  const formatOptions = normalizeFormatOptions(options);
   return {
     globs,
     check,
@@ -5599,7 +4956,7 @@ async function normalizeOptions(options2, targets) {
     ignore,
     ignorePath,
     withNodeModules,
-    cache: cache2,
+    cache: cache3,
     cacheLocation,
     errorOnUnmatchedPattern,
     ignoreUnknown,
@@ -5611,114 +4968,108 @@ async function normalizeOptions(options2, targets) {
     formatOptions
   };
 }
-function normalizeContextOptions(options2) {
-  if (!isObject2(options2))
+function normalizeContextOptions(options) {
+  if (!isObject2(options))
     exit_default("Invalid options object");
   const contextOptions = {};
-  if ("configPrecedence" in options2) {
-    const value = options2.configPrecedence;
-    if (isString3(value) && (value === "cli-override" || value === "file-override")) {
-      contextOptions.configPrecedence = value;
-    }
-  }
-  if ("cursorOffset" in options2) {
-    const value = Number(options2.cursorOffset);
+  if ("cursorOffset" in options) {
+    const value = Number(options.cursorOffset);
     if (isInteger(value) && value >= 0) {
       contextOptions.cursorOffset = value;
     }
   }
-  if ("rangeEnd" in options2) {
-    const value = Number(options2.rangeEnd);
+  if ("rangeEnd" in options) {
+    const value = Number(options.rangeEnd);
     if (isInteger(value) && value >= 0) {
       contextOptions.rangeEnd = value;
     }
   }
-  if ("rangeStart" in options2) {
-    const value = Number(options2.rangeStart);
+  if ("rangeStart" in options) {
+    const value = Number(options.rangeStart);
     if (isInteger(value) && value >= 0) {
       contextOptions.rangeStart = value;
     }
   }
   return contextOptions;
 }
-function normalizeFormatOptions(options2) {
-  if (!isObject2(options2))
+function normalizeFormatOptions(options) {
+  if (!isObject2(options))
     exit_default("Invalid options object");
   const formatOptions = {};
-  if ("experimentalOperatorPosition" in options2) {
-    const value = options2.experimentalOperatorPosition;
+  if ("experimentalOperatorPosition" in options) {
+    const value = options.experimentalOperatorPosition;
     if (value === "start" || value === "end") {
       formatOptions.experimentalOperatorPosition = value;
     }
   }
-  if ("experimentalTernaries" in options2) {
-    const value = options2.experimentalTernaries;
+  if ("experimentalTernaries" in options) {
+    const value = options.experimentalTernaries;
     if (isBoolean2(value)) {
       formatOptions.experimentalTernaries = value;
     }
   }
-  if ("arrowParens" in options2) {
-    const value = options2.arrowParens;
+  if ("arrowParens" in options) {
+    const value = options.arrowParens;
     if (value === "avoid" || value === "always") {
       formatOptions.arrowParens = value;
     }
   }
-  if ("bracketSameLine" in options2) {
-    const value = options2.bracketSameLine;
+  if ("bracketSameLine" in options) {
+    const value = options.bracketSameLine;
     if (isBoolean2(value)) {
       formatOptions.bracketSameLine = value;
     }
   }
-  if ("bracketSpacing" in options2) {
-    const value = options2.bracketSpacing;
+  if ("bracketSpacing" in options) {
+    const value = options.bracketSpacing;
     if (isBoolean2(value)) {
       formatOptions.bracketSpacing = value;
     }
   }
-  if ("embeddedLanguageFormatting" in options2) {
-    const value = options2.embeddedLanguageFormatting;
+  if ("embeddedLanguageFormatting" in options) {
+    const value = options.embeddedLanguageFormatting;
     if (value === "auto" || value === "off") {
       formatOptions.embeddedLanguageFormatting = value;
     }
   }
-  if ("endOfLine" in options2) {
-    const value = options2.endOfLine;
+  if ("endOfLine" in options) {
+    const value = options.endOfLine;
     if (value === "lf" || value === "crlf" || value === "cr" || value === "auto") {
       formatOptions.endOfLine = value;
     }
   }
-  if ("htmlWhitespaceSensitivity" in options2) {
-    const value = options2.htmlWhitespaceSensitivity;
+  if ("htmlWhitespaceSensitivity" in options) {
+    const value = options.htmlWhitespaceSensitivity;
     if (value === "css" || value === "strict" || value === "ignore") {
       formatOptions.htmlWhitespaceSensitivity = value;
     }
   }
-  if ("insertPragma" in options2) {
-    const value = options2.insertPragma;
+  if ("insertPragma" in options) {
+    const value = options.insertPragma;
     if (isBoolean2(value)) {
       formatOptions.insertPragma = value;
     }
   }
-  if ("jsxSingleQuote" in options2) {
-    const value = options2.jsxSingleQuote;
+  if ("jsxSingleQuote" in options) {
+    const value = options.jsxSingleQuote;
     if (isBoolean2(value)) {
       formatOptions.jsxSingleQuote = value;
     }
   }
-  if ("objectWrap" in options2) {
-    const value = options2.objectWrap;
+  if ("objectWrap" in options) {
+    const value = options.objectWrap;
     if (value === "preserve" || value === "collapse") {
       formatOptions.objectWrap = value;
     }
   }
-  if ("parser" in options2) {
-    const value = options2.parser;
+  if ("parser" in options) {
+    const value = options.parser;
     if (isString3(value)) {
       formatOptions.parser = value;
     }
   }
-  if ("plugin" in options2 || "plugins" in options2) {
-    const value = options2["plugin"] || options2["plugins"];
+  if ("plugin" in options || "plugins" in options) {
+    const value = options["plugin"] || options["plugins"];
     if (isArray3(value) && value.every(isString3)) {
       formatOptions.plugins = value;
     } else if (isString3(value)) {
@@ -5727,93 +5078,93 @@ function normalizeFormatOptions(options2) {
       exit_default("Non-string plugin specifiers are not supported yet");
     }
   }
-  if ("printWidth" in options2) {
-    const value = Number(options2.printWidth);
+  if ("printWidth" in options) {
+    const value = Number(options.printWidth);
     if (isInteger(value) && value >= 0) {
       formatOptions.printWidth = value;
     }
   }
-  if ("proseWrap" in options2) {
-    const value = options2.proseWrap;
+  if ("proseWrap" in options) {
+    const value = options.proseWrap;
     if (value === "always" || value === "never" || value === "preserve") {
       formatOptions.proseWrap = value;
     }
   }
-  if ("quoteProps" in options2) {
-    const value = options2.quoteProps;
+  if ("quoteProps" in options) {
+    const value = options.quoteProps;
     if (value === "as-needed" || value === "consistent" || value === "preserve") {
       formatOptions.quoteProps = value;
     }
   }
-  if ("requirePragma" in options2) {
-    const value = options2.requirePragma;
+  if ("requirePragma" in options) {
+    const value = options.requirePragma;
     if (isBoolean2(value)) {
       formatOptions.requirePragma = value;
     }
   }
-  if ("semi" in options2) {
-    const value = options2.semi;
+  if ("semi" in options) {
+    const value = options.semi;
     if (isBoolean2(value)) {
       formatOptions.semi = value;
     }
   }
-  if ("singleAttributePerLine" in options2) {
-    const value = options2.singleAttributePerLine;
+  if ("singleAttributePerLine" in options) {
+    const value = options.singleAttributePerLine;
     if (isBoolean2(value)) {
       formatOptions.singleAttributePerLine = value;
     }
   }
-  if ("singleQuote" in options2) {
-    const value = options2.singleQuote;
+  if ("singleQuote" in options) {
+    const value = options.singleQuote;
     if (isBoolean2(value)) {
       formatOptions.singleQuote = value;
     }
   }
-  if ("tabWidth" in options2) {
-    const value = Number(options2.tabWidth);
+  if ("tabWidth" in options) {
+    const value = Number(options.tabWidth);
     if (isInteger(value) && value >= 0) {
       formatOptions.tabWidth = value;
     }
   }
-  if ("trailingComma" in options2) {
-    const value = options2.trailingComma;
+  if ("trailingComma" in options) {
+    const value = options.trailingComma;
     if (value === "all" || value === "es5" || value === "none") {
       formatOptions.trailingComma = value;
     }
   }
-  if ("useTabs" in options2) {
-    const value = options2.useTabs;
+  if ("useTabs" in options) {
+    const value = options.useTabs;
     if (isBoolean2(value)) {
       formatOptions.useTabs = value;
     }
   }
-  if ("vueIndentScriptAndStyle" in options2) {
-    const value = options2.vueIndentScriptAndStyle;
+  if ("vueIndentScriptAndStyle" in options) {
+    const value = options.vueIndentScriptAndStyle;
     if (isBoolean2(value)) {
       formatOptions.vueIndentScriptAndStyle = value;
     }
   }
   return formatOptions;
 }
-function normalizePluginOptions(options2, names) {
-  if (!isObject2(options2))
+function normalizePluginOptions(options, names) {
+  if (!isObject2(options))
     exit_default("Invalid options object");
   const config = {};
   for (let i = 0, l = names.length; i < l; i++) {
     const name = names[i];
-    const value = options2[name];
+    const value = options[name];
     if (isUndefined4(value))
       continue;
     config[name] = value;
   }
   return config;
 }
-function normalizePrettierOptions(options2, folderPath) {
-  if (!isObject2(options2))
+function normalizePrettierOptions(options, folderPath) {
+  if (!isObject2(options))
     exit_default("Invalid options object");
-  const config = normalizeFormatOptions(options2);
-  if ("overrides" in options2 && isArray3(options2.overrides)) {
-    const overridesRaw = options2.overrides;
+  const config = normalizeFormatOptions(options);
+  if ("overrides" in options && isArray3(options.overrides)) {
+    const overridesRaw = options.overrides;
     for (let i = 0, l = overridesRaw.length; i < l; i++) {
       const overrideRaw = overridesRaw[i];
       if (!isObject2(overrideRaw))
@@ -5832,8 +5183,8 @@ function normalizePrettierOptions(options2, folderPath) {
       const filesPositive = castArray5(overrideRaw.files);
       const filesNegative = "filesNegative" in overrideRaw && (isString3(overrideRaw.filesNegative) || isArray3(overrideRaw.filesNegative) && overrideRaw.filesNegative.every(isString3)) ? castArray5(overrideRaw.filesNegative) : [];
       const folder = folderPath;
-      const options3 = normalizeFormatOptions(overrideRaw.options);
-      overrides.push({ filesPositive, filesNegative, folder, options: options3 });
+      const options2 = normalizeFormatOptions(overrideRaw.options);
+      overrides.push({ filesPositive, filesNegative, folder, options: options2 });
     }
   }
   return config;
@@ -5898,7 +5249,7 @@ function zipObjectUnless(keys, values, unless) {
   }
   return map2;
 }
-var getPlugin, getPluginsBuiltin, getStdin, normalizeToPosix;
+var getPlugin, getStdin, normalizePathSeparatorsToPosix;
 var init_utils12 = __esm({
   "node_modules/@prettier/cli/dist/utils.js"() {
     init_dist2();
@@ -5917,9 +5268,6 @@ var init_utils12 = __esm({
       const plugin = getModule(pluginPath);
       return plugin;
     });
-    getPluginsBuiltin = dist_default12(async () => {
-      return [(await Promise.resolve().then(() => (init_prettier_plugins_builtin(), prettier_plugins_builtin_exports))).default];
-    });
     getStdin = dist_default12(async () => {
       if (!process11.stdin.isTTY) {
         const stdin = stream2text(process11.stdin);
@@ -5927,15 +5275,22 @@ var init_utils12 = __esm({
         return Promise.race([stdin, fallback]);
       }
     });
-    normalizeToPosix = path9.sep === "\\" ? (filepath) => filepath.replaceAll("\\", "/") : (filepath) => filepath;
+    normalizePathSeparatorsToPosix = (() => {
+      if (path9.sep === "\\") {
+        return (filePath) => {
+          return filePath.replaceAll("\\", "/");
+        };
+      } else {
+        return identity3;
+      }
+    })();
   }
 });
 
 // node_modules/binary-extensions/binary-extensions.json
-var binary_extensions_default;
-var init_binary_extensions = __esm({
-  "node_modules/binary-extensions/binary-extensions.json"() {
-    binary_extensions_default = [
+var require_binary_extensions = __commonJS({
+  "node_modules/binary-extensions/binary-extensions.json"(exports, module) {
+    module.exports = [
       "3dm",
       "3ds",
       "3g2",
@@ -5975,7 +5330,6 @@ var init_binary_extensions = __esm({
       "cmx",
       "cpio",
       "cr2",
-      "cr3",
       "cur",
       "dat",
       "dcm",
@@ -6203,24 +5557,20 @@ var init_binary_extensions = __esm({
 });
 
 // node_modules/binary-extensions/index.js
-var binary_extensions_default2;
-var init_binary_extensions2 = __esm({
-  "node_modules/binary-extensions/index.js"() {
-    init_binary_extensions();
-    binary_extensions_default2 = binary_extensions_default;
+var require_binary_extensions2 = __commonJS({
+  "node_modules/binary-extensions/index.js"(exports, module) {
+    module.exports = require_binary_extensions();
   }
 });
 
 // node_modules/is-binary-path/index.js
-import path10 from "path";
-function isBinaryPath(filePath) {
-  return extensions.has(path10.extname(filePath).slice(1).toLowerCase());
-}
-var extensions;
-var init_is_binary_path = __esm({
-  "node_modules/is-binary-path/index.js"() {
-    init_binary_extensions2();
-    extensions = new Set(binary_extensions_default2);
+var require_is_binary_path = __commonJS({
+  "node_modules/is-binary-path/index.js"(exports, module) {
+    "use strict";
+    var path17 = __require("path");
+    var binaryExtensions = require_binary_extensions2();
+    var extensions = new Set(binaryExtensions);
+    module.exports = (filePath) => extensions.has(path17.extname(filePath).slice(1).toLowerCase());
   }
 });
 
@@ -6248,17 +5598,17 @@ var init_dist26 = __esm({
 
 // node_modules/@prettier/cli/dist/cache.js
 import fs8 from "fs";
-import path11 from "path";
+import path10 from "path";
 var Cache, cache_default;
 var init_cache = __esm({
   "node_modules/@prettier/cli/dist/cache.js"() {
     init_utils12();
     Cache = class {
-      constructor(version, rootPath, options2, logger) {
+      constructor(version, rootPath, options, logger) {
         this.version = sha1hex(version);
         this.logger = logger;
         this.rootPath = rootPath;
-        this.storePath = options2.cacheLocation || path11.join(getCachePath(rootPath), `${sha1hex(rootPath)}.json`);
+        this.storePath = options.cacheLocation || path10.join(getCachePath(rootPath), `${sha1hex(rootPath)}.json`);
         this.store = this.read();
         this.dirty = false;
       }
@@ -6287,7 +5637,7 @@ var init_cache = __esm({
           return;
         try {
           const store = JSON.stringify(this.store);
-          fs8.mkdirSync(path11.dirname(this.storePath), { recursive: true });
+          fs8.mkdirSync(path10.dirname(this.storePath), { recursive: true });
           fs8.writeFileSync(this.storePath, store);
         } catch (error) {
           this.logger.prefixed.debug(String(error));
@@ -6414,16 +5764,16 @@ var parse2, dist_default24;
 var init_dist27 = __esm({
   "node_modules/ini-simple-parser/dist/index.js"() {
     init_utils13();
-    parse2 = (input, options2 = {}) => {
+    parse2 = (input, options = {}) => {
       const COMMENT1 = 35;
       const COMMENT2 = 59;
       const SECTION_START = 91;
       const SECTION_END = 93;
-      const INFER_BOOLEANS = !!options2.inferBooleans;
-      const INFER_NULLS = !!options2.inferNulls;
-      const INFER_NUMBERS = !!options2.inferNumbers;
-      const INFER_STRINGS = !!options2.inferStrings;
-      const INLINE_COMMENTS = !!options2.inlineComments;
+      const INFER_BOOLEANS = !!options.inferBooleans;
+      const INFER_NULLS = !!options.inferNulls;
+      const INFER_NUMBERS = !!options.inferNumbers;
+      const INFER_STRINGS = !!options.inferStrings;
+      const INLINE_COMMENTS = !!options.inlineComments;
       const results = {};
       const lines = input.split(/\r?\n|\r/g);
       let section = results;
@@ -6635,11 +5985,11 @@ var init_range2 = __esm({
 });
 
 // node_modules/tiny-editorconfig/node_modules/zeptomatch/dist/utils.js
-var identity3, makeParser2, memoize4;
+var identity4, makeParser2, memoize4;
 var init_utils15 = __esm({
   "node_modules/tiny-editorconfig/node_modules/zeptomatch/dist/utils.js"() {
     init_dist19();
-    identity3 = (value) => {
+    identity4 = (value) => {
       return value;
     };
     makeParser2 = (grammar) => {
@@ -6648,9 +5998,9 @@ var init_utils15 = __esm({
       });
     };
     memoize4 = (fn) => {
-      const cache2 = {};
+      const cache3 = {};
       return (arg) => {
-        return cache2[arg] ?? (cache2[arg] = fn(arg));
+        return cache3[arg] ?? (cache3[arg] = fn(arg));
       };
     };
   }
@@ -6667,9 +6017,9 @@ var init_grammar3 = __esm({
     FastPathAll = match(/^\*\*\/\*$/, ".*");
     FastPathSimple = match(/^\*\*\/(\*)?([ a-zA-Z0-9._-]+)$/, (_, $1, $2) => `.*${$1 ? "" : "(?:^|/)"}${$2.replaceAll(".", "\\.")}`);
     FastPathSimples = match(/^\*\*\/(\*)?([ a-zA-Z0-9._-]*)\{([ a-zA-Z0-9._-]+(?:,[ a-zA-Z0-9._-]+)*)\}$/, (_, $1, $2, $3) => `.*${$1 ? "" : "(?:^|/)"}${$2.replaceAll(".", "\\.")}(?:${$3.replaceAll(",", "|").replaceAll(".", "\\.")})`);
-    Escaped3 = match(/\\./, identity3);
+    Escaped3 = match(/\\./, identity4);
     Escape2 = match(/[$.*+?^(){}[\]\|]/, (char) => `\\${char}`);
-    Passthrough3 = match(/./, identity3);
+    Passthrough3 = match(/./, identity4);
     NegationOdd2 = match(/^(?:!!)*!(.*)$/, (_, glob) => `(?!^${parser_default3(glob)}$).*?`);
     NegationEven2 = match(/^(!!)+/, "");
     Negation2 = or([NegationOdd2, NegationEven2]);
@@ -6682,12 +6032,12 @@ var init_grammar3 = __esm({
     StarSingle2 = match(/\*/, "[^/]*");
     Star2 = or([StarDouble2, StarSingle2]);
     Question2 = match("?", "[^/]");
-    ClassOpen2 = match("[", identity3);
-    ClassClose2 = match("]", identity3);
+    ClassOpen2 = match("[", identity4);
+    ClassClose2 = match("]", identity4);
     ClassNegation2 = match(/[!^]/, "^/");
-    ClassRange2 = match(/[a-z]-[a-z]|[0-9]-[0-9]/i, identity3);
+    ClassRange2 = match(/[a-z]-[a-z]|[0-9]-[0-9]/i, identity4);
     ClassEscape2 = match(/[$.*+?^(){}[\|]/, (char) => `\\${char}`);
-    ClassPassthrough2 = match(/[^\]]/, identity3);
+    ClassPassthrough2 = match(/[^\]]/, identity4);
     ClassValue2 = or([Escaped3, ClassEscape2, ClassRange2, ClassPassthrough2]);
     Class2 = and([ClassOpen2, optional(ClassNegation2), star(ClassValue2), ClassClose2]);
     RangeOpen2 = match("{", "(?:");
@@ -6701,7 +6051,7 @@ var init_grammar3 = __esm({
     BracesClose2 = match("}", ")");
     BracesComma2 = match(",", "|");
     BracesEscape2 = match(/[$.*+?^(){[\]\|]/, (char) => `\\${char}`);
-    BracesPassthrough2 = match(/[^}]/, identity3);
+    BracesPassthrough2 = match(/[^}]/, identity4);
     BracesNested2 = lazy(() => Braces2);
     BracesValue2 = or([StarStar2, Star2, Question2, Class2, Range2, BracesNested2, Escaped3, BracesEscape2, BracesComma2, BracesPassthrough2]);
     Braces2 = and([BracesOpen2, star(BracesValue2), BracesClose2]);
@@ -6727,8 +6077,8 @@ var init_grammar4 = __esm({
   "node_modules/tiny-editorconfig/node_modules/zeptomatch/dist/normalize/grammar.js"() {
     init_dist19();
     init_utils15();
-    Escaped4 = match(/\\./, identity3);
-    Passthrough4 = match(/./, identity3);
+    Escaped4 = match(/\\./, identity4);
+    Passthrough4 = match(/./, identity4);
     StarStarStar2 = match(/\*\*\*+/, "*");
     StarStarNoLeft2 = match(/([^/{[(!])\*\*/, (_, $1) => `${$1}*`);
     StarStarNoRight2 = match(/(^|.)\*\*(?=[^*/)\]}])/, (_, $1) => `${$1}*`);
@@ -6754,13 +6104,13 @@ var init_dist28 = __esm({
   "node_modules/tiny-editorconfig/node_modules/zeptomatch/dist/index.js"() {
     init_parser3();
     init_parser4();
-    zeptomatch2 = (glob, path18) => {
+    zeptomatch2 = (glob, path17) => {
       const globs = Array.isArray(glob) ? glob : [glob];
       if (!globs.length)
         return false;
       const res = globs.map(zeptomatch2.compile);
       const isTrailing = globs.every((glob2) => /(\/(?:\*\*)?|\[\/\])$/.test(glob2));
-      const normpath = path18.replace(/[\\\/]+/g, "/").replace(/\/$/, isTrailing ? "/" : "");
+      const normpath = path17.replace(/[\\\/]+/g, "/").replace(/\/$/, isTrailing ? "/" : "");
       const isMatch = res.some((re) => re.test(normpath));
       return isMatch;
     };
@@ -6871,7 +6221,7 @@ var init_known = __esm({
 
 // node_modules/@prettier/cli/dist/config_editorconfig.js
 import fs9 from "fs/promises";
-import path12 from "path";
+import path11 from "path";
 var getEditorConfig, getEditorConfigsMap, getEditorConfigsUp, getEditorConfigResolved, getEditorConfigFormatOptions;
 var init_config_editorconfig = __esm({
   "node_modules/@prettier/cli/dist/config_editorconfig.js"() {
@@ -6894,14 +6244,14 @@ var init_config_editorconfig = __esm({
     };
     getEditorConfigsUp = dist_default13(async (folderPath, filesNames) => {
       const config = await getEditorConfig(folderPath, filesNames);
-      const folderPathUp = path12.dirname(folderPath);
+      const folderPathUp = path11.dirname(folderPath);
       const configsUp = folderPath !== folderPathUp ? await getEditorConfigsUp(folderPathUp, filesNames) : [];
       const configs = config ? [...configsUp, config] : configsUp;
       const lastRootIndex = findLastIndex(configs, (config2) => config2.root);
       return lastRootIndex > 0 ? configs.slice(lastRootIndex) : configs;
     });
     getEditorConfigResolved = async (filePath, filesNames) => {
-      const folderPath = path12.dirname(filePath);
+      const folderPath = path11.dirname(filePath);
       const configs = await getEditorConfigsUp(folderPath, filesNames);
       const config = resolve_default(configs, filePath);
       return config;
@@ -7028,8 +6378,8 @@ var compile, compile_default;
 var init_compile = __esm({
   "node_modules/fast-ignore/dist/ignore/compile.js"() {
     init_matcher();
-    compile = (tiers, options2) => {
-      const caseSensitive = options2.caseSensitive ?? false;
+    compile = (tiers, options) => {
+      const caseSensitive = options.caseSensitive ?? false;
       const root2 = { id: "", globstar: false, negative: false, strength: -1, tier: -1, match: () => false, children: [] };
       let scounter = 0;
       for (let ti = 0, tl = tiers.length; ti < tl; ti++) {
@@ -7147,13 +6497,13 @@ var init_matcher2 = __esm({
     init_compile();
     init_parse3();
     init_tick();
-    matcher2 = (ignore, options2 = {}) => {
+    matcher2 = (ignore, options = {}) => {
       const ignores = Array.isArray(ignore) ? ignore : [ignore];
       const tiers = ignores.map(parse_default3).filter((tier) => !!tier.length);
       if (!tiers.length)
         return () => false;
-      const root2 = compile_default(tiers, options2);
-      const cache2 = [];
+      const root2 = compile_default(tiers, options);
+      const cache3 = [];
       return (fileRelativePath) => {
         const sep = fileRelativePath.includes("/") ? "/" : "\\";
         const length = fileRelativePath.length;
@@ -7171,7 +6521,7 @@ var init_matcher2 = __esm({
           if (!segment.length)
             continue;
           segmentNth += 1;
-          const cached = segmentNth < cache2.length - 1 ? cache2[segmentNth] : void 0;
+          const cached = segmentNth < cache3.length - 1 ? cache3[segmentNth] : void 0;
           const cachedResult = cacheable && cached && cached[0] === segment ? cached[1] : void 0;
           const result = cachedResult || tick_default(nodes, segment);
           cacheable = !!cachedResult;
@@ -7180,7 +6530,7 @@ var init_matcher2 = __esm({
               cached[0] = segment;
               cached[1] = result;
             } else {
-              cache2[segmentNth] = [segment, result];
+              cache3[segmentNth] = [segment, result];
             }
           }
           if (result[2] >= 0 && !result[1])
@@ -7207,7 +6557,7 @@ var init_dist31 = __esm({
 
 // node_modules/@prettier/cli/dist/config_ignore.js
 import fs10 from "fs/promises";
-import path13 from "path";
+import path12 from "path";
 var getIgnoreContent, getIgnoresContent, getIgnoresContentMap, getIgnoreBy, getIgnoreBys, getIgnores, getIgnoresUp, getIgnoreResolved;
 var init_config_ignore = __esm({
   "node_modules/@prettier/cli/dist/config_ignore.js"() {
@@ -7255,7 +6605,7 @@ var init_config_ignore = __esm({
     });
     getIgnoresUp = dist_default13(async (folderPath, filesNames) => {
       const ignore = await getIgnores(folderPath, filesNames);
-      const folderPathUp = path13.dirname(folderPath);
+      const folderPathUp = path12.dirname(folderPath);
       const ignoreUp = folderPath !== folderPathUp ? await getIgnoresUp(folderPathUp, filesNames) : void 0;
       const ignores = ignore ? ignoreUp ? [ignore, ignoreUp] : [ignore] : ignoreUp ? [ignoreUp] : [];
       if (!ignores.length)
@@ -7264,7 +6614,7 @@ var init_config_ignore = __esm({
       return ignoreAll;
     });
     getIgnoreResolved = async (filePath, filesNames) => {
-      const folderPath = path13.dirname(filePath);
+      const folderPath = path12.dirname(filePath);
       const ignore = await getIgnoresUp(folderPath, filesNames);
       const ignored = !!ignore?.(filePath);
       return ignored;
@@ -8383,12 +7733,12 @@ var init_error = __esm({
       line;
       column;
       codeblock;
-      constructor(message, options2) {
-        const [line2, column2] = getLineColFromPtr(options2.toml, options2.ptr);
-        const codeblock = makeCodeBlock(options2.toml, line2, column2);
+      constructor(message, options) {
+        const [line2, column2] = getLineColFromPtr(options.toml, options.ptr);
+        const codeblock = makeCodeBlock(options.toml, line2, column2);
         super(`Invalid TOML document: ${message}
 
-${codeblock}`, options2);
+${codeblock}`, options);
         this.line = line2;
         this.column = column2;
         this.codeblock = codeblock;
@@ -9358,13 +8708,13 @@ function getLine(buffer2, lineStart, lineEnd, position, maxLineLength) {
 function padStart(string2, max) {
   return common.repeat(" ", max - string2.length) + string2;
 }
-function makeSnippet(mark, options2) {
-  options2 = Object.create(options2 || null);
+function makeSnippet(mark, options) {
+  options = Object.create(options || null);
   if (!mark.buffer) return null;
-  if (!options2.maxLength) options2.maxLength = 79;
-  if (typeof options2.indent !== "number") options2.indent = 1;
-  if (typeof options2.linesBefore !== "number") options2.linesBefore = 3;
-  if (typeof options2.linesAfter !== "number") options2.linesAfter = 2;
+  if (!options.maxLength) options.maxLength = 79;
+  if (typeof options.indent !== "number") options.indent = 1;
+  if (typeof options.linesBefore !== "number") options.linesBefore = 3;
+  if (typeof options.linesAfter !== "number") options.linesAfter = 2;
   var re = /\r?\n|\r|\0/g;
   var lineStarts = [0];
   var lineEnds = [];
@@ -9379,9 +8729,9 @@ function makeSnippet(mark, options2) {
   }
   if (foundLineNo < 0) foundLineNo = lineStarts.length - 1;
   var result = "", i, line2;
-  var lineNoLength = Math.min(mark.line + options2.linesAfter, lineEnds.length).toString().length;
-  var maxLineLength = options2.maxLength - (options2.indent + lineNoLength + 3);
-  for (i = 1; i <= options2.linesBefore; i++) {
+  var lineNoLength = Math.min(mark.line + options.linesAfter, lineEnds.length).toString().length;
+  var maxLineLength = options.maxLength - (options.indent + lineNoLength + 3);
+  for (i = 1; i <= options.linesBefore; i++) {
     if (foundLineNo - i < 0) break;
     line2 = getLine(
       mark.buffer,
@@ -9390,12 +8740,12 @@ function makeSnippet(mark, options2) {
       mark.position - (lineStarts[foundLineNo] - lineStarts[foundLineNo - i]),
       maxLineLength
     );
-    result = common.repeat(" ", options2.indent) + padStart((mark.line - i + 1).toString(), lineNoLength) + " | " + line2.str + "\n" + result;
+    result = common.repeat(" ", options.indent) + padStart((mark.line - i + 1).toString(), lineNoLength) + " | " + line2.str + "\n" + result;
   }
   line2 = getLine(mark.buffer, lineStarts[foundLineNo], lineEnds[foundLineNo], mark.position, maxLineLength);
-  result += common.repeat(" ", options2.indent) + padStart((mark.line + 1).toString(), lineNoLength) + " | " + line2.str + "\n";
-  result += common.repeat("-", options2.indent + lineNoLength + 3 + line2.pos) + "^\n";
-  for (i = 1; i <= options2.linesAfter; i++) {
+  result += common.repeat(" ", options.indent) + padStart((mark.line + 1).toString(), lineNoLength) + " | " + line2.str + "\n";
+  result += common.repeat("-", options.indent + lineNoLength + 3 + line2.pos) + "^\n";
+  for (i = 1; i <= options.linesAfter; i++) {
     if (foundLineNo + i >= lineEnds.length) break;
     line2 = getLine(
       mark.buffer,
@@ -9404,7 +8754,7 @@ function makeSnippet(mark, options2) {
       mark.position - (lineStarts[foundLineNo] - lineStarts[foundLineNo + i]),
       maxLineLength
     );
-    result += common.repeat(" ", options2.indent) + padStart((mark.line + i + 1).toString(), lineNoLength) + " | " + line2.str + "\n";
+    result += common.repeat(" ", options.indent) + padStart((mark.line + i + 1).toString(), lineNoLength) + " | " + line2.str + "\n";
   }
   return result.replace(/\n$/, "");
 }
@@ -9419,29 +8769,29 @@ function compileStyleAliases(map2) {
   }
   return result;
 }
-function Type$1(tag, options2) {
-  options2 = options2 || {};
-  Object.keys(options2).forEach(function(name) {
+function Type$1(tag, options) {
+  options = options || {};
+  Object.keys(options).forEach(function(name) {
     if (TYPE_CONSTRUCTOR_OPTIONS.indexOf(name) === -1) {
       throw new exception('Unknown option "' + name + '" is met in definition of "' + tag + '" YAML type.');
     }
   });
-  this.options = options2;
+  this.options = options;
   this.tag = tag;
-  this.kind = options2["kind"] || null;
-  this.resolve = options2["resolve"] || function() {
+  this.kind = options["kind"] || null;
+  this.resolve = options["resolve"] || function() {
     return true;
   };
-  this.construct = options2["construct"] || function(data) {
+  this.construct = options["construct"] || function(data) {
     return data;
   };
-  this.instanceOf = options2["instanceOf"] || null;
-  this.predicate = options2["predicate"] || null;
-  this.represent = options2["represent"] || null;
-  this.representName = options2["representName"] || null;
-  this.defaultStyle = options2["defaultStyle"] || null;
-  this.multi = options2["multi"] || false;
-  this.styleAliases = compileStyleAliases(options2["styleAliases"] || null);
+  this.instanceOf = options["instanceOf"] || null;
+  this.predicate = options["predicate"] || null;
+  this.represent = options["represent"] || null;
+  this.representName = options["representName"] || null;
+  this.defaultStyle = options["defaultStyle"] || null;
+  this.multi = options["multi"] || false;
+  this.styleAliases = compileStyleAliases(options["styleAliases"] || null);
   if (YAML_NODE_KINDS.indexOf(this.kind) === -1) {
     throw new exception('Unknown kind "' + this.kind + '" is specified for "' + tag + '" YAML type.');
   }
@@ -9881,14 +9231,14 @@ function charFromCodepoint(c2) {
     (c2 - 65536 & 1023) + 56320
   );
 }
-function State$1(input, options2) {
+function State$1(input, options) {
   this.input = input;
-  this.filename = options2["filename"] || null;
-  this.schema = options2["schema"] || _default;
-  this.onWarning = options2["onWarning"] || null;
-  this.legacy = options2["legacy"] || false;
-  this.json = options2["json"] || false;
-  this.listener = options2["listener"] || null;
+  this.filename = options["filename"] || null;
+  this.schema = options["schema"] || _default;
+  this.onWarning = options["onWarning"] || null;
+  this.legacy = options["legacy"] || false;
+  this.json = options["json"] || false;
+  this.listener = options["listener"] || null;
   this.implicitTypes = this.schema.compiledImplicit;
   this.typeMap = this.schema.compiledTypeMap;
   this.length = input.length;
@@ -10856,9 +10206,9 @@ function readDocument(state) {
     return;
   }
 }
-function loadDocuments(input, options2) {
+function loadDocuments(input, options) {
   input = String(input);
-  options2 = options2 || {};
+  options = options || {};
   if (input.length !== 0) {
     if (input.charCodeAt(input.length - 1) !== 10 && input.charCodeAt(input.length - 1) !== 13) {
       input += "\n";
@@ -10867,7 +10217,7 @@ function loadDocuments(input, options2) {
       input = input.slice(1);
     }
   }
-  var state = new State$1(input, options2);
+  var state = new State$1(input, options);
   var nullpos = input.indexOf("\0");
   if (nullpos !== -1) {
     state.position = nullpos;
@@ -10883,12 +10233,12 @@ function loadDocuments(input, options2) {
   }
   return state.documents;
 }
-function loadAll$1(input, iterator, options2) {
-  if (iterator !== null && typeof iterator === "object" && typeof options2 === "undefined") {
-    options2 = iterator;
+function loadAll$1(input, iterator, options) {
+  if (iterator !== null && typeof iterator === "object" && typeof options === "undefined") {
+    options = iterator;
     iterator = null;
   }
-  var documents = loadDocuments(input, options2);
+  var documents = loadDocuments(input, options);
   if (typeof iterator !== "function") {
     return documents;
   }
@@ -10896,8 +10246,8 @@ function loadAll$1(input, iterator, options2) {
     iterator(documents[index]);
   }
 }
-function load$1(input, options2) {
-  var documents = loadDocuments(input, options2);
+function load$1(input, options) {
+  var documents = loadDocuments(input, options);
   if (documents.length === 0) {
     return void 0;
   } else if (documents.length === 1) {
@@ -10941,21 +10291,21 @@ function encodeHex(character) {
   }
   return "\\" + handle + common.repeat("0", length - string2.length) + string2;
 }
-function State(options2) {
-  this.schema = options2["schema"] || _default;
-  this.indent = Math.max(1, options2["indent"] || 2);
-  this.noArrayIndent = options2["noArrayIndent"] || false;
-  this.skipInvalid = options2["skipInvalid"] || false;
-  this.flowLevel = common.isNothing(options2["flowLevel"]) ? -1 : options2["flowLevel"];
-  this.styleMap = compileStyleMap(this.schema, options2["styles"] || null);
-  this.sortKeys = options2["sortKeys"] || false;
-  this.lineWidth = options2["lineWidth"] || 80;
-  this.noRefs = options2["noRefs"] || false;
-  this.noCompatMode = options2["noCompatMode"] || false;
-  this.condenseFlow = options2["condenseFlow"] || false;
-  this.quotingType = options2["quotingType"] === '"' ? QUOTING_TYPE_DOUBLE : QUOTING_TYPE_SINGLE;
-  this.forceQuotes = options2["forceQuotes"] || false;
-  this.replacer = typeof options2["replacer"] === "function" ? options2["replacer"] : null;
+function State(options) {
+  this.schema = options["schema"] || _default;
+  this.indent = Math.max(1, options["indent"] || 2);
+  this.noArrayIndent = options["noArrayIndent"] || false;
+  this.skipInvalid = options["skipInvalid"] || false;
+  this.flowLevel = common.isNothing(options["flowLevel"]) ? -1 : options["flowLevel"];
+  this.styleMap = compileStyleMap(this.schema, options["styles"] || null);
+  this.sortKeys = options["sortKeys"] || false;
+  this.lineWidth = options["lineWidth"] || 80;
+  this.noRefs = options["noRefs"] || false;
+  this.noCompatMode = options["noCompatMode"] || false;
+  this.condenseFlow = options["condenseFlow"] || false;
+  this.quotingType = options["quotingType"] === '"' ? QUOTING_TYPE_DOUBLE : QUOTING_TYPE_SINGLE;
+  this.forceQuotes = options["forceQuotes"] || false;
+  this.replacer = typeof options["replacer"] === "function" ? options["replacer"] : null;
   this.implicitTypes = this.schema.compiledImplicit;
   this.explicitTypes = this.schema.compiledExplicit;
   this.tag = null;
@@ -11443,9 +10793,9 @@ function inspectNode(object, objects, duplicatesIndexes) {
     }
   }
 }
-function dump$1(input, options2) {
-  options2 = options2 || {};
-  var state = new State(options2);
+function dump$1(input, options) {
+  options = options || {};
+  var state = new State(options);
   if (!state.noRefs) getDuplicateReferences(input, state);
   var value = input;
   if (state.replacer) {
@@ -11908,7 +11258,7 @@ var init_js_yaml = __esm({
 
 // node_modules/@prettier/cli/dist/config_prettier.js
 import fs11 from "fs";
-import path14 from "path";
+import path13 from "path";
 import url2 from "url";
 var Loaders, File2Loader, Ext2Loader, getPrettierConfig, getPrettierConfigs, getPrettierConfigsMap, getPrettierConfigsUp, getPrettierConfigResolved;
 var init_config_prettier = __esm({
@@ -11919,8 +11269,8 @@ var init_config_prettier = __esm({
     init_utils12();
     Loaders = {
       auto: (filePath) => {
-        const basename = path14.basename(filePath);
-        const ext = path14.extname(filePath).slice(1);
+        const basename = path13.basename(filePath);
+        const ext = path13.extname(filePath).slice(1);
         const loader2 = File2Loader[basename] || Ext2Loader[ext] || File2Loader["default"];
         return loader2(filePath);
       },
@@ -12017,13 +11367,13 @@ var init_config_prettier = __esm({
     };
     getPrettierConfigsUp = dist_default13(async (folderPath, filesNames) => {
       const config = (await getPrettierConfigs(folderPath, filesNames))?.[0];
-      const folderPathUp = path14.dirname(folderPath);
+      const folderPathUp = path13.dirname(folderPath);
       const configsUp = folderPath !== folderPathUp ? await getPrettierConfigsUp(folderPathUp, filesNames) : [];
       const configs = config ? [...configsUp, config] : configsUp;
       return configs;
     });
     getPrettierConfigResolved = async (filePath, filesNames) => {
-      const folderPath = path14.dirname(filePath);
+      const folderPath = path13.dirname(filePath);
       const configs = await getPrettierConfigsUp(folderPath, filesNames);
       let resolved = {};
       for (let ci = 0, cl = configs.length; ci < cl; ci++) {
@@ -12054,11 +11404,11 @@ var init_config_prettier = __esm({
 var debounce, debounce_default;
 var init_debounce = __esm({
   "node_modules/dettle/dist/debounce.js"() {
-    debounce = (fn, wait = 1, options2) => {
+    debounce = (fn, wait = 1, options) => {
       wait = Math.max(1, wait);
-      const leading = options2?.leading ?? false;
-      const trailing = options2?.trailing ?? true;
-      const maxWait = Math.max(options2?.maxWait ?? Infinity, wait);
+      const leading = options?.leading ?? false;
+      const trailing = options?.trailing ?? true;
+      const maxWait = Math.max(options?.maxWait ?? Infinity, wait);
       let args;
       let timeout;
       let timestampCall = 0;
@@ -12188,14 +11538,14 @@ var init_dist35 = __esm({
     init_utils16();
     Pioppo = class {
       /* CONSTRUCTOR */
-      constructor(options2 = {}) {
+      constructor(options = {}) {
         this.errors = [];
         this.warns = [];
         this.infos = [];
         this.debugs = [];
         this.scheduled = false;
-        this.scheduler = options2.scheduler || scheduler_default;
-        this.transports = options2.transports || [console];
+        this.scheduler = options.scheduler || scheduler_default;
+        this.transports = options.transports || [console];
         node_default2(this.flush.bind(this));
       }
       /* LOGGING API */
@@ -12401,10 +11751,10 @@ var init_dist38 = __esm({
   "node_modules/ansi-truncate/dist/index.js"() {
     init_dist7();
     init_constants6();
-    truncate = (input, width, options2) => {
+    truncate = (input, width, options) => {
       const limit = width;
-      const ellipsis = options2?.ellipsis ?? ELLIPSIS;
-      const ellipsisWidth = options2?.ellipsisWidth ?? (ellipsis === ELLIPSIS ? ELLIPSIS_WIDTH : void 0);
+      const ellipsis = options?.ellipsis ?? ELLIPSIS;
+      const ellipsisWidth = options?.ellipsisWidth ?? (ellipsis === ELLIPSIS ? ELLIPSIS_WIDTH : void 0);
       const { index, ellipsed, truncated } = dist_default7(input, { limit, ellipsis, ellipsisWidth });
       if (!truncated)
         return input;
@@ -12421,9 +11771,9 @@ var truncate2, dist_default34;
 var init_dist39 = __esm({
   "node_modules/tiny-truncate/dist/index.js"() {
     init_dist38();
-    truncate2 = (str2, options2) => {
+    truncate2 = (str2, options) => {
       const width = (globalThis.process?.stdout?.getWindowSize?.()?.[0] || 25) - 1;
-      return dist_default33(str2, width, options2);
+      return dist_default33(str2, width, options);
     };
     dist_default34 = truncate2;
   }
@@ -12439,13 +11789,13 @@ var init_utils17 = __esm({
     };
     writeLine = (line2) => {
       line2 = dist_default34(line2);
-      const process18 = globalThis.process;
-      if (process18) {
+      const process19 = globalThis.process;
+      if (process19) {
         const isTerminal = /(\r?\n|\r)$/.test(line2);
-        process18.stdout?.cursorTo?.(0);
-        process18.stdout?.write?.(line2.trim());
-        process18.stdout?.clearLine?.(1);
-        process18.stdout?.write?.(isTerminal ? "\r\n" : "");
+        process19.stdout?.cursorTo?.(0);
+        process19.stdout?.write?.(line2.trim());
+        process19.stdout?.clearLine?.(1);
+        process19.stdout?.write?.(isTerminal ? "\r\n" : "");
       } else {
         console.log(line2);
       }
@@ -12944,7 +12294,7 @@ var init_scheduler2 = __esm({
 });
 
 // node_modules/atomically/dist/utils/temp.js
-import path15 from "path";
+import path14 from "path";
 var Temp, temp_default;
 var init_temp = __esm({
   "node_modules/atomically/dist/utils/temp.js"() {
@@ -12989,7 +12339,7 @@ var init_temp = __esm({
         }
       },
       truncate: (filePath) => {
-        const basename = path15.basename(filePath);
+        const basename = path14.basename(filePath);
         if (basename.length <= LIMIT_BASENAME_LENGTH)
           return filePath;
         const truncable = /^(\.?)(.*?)((?:\.[^.]+)?(?:\.tmp-\d{10}[a-f0-9]{6})?)$/.exec(basename);
@@ -13005,70 +12355,70 @@ var init_temp = __esm({
 });
 
 // node_modules/atomically/dist/index.js
-import path16 from "path";
-function readFile(filePath, options2 = DEFAULT_READ_OPTIONS) {
-  if (isString6(options2))
-    return readFile(filePath, { encoding: options2 });
-  const timeout = Date.now() + ((options2.timeout ?? DEFAULT_TIMEOUT_ASYNC) || -1);
-  return dist_default36.retry.readFile(timeout)(filePath, options2);
+import path15 from "path";
+function readFile(filePath, options = DEFAULT_READ_OPTIONS) {
+  if (isString6(options))
+    return readFile(filePath, { encoding: options });
+  const timeout = Date.now() + ((options.timeout ?? DEFAULT_TIMEOUT_ASYNC) || -1);
+  return dist_default36.retry.readFile(timeout)(filePath, options);
 }
-function writeFile(filePath, data, options2, callback) {
-  if (isFunction4(options2))
-    return writeFile(filePath, data, DEFAULT_WRITE_OPTIONS, options2);
-  const promise = writeFileAsync(filePath, data, options2);
+function writeFile(filePath, data, options, callback) {
+  if (isFunction4(options))
+    return writeFile(filePath, data, DEFAULT_WRITE_OPTIONS, options);
+  const promise = writeFileAsync(filePath, data, options);
   if (callback)
     promise.then(callback, callback);
   return promise;
 }
-async function writeFileAsync(filePath, data, options2 = DEFAULT_WRITE_OPTIONS) {
-  if (isString6(options2))
-    return writeFileAsync(filePath, data, { encoding: options2 });
-  const timeout = Date.now() + ((options2.timeout ?? DEFAULT_TIMEOUT_ASYNC) || -1);
+async function writeFileAsync(filePath, data, options = DEFAULT_WRITE_OPTIONS) {
+  if (isString6(options))
+    return writeFileAsync(filePath, data, { encoding: options });
+  const timeout = Date.now() + ((options.timeout ?? DEFAULT_TIMEOUT_ASYNC) || -1);
   let schedulerCustomDisposer = null;
   let schedulerDisposer = null;
   let tempDisposer = null;
   let tempPath = null;
   let fd = null;
   try {
-    if (options2.schedule)
-      schedulerCustomDisposer = await options2.schedule(filePath);
+    if (options.schedule)
+      schedulerCustomDisposer = await options.schedule(filePath);
     schedulerDisposer = await scheduler_default2.schedule(filePath);
     const filePathReal = await dist_default36.attempt.realpath(filePath);
     const filePathExists = !!filePathReal;
     filePath = filePathReal || filePath;
-    [tempPath, tempDisposer] = temp_default.get(filePath, options2.tmpCreate || temp_default.create, !(options2.tmpPurge === false));
-    const useStatChown = IS_POSIX && isUndefined6(options2.chown);
-    const useStatMode = isUndefined6(options2.mode);
+    [tempPath, tempDisposer] = temp_default.get(filePath, options.tmpCreate || temp_default.create, !(options.tmpPurge === false));
+    const useStatChown = IS_POSIX && isUndefined6(options.chown);
+    const useStatMode = isUndefined6(options.mode);
     if (filePathExists && (useStatChown || useStatMode)) {
       const stats = await dist_default36.attempt.stat(filePath);
       if (stats) {
-        options2 = { ...options2 };
+        options = { ...options };
         if (useStatChown) {
-          options2.chown = { uid: stats.uid, gid: stats.gid };
+          options.chown = { uid: stats.uid, gid: stats.gid };
         }
         if (useStatMode) {
-          options2.mode = stats.mode;
+          options.mode = stats.mode;
         }
       }
     }
     if (!filePathExists) {
-      const parentPath = path16.dirname(filePath);
+      const parentPath = path15.dirname(filePath);
       await dist_default36.attempt.mkdir(parentPath, {
         mode: DEFAULT_FOLDER_MODE,
         recursive: true
       });
     }
-    fd = await dist_default36.retry.open(timeout)(tempPath, "w", options2.mode || DEFAULT_FILE_MODE);
-    if (options2.tmpCreated) {
-      options2.tmpCreated(tempPath);
+    fd = await dist_default36.retry.open(timeout)(tempPath, "w", options.mode || DEFAULT_FILE_MODE);
+    if (options.tmpCreated) {
+      options.tmpCreated(tempPath);
     }
     if (isString6(data)) {
-      await dist_default36.retry.write(timeout)(fd, data, 0, options2.encoding || DEFAULT_ENCODING);
+      await dist_default36.retry.write(timeout)(fd, data, 0, options.encoding || DEFAULT_ENCODING);
     } else if (!isUndefined6(data)) {
       await dist_default36.retry.write(timeout)(fd, data, 0, data.length, 0);
     }
-    if (options2.fsync !== false) {
-      if (options2.fsyncWait !== false) {
+    if (options.fsync !== false) {
+      if (options.fsyncWait !== false) {
         await dist_default36.retry.fsync(timeout)(fd);
       } else {
         dist_default36.attempt.fsync(fd);
@@ -13076,11 +12426,11 @@ async function writeFileAsync(filePath, data, options2 = DEFAULT_WRITE_OPTIONS) 
     }
     await dist_default36.retry.close(timeout)(fd);
     fd = null;
-    if (options2.chown && (options2.chown.uid !== DEFAULT_USER_UID || options2.chown.gid !== DEFAULT_USER_GID)) {
-      await dist_default36.attempt.chown(tempPath, options2.chown.uid, options2.chown.gid);
+    if (options.chown && (options.chown.uid !== DEFAULT_USER_UID || options.chown.gid !== DEFAULT_USER_GID)) {
+      await dist_default36.attempt.chown(tempPath, options.chown.uid, options.chown.gid);
     }
-    if (options2.mode && options2.mode !== DEFAULT_FILE_MODE) {
-      await dist_default36.attempt.chmod(tempPath, options2.mode);
+    if (options.mode && options.mode !== DEFAULT_FILE_MODE) {
+      await dist_default36.attempt.chmod(tempPath, options.mode);
     }
     try {
       await dist_default36.retry.rename(timeout)(tempPath, filePath);
@@ -13115,13 +12465,13 @@ var init_dist42 = __esm({
 });
 
 // node_modules/@prettier/cli/dist/prettier_cached.js
-function makeCached(options2, cache2, prettier) {
+function makeCached(options, cache3, prettier) {
   return {
     check: prettier.check,
     format: prettier.format,
     write: prettier.write,
     async checkWithPath(filePath, formatOptions, contextOptions, pluginsDefaultOptions, pluginsCustomOptions) {
-      const data = await cache2.get(filePath);
+      const data = await cache3.get(filePath);
       if (isBoolean2(data?.formatted))
         return data.formatted;
       const fileContent = data?.content?.toString() ?? await readFile(filePath, "utf8");
@@ -13130,7 +12480,7 @@ function makeCached(options2, cache2, prettier) {
       return formatted;
     },
     async formatWithPath(filePath, formatOptions, contextOptions, pluginsDefaultOptions, pluginsCustomOptions) {
-      const data = await cache2.get(filePath);
+      const data = await cache3.get(filePath);
       const fileContent = data?.content?.toString() ?? await readFile(filePath, "utf8");
       if (data?.formatted)
         return fileContent;
@@ -13144,7 +12494,7 @@ function makeCached(options2, cache2, prettier) {
       }
     },
     async writeWithPath(filePath, formatOptions, contextOptions, pluginsDefaultOptions, pluginsCustomOptions) {
-      const data = await cache2.get(filePath);
+      const data = await cache3.get(filePath);
       if (data?.formatted)
         return true;
       const fileContent = data?.content?.toString() ?? await readFile(filePath, "utf8");
@@ -13167,53 +12517,77 @@ var init_prettier_cached = __esm({
   }
 });
 
-// node_modules/worktank/node_modules/promise-make-naked/dist/constants.js
-var NOOP2;
-var init_constants9 = __esm({
-  "node_modules/worktank/node_modules/promise-make-naked/dist/constants.js"() {
-    NOOP2 = () => {
+// node_modules/isoconcurrency/dist/node.js
+import os3 from "os";
+var concurrency, node_default3;
+var init_node3 = __esm({
+  "node_modules/isoconcurrency/dist/node.js"() {
+    concurrency = os3.cpus().length || 1;
+    node_default3 = concurrency;
+  }
+});
+
+// node_modules/isotimer/dist/utils.js
+var sanitizeMs;
+var init_utils18 = __esm({
+  "node_modules/isotimer/dist/utils.js"() {
+    sanitizeMs = (ms) => {
+      return Math.max(0, Math.min(ms, 2147483647));
     };
   }
 });
 
-// node_modules/worktank/node_modules/promise-make-naked/dist/index.js
-var makeNakedPromise2, dist_default37;
-var init_dist43 = __esm({
-  "node_modules/worktank/node_modules/promise-make-naked/dist/index.js"() {
-    init_constants9();
-    makeNakedPromise2 = () => {
-      let resolve4 = NOOP2;
-      let reject = NOOP2;
-      let resolved = false;
-      let rejected = false;
-      const promise = new Promise((res, rej) => {
-        resolve4 = (value) => {
-          resolved = true;
-          return res(value);
-        };
-        reject = (value) => {
-          rejected = true;
-          return rej(value);
-        };
-      });
-      const isPending = () => !resolved && !rejected;
-      const isResolved = () => resolved;
-      const isRejected = () => rejected;
-      return { promise, resolve: resolve4, reject, isPending, isResolved, isRejected };
+// node_modules/isotimer/dist/node/interval.js
+import { setInterval as setInterval2, clearInterval as clearInterval2 } from "timers";
+var cache2, set2, clear, unref;
+var init_interval = __esm({
+  "node_modules/isotimer/dist/node/interval.js"() {
+    init_utils18();
+    cache2 = /* @__PURE__ */ new Map();
+    set2 = (callback, ms = 0, ...args) => {
+      ms = sanitizeMs(ms);
+      const timer = setInterval2(callback, ms, ...args);
+      const id = +timer;
+      cache2.set(id, timer);
+      return id;
     };
-    makeNakedPromise2.wrap = async (fn) => {
-      const result = makeNakedPromise2();
-      await fn(result);
-      return result.promise;
+    clear = (id) => {
+      cache2.delete(id);
+      clearInterval2(id);
     };
-    dist_default37 = makeNakedPromise2;
+    unref = (id) => {
+      cache2.get(id)?.unref();
+    };
+  }
+});
+
+// node_modules/isotimer/dist/node/index.js
+var init_node4 = __esm({
+  "node_modules/isotimer/dist/node/index.js"() {
+    init_interval();
+  }
+});
+
+// node_modules/worktank/dist/worker/error.js
+var WorkerError, error_default;
+var init_error2 = __esm({
+  "node_modules/worktank/dist/worker/error.js"() {
+    WorkerError = class extends Error {
+      /* CONSTRUCTOR */
+      constructor(name, message) {
+        super(message);
+        this.name = `WorkTankWorkerError (${name})`;
+        this.message = message;
+      }
+    };
+    error_default = WorkerError;
   }
 });
 
 // node_modules/webworker-shim/dist/node.js
 import { Worker } from "worker_threads";
-var __classPrivateFieldSet2, __classPrivateFieldGet2, _WorkerShim_worker, WorkerShim, node_default3;
-var init_node3 = __esm({
+var __classPrivateFieldSet2, __classPrivateFieldGet2, _WorkerShim_worker, WorkerShim, node_default4;
+var init_node5 = __esm({
   "node_modules/webworker-shim/dist/node.js"() {
     __classPrivateFieldSet2 = function(receiver, state, value, kind, f) {
       if (kind === "m") throw new TypeError("Private method is not writable");
@@ -13228,7 +12602,7 @@ var init_node3 = __esm({
     };
     WorkerShim = class extends EventTarget {
       /* CONSTRUCTOR */
-      constructor(url3, options2) {
+      constructor(url3, options) {
         super();
         _WorkerShim_worker.set(this, void 0);
         url3 = url3.trim();
@@ -13266,7 +12640,7 @@ var init_node3 = __esm({
       }
     };
     _WorkerShim_worker = /* @__PURE__ */ new WeakMap();
-    node_default3 = globalThis.Worker || WorkerShim;
+    node_default4 = globalThis.Worker || WorkerShim;
   }
 });
 
@@ -13274,7 +12648,7 @@ var init_node3 = __esm({
 var backend_compiled_default;
 var init_backend_compiled = __esm({
   "node_modules/worktank/dist/worker/backend_compiled.js"() {
-    backend_compiled_default = 'globalThis.WorkTankWorkerBackend=new class{constructor(){this.methods={};addEventListener("message",this.message.bind(this))}exec(e,t){let a=this.methods[e],r=new Promise(s=>s(a.apply(void 0,t))),i=s=>{try{postMessage({type:"result",value:s})}catch(o){n(o)}},n=s=>{s=s instanceof Error?s:typeof s=="string"?new Error(s):new Error;let{message:o,name:c,stack:d}=s;postMessage({type:"result",error:{message:o,name:c,stack:d}})};r.then(i,n)}message(e){if(e.data.type==="exec")return this.exec(e.data.method,e.data.args)}ready(){postMessage({type:"ready"})}register(e,t){this.methods[e]=t}};globalThis.process||(globalThis.process={});globalThis.process.env={...globalThis.process.env,...globalThis.process.ENV_PLACEHOLDER}; /*! METHODS_PLACEHOLDER !*/';
+    backend_compiled_default = 'globalThis.WorkTankWorkerBackend=(()=>{let{addEventListener:d,postMessage:n}=globalThis,r={},l=e=>e instanceof Error?e:typeof e=="string"?new Error(e):new Error("Unknown error"),a=e=>{try{n({type:"log",value:e})}catch(t){console.error("Failed to post log message",t)}},g=e=>{let t=!1,o;return()=>(t||(t=!0,o=e()),o)},u=e=>{var t,o;((t=e.data)==null?void 0:t.type)==="exec"?p(e.data.method,e.data.args):a(`Unknown message type: ${(o=e.data)==null?void 0:o.type}`)},p=(e,t)=>{let o=r[e];new Promise(i=>i(o.apply(void 0,t))).then(y,s)},s=e=>{let{name:t,message:o,stack:c}=l(e);try{n({type:"result",error:{name:t,message:o,stack:c}})}catch(i){s("Failed to post error message")}},y=e=>{try{n({type:"result",value:e})}catch(t){s(t)}};return{ready:g(()=>{d("message",u),n({type:"ready"})}),registerEnv:e=>{globalThis.process||(globalThis.process={}),globalThis.process.env={...globalThis.process.env,...e}},registerMethods:e=>{for(let t in e){let o=e[t];typeof o=="function"?r[t]=o:a(`Method "${t}" is not a function and will be ignored`)}}}})(); /*! BOOTLOADER_PLACEHOLDER !*/';
   }
 });
 
@@ -13282,27 +12656,26 @@ var init_backend_compiled = __esm({
 var WorkerFrontend, frontend_default;
 var init_frontend = __esm({
   "node_modules/worktank/dist/worker/frontend.js"() {
-    init_node3();
+    init_node5();
     init_backend_compiled();
     WorkerFrontend = class {
       /* CONSTRUCTOR */
-      constructor(env, methods, name, listener) {
-        const code = `data:text/javascript;charset=utf-8,${encodeURIComponent(backend_compiled_default.replace("globalThis.process.ENV_PLACEHOLDER", JSON.stringify(env)).replace("/*! METHODS_PLACEHOLDER !*/", `
-
-
-${methods}`))}`;
-        this.worker = new node_default3(code, { name, type: "module" });
-        this.listen(listener);
-      }
-      /* API */
-      listen(listener) {
-        this.worker.addEventListener("message", (event) => listener(event.data));
-      }
-      send(message) {
-        this.worker.postMessage(message);
-      }
-      terminate() {
-        this.worker.terminate();
+      constructor(name, bootloader, onClose, onError, onMessage) {
+        this.listen = (onClose2, onError2, onMessage2) => {
+          this.worker.addEventListener("close", (event) => onClose2(event["data"]));
+          this.worker.addEventListener("error", (event) => onError2(event["data"]));
+          this.worker.addEventListener("message", (event) => onMessage2(event["data"]));
+        };
+        this.send = (message, transfer = []) => {
+          this.worker.postMessage(message, transfer);
+        };
+        this.terminate = () => {
+          this.worker.terminate();
+        };
+        const backend = backend_compiled_default.replace("/*! BOOTLOADER_PLACEHOLDER !*/", bootloader);
+        const script = `data:text/javascript;charset=utf-8,${encodeURIComponent(backend)}`;
+        this.worker = new node_default4(script, { name, type: "module" });
+        this.listen(onClose, onError, onMessage);
       }
     };
     frontend_default = WorkerFrontend;
@@ -13313,65 +12686,102 @@ ${methods}`))}`;
 var Worker2, worker_default;
 var init_worker = __esm({
   "node_modules/worktank/dist/worker/index.js"() {
+    init_error2();
     init_frontend();
     Worker2 = class {
       /* CONSTRUCTOR */
-      constructor(env, methods, name) {
+      constructor(name, bootloader) {
+        this.onClose = (code) => {
+          if (this.terminated)
+            return;
+          this.terminated = true;
+          this.worker.terminate();
+          this.reject(new error_default(this.name, `Exited with exit code ${code}`));
+        };
+        this.onError = (error) => {
+          if (this.terminated)
+            return;
+          this.terminated = true;
+          this.worker.terminate();
+          this.reject(error);
+        };
+        this.onMessage = (message) => {
+          if (this.terminated)
+            return;
+          if (message.type === "log") {
+            this.onMessageLog(message);
+          } else if (message.type === "ready") {
+            this.onMessageReady(message);
+          } else if (message.type === "result") {
+            this.onMessageResult(message);
+          }
+        };
+        this.onMessageLog = (message) => {
+          console.log(message.value);
+        };
+        this.onMessageReady = (message) => {
+          this.ready = true;
+          this.tick();
+        };
+        this.onMessageResult = (message) => {
+          if ("value" in message) {
+            this.resolve(message.value);
+          } else {
+            const error = Object.assign(new Error(), message.error);
+            this.reject(error);
+          }
+        };
+        this.exec = (task) => {
+          if (this.terminated)
+            throw new error_default(this.name, "Terminated");
+          if (this.task || this.busy)
+            throw new error_default(this.name, "Busy");
+          this.task = task;
+          this.tick();
+        };
+        this.reject = (error) => {
+          const { task } = this;
+          if (!task)
+            return;
+          this.busy = false;
+          this.task = void 0;
+          this.timestamp = Date.now();
+          task.reject(error);
+        };
+        this.resolve = (value) => {
+          const { task } = this;
+          if (!task)
+            return;
+          this.busy = false;
+          this.task = void 0;
+          this.timestamp = Date.now();
+          task.resolve(value);
+        };
+        this.terminate = () => {
+          if (this.terminated)
+            return;
+          this.terminated = true;
+          this.worker.terminate();
+          this.reject(new error_default(this.name, "Terminated"));
+        };
+        this.tick = () => {
+          if (this.terminated || !this.ready || !this.task || this.busy)
+            return;
+          this.busy = true;
+          try {
+            const { method, args, transfer } = this.task;
+            this.worker.send({ type: "exec", method, args }, transfer);
+          } catch {
+            this.reject(new error_default(this.name, "Failed to send message"));
+          }
+        };
         this.busy = false;
-        this.loaded = false;
+        this.ready = false;
         this.terminated = false;
-        this.env = env;
+        this.timestamp = Date.now();
         this.name = name;
-        this.methods = methods;
-        this.worker = new frontend_default(this.env, this.methods, this.name, this.onMessage.bind(this));
-      }
-      /* EVENTS API */
-      onMessage(message) {
-        if (message.type === "ready")
-          return this.onMessageReady(message);
-        if (message.type === "result")
-          return this.onMessageResult(message);
-      }
-      onMessageReady(message) {
-        this.loaded = true;
-        this.tick();
-      }
-      onMessageResult(message) {
-        const { task } = this;
-        if (!task)
-          throw new Error(`WorkTank Worker (${this.name}): missing task`);
-        this.busy = false;
-        this.task = void 0;
-        if ("value" in message) {
-          return task.resolve(message.value);
-        } else {
-          const error = Object.assign(new Error(), message.error);
-          return task.reject(error);
-        }
-      }
-      /* API */
-      exec(task) {
-        if (this.terminated || this.task || this.busy)
-          throw new Error(`WorkTank Worker (${this.name}): already busy or terminated`);
-        this.task = task;
-        this.tick();
-      }
-      terminate() {
-        this.terminated = true;
-        this.worker.terminate();
-        if (this.task) {
-          const error = new Error(`WorkTank Worker (${this.name}): terminated`);
-          this.task.reject(error);
-        }
-      }
-      tick() {
-        if (this.terminated || !this.loaded || !this.task || this.busy)
-          return;
-        const { method, args } = this.task;
-        if (typeof method !== "string")
-          throw new Error("Unsupported method name");
-        this.busy = true;
-        this.worker.send({ type: "exec", method, args });
+        this.bootloader = bootloader;
+        this.worker = new frontend_default(this.name, this.bootloader, this.onClose, this.onError, this.onMessage);
       }
     };
     worker_default = Worker2;
@@ -13379,173 +12789,217 @@ var init_worker = __esm({
 });
 
 // node_modules/worktank/dist/index.js
-var WorkTank, dist_default38;
-var init_dist44 = __esm({
+var clearIntervalRegistry, WorkTank, dist_default37;
+var init_dist43 = __esm({
   "node_modules/worktank/dist/index.js"() {
-    init_dist43();
+    init_node3();
+    init_node4();
+    init_dist16();
     init_worker();
+    init_error2();
+    clearIntervalRegistry = new FinalizationRegistry(clear);
     WorkTank = class {
       /* CONSTRUCTOR */
-      constructor(options2) {
-        this.terminated = true;
-        this.timeout = options2.timeout ?? Infinity;
-        this.terminateTimeout = options2.autoterminate ?? 6e4;
-        this.env = { ...globalThis.process?.env, ...options2.env };
-        this.name = options2.name ?? "WorkTank-Worker";
-        this.size = options2.size ?? 1;
-        this.methods = this._getMethods(options2.methods);
-        this.tasksBusy = /* @__PURE__ */ new Set();
-        this.tasksReady = /* @__PURE__ */ new Set();
-        this.workersBusy = /* @__PURE__ */ new Set();
-        this.workersReady = /* @__PURE__ */ new Set();
-        if (options2.warmup) {
-          this._getWorkersWarm();
-        }
-      }
-      /* HELPERS */
-      _autoterminate() {
-        if (this.terminateTimeoutId)
-          return;
-        if (!this.tasksBusy.size && !this.tasksReady.size) {
-          this.terminateTimeoutId = void 0;
-          this.terminate();
-        } else {
-          const timeout = Math.min(2147483647, this.terminateTimeout);
-          this.terminateTimeoutId = setTimeout(() => {
-            this.terminateTimeoutId = void 0;
-            this._autoterminate();
-          }, timeout);
-        }
-      }
-      _getMethods(methods) {
-        if (typeof methods === "string") {
-          if (/^(file|https?):\/\//.test(methods)) {
-            const register = `Object.entries ( Methods ).forEach ( ([ name, fn ]) => typeof fn === 'function' && WorkTankWorkerBackend.register ( name, fn ) );`;
-            const ready = "WorkTankWorkerBackend.ready ();";
-            const load2 = `${"import"} ( '${methods}' ).then ( Methods => { 
-${register}
+      constructor(options) {
+        this.getTaskIdle = () => {
+          for (const task of this.tasksIdle) {
+            return task;
+          }
+        };
+        this.getWorkerBootloader = (env, methods) => {
+          if (methods instanceof URL) {
+            return this.getWorkerBootloader(env, methods.href);
+          } else if (typeof methods === "string") {
+            if (/^(file|https?):\/\//.test(methods)) {
+              const registerEnv = `WorkTankWorkerBackend.registerEnv ( ${JSON.stringify(env)} );`;
+              const registerMethods = `WorkTankWorkerBackend.registerMethods ( Methods );`;
+              const ready = "WorkTankWorkerBackend.ready ();";
+              const bootloader = `${"import"} ( '${methods}' ).then ( Methods => { 
+${registerEnv}
+
+${registerMethods}
 
 ${ready}
  } );`;
-            return load2;
+              return bootloader;
+            } else {
+              return methods;
+            }
           } else {
-            return methods;
-          }
-        } else if (methods instanceof URL) {
-          return this._getMethods(methods.href);
-        } else {
-          const names = Object.keys(methods);
-          const values = Object.values(methods);
-          const register = names.map((name, index) => `WorkTankWorkerBackend.register ( '${name}', ${values[index].toString()} );`).join("\n");
-          const ready = "WorkTankWorkerBackend.ready ();";
-          const load2 = `${register}
+            const registerEnv = `WorkTankWorkerBackend.registerEnv ( ${JSON.stringify(env)} );`;
+            const serializedMethods = `{ ${Object.keys(methods).map((name) => `${name}: ${methods[name].toString()}`).join(",")} }`;
+            const registerMethods = `WorkTankWorkerBackend.registerMethods ( ${serializedMethods} );`;
+            const ready = "WorkTankWorkerBackend.ready ();";
+            const bootloader = `${registerEnv}
+
+${registerMethods}
 
 ${ready}`;
-          return load2;
-        }
-      }
-      _getTaskReady() {
-        for (const task of this.tasksReady)
-          return task;
-      }
-      _getWorkerName() {
-        if (this.size < 2)
-          return this.name;
-        const counter = 1 + (this.workersBusy.size + this.workersReady.size);
-        return `${this.name} (${counter})`;
-      }
-      _getWorkerReady() {
-        for (const worker2 of this.workersReady)
-          return worker2;
-        if (this.workersBusy.size >= this.size)
-          return;
-        const name = this._getWorkerName();
-        const worker = new worker_default(this.env, this.methods, name);
-        this.workersReady.add(worker);
-        return worker;
-      }
-      _getWorkersWarm() {
-        for (let i = 0, l = this.size; i < l; i++) {
-          const name = this._getWorkerName();
-          const worker = new worker_default(this.env, this.methods, name);
-          this.workersReady.add(worker);
-        }
-      }
-      /* API */
-      exec(method, args) {
-        const { promise, resolve: resolve4, reject } = dist_default37();
-        const task = { method, args, promise, resolve: resolve4, reject };
-        this.terminated = false;
-        this.tasksReady.add(task);
-        this.tick();
-        this._autoterminate();
-        return promise;
-      }
-      proxy() {
-        return new Proxy({}, {
-          get: (_, method) => {
-            if (typeof method !== "string")
-              throw new Error("Unsupported method name");
-            if (method === "then")
-              return;
-            return (...args) => {
-              return this.exec(method, args);
-            };
+            return bootloader;
           }
-        });
-      }
-      terminate() {
-        this.terminated = true;
-        clearTimeout(this.terminateTimeoutId);
-        this.terminateTimeoutId = void 0;
-        const error = new Error("WorkTank terminated!");
-        for (const task of this.tasksBusy)
-          task.reject(error);
-        for (const task of this.tasksReady)
-          task.reject(error);
-        this.tasksBusy = /* @__PURE__ */ new Set();
-        this.tasksReady = /* @__PURE__ */ new Set();
-        for (const worker of this.workersBusy)
-          worker.terminate();
-        for (const worker of this.workersReady)
-          worker.terminate();
-        this.workersBusy = /* @__PURE__ */ new Set();
-        this.workersReady = /* @__PURE__ */ new Set();
-      }
-      tick() {
-        const worker = this._getWorkerReady();
-        if (!worker)
-          return;
-        const task = this._getTaskReady();
-        if (!task)
-          return;
-        this.workersReady.delete(worker);
-        this.workersBusy.add(worker);
-        this.tasksReady.delete(task);
-        this.tasksBusy.add(task);
-        let timeoutId;
-        if (this.timeout > 0 && this.timeout !== Infinity) {
-          const timeout = Math.min(2147483647, this.timeout);
-          timeoutId = setTimeout(() => {
-            worker.terminate();
-          }, timeout);
-        }
-        const onFinally = () => {
-          clearTimeout(timeoutId);
-          if (this.terminated)
+        };
+        this.getWorkerIdle = () => {
+          for (const worker of this.workersIdle) {
+            return worker;
+          }
+          if (this.workersBusy.size < this.size) {
+            return this.getWorkerIdleNew();
+          }
+        };
+        this.getWorkerIdleNew = () => {
+          const name = this.getWorkerName();
+          const worker = new worker_default(name, this.bootloader);
+          this.workersIdle.add(worker);
+          return worker;
+        };
+        this.getWorkerName = () => {
+          if (this.size < 2)
+            return this.name;
+          const counter = 1 + (this.workersBusy.size + this.workersIdle.size);
+          return `${this.name} (${counter})`;
+        };
+        this.cleanup = () => {
+          if (this.autoTerminate <= 0)
             return;
-          this.workersBusy.delete(worker);
-          if (!worker.terminated) {
-            this.workersReady.add(worker);
+          const autoterminateTimestamp = Date.now() - this.autoTerminate;
+          for (const worker of this.workersIdle) {
+            if (worker.ready && !worker.busy && worker.timestamp < autoterminateTimestamp) {
+              worker.terminate();
+              this.workersIdle.delete(worker);
+            }
           }
-          this.tasksBusy.delete(task);
+        };
+        this.exec = (method, args, options2) => {
+          const { promise, resolve: resolve4, reject } = dist_default15();
+          const signal = options2?.signal;
+          const timeout = options2?.timeout ?? this.autoAbort;
+          const transfer = options2?.transfer;
+          const task = { method, args, signal, timeout, transfer, promise, resolve: resolve4, reject };
+          this.tasksIdle.add(task);
+          this.tick();
+          return promise;
+        };
+        this.proxy = () => {
+          return new Proxy({}, {
+            get: (_, method) => {
+              if (method === "then")
+                return;
+              return (...args) => {
+                return this.exec(method, args);
+              };
+            }
+          });
+        };
+        this.resize = (size) => {
+          this.size = size;
+          if (this.autoInstantiate) {
+            const missingNr = Math.max(0, this.size - this.workersBusy.size - this.workersIdle.size);
+            for (let i = 0, l = missingNr; i < l; i++) {
+              this.getWorkerIdleNew();
+            }
+          }
+          const excessNr = Math.max(0, this.workersIdle.size - this.size);
+          for (let i = 0, l = excessNr; i < l; i++) {
+            for (const worker of this.workersIdle) {
+              this.workersIdle.delete(worker);
+              worker.terminate();
+              break;
+            }
+          }
           this.tick();
         };
-        task.promise.then(onFinally, onFinally);
-        worker.exec(task);
+        this.stats = () => {
+          return {
+            tasks: {
+              busy: this.tasksBusy.size,
+              idle: this.tasksIdle.size,
+              total: this.tasksBusy.size + this.tasksIdle.size
+            },
+            workers: {
+              busy: this.workersBusy.size,
+              idle: this.workersIdle.size,
+              total: this.workersBusy.size + this.workersIdle.size
+            }
+          };
+        };
+        this.terminate = () => {
+          const error = new error_default(this.name, "Terminated");
+          for (const task of this.tasksBusy)
+            task.reject(error);
+          for (const task of this.tasksIdle)
+            task.reject(error);
+          this.tasksBusy = /* @__PURE__ */ new Set();
+          this.tasksIdle = /* @__PURE__ */ new Set();
+          for (const worker of this.workersBusy)
+            worker.terminate();
+          for (const worker of this.workersIdle)
+            worker.terminate();
+          this.workersBusy = /* @__PURE__ */ new Set();
+          this.workersIdle = /* @__PURE__ */ new Set();
+        };
+        this.tick = () => {
+          const task = this.getTaskIdle();
+          if (!task)
+            return;
+          if (task.signal?.aborted) {
+            this.tasksIdle.delete(task);
+            task.reject(new error_default(this.name, "Terminated"));
+            return this.tick();
+          }
+          const worker = this.getWorkerIdle();
+          if (!worker)
+            return;
+          this.tasksIdle.delete(task);
+          this.tasksBusy.add(task);
+          this.workersIdle.delete(worker);
+          this.workersBusy.add(worker);
+          if (task.signal) {
+            task.signal.addEventListener("abort", worker.terminate, { once: true });
+          }
+          let timeoutId;
+          if (task.timeout > 0 && task.timeout !== Infinity) {
+            timeoutId = setTimeout(worker.terminate, task.timeout);
+          }
+          const onFinally = () => {
+            clearTimeout(timeoutId);
+            this.tasksBusy.delete(task);
+            this.workersBusy.delete(worker);
+            if (!worker.terminated) {
+              if (this.workersIdle.size < this.size) {
+                this.workersIdle.add(worker);
+              } else {
+                worker.terminate();
+              }
+            }
+            this.tick();
+          };
+          task.promise.then(onFinally, onFinally);
+          worker.exec(task);
+          this.tick();
+        };
+        this.name = options.pool?.name ?? "WorkTank";
+        this.size = options.pool?.size ?? node_default3;
+        this.env = { ...globalThis.process?.env, ...options.worker.env };
+        this.bootloader = this.getWorkerBootloader(this.env, options.worker.methods);
+        this.autoAbort = options.worker.autoAbort ?? 0;
+        this.autoInstantiate = options.worker.autoInstantiate ?? false;
+        this.autoTerminate = options.worker.autoTerminate ?? 0;
+        this.tasksBusy = /* @__PURE__ */ new Set();
+        this.tasksIdle = /* @__PURE__ */ new Set();
+        this.workersBusy = /* @__PURE__ */ new Set();
+        this.workersIdle = /* @__PURE__ */ new Set();
+        this.resize(this.size);
+        if (this.autoTerminate) {
+          const thizRef = new WeakRef(this);
+          const intervalId = set2(() => {
+            thizRef.deref()?.cleanup();
+          }, this.autoTerminate);
+          unref(intervalId);
+          clearIntervalRegistry.register(this, intervalId);
+        }
       }
     };
-    dist_default38 = WorkTank;
+    dist_default37 = WorkTank;
   }
 });
 
@@ -13554,13 +13008,19 @@ var prettier_parallel_exports = {};
 __export(prettier_parallel_exports, {
   makeParallel: () => makeParallel
 });
-import os3 from "os";
-function makeParallel(options2) {
-  const pool = new dist_default38({
-    name: "prettier",
-    size: options2.parallelWorkers || Math.max(1, os3.cpus().length - 1),
-    methods: new URL("./experimental-cli-worker.mjs", import.meta.url),
-    warmup: true
+import os4 from "os";
+import process17 from "process";
+function makeParallel(options) {
+  const pool = new dist_default37({
+    pool: {
+      name: "prettier",
+      size: options.parallelWorkers || Math.max(1, os4.cpus().length - 1)
+    },
+    worker: {
+      autoInstantiate: true,
+      env: process17.env,
+      methods: new URL("./experimental-cli-worker.mjs", import.meta.url)
+    }
   });
   return {
     async check(filePath, fileContent, formatOptions, contextOptions, pluginsDefaultOptions, pluginsCustomOptions) {
@@ -13585,7 +13045,7 @@ function makeParallel(options2) {
 }
 var init_prettier_parallel = __esm({
   "node_modules/@prettier/cli/dist/prettier_parallel.js"() {
-    init_dist44();
+    init_dist43();
     init_utils12();
   }
 });
@@ -13595,7 +13055,7 @@ var prettier_lazy_exports = {};
 __export(prettier_lazy_exports, {
   makeLazy: () => makeLazy
 });
-function makeLazy(options2) {
+function makeLazy(options) {
   const prettier = dist_default12(() => {
     return import("./experimental-cli-worker.mjs");
   });
@@ -13627,20 +13087,20 @@ var init_prettier_lazy = __esm({
 });
 
 // node_modules/@prettier/cli/dist/prettier.js
-async function makePrettier(options2, cache2) {
-  if (options2.parallel) {
+async function makePrettier(options, cache3) {
+  if (options.parallel) {
     const { makeParallel: makeParallel2 } = await Promise.resolve().then(() => (init_prettier_parallel(), prettier_parallel_exports));
-    if (options2.cache && cache2) {
-      return makeCached(options2, cache2, makeParallel2(options2));
+    if (options.cache && cache3) {
+      return makeCached(options, cache3, makeParallel2(options));
     } else {
-      return makeParallel2(options2);
+      return makeParallel2(options);
     }
   } else {
     const { makeLazy: makeLazy2 } = await Promise.resolve().then(() => (init_prettier_lazy(), prettier_lazy_exports));
-    if (options2.cache && cache2) {
-      return makeCached(options2, cache2, makeLazy2(options2));
+    if (options.cache && cache3) {
+      return makeCached(options, cache3, makeLazy2(options));
     } else {
-      return makeLazy2(options2);
+      return makeLazy2(options);
     }
   }
 }
@@ -13658,102 +13118,102 @@ __export(dist_exports4, {
   runStdin: () => runStdin
 });
 import fs13 from "fs/promises";
-import path17 from "path";
-import process17 from "process";
-async function run(options2, pluginsDefaultOptions, pluginsCustomOptions) {
-  if (options2.globs.length || !isString3(await getStdin())) {
-    return runGlobs(options2, pluginsDefaultOptions, pluginsCustomOptions);
+import path16 from "path";
+import process18 from "process";
+async function run(options, pluginsDefaultOptions, pluginsCustomOptions) {
+  if (options.globs.length || !isString3(await getStdin())) {
+    return runGlobs(options, pluginsDefaultOptions, pluginsCustomOptions);
   } else {
-    return runStdin(options2, pluginsDefaultOptions, pluginsCustomOptions);
+    return runStdin(options, pluginsDefaultOptions, pluginsCustomOptions);
   }
 }
-async function runStdin(options2, pluginsDefaultOptions, pluginsCustomOptions) {
-  const stderr = new logger_default2(options2.logLevel, "stderr");
-  const stdout = new logger_default2(options2.logLevel, "stdout");
+async function runStdin(options, pluginsDefaultOptions, pluginsCustomOptions) {
+  const stderr = new logger_default2(options.logLevel, "stderr");
+  const stdout = new logger_default2(options.logLevel, "stdout");
   const prettier = await import("./experimental-cli-worker.mjs");
-  const fileName = options2.stdinFilepath || "stdin";
+  const fileName = options.stdinFilepath || "stdin";
   const fileContent = await getStdin() || "";
   try {
-    const formatted = await prettier.format(fileName, fileContent, options2.formatOptions, options2.contextOptions, pluginsDefaultOptions, pluginsCustomOptions);
-    if (options2.check || options2.list) {
+    const formatted = await prettier.format(fileName, fileContent, options.formatOptions, options.contextOptions, pluginsDefaultOptions, pluginsCustomOptions);
+    if (options.check || options.list) {
       if (formatted !== fileContent) {
         stdout.warn("(stdin)");
       }
     } else {
       stdout.always(trimFinalNewline(formatted));
     }
-    process17.exitCode = (options2.check || options2.list) && formatted !== fileContent ? 1 : 0;
+    process18.exitCode = (options.check || options.list) && formatted !== fileContent ? 1 : 0;
   } catch (error) {
     stderr.prefixed.error(String(error));
-    process17.exitCode = 1;
+    process18.exitCode = 1;
   }
 }
-async function runGlobs(options2, pluginsDefaultOptions, pluginsCustomOptions) {
-  const stderr = new logger_default2(options2.logLevel, "stderr");
-  const stdout = new logger_default2(options2.logLevel, "stdout");
-  const spinner = options2.check ? stdout.spinner.log() : void 0;
+async function runGlobs(options, pluginsDefaultOptions, pluginsCustomOptions) {
+  const stderr = new logger_default2(options.logLevel, "stderr");
+  const stdout = new logger_default2(options.logLevel, "stdout");
+  const spinner = options.check ? stdout.spinner.log() : void 0;
   spinner?.start("Checking formatting...");
-  const rootPath = process17.cwd();
+  const rootPath = process18.cwd();
   const projectPath = getProjectPath(rootPath);
-  const [filesPaths, filesNames, filesNamesToPaths, filesExplicitPaths, filesFoundPaths, foldersFoundPaths] = await getTargetsPaths(rootPath, options2.globs, options2.withNodeModules);
+  const [filesPaths, filesNames, filesNamesToPaths, filesExplicitPaths, filesFoundPaths, foldersFoundPaths] = await getTargetsPaths(rootPath, options.globs, options.withNodeModules);
   const filesExplicitPathsSet = new Set(filesExplicitPaths);
-  const filesPathsTargets = filesPaths.filter(negate(isBinaryPath)).sort();
+  const filesPathsTargets = filesPaths.filter(negate(import_is_binary_path.default)).sort();
   const [foldersPathsTargets, foldersExtraPaths] = getExpandedFoldersPaths(foldersFoundPaths, projectPath);
   const filesExtraPaths = await getFoldersChildrenPaths([rootPath, ...foldersExtraPaths]);
-  const filesExtraNames = filesExtraPaths.map((filePath) => path17.basename(filePath));
+  const filesExtraNames = filesExtraPaths.map((filePath) => path16.basename(filePath));
   known_default.addFilesPaths(filesFoundPaths);
   known_default.addFilesPaths(filesExtraPaths);
   known_default.addFilesNames(filesNames);
   known_default.addFilesNames(filesExtraNames);
   const prettierVersion = PRETTIER_VERSION;
   const cliVersion = CLI_VERSION;
-  const pluginsNames = options2.formatOptions.plugins || [];
+  const pluginsNames = options.formatOptions.plugins || [];
   const pluginsVersions = getPluginsVersions(pluginsNames);
   const pluginsVersionsMissing = pluginsVersions.filter(isNull2);
-  const editorConfigNames = options2.editorConfig ? [".editorconfig"].filter(known_default.hasFileName) : [];
-  const ignoreNames = options2.ignore ? [".gitignore", ".prettierignore"].filter(known_default.hasFileName) : [];
-  const prettierConfigNames = options2.config ? without2(Object.keys(File2Loader), ["default"]).filter(known_default.hasFileName) : [];
-  const fileNames2parentPaths = (names) => names.flatMap((name) => filesNamesToPaths[name]?.map(path17.dirname) || []);
+  const editorConfigNames = options.editorConfig ? [".editorconfig"].filter(known_default.hasFileName) : [];
+  const ignoreNames = options.ignore ? [".gitignore", ".prettierignore"].filter(known_default.hasFileName) : [];
+  const prettierConfigNames = options.config ? without2(Object.keys(File2Loader), ["default"]).filter(known_default.hasFileName) : [];
+  const fileNames2parentPaths = (names) => names.flatMap((name) => filesNamesToPaths[name]?.map(path16.dirname) || []);
   const editorConfigPaths = uniq3([...fileNames2parentPaths(editorConfigNames), rootPath, ...foldersExtraPaths]);
   const ignorePaths = uniq3([...fileNames2parentPaths(ignoreNames), rootPath, ...foldersExtraPaths]);
   const prettierConfigPaths = uniq3([...fileNames2parentPaths(prettierConfigNames), rootPath, ...foldersExtraPaths]);
-  const editorConfigs = options2.editorConfig ? await getEditorConfigsMap(editorConfigPaths, editorConfigNames) : {};
-  const ignoreContents = options2.ignore ? await getIgnoresContentMap(ignorePaths, ignoreNames) : {};
-  const prettierConfigs = options2.config ? await getPrettierConfigsMap(prettierConfigPaths, prettierConfigNames) : {};
-  const ignoreManualFilesNames = options2.ignore ? options2.ignorePath || [] : [];
-  const ignoreManualFilesPaths = ignoreManualFilesNames.map((fileName) => path17.resolve(fileName));
+  const editorConfigs = options.editorConfig ? await getEditorConfigsMap(editorConfigPaths, editorConfigNames) : {};
+  const ignoreContents = options.ignore ? await getIgnoresContentMap(ignorePaths, ignoreNames) : {};
+  const prettierConfigs = options.config ? await getPrettierConfigsMap(prettierConfigPaths, prettierConfigNames) : {};
+  const ignoreManualFilesNames = options.ignore ? options.ignorePath || [] : [];
+  const ignoreManualFilesPaths = ignoreManualFilesNames.map((fileName) => path16.resolve(fileName));
   const ignoreManualFilesContents = await Promise.all(ignoreManualFilesPaths.map((filePath) => fs13.readFile(filePath, "utf8").catch(() => "")));
-  const ignoreManualFoldersPaths = ignoreManualFilesPaths.map(path17.dirname);
+  const ignoreManualFoldersPaths = ignoreManualFilesPaths.map(path16.dirname);
   const ignoreManual = getIgnoreBys(ignoreManualFoldersPaths, ignoreManualFilesContents.map(castArray5));
-  const prettierManualFilesNames = options2.configPath || [];
-  const prettierManualFilesPaths = prettierManualFilesNames.map((fileName) => path17.resolve(fileName));
+  const prettierManualFilesNames = options.configPath || [];
+  const prettierManualFilesPaths = prettierManualFilesNames.map((fileName) => path16.resolve(fileName));
   const prettierManualFilesContents = await Promise.all(prettierManualFilesPaths.map((filePath) => fs13.readFile(filePath, "utf8")));
   const prettierManualConfigs = await Promise.all(prettierManualFilesPaths.map(Loaders.auto));
   const prettierManualConfig = prettierManualConfigs.length ? Object.assign({}, ...prettierManualConfigs) : void 0;
-  const cliContextConfig = options2.contextOptions;
-  const cliFormatConfig = options2.formatOptions;
+  const cliContextConfig = options.contextOptions;
+  const cliFormatConfig = options.formatOptions;
   const cacheVersion = dist_default23({ prettierVersion, cliVersion, pluginsNames, pluginsVersions, editorConfigs, ignoreContents, prettierConfigs, ignoreManualFilesPaths, ignoreManualFilesContents, prettierManualFilesPaths, prettierManualFilesContents, cliContextConfig, cliFormatConfig, pluginsDefaultOptions, pluginsCustomOptions });
-  const shouldCache = options2.cache && !options2.dump && !pluginsVersionsMissing.length && isUndefined4(cliContextConfig.cursorOffset);
-  const cache2 = shouldCache ? new cache_default(cacheVersion, projectPath, options2, stdout) : void 0;
-  const prettier = await makePrettier(options2, cache2);
+  const shouldCache = options.cache && !options.dump && !pluginsVersionsMissing.length && isUndefined4(cliContextConfig.cursorOffset);
+  const cache3 = shouldCache ? new cache_default(cacheVersion, projectPath, options, stdout) : void 0;
+  const prettier = await makePrettier(options, cache3);
   const filesResults = await Promise.allSettled(filesPathsTargets.map(async (filePath) => {
     const isIgnored = () => ignoreManual ? ignoreManual(filePath) : getIgnoreResolved(filePath, ignoreNames);
-    const isCacheable = () => cache2?.has(filePath, isIgnored);
+    const isCacheable = () => cache3?.has(filePath, isIgnored);
     const isExplicitlyIncluded = () => filesExplicitPathsSet.has(filePath);
-    const isForceIncluded = options2.dump && isExplicitlyIncluded();
-    const isExcluded = cache2 ? !await isCacheable() : await isIgnored();
+    const isForceIncluded = options.dump && isExplicitlyIncluded();
+    const isExcluded = cache3 ? !await isCacheable() : await isIgnored();
     if (!isForceIncluded && isExcluded)
       return;
     const getFormatOptions = async () => {
-      const editorConfig = options2.editorConfig ? getEditorConfigFormatOptions(await getEditorConfigResolved(filePath, editorConfigNames)) : {};
-      const prettierConfig = prettierManualConfig || (options2.config ? await getPrettierConfigResolved(filePath, prettierConfigNames) : {});
-      const formatOptions = { ...editorConfig, ...prettierConfig, ...options2.formatOptions };
+      const editorConfig = options.editorConfig ? getEditorConfigFormatOptions(await getEditorConfigResolved(filePath, editorConfigNames)) : {};
+      const prettierConfig = prettierManualConfig || (options.config ? await getPrettierConfigResolved(filePath, prettierConfigNames) : {});
+      const formatOptions = { ...editorConfig, ...prettierConfig, ...options.formatOptions };
       return formatOptions;
     };
     try {
-      if (options2.check || options2.list) {
+      if (options.check || options.list) {
         return await prettier.checkWithPath(filePath, getFormatOptions, cliContextConfig, pluginsDefaultOptions, pluginsCustomOptions);
-      } else if (options2.write) {
+      } else if (options.write) {
         return await prettier.writeWithPath(filePath, getFormatOptions, cliContextConfig, pluginsDefaultOptions, pluginsCustomOptions);
       } else {
         return await prettier.formatWithPath(filePath, getFormatOptions, cliContextConfig, pluginsDefaultOptions, pluginsCustomOptions);
@@ -13785,10 +13245,10 @@ async function runGlobs(options2, pluginsDefaultOptions, pluginsCustomOptions) {
         } else {
           totalUnformatted += 1;
           const filePath = filesPathsTargets[i];
-          const fileNameToDisplay = normalizeToPosix(fastRelativePath(rootPath, filePath));
-          if (options2.check) {
+          const fileNameToDisplay = normalizePathSeparatorsToPosix(fastRelativePath(rootPath, filePath));
+          if (options.check) {
             stderr.prefixed.warn(fileNameToDisplay);
-          } else if (options2.list || options2.write) {
+          } else if (options.list || options.write) {
             stdout.warn(fileNameToDisplay);
           }
         }
@@ -13799,14 +13259,14 @@ async function runGlobs(options2, pluginsDefaultOptions, pluginsCustomOptions) {
         totalUnknown += 1;
         pathsUnknown.push(filesPathsTargets[i]);
       }
-      if (error.name !== "UndefinedParserError" || !options2.ignoreUnknown) {
+      if (error.name !== "UndefinedParserError" || !options.ignoreUnknown) {
         totalErrored += 1;
         pathsErrored.push(filesPathsTargets[i]);
         const filePath = filesPathsTargets[i];
-        const fileNameToDisplay = normalizeToPosix(fastRelativePath(rootPath, filePath));
-        if (options2.check || options2.write) {
+        const fileNameToDisplay = normalizePathSeparatorsToPosix(fastRelativePath(rootPath, filePath));
+        if (options.check || options.write || options.dump) {
           stderr.prefixed.error(`${fileNameToDisplay}: ${error}`);
-        } else if (options2.list) {
+        } else if (options.list) {
           stderr.error(fileNameToDisplay);
         }
       }
@@ -13818,30 +13278,31 @@ async function runGlobs(options2, pluginsDefaultOptions, pluginsCustomOptions) {
   stdout.prefixed.debug(`Files formatted: ${totalFormatted}`);
   stdout.prefixed.debug(`Files unformatted: ${totalUnformatted}`);
   stdout.prefixed.debug(`Files unknown: ${totalUnknown}`);
-  stdout.prefixed.debug(() => pathsUnknown.map((filePath) => normalizeToPosix(fastRelativePath(rootPath, filePath))).join("\n"));
+  stdout.prefixed.debug(() => pathsUnknown.map((filePath) => normalizePathSeparatorsToPosix(fastRelativePath(rootPath, filePath))).join("\n"));
   stdout.prefixed.debug(`Files errored: ${totalErrored}`);
-  stdout.prefixed.debug(() => pathsErrored.map((filePath) => normalizeToPosix(fastRelativePath(rootPath, filePath))).join("\n"));
+  stdout.prefixed.debug(() => pathsErrored.map((filePath) => normalizePathSeparatorsToPosix(fastRelativePath(rootPath, filePath))).join("\n"));
   if (!totalMatched && !totalIgnored) {
-    if (options2.errorOnUnmatchedPattern) {
+    if (options.errorOnUnmatchedPattern) {
       stderr.prefixed.error(`No files matching the given patterns were found.`);
     }
   }
   if (totalUnformatted) {
-    if (options2.check) {
+    if (options.check) {
       stderr.prefixed.warn(`Code style issues found in ${totalUnformatted} ${pluralize("file", totalUnformatted)}. Run Prettier with --write to fix.`);
     }
   }
   if (!totalUnformatted && !totalErrored) {
-    if (options2.check) {
+    if (options.check) {
       stdout.log("All matched files use Prettier code style!");
     }
   }
-  cache2?.write();
-  process17.exitCode = !totalMatched && !totalIgnored && options2.errorOnUnmatchedPattern || totalErrored || totalUnformatted && !options2.write ? 1 : 0;
+  cache3?.write();
+  process18.exitCode = !totalMatched && !totalIgnored && options.errorOnUnmatchedPattern || totalErrored || totalUnformatted && !options.write ? 1 : 0;
 }
-var init_dist45 = __esm({
+var import_is_binary_path;
+var init_dist44 = __esm({
   "node_modules/@prettier/cli/dist/index.js"() {
-    init_is_binary_path();
+    import_is_binary_path = __toESM(require_is_binary_path(), 1);
     init_dist26();
     init_cache();
     init_config_editorconfig();
@@ -13943,9 +13404,6 @@ var makeBin = () => {
     default: true
   }).option("--config-path <path>", "Path to a Prettier configuration file (.prettierrc, package.json, prettier.config.js)", {
     section: "Config"
-  }).option("--config-precedence <cli-override|file-override>", 'Define in which order config files and CLI options should be evaluated.\nDefaults to "cli-override"', {
-    section: "Config",
-    enum: ["cli-override", "file-override"]
   }).option("--no-editorconfig", "Don't take .editorconfig into account when parsing configuration", {
     section: "Config",
     default: true
@@ -13996,9 +13454,9 @@ Defaults to "false"`, {
     section: "Other"
   }).option("--stdin-filepath <path>", "Path to the file to pretend that stdin comes from", {
     section: "Other"
-  }).argument("[file/dir/glob...]", "Files, directories or globs to format").action(async (options2, files) => {
-    const { run: run2 } = await Promise.resolve().then(() => (init_dist45(), dist_exports4));
-    const baseOptions = await normalizeOptions(options2, files);
+  }).argument("[file/dir/glob...]", "Files, directories or globs to format").action(async (options, files) => {
+    const { run: run2 } = await Promise.resolve().then(() => (init_dist44(), dist_exports4));
+    const baseOptions = await normalizeOptions(options, files);
     const pluginsDefaultOptions = {};
     const pluginsCustomOptions = {};
     return run2(baseOptions, pluginsDefaultOptions, pluginsCustomOptions);
@@ -14067,17 +13525,17 @@ ${descriptionDefault}`.trim();
     }
   }
   if (pluginsParsers.size) {
-    const parsers2 = [...DEFAULT_PARSERS, ...pluginsParsers];
-    bin2.option(`--parser <${parsers2}>`, "Which parser to use", {
+    const parsers = [...DEFAULT_PARSERS, ...pluginsParsers];
+    bin2.option(`--parser <${parsers}>`, "Which parser to use", {
       section: "Format",
-      enum: parsers2,
+      enum: parsers,
       override: true
     });
   }
-  bin2 = bin2.action(async (options2, files) => {
-    const { run: run2 } = await Promise.resolve().then(() => (init_dist45(), dist_exports4));
-    const baseOptions = await normalizeOptions(options2, files);
-    const pluginsCustomOptions = normalizePluginOptions(options2, optionsNames);
+  bin2 = bin2.action(async (options, files) => {
+    const { run: run2 } = await Promise.resolve().then(() => (init_dist44(), dist_exports4));
+    const baseOptions = await normalizeOptions(options, files);
+    const pluginsCustomOptions = normalizePluginOptions(options, optionsNames);
     return run2(baseOptions, pluginsDefaultOptions, pluginsCustomOptions);
   });
   return bin2;
@@ -14094,8 +13552,8 @@ var makeWarnedPluggableBin = async () => {
   if (isBoolean2(args["find-config-path"])) {
     exit_default('The "--find-config-path" is not currently supported, please open an issue on GitHub if you need it');
   }
-  if (args["config-precedence"] === "prefer-file") {
-    exit_default('The "prefer-file" value for "--config-precedence" is not currently supported, please open an issue on GitHub if you need it');
+  if (args["config-precedence"]) {
+    exit_default('The "config-precedence" option is not currently supported, please open an issue on GitHub if you need it');
   }
   if (args["file-info"]) {
     exit_default('The "--file-info" option is not currently supported, please open an issue on GitHub if you need it');

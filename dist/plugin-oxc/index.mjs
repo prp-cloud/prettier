@@ -26,7 +26,6 @@ __export(oxc_exports, {
   oxc: () => oxc,
   "oxc-ts": () => oxcTs
 });
-import os from "os";
 
 // node_modules/index-to-position/index.js
 function getPosition(text, textIndex) {
@@ -49,6 +48,9 @@ function indexToPosition(text, textIndex, { oneBased = false } = {}) {
   const position = getPosition(text, textIndex);
   return oneBased ? { line: position.line + 1, column: position.column + 1 } : position;
 }
+
+// src/language-js/parse/oxc.js
+import * as oxcParser from "oxc-parser";
 
 // src/common/parser-create-error.js
 function createError(message, options2) {
@@ -1877,12 +1879,7 @@ function createParseError(error, { text }) {
     cause: error
   });
 }
-var oxcParser;
 async function parseWithOptions(filepath, text, options2) {
-  if (!oxcParser) {
-    os.availableParallelism ??= () => os.cpus().length;
-    oxcParser = await import("oxc-parser");
-  }
   const result = await oxcParser.parseAsync(filepath, text, {
     preserveParens: true,
     showSemanticErrors: false,

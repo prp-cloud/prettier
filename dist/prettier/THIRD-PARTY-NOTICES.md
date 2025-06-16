@@ -350,7 +350,7 @@ License: MIT
 
 ----------------------------------------
 
-## @prettier/cli@v0.8.0
+## @prettier/cli@v0.9.0
 
 > A faster CLI for Prettier.
 
@@ -731,7 +731,7 @@ Contributors:
 
 ----------------------------------------
 
-## binary-extensions@v3.1.0
+## binary-extensions@v2.3.0
 
 > List of binary file extensions
 
@@ -2384,17 +2384,16 @@ Contributors:
 
 ----------------------------------------
 
-## is-binary-path@v3.0.0
+## is-binary-path@v2.1.0
 
 > Check if a file path is a binary file
 
 License: MIT  
-Author: Sindre Sorhus <sindresorhus@gmail.com> (https://sindresorhus.com)  
+Author: Sindre Sorhus <sindresorhus@gmail.com> (sindresorhus.com)  
 
 > MIT License
 >
-> Copyright (c) Sindre Sorhus <sindresorhus@gmail.com> (https://sindresorhus.com)
-> Copyright (c) Paul Miller (https://paulmillr.com)
+> Copyright (c) 2019 Sindre Sorhus <sindresorhus@gmail.com> (https://sindresorhus.com), Paul Miller (https://paulmillr.com)
 >
 > Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 >
@@ -2723,6 +2722,66 @@ Contributors:
 > CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 > TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 > SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+----------------------------------------
+
+## isoconcurrency@v1.0.0
+
+> An isomorphic way to get the number of logical cores available.
+
+License: MIT  
+
+> The MIT License (MIT)
+>
+> Copyright (c) 2025-present Fabio Spampinato
+>
+> Permission is hereby granted, free of charge, to any person obtaining a
+> copy of this software and associated documentation files (the "Software"),
+> to deal in the Software without restriction, including without limitation
+> the rights to use, copy, modify, merge, publish, distribute, sublicense,
+> and/or sell copies of the Software, and to permit persons to whom the
+> Software is furnished to do so, subject to the following conditions:
+>
+> The above copyright notice and this permission notice shall be included in
+> all copies or substantial portions of the Software.
+>
+> THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+> IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+> FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+> AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+> LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+> FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+> DEALINGS IN THE SOFTWARE.
+
+----------------------------------------
+
+## isotimer@v1.0.0
+
+> An isomorphic setImmediate/setInterval/setTimeout implementation.
+
+License: MIT  
+
+> The MIT License (MIT)
+>
+> Copyright (c) 2025-present Fabio Spampinato
+>
+> Permission is hereby granted, free of charge, to any person obtaining a
+> copy of this software and associated documentation files (the "Software"),
+> to deal in the Software without restriction, including without limitation
+> the rights to use, copy, modify, merge, publish, distribute, sublicense,
+> and/or sell copies of the Software, and to permit persons to whom the
+> Software is furnished to do so, subject to the following conditions:
+>
+> The above copyright notice and this permission notice shall be included in
+> all copies or substantial portions of the Software.
+>
+> THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+> IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+> FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+> AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+> LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+> FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+> DEALINGS IN THE SOFTWARE.
 
 ----------------------------------------
 
@@ -5425,10 +5484,11 @@ License: MIT
 
 ----------------------------------------
 
-## worktank@v2.7.3
+## worktank@v3.0.2
 
 > A simple isomorphic library for executing functions inside WebWorkers or Node Threads pools.
 
+License: MIT  
 
 > The MIT License (MIT)
 >
