@@ -399,7 +399,7 @@ Author: Alex Bell <alex@bellandwhistle.net>
 
 ----------------------------------------
 
-## @typescript-eslint/types@v8.34.0
+## @typescript-eslint/types@v8.34.1
 
 > Types for the TypeScript-ESTree AST spec
 
@@ -431,7 +431,7 @@ Repository: <https://github.com/typescript-eslint/typescript-eslint.git>
 
 ----------------------------------------
 
-## @typescript-eslint/typescript-estree@v8.34.0
+## @typescript-eslint/typescript-estree@v8.34.1
 
 > A parser that converts TypeScript source code into an ESTree compatible form
 
@@ -3214,7 +3214,7 @@ Repository: <git@github.com:teambition/merge2.git>
 
 ----------------------------------------
 
-## meriyah@v6.1.0
+## meriyah@v6.1.1
 
 > A 100% compliant, self-hosted javascript parser with high focus on both performance and stability
 
