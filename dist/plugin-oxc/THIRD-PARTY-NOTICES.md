@@ -123,7 +123,7 @@ Author: fisker Cheung <lionkay@gmail.com>
 
 ----------------------------------------
 
-## jest-docblock@v30.0.0
+## jest-docblock@v30.0.1
 
 License: MIT  
 Repository: <https://github.com/jestjs/jest.git>  
@@ -153,7 +153,7 @@ Repository: <https://github.com/jestjs/jest.git>
 
 ----------------------------------------
 
-## prettier@v3.6.0-1dce3ecdb
+## prettier@v3.6.0-61ce6d879
 
 > Prettier is an opinionated code formatter
 
