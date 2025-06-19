@@ -3,7 +3,7 @@
 The published Prettier artifact additionally contains code with the following licenses:
 MIT, ISC, BSD-3-Clause, BSD-2-Clause, and Apache-2.0.
 
-## @angular/compiler@v20.0.0
+## @angular/compiler@v20.0.4
 
 > Angular - the compiler library
 
