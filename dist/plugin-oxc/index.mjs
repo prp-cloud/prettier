@@ -7550,7 +7550,14 @@ function isNonEmptyBlockStatement(node) {
   return node.type === "BlockStatement" && (node.body.some((node2) => node2.type !== "EmptyStatement") || hasComment(node, CommentCheckFlags.Dangling));
 }
 function isTypeModuleObjectExpression(node) {
-  return node.type === "ObjectExpression" && node.properties.length === 1 && isObjectProperty(node.properties[0]) && node.properties[0].key.type === "Identifier" && node.properties[0].key.name === "type" && isStringLiteral(node.properties[0].value) && node.properties[0].value.value === "module";
+  if (!(node.type === "ObjectExpression" && node.properties.length === 1)) {
+    return false;
+  }
+  const [property] = node.properties;
+  if (!isObjectProperty(property)) {
+    return false;
+  }
+  return !property.computed && (property.key.type === "Identifier" && property.key.name === "type" || isStringLiteral(property.key) && property.key.value === "type") && isStringLiteral(property.value) && property.value.value === "module";
 }
 var call_arguments_default = printCallArguments;
 

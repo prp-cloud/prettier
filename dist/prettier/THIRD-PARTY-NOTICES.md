@@ -1104,7 +1104,7 @@ Contributors:
 
 ----------------------------------------
 
-## deno-path-from-file-url@v0.0.2
+## deno-path-from-file-url@v0.0.3
 
 > Convert file URLs to paths.
 
