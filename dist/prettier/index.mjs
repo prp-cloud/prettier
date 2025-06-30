@@ -3423,8 +3423,8 @@ var require_utils3 = __commonJS({
     exports.array = array2;
     var errno = require_errno();
     exports.errno = errno;
-    var fs5 = require_fs();
-    exports.fs = fs5;
+    var fs4 = require_fs();
+    exports.fs = fs4;
     var path14 = require_path();
     exports.path = path14;
     var pattern = require_pattern();
@@ -3608,12 +3608,12 @@ var require_fs2 = __commonJS({
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.createFileSystemAdapter = exports.FILE_SYSTEM_ADAPTER = void 0;
-    var fs5 = __require("fs");
+    var fs4 = __require("fs");
     exports.FILE_SYSTEM_ADAPTER = {
-      lstat: fs5.lstat,
-      stat: fs5.stat,
-      lstatSync: fs5.lstatSync,
-      statSync: fs5.statSync
+      lstat: fs4.lstat,
+      stat: fs4.stat,
+      lstatSync: fs4.lstatSync,
+      statSync: fs4.statSync
     };
     function createFileSystemAdapter(fsMethods) {
       if (fsMethods === void 0) {
@@ -3630,12 +3630,12 @@ var require_settings = __commonJS({
   "node_modules/@nodelib/fs.stat/out/settings.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var fs5 = require_fs2();
+    var fs4 = require_fs2();
     var Settings = class {
       constructor(_options = {}) {
         this._options = _options;
         this.followSymbolicLink = this._getValue(this._options.followSymbolicLink, true);
-        this.fs = fs5.createFileSystemAdapter(this._options.fs);
+        this.fs = fs4.createFileSystemAdapter(this._options.fs);
         this.markSymbolicLink = this._getValue(this._options.markSymbolicLink, false);
         this.throwErrorOnBrokenSymbolicLink = this._getValue(this._options.throwErrorOnBrokenSymbolicLink, true);
       }
@@ -3790,8 +3790,8 @@ var require_utils4 = __commonJS({
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.fs = void 0;
-    var fs5 = require_fs3();
-    exports.fs = fs5;
+    var fs4 = require_fs3();
+    exports.fs = fs4;
   }
 });
 
@@ -3986,14 +3986,14 @@ var require_fs4 = __commonJS({
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.createFileSystemAdapter = exports.FILE_SYSTEM_ADAPTER = void 0;
-    var fs5 = __require("fs");
+    var fs4 = __require("fs");
     exports.FILE_SYSTEM_ADAPTER = {
-      lstat: fs5.lstat,
-      stat: fs5.stat,
-      lstatSync: fs5.lstatSync,
-      statSync: fs5.statSync,
-      readdir: fs5.readdir,
-      readdirSync: fs5.readdirSync
+      lstat: fs4.lstat,
+      stat: fs4.stat,
+      lstatSync: fs4.lstatSync,
+      statSync: fs4.statSync,
+      readdir: fs4.readdir,
+      readdirSync: fs4.readdirSync
     };
     function createFileSystemAdapter(fsMethods) {
       if (fsMethods === void 0) {
@@ -4012,12 +4012,12 @@ var require_settings2 = __commonJS({
     Object.defineProperty(exports, "__esModule", { value: true });
     var path14 = __require("path");
     var fsStat = require_out();
-    var fs5 = require_fs4();
+    var fs4 = require_fs4();
     var Settings = class {
       constructor(_options = {}) {
         this._options = _options;
         this.followSymbolicLinks = this._getValue(this._options.followSymbolicLinks, false);
-        this.fs = fs5.createFileSystemAdapter(this._options.fs);
+        this.fs = fs4.createFileSystemAdapter(this._options.fs);
         this.pathSegmentSeparator = this._getValue(this._options.pathSegmentSeparator, path14.sep);
         this.stats = this._getValue(this._options.stats, false);
         this.throwErrorOnBrokenSymbolicLink = this._getValue(this._options.throwErrorOnBrokenSymbolicLink, true);
@@ -5375,16 +5375,16 @@ var require_settings4 = __commonJS({
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.DEFAULT_FILE_SYSTEM_ADAPTER = void 0;
-    var fs5 = __require("fs");
+    var fs4 = __require("fs");
     var os = __require("os");
     var CPU_COUNT = Math.max(os.cpus().length, 1);
     exports.DEFAULT_FILE_SYSTEM_ADAPTER = {
-      lstat: fs5.lstat,
-      lstatSync: fs5.lstatSync,
-      stat: fs5.stat,
-      statSync: fs5.statSync,
-      readdir: fs5.readdir,
-      readdirSync: fs5.readdirSync
+      lstat: fs4.lstat,
+      lstatSync: fs4.lstatSync,
+      stat: fs4.stat,
+      statSync: fs4.statSync,
+      readdir: fs4.readdir,
+      readdirSync: fs4.readdirSync
     };
     var Settings = class {
       constructor(_options = {}) {
@@ -7621,7 +7621,7 @@ var require_ini = __commonJS({
       return result;
     };
     Object.defineProperty(exports, "__esModule", { value: true });
-    var fs5 = __importStar(__require("fs"));
+    var fs4 = __importStar(__require("fs"));
     var regex = {
       section: /^\s*\[(([^#;]|\\#|\\;)+)\]\s*([#;].*)?$/,
       param: /^\s*([\w\.\-\_]+)\s*[=:]\s*(.*?)\s*([#;].*)?$/,
@@ -7631,7 +7631,7 @@ var require_ini = __commonJS({
       return __awaiter(this, void 0, void 0, function() {
         return __generator(this, function(_a) {
           return [2, new Promise(function(resolve3, reject) {
-            fs5.readFile(file, "utf8", function(err, data) {
+            fs4.readFile(file, "utf8", function(err, data) {
               if (err) {
                 reject(err);
                 return;
@@ -7644,7 +7644,7 @@ var require_ini = __commonJS({
     }
     exports.parse = parse7;
     function parseSync(file) {
-      return parseString2(fs5.readFileSync(file, "utf8"));
+      return parseString2(fs4.readFileSync(file, "utf8"));
     }
     exports.parseSync = parseSync;
     function parseString2(data) {
@@ -7848,7 +7848,7 @@ var require_src = __commonJS({
       return mod && mod.__esModule ? mod : { "default": mod };
     };
     Object.defineProperty(exports, "__esModule", { value: true });
-    var fs5 = __importStar(__require("fs"));
+    var fs4 = __importStar(__require("fs"));
     var path14 = __importStar(__require("path"));
     var semver = {
       gte: require_gte()
@@ -7980,7 +7980,7 @@ var require_src = __commonJS({
         return __generator(this, function(_a) {
           return [2, Promise.all(filepaths.map(function(name) {
             return new Promise(function(resolve3) {
-              fs5.readFile(name, "utf8", function(err, data) {
+              fs4.readFile(name, "utf8", function(err, data) {
                 resolve3({
                   name,
                   contents: err ? "" : data
@@ -7996,7 +7996,7 @@ var require_src = __commonJS({
       var file;
       filepaths.forEach(function(filepath) {
         try {
-          file = fs5.readFileSync(filepath, "utf8");
+          file = fs4.readFileSync(filepath, "utf8");
         } catch (e) {
           file = "";
         }
@@ -8481,7 +8481,7 @@ ${frame}`;
 var require_readlines = __commonJS({
   "node_modules/n-readlines/readlines.js"(exports, module) {
     "use strict";
-    var fs5 = __require("fs");
+    var fs4 = __require("fs");
     var LineByLine = class {
       constructor(file, options8) {
         options8 = options8 || {};
@@ -8494,7 +8494,7 @@ var require_readlines = __commonJS({
         if (typeof file === "number") {
           this.fd = file;
         } else {
-          this.fd = fs5.openSync(file, "r");
+          this.fd = fs4.openSync(file, "r");
         }
         this.options = options8;
         this.newLineCharacter = options8.newLineCharacter;
@@ -8517,7 +8517,7 @@ var require_readlines = __commonJS({
         this.fdPosition = 0;
       }
       close() {
-        fs5.closeSync(this.fd);
+        fs4.closeSync(this.fd);
         this.fd = null;
       }
       _extractLines(buffer2) {
@@ -8547,7 +8547,7 @@ var require_readlines = __commonJS({
         const buffers = [];
         do {
           const readBuffer = Buffer.alloc(this.options.readChunk);
-          bytesRead = fs5.readSync(this.fd, readBuffer, 0, this.options.readChunk, this.fdPosition);
+          bytesRead = fs4.readSync(this.fd, readBuffer, 0, this.options.readChunk, this.fdPosition);
           totalBytesRead = totalBytesRead + bytesRead;
           this.fdPosition = this.fdPosition + bytesRead;
           buffers.push(readBuffer);
@@ -16291,17 +16291,15 @@ var array_to_reversed_default = arrayToReversed;
 
 // src/utils/get-interpreter.js
 var import_n_readlines = __toESM(require_readlines(), 1);
-import fs4 from "fs";
 function getInterpreter(file) {
-  let fd;
   try {
-    fd = fs4.openSync(file, "r");
-  } catch {
-    return;
-  }
-  try {
-    const liner = new import_n_readlines.default(fd);
-    const firstLine = liner.next().toString("utf8");
+    const liner = new import_n_readlines.default(file);
+    const firstLineBuffer = liner.next();
+    if (firstLineBuffer === false) {
+      return;
+    }
+    liner.close();
+    const firstLine = firstLineBuffer.toString("utf8");
     const m1 = firstLine.match(/^#!\/(?:usr\/)?bin\/env\s+(\S+)/u);
     if (m1) {
       return m1[1];
@@ -16310,11 +16308,7 @@ function getInterpreter(file) {
     if (m2) {
       return m2[1];
     }
-  } finally {
-    try {
-      fs4.closeSync(fd);
-    } catch {
-    }
+  } catch {
   }
 }
 var get_interpreter_default = getInterpreter;
@@ -18766,7 +18760,7 @@ var get_file_info_default = getFileInfo;
 import * as doc from "./doc.mjs";
 
 // src/main/version.evaluate.js
-var version_evaluate_default = "3.6.0-267231789";
+var version_evaluate_default = "3.7.0-840c8a244";
 
 // src/utils/public.js
 var public_exports = {};

@@ -1,6 +1,6 @@
 {
   "name": "@prettier/plugin-hermes",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "Prettier Hermes plugin.",
   "exports": {
     ".": {
@@ -30,7 +30,8 @@
     "index.mjs",
     "package.json"
   ],
-  "dependencies": {
-    "hermes-parser": "0.28.1"
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   }
 }

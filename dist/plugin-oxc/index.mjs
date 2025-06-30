@@ -317,9 +317,9 @@ var visitor_keys_evaluate_default = {
   ],
   "CallExpression": [
     "callee",
-    "arguments",
     "typeParameters",
-    "typeArguments"
+    "typeArguments",
+    "arguments"
   ],
   "CatchClause": [
     "param",
@@ -399,9 +399,9 @@ var visitor_keys_evaluate_default = {
   ],
   "NewExpression": [
     "callee",
-    "arguments",
     "typeParameters",
-    "typeArguments"
+    "typeArguments",
+    "arguments"
   ],
   "Program": [
     "directives",
@@ -419,9 +419,9 @@ var visitor_keys_evaluate_default = {
     "body"
   ],
   "ObjectProperty": [
+    "decorators",
     "key",
-    "value",
-    "decorators"
+    "value"
   ],
   "RestElement": [
     "argument",
@@ -573,9 +573,9 @@ var visitor_keys_evaluate_default = {
     "body"
   ],
   "ObjectPattern": [
+    "decorators",
     "properties",
-    "typeAnnotation",
-    "decorators"
+    "typeAnnotation"
   ],
   "SpreadElement": [
     "argument"
@@ -608,9 +608,9 @@ var visitor_keys_evaluate_default = {
   ],
   "OptionalCallExpression": [
     "callee",
-    "arguments",
     "typeParameters",
-    "typeArguments"
+    "typeArguments",
+    "arguments"
   ],
   "ClassProperty": [
     "decorators",
@@ -1883,7 +1883,6 @@ async function parseWithOptions(filepath, text, options2) {
   const result = await oxcParser.parseAsync(filepath, text, {
     preserveParens: true,
     showSemanticErrors: false,
-    experimentalRawTransfer: oxcParser.rawTransferSupported(),
     ...options2
   });
   const { errors } = result;
@@ -1910,30 +1909,26 @@ async function parseJs(text, options2) {
   return postprocess_default(ast, { text, parser: "oxc" });
 }
 async function parseTs(text, options2) {
-  let filepath = options2?.filepath;
+  const filepath = options2?.filepath;
   const sourceType = getSourceType(filepath);
   const parseOptions = { sourceType, astType: "ts" };
   const isKnownJsx = typeof filepath === "string" && /\.(?:jsx|tsx)$/iu.test(filepath);
-  let parseOptionsCombinations = [];
-  if (isKnownJsx) {
-    parseOptionsCombinations = [{ ...parseOptions, lang: "tsx" }];
-  } else {
+  const isDtsFile = typeof filepath === "string" && filepath.toLowerCase().endsWith(".d.ts");
+  let filenameCombinations = [isDtsFile ? "prettier.d.ts" : "prettier.tsx"];
+  if (!isDtsFile && !isKnownJsx) {
     const shouldEnableJsx = jsx_regexp_evaluate_default.test(text);
-    parseOptionsCombinations = [shouldEnableJsx, !shouldEnableJsx].map(
-      (shouldEnableJsx2) => ({
-        ...parseOptions,
-        lang: shouldEnableJsx2 ? "tsx" : "ts"
-      })
-    );
-  }
-  if (typeof filepath !== "string") {
-    filepath = "prettier.tsx";
+    filenameCombinations = [
+      ...[shouldEnableJsx, !shouldEnableJsx].map(
+        (shouldEnableJsx2) => shouldEnableJsx2 ? "prettier.tsx" : "prettier.ts"
+      ),
+      "prettier.d.ts"
+    ];
   }
   let result;
   try {
     result = await tryCombinationsAsync(
-      parseOptionsCombinations.map(
-        (parseOptions2) => () => parseWithOptions(filepath, text, parseOptions2)
+      filenameCombinations.map(
+        (filename) => () => parseWithOptions(filename, text, parseOptions)
       )
     );
   } catch ({
@@ -6722,12 +6717,7 @@ function maybeWrapJsxElementInParens(path, elem, options2) {
   if (NO_WRAP_PARENTS.has(parent.type)) {
     return elem;
   }
-  const shouldBreak = path.match(
-    void 0,
-    (node) => node.type === "ArrowFunctionExpression",
-    isCallExpression,
-    (node) => node.type === "JSXExpressionContainer"
-  );
+  const shouldBreak = shouldBreakJsxElement(path);
   const needsParens2 = parent.type !== "ReturnStatement";
   return group(
     [
@@ -6738,6 +6728,26 @@ function maybeWrapJsxElementInParens(path, elem, options2) {
     ],
     { shouldBreak }
   );
+}
+function shouldBreakJsxElement(path) {
+  return path.match(
+    void 0,
+    (node) => node.type === "ArrowFunctionExpression",
+    isCallExpression
+  ) && // Babel
+  (path.match(
+    void 0,
+    void 0,
+    void 0,
+    (node) => node.type === "JSXExpressionContainer"
+  ) || // Estree
+  path.match(
+    void 0,
+    void 0,
+    void 0,
+    (node) => node.type === "ChainExpression",
+    (node) => node.type === "JSXExpressionContainer"
+  ));
 }
 function printJsxAttribute(path, options2, print3) {
   const { node } = path;
@@ -7378,6 +7388,10 @@ function printCallArguments(path, options2, print3) {
     !options2.parser.startsWith("__ng_") && // Dynamic imports cannot have trailing commas
     node.type !== "ImportExpression" && node.type !== "TSImportType" && shouldPrintComma(options2, "all") ? "," : ""
   );
+  if (node.type === "TSImportType" && args.length === 1 && (args[0].type === "TSLiteralType" && isStringLiteral(args[0].literal) || // TODO: Remove this when update Babel to v8
+  isStringLiteral(args[0])) && !hasComment(args[0])) {
+    return group(["(", ...printedArguments, ifBreak(maybeTrailingComma), ")"]);
+  }
   function allArgsBrokenOut() {
     return group(
       ["(", indent([line, ...printedArguments]), maybeTrailingComma, line, ")"],
@@ -10272,7 +10286,11 @@ function printObject(path, options2, print3) {
     propsAndLoc,
     -1
   )?.node;
-  const canHaveTrailingSeparator = !(node.inexact || node.hasUnknownMembers || lastElem && (lastElem.type === "RestElement" || (lastElem.type === "TSPropertySignature" || lastElem.type === "TSCallSignatureDeclaration" || lastElem.type === "TSMethodSignature" || lastElem.type === "TSConstructSignatureDeclaration" || lastElem.type === "TSIndexSignature") && hasComment(lastElem, CommentCheckFlags.PrettierIgnore)));
+  const canHaveTrailingSeparator = !(node.inexact || node.hasUnknownMembers || lastElem && (lastElem.type === "RestElement" || (lastElem.type === "TSPropertySignature" || lastElem.type === "TSCallSignatureDeclaration" || lastElem.type === "TSMethodSignature" || lastElem.type === "TSConstructSignatureDeclaration" || lastElem.type === "TSIndexSignature") && hasComment(lastElem, CommentCheckFlags.PrettierIgnore)) || // https://github.com/microsoft/TypeScript/issues/61916
+  path.match(
+    void 0,
+    (node2, key2) => node2.type === "TSImportType" && key2 === "options"
+  ));
   let content;
   if (props.length === 0) {
     if (!hasComment(node, CommentCheckFlags.Dangling)) {

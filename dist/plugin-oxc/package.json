@@ -1,6 +1,6 @@
 {
   "name": "@prettier/plugin-oxc",
-  "version": "0.0.1",
+  "version": "0.0.4",
   "description": "Prettier Oxc plugin.",
   "exports": {
     ".": {
@@ -31,6 +31,10 @@
     "package.json"
   ],
   "dependencies": {
-    "oxc-parser": "0.73.2"
+    "oxc-parser": "0.75.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   }
 }

@@ -142,7 +142,7 @@ Author: Sindre Sorhus <sindresorhus@gmail.com> (https://sindresorhus.com)
 
 ----------------------------------------
 
-## hermes-parser@v0.28.1
+## hermes-parser@v0.29.1
 
 > A JavaScript parser built from the Hermes engine
 
@@ -258,7 +258,7 @@ Repository: <https://github.com/jestjs/jest.git>
 
 ----------------------------------------
 
-## prettier@v3.6.0-267231789
+## prettier@v3.7.0-840c8a244
 
 > Prettier is an opinionated code formatter
 
