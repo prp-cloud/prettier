@@ -1907,6 +1907,9 @@ var l = class extends n {
     let s = this._hooks.get(e);
     s ? s.push(t) : this._hooks.set(e, [t]);
   }
+  addHook(e, t) {
+    this.onHook(e, t);
+  }
   onHooks(e) {
     for (let t of e) this.onHook(t.event, t.handler);
   }
@@ -1940,6 +1943,9 @@ var l = class extends n {
       let o = `${e}: ${i.message}`;
       if (this.emit("error", new Error(o)), this._logger && this._logger.error(o), this._throwHookErrors) throw new Error(o);
     }
+  }
+  async callHook(e, ...t) {
+    await this.hook(e, ...t);
   }
   getHooks(e) {
     return this._hooks.get(e);

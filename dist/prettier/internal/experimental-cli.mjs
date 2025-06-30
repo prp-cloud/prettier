@@ -1122,12 +1122,12 @@ var init_dist10 = __esm({
       let aEnd = a.length - 1;
       let bEnd = b.length - 1;
       while (start <= aEnd && start <= bEnd) {
-        if (a.charCodeAt(start) !== b.charCodeAt(start))
+        if (a[start] !== b[start])
           break;
         start += 1;
       }
       while (aEnd >= start && bEnd >= start) {
-        if (a.charCodeAt(aEnd) !== b.charCodeAt(bEnd))
+        if (a[aEnd] !== b[bEnd])
           break;
         aEnd -= 1;
         bEnd -= 1;
@@ -1149,7 +1149,7 @@ var init_dist10 = __esm({
       }
       for (let i = 1; i <= aLength; i++) {
         for (let j = 1; j <= bLength; j++) {
-          const cost = a.charCodeAt(start + i - 1) === b.charCodeAt(start + j - 1) ? 0 : 1;
+          const cost = a[start + i - 1] === b[start + j - 1] ? 0 : 1;
           const deletion = matrix.get(i - 1, j) + 1;
           const insertion = matrix.get(i, j - 1) + 1;
           const substitution = matrix.get(i - 1, j - 1) + cost;
@@ -2184,7 +2184,7 @@ var init_constants_evaluate = __esm({
       "angular",
       "lwc"
     ];
-    PRETTIER_VERSION = "3.6.0-960ec8747";
+    PRETTIER_VERSION = "3.6.0-267231789";
   }
 });
 

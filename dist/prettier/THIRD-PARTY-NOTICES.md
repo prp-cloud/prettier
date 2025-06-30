@@ -2030,7 +2030,7 @@ Repository: <https://github.com/graphql/graphql-js.git>
 
 ----------------------------------------
 
-## hookified@v1.9.1
+## hookified@v1.10.0
 
 > Event Emitting and Middleware Hooks
 
@@ -4474,7 +4474,7 @@ License: MIT
 
 ----------------------------------------
 
-## tiny-levenshtein@v1.0.1
+## tiny-levenshtein@v1.1.0
 
 > A tiny implementation of the Levenshtein edit distance algorithm.
 
