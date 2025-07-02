@@ -3214,7 +3214,7 @@ Repository: <git@github.com:teambition/merge2.git>
 
 ----------------------------------------
 
-## meriyah@v6.1.3
+## meriyah@v6.1.4
 
 > A 100% compliant, self-hosted javascript parser with high focus on both performance and stability
 
