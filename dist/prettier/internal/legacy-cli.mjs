@@ -1970,9 +1970,7 @@ var shorthandToMilliseconds = (shorthand) => {
     if (Number.isNaN(Number(shorthand))) {
       const match = /^([\d.]+)\s*(ms|s|m|h|hr|d)$/i.exec(shorthand);
       if (!match) {
-        throw new Error(
-          `Unsupported time format: "${shorthand}". Use 'ms', 's', 'm', 'h', 'hr', or 'd'.`
-        );
+        throw new Error(`Unsupported time format: "${shorthand}". Use 'ms', 's', 'm', 'h', 'hr', or 'd'.`);
       }
       const [, value, unit] = match;
       const numericValue = Number.parseFloat(value);
@@ -2016,7 +2014,7 @@ var shorthandToMilliseconds = (shorthand) => {
   return milliseconds;
 };
 var shorthandToTime = (shorthand, fromDate) => {
-  fromDate ||= /* @__PURE__ */ new Date();
+  fromDate ??= /* @__PURE__ */ new Date();
   const milliseconds = shorthandToMilliseconds(shorthand);
   if (milliseconds === void 0) {
     return fromDate.getTime();
@@ -2055,7 +2053,10 @@ function djb2Hash(string_, min = 0, max = 10) {
 function wrapSync(function_, options) {
   const { ttl, keyPrefix, cache } = options;
   return function(...arguments_) {
-    const cacheKey = createWrapKey(function_, arguments_, keyPrefix);
+    let cacheKey = createWrapKey(function_, arguments_, keyPrefix);
+    if (options.createKey) {
+      cacheKey = options.createKey(function_, arguments_, options);
+    }
     let value = cache.get(cacheKey);
     if (value === void 0) {
       try {
@@ -2123,7 +2124,7 @@ var DoublyLinkedList = class {
       this.head.prev = node;
     }
     this.head = node;
-    this.tail ||= node;
+    this.tail ??= node;
   }
   // Get the oldest node (tail)
   getOldest() {
@@ -2911,6 +2912,40 @@ var FlatCache = class extends l {
         this._cache.set(items[key].key, items[key].value, { expire: items[key].expires });
       }
       this._changesSinceLastSave = true;
+    }
+  }
+  loadFileStream(pathToFile, onProgress, onEnd, onError) {
+    if (fs5.existsSync(pathToFile)) {
+      const stats = fs5.statSync(pathToFile);
+      const total = stats.size;
+      let loaded = 0;
+      let streamData = "";
+      const readStream = fs5.createReadStream(pathToFile, { encoding: "utf8" });
+      readStream.on("data", (chunk) => {
+        loaded += chunk.length;
+        streamData += chunk;
+        onProgress(loaded, total);
+      });
+      readStream.on("end", () => {
+        const items = this._parse(streamData);
+        for (const key of Object.keys(items)) {
+          this._cache.set(items[key].key, items[key].value, { expire: items[key].expires });
+        }
+        this._changesSinceLastSave = true;
+        onEnd();
+      });
+      readStream.on("error", (error) => {
+        this.emit("error", error);
+        if (onError) {
+          onError(error);
+        }
+      });
+    } else {
+      const error = new Error(`Cache file ${pathToFile} does not exist`);
+      this.emit("error", error);
+      if (onError) {
+        onError(error);
+      }
     }
   }
   /**
