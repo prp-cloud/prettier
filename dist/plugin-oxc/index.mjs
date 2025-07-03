@@ -5846,7 +5846,9 @@ function needsParens(path, options2) {
         "AwaitExpression",
         "BinaryExpression",
         "LogicalExpression",
-        "UnaryExpression"
+        "UnaryExpression",
+        "TSAsExpression",
+        "TSSatisfiesExpression"
       ].includes(parent.type);
       if ((key === "init" || key === "update") && parent.type === "ForStatement") {
         return false;

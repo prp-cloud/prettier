@@ -760,6 +760,8 @@ function needsParens(path, options) {
           "BinaryExpression",
           "LogicalExpression",
           "UnaryExpression",
+          "TSAsExpression",
+          "TSSatisfiesExpression",
         ].includes(parent.type)
       );
 
