@@ -1,5 +1,4 @@
 import {
-  align,
   breakParent,
   dedent,
   group,
@@ -18,6 +17,8 @@ import {
   isMemberExpression,
 } from "../utils/index.js";
 import isBlockComment from "../utils/is-block-comment.js";
+
+const align = (_, doc) => group(doc);
 
 /**
  * @import {Doc} from "../../document/builders.js"
@@ -213,7 +214,7 @@ function printTernaryOld(path, options, print) {
   const isParentTest =
     parent.type === node.type &&
     testNodePropertyNames.some((prop) => parent[prop] === node);
-  let forceNoIndent = parent.type === node.type && !isParentTest;
+  let forceNoIndent = /*parent.type === node.type && !isParentTest*/ false;
 
   // Find the outermost non-ConditionalExpression parent, and the outermost
   // ConditionalExpression parent. We'll use these to determine if we should
@@ -235,7 +236,7 @@ function printTernaryOld(path, options, print) {
   const firstNonConditionalParent = currentParent || parent;
   const lastConditionalParent = previousParent;
 
-  if (
+  /*if (
     isConditionalExpression &&
     (isJsxElement(node[testNodePropertyNames[0]]) ||
       isJsxElement(consequentNode) ||
@@ -274,8 +275,8 @@ function printTernaryOld(path, options, print) {
         ? print(alternateNodePropertyName)
         : wrap(print(alternateNodePropertyName)),
     );
-  } else {
-    /*
+  } else {*/
+  /*
     This does not mean to indent, but make the doc aligned with the first character after `? ` or `: `,
     so we use `2` instead of `options.tabWidth` here.
 
@@ -297,31 +298,31 @@ function printTernaryOld(path, options, print) {
      : alternate
     ```
     */
-    const printBranch = (nodePropertyName) =>
-      options.useTabs
-        ? indent(print(nodePropertyName))
-        : align(2, print(nodePropertyName));
-    // normal mode
-    const part = [
-      line,
-      "? ",
-      consequentNode.type === node.type ? ifBreak("", "(") : "",
-      printBranch(consequentNodePropertyName),
-      consequentNode.type === node.type ? ifBreak("", ")") : "",
-      line,
-      ": ",
-      printBranch(alternateNodePropertyName),
-    ];
-    parts.push(
-      parent.type !== node.type ||
-        parent[alternateNodePropertyName] === node ||
-        isParentTest
-        ? part
-        : options.useTabs
-          ? dedent(indent(part))
-          : align(Math.max(0, options.tabWidth - 2), part),
-    );
-  }
+  const printBranch = (nodePropertyName) =>
+    /*options.useTabs
+      ? indent(print(nodePropertyName))
+      :*/ align(2, print(nodePropertyName));
+  // normal mode
+  const part = [
+    line,
+    "? ",
+    //consequentNode.type === node.type ? ifBreak("", "(") : "",
+    printBranch(consequentNodePropertyName),
+    //consequentNode.type === node.type ? ifBreak("", ")") : "",
+    line,
+    ": ",
+    printBranch(alternateNodePropertyName),
+  ];
+  parts.push(
+    parent.type !== node.type ||
+      parent[alternateNodePropertyName] === node ||
+      isParentTest
+      ? part
+      : options.useTabs
+        ? dedent(indent(part))
+        : align(Math.max(0, options.tabWidth - 2), part),
+  );
+  //}
 
   // We want a whole chain of ConditionalExpressions to all
   // break if any of them break. That means we should only group around the
