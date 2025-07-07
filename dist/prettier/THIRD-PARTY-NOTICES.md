@@ -399,7 +399,7 @@ Author: Alex Bell <alex@bellandwhistle.net>
 
 ----------------------------------------
 
-## @typescript-eslint/types@v8.34.1
+## @typescript-eslint/types@v8.35.1
 
 > Types for the TypeScript-ESTree AST spec
 
@@ -431,7 +431,7 @@ Repository: <https://github.com/typescript-eslint/typescript-eslint.git>
 
 ----------------------------------------
 
-## @typescript-eslint/typescript-estree@v8.34.1
+## @typescript-eslint/typescript-estree@v8.35.1
 
 > A parser that converts TypeScript source code into an ESTree compatible form
 
@@ -974,7 +974,7 @@ Contributors:
 
 ----------------------------------------
 
-## ci-info@v4.2.0
+## ci-info@v4.3.0
 
 > Get details about the current Continuous Integration environment
 
@@ -4149,7 +4149,7 @@ Repository: <https://github.com/tildeio/simple-html-tokenizer.git>
 
 ----------------------------------------
 
-## smol-toml@v1.3.4
+## smol-toml@v1.4.1
 
 > A small, fast, and correct TOML parser/serializer
 

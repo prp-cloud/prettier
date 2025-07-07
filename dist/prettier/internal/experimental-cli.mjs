@@ -2184,7 +2184,7 @@ var init_constants_evaluate = __esm({
       "angular",
       "lwc"
     ];
-    PRETTIER_VERSION = "3.7.0-c21b5423b";
+    PRETTIER_VERSION = "3.7.0-9eb0af39f";
   }
 });
 
@@ -7991,7 +7991,7 @@ function parseString(str2, ptr = 0, endPtr = str2.length) {
   }
   return parsed + str2.slice(sliceStart, endPtr - 1);
 }
-function parseValue2(value, toml, ptr) {
+function parseValue2(value, toml, ptr, integersAsBigInt) {
   if (value === "true")
     return true;
   if (value === "false")
@@ -8003,31 +8003,36 @@ function parseValue2(value, toml, ptr) {
   if (value === "nan" || value === "+nan" || value === "-nan")
     return NaN;
   if (value === "-0")
-    return 0;
-  let isInt;
-  if ((isInt = INT_REGEX.test(value)) || FLOAT_REGEX.test(value)) {
+    return integersAsBigInt ? 0n : 0;
+  let isInt = INT_REGEX.test(value);
+  if (isInt || FLOAT_REGEX.test(value)) {
     if (LEADING_ZERO.test(value)) {
       throw new TomlError("leading zeroes are not allowed", {
         toml,
         ptr
       });
     }
-    let numeric = +value.replace(/_/g, "");
+    value = value.replace(/_/g, "");
+    let numeric = +value;
     if (isNaN(numeric)) {
       throw new TomlError("invalid number", {
         toml,
         ptr
       });
     }
-    if (isInt && !Number.isSafeInteger(numeric)) {
-      throw new TomlError("integer value cannot be represented losslessly", {
-        toml,
-        ptr
-      });
+    if (isInt) {
+      if ((isInt = !Number.isSafeInteger(numeric)) && !integersAsBigInt) {
+        throw new TomlError("integer value cannot be represented losslessly", {
+          toml,
+          ptr
+        });
+      }
+      if (isInt || integersAsBigInt === true)
+        numeric = BigInt(value);
     }
     return numeric;
   }
-  let date = new TomlDate(value);
+  const date = new TomlDate(value);
   if (!date.isValid()) {
     throw new TomlError("invalid value", {
       toml,
@@ -8078,7 +8083,7 @@ function sliceAndTrimEndOf(str2, startPtr, endPtr, allowNewLines) {
   }
   return [trimmed, commentIdx];
 }
-function extractValue(str2, ptr, end, depth = -1) {
+function extractValue(str2, ptr, end, depth, integersAsBigInt) {
   if (depth === 0) {
     throw new TomlError("document contains excessively nested structures. aborting.", {
       toml: str2,
@@ -8087,7 +8092,7 @@ function extractValue(str2, ptr, end, depth = -1) {
   }
   let c2 = str2[ptr];
   if (c2 === "[" || c2 === "{") {
-    let [value, endPtr2] = c2 === "[" ? parseArray(str2, ptr, depth) : parseInlineTable(str2, ptr, depth);
+    let [value, endPtr2] = c2 === "[" ? parseArray(str2, ptr, depth, integersAsBigInt) : parseInlineTable(str2, ptr, depth, integersAsBigInt);
     let newPtr = end ? skipUntil(str2, endPtr2, ",", end) : endPtr2;
     if (endPtr2 - newPtr && end === "}") {
       let nextNewLine = indexOfNewline(str2, endPtr2, newPtr);
@@ -8129,7 +8134,7 @@ function extractValue(str2, ptr, end, depth = -1) {
     endPtr += +(str2[endPtr] === ",");
   }
   return [
-    parseValue2(slice[0], str2, ptr),
+    parseValue2(slice[0], str2, ptr, integersAsBigInt),
     endPtr
   ];
 }
@@ -8210,28 +8215,20 @@ function parseKey(str2, ptr, end = "=") {
   } while (dot + 1 && dot < endPtr);
   return [parsed, skipVoid(str2, endPtr + 1, true, true)];
 }
-function parseInlineTable(str2, ptr, depth = -1) {
+function parseInlineTable(str2, ptr, depth, integersAsBigInt) {
   let res = {};
   let seen = /* @__PURE__ */ new Set();
   let c2;
   let comma = 0;
   ptr++;
   while ((c2 = str2[ptr++]) !== "}" && c2) {
+    let err = { toml: str2, ptr: ptr - 1 };
     if (c2 === "\n") {
-      throw new TomlError("newlines are not allowed in inline tables", {
-        toml: str2,
-        ptr: ptr - 1
-      });
+      throw new TomlError("newlines are not allowed in inline tables", err);
     } else if (c2 === "#") {
-      throw new TomlError("inline tables cannot contain comments", {
-        toml: str2,
-        ptr: ptr - 1
-      });
+      throw new TomlError("inline tables cannot contain comments", err);
     } else if (c2 === ",") {
-      throw new TomlError("expected key-value, found comma", {
-        toml: str2,
-        ptr: ptr - 1
-      });
+      throw new TomlError("expected key-value, found comma", err);
     } else if (c2 !== " " && c2 !== "	") {
       let k;
       let t = res;
@@ -8257,7 +8254,7 @@ function parseInlineTable(str2, ptr, depth = -1) {
           ptr
         });
       }
-      let [value, valueEndPtr] = extractValue(str2, keyEndPtr, "}", depth - 1);
+      let [value, valueEndPtr] = extractValue(str2, keyEndPtr, "}", depth - 1, integersAsBigInt);
       seen.add(value);
       t[k] = value;
       ptr = valueEndPtr;
@@ -8278,7 +8275,7 @@ function parseInlineTable(str2, ptr, depth = -1) {
   }
   return [res, ptr];
 }
-function parseArray(str2, ptr, depth = -1) {
+function parseArray(str2, ptr, depth, integersAsBigInt) {
   let res = [];
   let c2;
   ptr++;
@@ -8291,7 +8288,7 @@ function parseArray(str2, ptr, depth = -1) {
     } else if (c2 === "#")
       ptr = skipComment(str2, ptr);
     else if (c2 !== " " && c2 !== "	" && c2 !== "\n" && c2 !== "\r") {
-      let e = extractValue(str2, ptr - 1, "]", depth - 1);
+      let e = extractValue(str2, ptr - 1, "]", depth - 1, integersAsBigInt);
       res.push(e[0]);
       ptr = e[1];
     }
@@ -8375,8 +8372,7 @@ function peekTable(key2, table, meta, type2) {
   }
   return [k, t, state.c];
 }
-function parse7(toml, opts) {
-  let maxDepth = opts?.maxDepth ?? 1e3;
+function parse7(toml, { maxDepth = 1e3, integersAsBigInt } = {}) {
   let res = {};
   let meta = {};
   let tbl = res;
@@ -8425,7 +8421,7 @@ function parse7(toml, opts) {
           ptr
         });
       }
-      let v = extractValue(toml, k[1], void 0, maxDepth);
+      let v = extractValue(toml, k[1], void 0, maxDepth, integersAsBigInt);
       p[1][p[0]] = v[0];
       ptr = v[1];
     }
@@ -8470,7 +8466,7 @@ function isArrayOfTables(obj) {
 function formatString(s) {
   return JSON.stringify(s).replace(/\x7f/g, "\\u007f");
 }
-function stringifyValue(val, type2, depth) {
+function stringifyValue(val, type2, depth, numberAsFloat) {
   if (depth === 0) {
     throw new Error("Could not stringify the object: maximum object depth exceeded");
   }
@@ -8481,6 +8477,8 @@ function stringifyValue(val, type2, depth) {
       return "inf";
     if (val === -Infinity)
       return "-inf";
+    if (numberAsFloat && Number.isInteger(val))
+      return val.toFixed(1);
     return val.toString();
   }
   if (type2 === "bigint" || type2 === "boolean") {
@@ -8496,13 +8494,13 @@ function stringifyValue(val, type2, depth) {
     return val.toISOString();
   }
   if (type2 === "object") {
-    return stringifyInlineTable(val, depth);
+    return stringifyInlineTable(val, depth, numberAsFloat);
   }
   if (type2 === "array") {
-    return stringifyArray(val, depth);
+    return stringifyArray(val, depth, numberAsFloat);
   }
 }
-function stringifyInlineTable(obj, depth) {
+function stringifyInlineTable(obj, depth, numberAsFloat) {
   let keys = Object.keys(obj);
   if (keys.length === 0)
     return "{}";
@@ -8513,11 +8511,11 @@ function stringifyInlineTable(obj, depth) {
       res += ", ";
     res += BARE_KEY.test(k) ? k : formatString(k);
     res += " = ";
-    res += stringifyValue(obj[k], extendedTypeOf(obj[k]), depth - 1);
+    res += stringifyValue(obj[k], extendedTypeOf(obj[k]), depth - 1, numberAsFloat);
   }
   return res + " }";
 }
-function stringifyArray(array, depth) {
+function stringifyArray(array, depth, numberAsFloat) {
   if (array.length === 0)
     return "[]";
   let res = "[ ";
@@ -8527,11 +8525,11 @@ function stringifyArray(array, depth) {
     if (array[i] === null || array[i] === void 0) {
       throw new TypeError("arrays cannot contain null or undefined values");
     }
-    res += stringifyValue(array[i], extendedTypeOf(array[i]), depth - 1);
+    res += stringifyValue(array[i], extendedTypeOf(array[i]), depth - 1, numberAsFloat);
   }
   return res + " ]";
 }
-function stringifyArrayTable(array, key2, depth) {
+function stringifyArrayTable(array, key2, depth, numberAsFloat) {
   if (depth === 0) {
     throw new Error("Could not stringify the object: maximum object depth exceeded");
   }
@@ -8539,12 +8537,12 @@ function stringifyArrayTable(array, key2, depth) {
   for (let i = 0; i < array.length; i++) {
     res += `[[${key2}]]
 `;
-    res += stringifyTable(array[i], key2, depth);
+    res += stringifyTable(array[i], key2, depth, numberAsFloat);
     res += "\n\n";
   }
   return res;
 }
-function stringifyTable(obj, prefix, depth) {
+function stringifyTable(obj, prefix, depth, numberAsFloat) {
   if (depth === 0) {
     throw new Error("Could not stringify the object: maximum object depth exceeded");
   }
@@ -8560,17 +8558,17 @@ function stringifyTable(obj, prefix, depth) {
       }
       let key2 = BARE_KEY.test(k) ? k : formatString(k);
       if (type2 === "array" && isArrayOfTables(obj[k])) {
-        tables += stringifyArrayTable(obj[k], prefix ? `${prefix}.${key2}` : key2, depth - 1);
+        tables += stringifyArrayTable(obj[k], prefix ? `${prefix}.${key2}` : key2, depth - 1, numberAsFloat);
       } else if (type2 === "object") {
         let tblKey = prefix ? `${prefix}.${key2}` : key2;
         tables += `[${tblKey}]
 `;
-        tables += stringifyTable(obj[k], tblKey, depth - 1);
+        tables += stringifyTable(obj[k], tblKey, depth - 1, numberAsFloat);
         tables += "\n\n";
       } else {
         preamble += key2;
         preamble += " = ";
-        preamble += stringifyValue(obj[k], type2, depth);
+        preamble += stringifyValue(obj[k], type2, depth, numberAsFloat);
         preamble += "\n";
       }
     }
@@ -8578,12 +8576,11 @@ function stringifyTable(obj, prefix, depth) {
   return `${preamble}
 ${tables}`.trim();
 }
-function stringify4(obj, opts) {
+function stringify4(obj, { maxDepth = 1e3, numbersAsFloat = false } = {}) {
   if (extendedTypeOf(obj) !== "object") {
     throw new TypeError("stringify can only be called with an object");
   }
-  let maxDepth = opts?.maxDepth ?? 1e3;
-  return stringifyTable(obj, "", maxDepth);
+  return stringifyTable(obj, "", maxDepth, numbersAsFloat);
 }
 var BARE_KEY;
 var init_stringify = __esm({

@@ -454,6 +454,11 @@ var require_vendors = __commonJS({
         env: "CF_PAGES"
       },
       {
+        name: "Cloudflare Workers",
+        constant: "CLOUDFLARE_WORKERS",
+        env: "WORKERS_CI"
+      },
+      {
         name: "Codefresh",
         constant: "CODEFRESH",
         env: "CF_BUILD_ID",
@@ -747,7 +752,7 @@ var require_ci_info = __commonJS({
     exports.isCI = !!(env3.CI !== "false" && // Bypass all checks if CI env is explicitly set to 'false'
     (env3.BUILD_ID || // Jenkins, Cloudbees
     env3.BUILD_NUMBER || // Jenkins, TeamCity
-    env3.CI || // Travis CI, CircleCI, Cirrus CI, Gitlab CI, Appveyor, CodeShip, dsari, Cloudflare Pages
+    env3.CI || // Travis CI, CircleCI, Cirrus CI, Gitlab CI, Appveyor, CodeShip, dsari, Cloudflare Pages/Workers
     env3.CI_APP_ID || // Appflow
     env3.CI_BUILD_ID || // Appflow
     env3.CI_BUILD_NUMBER || // Appflow

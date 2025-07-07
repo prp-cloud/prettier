@@ -11773,7 +11773,7 @@ function parseString(str, ptr = 0, endPtr = str.length) {
   }
   return parsed + str.slice(sliceStart, endPtr - 1);
 }
-function parseValue(value, toml, ptr) {
+function parseValue(value, toml, ptr, integersAsBigInt) {
   if (value === "true")
     return true;
   if (value === "false")
@@ -11785,31 +11785,36 @@ function parseValue(value, toml, ptr) {
   if (value === "nan" || value === "+nan" || value === "-nan")
     return NaN;
   if (value === "-0")
-    return 0;
-  let isInt2;
-  if ((isInt2 = INT_REGEX.test(value)) || FLOAT_REGEX.test(value)) {
+    return integersAsBigInt ? 0n : 0;
+  let isInt2 = INT_REGEX.test(value);
+  if (isInt2 || FLOAT_REGEX.test(value)) {
     if (LEADING_ZERO.test(value)) {
       throw new TomlError("leading zeroes are not allowed", {
         toml,
         ptr
       });
     }
-    let numeric = +value.replace(/_/g, "");
+    value = value.replace(/_/g, "");
+    let numeric = +value;
     if (isNaN(numeric)) {
       throw new TomlError("invalid number", {
         toml,
         ptr
       });
     }
-    if (isInt2 && !Number.isSafeInteger(numeric)) {
-      throw new TomlError("integer value cannot be represented losslessly", {
-        toml,
-        ptr
-      });
+    if (isInt2) {
+      if ((isInt2 = !Number.isSafeInteger(numeric)) && !integersAsBigInt) {
+        throw new TomlError("integer value cannot be represented losslessly", {
+          toml,
+          ptr
+        });
+      }
+      if (isInt2 || integersAsBigInt === true)
+        numeric = BigInt(value);
     }
     return numeric;
   }
-  let date = new TomlDate(value);
+  const date = new TomlDate(value);
   if (!date.isValid()) {
     throw new TomlError("invalid value", {
       toml,
@@ -11839,7 +11844,7 @@ function sliceAndTrimEndOf(str, startPtr, endPtr, allowNewLines) {
   }
   return [trimmed, commentIdx];
 }
-function extractValue(str, ptr, end, depth = -1) {
+function extractValue(str, ptr, end, depth, integersAsBigInt) {
   if (depth === 0) {
     throw new TomlError("document contains excessively nested structures. aborting.", {
       toml: str,
@@ -11848,7 +11853,7 @@ function extractValue(str, ptr, end, depth = -1) {
   }
   let c2 = str[ptr];
   if (c2 === "[" || c2 === "{") {
-    let [value, endPtr2] = c2 === "[" ? parseArray(str, ptr, depth) : parseInlineTable(str, ptr, depth);
+    let [value, endPtr2] = c2 === "[" ? parseArray(str, ptr, depth, integersAsBigInt) : parseInlineTable(str, ptr, depth, integersAsBigInt);
     let newPtr = end ? skipUntil(str, endPtr2, ",", end) : endPtr2;
     if (endPtr2 - newPtr && end === "}") {
       let nextNewLine = indexOfNewline(str, endPtr2, newPtr);
@@ -11890,7 +11895,7 @@ function extractValue(str, ptr, end, depth = -1) {
     endPtr += +(str[endPtr] === ",");
   }
   return [
-    parseValue(slice[0], str, ptr),
+    parseValue(slice[0], str, ptr, integersAsBigInt),
     endPtr
   ];
 }
@@ -11964,28 +11969,20 @@ function parseKey(str, ptr, end = "=") {
   } while (dot + 1 && dot < endPtr);
   return [parsed, skipVoid(str, endPtr + 1, true, true)];
 }
-function parseInlineTable(str, ptr, depth = -1) {
+function parseInlineTable(str, ptr, depth, integersAsBigInt) {
   let res = {};
   let seen = /* @__PURE__ */ new Set();
   let c2;
   let comma = 0;
   ptr++;
   while ((c2 = str[ptr++]) !== "}" && c2) {
+    let err = { toml: str, ptr: ptr - 1 };
     if (c2 === "\n") {
-      throw new TomlError("newlines are not allowed in inline tables", {
-        toml: str,
-        ptr: ptr - 1
-      });
+      throw new TomlError("newlines are not allowed in inline tables", err);
     } else if (c2 === "#") {
-      throw new TomlError("inline tables cannot contain comments", {
-        toml: str,
-        ptr: ptr - 1
-      });
+      throw new TomlError("inline tables cannot contain comments", err);
     } else if (c2 === ",") {
-      throw new TomlError("expected key-value, found comma", {
-        toml: str,
-        ptr: ptr - 1
-      });
+      throw new TomlError("expected key-value, found comma", err);
     } else if (c2 !== " " && c2 !== "	") {
       let k;
       let t = res;
@@ -12011,7 +12008,7 @@ function parseInlineTable(str, ptr, depth = -1) {
           ptr
         });
       }
-      let [value, valueEndPtr] = extractValue(str, keyEndPtr, "}", depth - 1);
+      let [value, valueEndPtr] = extractValue(str, keyEndPtr, "}", depth - 1, integersAsBigInt);
       seen.add(value);
       t[k] = value;
       ptr = valueEndPtr;
@@ -12032,7 +12029,7 @@ function parseInlineTable(str, ptr, depth = -1) {
   }
   return [res, ptr];
 }
-function parseArray(str, ptr, depth = -1) {
+function parseArray(str, ptr, depth, integersAsBigInt) {
   let res = [];
   let c2;
   ptr++;
@@ -12045,7 +12042,7 @@ function parseArray(str, ptr, depth = -1) {
     } else if (c2 === "#")
       ptr = skipComment(str, ptr);
     else if (c2 !== " " && c2 !== "	" && c2 !== "\n" && c2 !== "\r") {
-      let e = extractValue(str, ptr - 1, "]", depth - 1);
+      let e = extractValue(str, ptr - 1, "]", depth - 1, integersAsBigInt);
       res.push(e[0]);
       ptr = e[1];
     }
@@ -12119,8 +12116,7 @@ function peekTable(key2, table, meta, type) {
   }
   return [k, t, state.c];
 }
-function parse4(toml, opts) {
-  let maxDepth = opts?.maxDepth ?? 1e3;
+function parse4(toml, { maxDepth = 1e3, integersAsBigInt } = {}) {
   let res = {};
   let meta = {};
   let tbl = res;
@@ -12169,7 +12165,7 @@ function parse4(toml, opts) {
           ptr
         });
       }
-      let v = extractValue(toml, k[1], void 0, maxDepth);
+      let v = extractValue(toml, k[1], void 0, maxDepth, integersAsBigInt);
       p[1][p[0]] = v[0];
       ptr = v[1];
     }
@@ -18760,7 +18756,7 @@ var get_file_info_default = getFileInfo;
 import * as doc from "./doc.mjs";
 
 // src/main/version.evaluate.js
-var version_evaluate_default = "3.7.0-c21b5423b";
+var version_evaluate_default = "3.7.0-9eb0af39f";
 
 // src/utils/public.js
 var public_exports = {};
