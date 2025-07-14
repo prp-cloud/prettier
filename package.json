@@ -285,7 +285,7 @@
     "n-readlines": "1.0.1",
     "nano-spawn": "1.0.2",
     "npm-run-all2": "8.0.4",
-    "node-style-text": "0.0.8",
+    "node-style-text": "1.0.0",
     "outdent": "0.8.0",
     "oxc-parser": "0.77.0",
     "parse-json": "8.3.0",
