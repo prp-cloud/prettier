@@ -18756,7 +18756,7 @@ var get_file_info_default = getFileInfo;
 import * as doc from "./doc.mjs";
 
 // src/main/version.evaluate.js
-var version_evaluate_default = "3.7.0-9eb0af39f";
+var version_evaluate_default = "3.7.0-350c8e358";
 
 // src/utils/public.js
 var public_exports = {};
