@@ -789,7 +789,7 @@ Contributors:
 
 ----------------------------------------
 
-## cacheable@v1.10.1
+## cacheable@v1.10.2
 
 > High Performance Layer 1 / Layer 2 Caching with Keyv Storage
 
