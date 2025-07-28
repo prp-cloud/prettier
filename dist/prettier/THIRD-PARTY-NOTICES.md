@@ -789,7 +789,7 @@ Contributors:
 
 ----------------------------------------
 
-## cacheable@v1.10.2
+## cacheable@v1.10.3
 
 > High Performance Layer 1 / Layer 2 Caching with Keyv Storage
 
@@ -1739,7 +1739,7 @@ Author: Sindre Sorhus <sindresorhus@gmail.com> (https://sindresorhus.com)
 
 ----------------------------------------
 
-## flat-cache@v6.1.11
+## flat-cache@v6.1.12
 
 > A simple key/value storage using files to persist the data
 
@@ -2030,7 +2030,7 @@ Repository: <https://github.com/graphql/graphql-js.git>
 
 ----------------------------------------
 
-## hookified@v1.10.0
+## hookified@v1.11.0
 
 > Event Emitting and Middleware Hooks
 

@@ -613,7 +613,7 @@ __export(version_evaluate_exports, {
 var version_evaluate_default;
 var init_version_evaluate = __esm({
   "src/main/version.evaluate.js"() {
-    version_evaluate_default = "3.7.0-7af1e01a7";
+    version_evaluate_default = "3.7.0-80c7f8dcd";
   }
 });
 
