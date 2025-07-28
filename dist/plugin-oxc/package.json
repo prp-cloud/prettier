@@ -31,7 +31,7 @@
     "package.json"
   ],
   "dependencies": {
-    "oxc-parser": "0.77.2"
+    "oxc-parser": "0.78.0"
   },
   "publishConfig": {
     "access": "public",

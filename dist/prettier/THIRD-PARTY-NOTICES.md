@@ -399,7 +399,7 @@ Author: Alex Bell <alex@bellandwhistle.net>
 
 ----------------------------------------
 
-## @typescript-eslint/types@v8.35.1
+## @typescript-eslint/types@v8.38.0
 
 > Types for the TypeScript-ESTree AST spec
 
@@ -431,7 +431,7 @@ Repository: <https://github.com/typescript-eslint/typescript-eslint.git>
 
 ----------------------------------------
 
-## @typescript-eslint/typescript-estree@v8.35.1
+## @typescript-eslint/typescript-estree@v8.38.0
 
 > A parser that converts TypeScript source code into an ESTree compatible form
 
@@ -1540,7 +1540,7 @@ Author: Matteo Collina <hello@matteocollina.com>
 
 ----------------------------------------
 
-## file-entry-cache@v10.1.1
+## file-entry-cache@v10.1.3
 
 > A lightweight cache for file metadata, ideal for processes that work on a specific set of files and only need to reprocess files that have changed since the last run
 
@@ -1831,7 +1831,7 @@ Contributors:
 
 ----------------------------------------
 
-## flow-parser@v0.274.2
+## flow-parser@v0.277.1
 
 > JavaScript parser written in OCaml. Produces ESTree AST
 
