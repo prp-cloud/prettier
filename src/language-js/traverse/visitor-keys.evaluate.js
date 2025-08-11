@@ -66,28 +66,6 @@ const excludeNodeTypes = new Set([
   "DecimalLiteral",
   // Babel, Won't exist since we use `createImportExpressions` when parsing with babel
   "Import",
-
-  // Flow, not supported
-  "MatchArrayPattern",
-  "MatchAsPattern",
-  "MatchBindingPattern",
-  "MatchExpression",
-  "MatchExpressionCase",
-  "MatchIdentifierPattern",
-  "MatchLiteralPattern",
-  "MatchMemberPattern",
-  "MatchObjectPattern",
-  "MatchObjectPatternProperty",
-  "MatchOrPattern",
-  "MatchRestPattern",
-  "MatchStatement",
-  "MatchStatementCase",
-  "MatchUnaryPattern",
-  "MatchWildcardPattern",
-
-  // Babel v7.28.0
-  // https://github.com/prettier/prettier/pull/17696
-  "VoidPattern",
 ]);
 
 const visitorKeys = Object.fromEntries(

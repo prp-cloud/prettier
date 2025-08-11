@@ -633,6 +633,7 @@ function needsParens(path, options) {
     case "UnionTypeAnnotation":
       return (
         parent.type === "TypeOperator" ||
+        parent.type === "KeyofTypeAnnotation" ||
         parent.type === "ArrayTypeAnnotation" ||
         parent.type === "NullableTypeAnnotation" ||
         parent.type === "IntersectionTypeAnnotation" ||
@@ -905,6 +906,7 @@ function needsParens(path, options) {
         case "LogicalExpression":
         case "AwaitExpression":
         case "TSTypeAssertion":
+        case "MatchExpressionCase":
           return true;
 
         case "ConditionalExpression":
@@ -1013,11 +1015,15 @@ function needsParens(path, options) {
           parent.type !== "ThrowStatement" &&
           parent.type !== "TypeCastExpression" &&
           parent.type !== "VariableDeclarator" &&
-          parent.type !== "YieldExpression")
+          parent.type !== "YieldExpression" &&
+          parent.type !== "MatchExpressionCase")
       );
 
     case "TSInstantiationExpression":
       return key === "object" && isMemberExpression(parent);
+
+    case "MatchOrPattern":
+      return parent.type === "MatchAsPattern";
   }
 
   return false;
