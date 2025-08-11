@@ -11527,6 +11527,12 @@ ${codeblock}`, options8);
 };
 
 // node_modules/smol-toml/dist/util.js
+function isEscaped(str, ptr) {
+  let i = 0;
+  while (str[ptr - ++i] === "\\")
+    ;
+  return --i && i % 2;
+}
 function indexOfNewline(str, start = 0, end = str.length) {
   let idx = str.indexOf("\n", start);
   if (str[idx - 1] === "\r")
@@ -11581,7 +11587,7 @@ function getStringEnd(str, seek) {
   seek += target.length - 1;
   do
     seek = str.indexOf(target, ++seek);
-  while (seek > -1 && first !== "'" && str[seek - 1] === "\\" && (str[seek - 2] !== "\\" || str[seek - 3] === "\\"));
+  while (seek > -1 && first !== "'" && isEscaped(str, seek));
   if (seek > -1) {
     seek += target.length;
     if (target.length > 1) {
@@ -17600,7 +17606,7 @@ var languages_evaluate_default = [
       "less-css"
     ],
     "codemirrorMode": "css",
-    "codemirrorMimeType": "text/css",
+    "codemirrorMimeType": "text/x-less",
     "parsers": [
       "less"
     ],
@@ -17711,7 +17717,7 @@ var languages_evaluate_default2 = [
       ".graphqls"
     ],
     "tmScope": "source.graphql",
-    "aceMode": "text",
+    "aceMode": "graphqlschema",
     "parsers": [
       "graphql"
     ],
@@ -17854,7 +17860,9 @@ var languages_evaluate_default4 = [
       ".vue"
     ],
     "tmScope": "source.vue",
-    "aceMode": "html",
+    "aceMode": "vue",
+    "codemirrorMode": "vue",
+    "codemirrorMimeType": "text/x-vue",
     "parsers": [
       "vue"
     ],
@@ -18072,9 +18080,9 @@ var languages_evaluate_default5 = [
       ".tsx"
     ],
     "tmScope": "source.tsx",
-    "aceMode": "javascript",
+    "aceMode": "tsx",
     "codemirrorMode": "jsx",
-    "codemirrorMimeType": "text/jsx",
+    "codemirrorMimeType": "text/typescript-jsx",
     "group": "TypeScript",
     "parsers": [
       "typescript",
@@ -18330,7 +18338,7 @@ var languages_evaluate_default6 = [
       ".json5"
     ],
     "tmScope": "source.js",
-    "aceMode": "javascript",
+    "aceMode": "json5",
     "codemirrorMode": "javascript",
     "codemirrorMimeType": "application/json",
     "parsers": [
@@ -18756,7 +18764,7 @@ var get_file_info_default = getFileInfo;
 import * as doc from "./doc.mjs";
 
 // src/main/version.evaluate.js
-var version_evaluate_default = "3.7.0-ae497a055";
+var version_evaluate_default = "3.7.0-1b5d8965b";
 
 // src/utils/public.js
 var public_exports = {};

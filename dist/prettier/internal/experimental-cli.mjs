@@ -2127,7 +2127,7 @@ var init_constants_evaluate = __esm({
       "angular",
       "lwc"
     ];
-    PRETTIER_VERSION = "3.7.0-ae497a055";
+    PRETTIER_VERSION = "3.7.0-1b5d8965b";
   }
 });
 
@@ -7691,6 +7691,12 @@ ${codeblock}`, options);
 });
 
 // node_modules/smol-toml/dist/util.js
+function isEscaped(str2, ptr) {
+  let i = 0;
+  while (str2[ptr - ++i] === "\\")
+    ;
+  return --i && i % 2;
+}
 function indexOfNewline(str2, start = 0, end = str2.length) {
   let idx = str2.indexOf("\n", start);
   if (str2[idx - 1] === "\r")
@@ -7745,7 +7751,7 @@ function getStringEnd(str2, seek) {
   seek += target.length - 1;
   do
     seek = str2.indexOf(target, ++seek);
-  while (seek > -1 && first !== "'" && str2[seek - 1] === "\\" && (str2[seek - 2] !== "\\" || str2[seek - 3] === "\\"));
+  while (seek > -1 && first !== "'" && isEscaped(str2, seek));
   if (seek > -1) {
     seek += target.length;
     if (target.length > 1) {

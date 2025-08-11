@@ -133,7 +133,7 @@ Author: The Babel Team (https://babel.dev/team)
 
 ----------------------------------------
 
-## @glimmer/syntax@v0.94.9
+## @glimmer/syntax@v0.95.0
 
 License: MIT  
 Repository: <git+https://github.com/glimmerjs/glimmer-vm.git>  
@@ -216,7 +216,7 @@ Repository: <git+https://github.com/glimmerjs/glimmer-vm.git>
 
 ----------------------------------------
 
-## @handlebars/parser@v2.0.0
+## @handlebars/parser@v2.2.1
 
 > The parser for the Handlebars language
 
@@ -399,7 +399,7 @@ Author: Alex Bell <alex@bellandwhistle.net>
 
 ----------------------------------------
 
-## @typescript-eslint/types@v8.38.0
+## @typescript-eslint/types@v8.39.0
 
 > Types for the TypeScript-ESTree AST spec
 
@@ -431,7 +431,7 @@ Repository: <https://github.com/typescript-eslint/typescript-eslint.git>
 
 ----------------------------------------
 
-## @typescript-eslint/typescript-estree@v8.38.0
+## @typescript-eslint/typescript-estree@v8.39.0
 
 > A parser that converts TypeScript source code into an ESTree compatible form
 
@@ -1831,7 +1831,7 @@ Contributors:
 
 ----------------------------------------
 
-## flow-parser@v0.277.1
+## flow-parser@v0.278.0
 
 > JavaScript parser written in OCaml. Produces ESTree AST
 
@@ -4149,7 +4149,7 @@ Repository: <https://github.com/tildeio/simple-html-tokenizer.git>
 
 ----------------------------------------
 
-## smol-toml@v1.4.1
+## smol-toml@v1.4.2
 
 > A small, fast, and correct TOML parser/serializer
 
@@ -4865,7 +4865,7 @@ Author: JoshuaKGoldberg <npm@joshuakgoldberg.com>
 
 ----------------------------------------
 
-## typescript@v5.8.3
+## typescript@v5.9.2
 
 > TypeScript is a language for application scale JavaScript development
 

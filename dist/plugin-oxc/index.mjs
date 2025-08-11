@@ -942,6 +942,7 @@ var visitor_keys_evaluate_default = {
     "callee"
   ],
   "PipelinePrimaryTopicReference": [],
+  "VoidPattern": [],
   "TSParameterProperty": [
     "parameter",
     "decorators"
@@ -1335,6 +1336,63 @@ var visitor_keys_evaluate_default = {
   "KeyofTypeAnnotation": [
     "argument"
   ],
+  "MatchArrayPattern": [
+    "elements",
+    "rest"
+  ],
+  "MatchAsPattern": [
+    "pattern",
+    "target"
+  ],
+  "MatchBindingPattern": [
+    "id"
+  ],
+  "MatchExpression": [
+    "argument",
+    "cases"
+  ],
+  "MatchExpressionCase": [
+    "pattern",
+    "body",
+    "guard"
+  ],
+  "MatchIdentifierPattern": [
+    "id"
+  ],
+  "MatchLiteralPattern": [
+    "literal"
+  ],
+  "MatchMemberPattern": [
+    "base",
+    "property"
+  ],
+  "MatchObjectPattern": [
+    "properties",
+    "rest"
+  ],
+  "MatchObjectPatternProperty": [
+    "key",
+    "pattern"
+  ],
+  "MatchOrPattern": [
+    "patterns"
+  ],
+  "MatchRestPattern": [
+    "argument"
+  ],
+  "MatchStatement": [
+    "argument",
+    "cases"
+  ],
+  "MatchStatementCase": [
+    "pattern",
+    "body",
+    "guard"
+  ],
+  "MatchUnaryPattern": [
+    "argument"
+  ],
+  "MatchWildcardPattern": [],
   "ObjectTypeMappedTypeProperty": [
     "keyTparam",
     "propType",
@@ -3653,6 +3711,7 @@ function handleOwnLineComment(context) {
     handleClassComments,
     handleForComments,
     handleUnionTypeComments,
+    handleMatchOrPatternComments,
     handleOnlyComments,
     handleModuleSpecifiersComments,
     handleAssignmentPatternComments,
@@ -4114,6 +4173,29 @@ function handleUnionTypeComments({
   }
   return false;
 }
+function handleMatchOrPatternComments({
+  comment,
+  precedingNode,
+  enclosingNode,
+  followingNode
+}) {
+  if (enclosingNode && enclosingNode.type === "MatchOrPattern") {
+    if (isPrettierIgnoreComment(comment)) {
+      followingNode.prettierIgnore = true;
+      comment.unignore = true;
+    }
+    if (precedingNode) {
+      addTrailingComment(precedingNode, comment);
+      return true;
+    }
+    return false;
+  }
+  if (followingNode && followingNode.type === "MatchOrPattern" && isPrettierIgnoreComment(comment)) {
+    followingNode.types[0].prettierIgnore = true;
+    comment.unignore = true;
+  }
+  return false;
+}
 function handlePropertyComments({ comment, enclosingNode }) {
   if (isObjectProperty(enclosingNode)) {
     addLeadingComment(enclosingNode, comment);
@@ -4335,7 +4417,7 @@ function getCommentChildNodes(node, options2) {
 }
 function willPrintOwnComments(path) {
   const { node, parent } = path;
-  return (isJsxElement(node) || parent && (parent.type === "JSXSpreadAttribute" || parent.type === "JSXSpreadChild" || isUnionType(parent) || (parent.type === "ClassDeclaration" || parent.type === "ClassExpression") && parent.superClass === node)) && (!hasNodeIgnoreComment(node) || isUnionType(parent));
+  return (isJsxElement(node) || parent && (parent.type === "JSXSpreadAttribute" || parent.type === "JSXSpreadChild" || isUnionType(parent) || parent.type === "MatchOrPattern" || (parent.type === "ClassDeclaration" || parent.type === "ClassExpression") && parent.superClass === node)) && (!hasNodeIgnoreComment(node) || isUnionType(parent));
 }
 function isGap(text, { parser }) {
   if (parser === "flow" || parser === "hermes" || parser === "babel-flow") {
@@ -5805,7 +5887,7 @@ function needsParens(path, options2) {
       return parent.type === "NullableTypeAnnotation";
     case "IntersectionTypeAnnotation":
     case "UnionTypeAnnotation":
-      return parent.type === "TypeOperator" || parent.type === "ArrayTypeAnnotation" || parent.type === "NullableTypeAnnotation" || parent.type === "IntersectionTypeAnnotation" || parent.type === "UnionTypeAnnotation" || key === "objectType" && (parent.type === "IndexedAccessType" || parent.type === "OptionalIndexedAccessType");
+      return parent.type === "TypeOperator" || parent.type === "KeyofTypeAnnotation" || parent.type === "ArrayTypeAnnotation" || parent.type === "NullableTypeAnnotation" || parent.type === "IntersectionTypeAnnotation" || parent.type === "UnionTypeAnnotation" || key === "objectType" && (parent.type === "IndexedAccessType" || parent.type === "OptionalIndexedAccessType");
     case "InferTypeAnnotation":
     case "NullableTypeAnnotation":
       return parent.type === "ArrayTypeAnnotation" || key === "objectType" && (parent.type === "IndexedAccessType" || parent.type === "OptionalIndexedAccessType");
@@ -5961,6 +6043,7 @@ function needsParens(path, options2) {
         case "LogicalExpression":
         case "AwaitExpression":
         case "TSTypeAssertion":
+        case "MatchExpressionCase":
           return true;
         case "ConditionalExpression":
           return key === "test";
@@ -6020,9 +6103,11 @@ function needsParens(path, options2) {
       return true;
     case "JSXFragment":
     case "JSXElement":
-      return key === "callee" || key === "left" && parent.type === "BinaryExpression" && parent.operator === "<" || !isArrayExpression(parent) && parent.type !== "ArrowFunctionExpression" && parent.type !== "AssignmentExpression" && parent.type !== "AssignmentPattern" && parent.type !== "BinaryExpression" && parent.type !== "NewExpression" && parent.type !== "ConditionalExpression" && parent.type !== "ExpressionStatement" && parent.type !== "JsExpressionRoot" && parent.type !== "JSXAttribute" && parent.type !== "JSXElement" && parent.type !== "JSXExpressionContainer" && parent.type !== "JSXFragment" && parent.type !== "LogicalExpression" && !isCallExpression(parent) && !isObjectProperty(parent) && parent.type !== "ReturnStatement" && parent.type !== "ThrowStatement" && parent.type !== "TypeCastExpression" && parent.type !== "VariableDeclarator" && parent.type !== "YieldExpression";
+      return key === "callee" || key === "left" && parent.type === "BinaryExpression" && parent.operator === "<" || !isArrayExpression(parent) && parent.type !== "ArrowFunctionExpression" && parent.type !== "AssignmentExpression" && parent.type !== "AssignmentPattern" && parent.type !== "BinaryExpression" && parent.type !== "NewExpression" && parent.type !== "ConditionalExpression" && parent.type !== "ExpressionStatement" && parent.type !== "JsExpressionRoot" && parent.type !== "JSXAttribute" && parent.type !== "JSXElement" && parent.type !== "JSXExpressionContainer" && parent.type !== "JSXFragment" && parent.type !== "LogicalExpression" && !isCallExpression(parent) && !isObjectProperty(parent) && parent.type !== "ReturnStatement" && parent.type !== "ThrowStatement" && parent.type !== "TypeCastExpression" && parent.type !== "VariableDeclarator" && parent.type !== "YieldExpression" && parent.type !== "MatchExpressionCase";
     case "TSInstantiationExpression":
       return key === "object" && isMemberExpression(parent);
+    case "MatchOrPattern":
+      return parent.type === "MatchAsPattern";
   }
   return false;
 }
@@ -6720,7 +6805,8 @@ var NO_WRAP_PARENTS = /* @__PURE__ */ new Set([
   "CallExpression",
   "OptionalCallExpression",
   "ConditionalExpression",
-  "JsExpressionRoot"
+  "JsExpressionRoot",
+  "MatchExpressionCase"
 ]);
 function maybeWrapJsxElementInParens(path, elem, options2) {
   const { parent } = path;
@@ -8857,9 +8943,21 @@ function isConciselyPrintedArray(node, options2) {
   );
 }
 function isLineAfterElementEmpty({ node }, { originalText: text }) {
-  const skipComment = (idx) => skip_inline_comment_default(text, skip_trailing_comment_default(text, idx));
-  const skipToComma = (currentIdx) => text[currentIdx] === "," ? currentIdx : skipToComma(skipComment(currentIdx + 1));
-  return is_next_line_empty_default(text, skipToComma(locEnd(node)));
+  let currentIdx = locEnd(node);
+  if (currentIdx === locStart(node)) {
+    return false;
+  }
+  const { length } = text;
+  while (currentIdx < length) {
+    if (text[currentIdx] === ",") {
+      break;
+    }
+    currentIdx = skip_inline_comment_default(
+      text,
+      skip_trailing_comment_default(text, currentIdx + 1)
+    );
+  }
+  return is_next_line_empty_default(text, currentIdx);
 }
 function printArrayElements(path, options2, print3, elementsProperty, inexact) {
   const parts = [];
@@ -9380,7 +9478,7 @@ function printBlock(path, options2, print3) {
     parts.push(indent([hardline, bodyDoc]), hardline);
   } else {
     const parentParent = path.grandparent;
-    if (!(parent.type === "ArrowFunctionExpression" || parent.type === "FunctionExpression" || parent.type === "FunctionDeclaration" || parent.type === "ComponentDeclaration" || parent.type === "HookDeclaration" || parent.type === "ObjectMethod" || parent.type === "ClassMethod" || parent.type === "ClassPrivateMethod" || parent.type === "ForStatement" || parent.type === "WhileStatement" || parent.type === "DoWhileStatement" || parent.type === "DoExpression" || parent.type === "ModuleExpression" || parent.type === "CatchClause" && !parentParent.finalizer || parent.type === "TSModuleDeclaration" || node.type === "StaticBlock")) {
+    if (!(parent.type === "ArrowFunctionExpression" || parent.type === "FunctionExpression" || parent.type === "FunctionDeclaration" || parent.type === "ComponentDeclaration" || parent.type === "HookDeclaration" || parent.type === "ObjectMethod" || parent.type === "ClassMethod" || parent.type === "ClassPrivateMethod" || parent.type === "ForStatement" || parent.type === "WhileStatement" || parent.type === "DoWhileStatement" || parent.type === "DoExpression" || parent.type === "ModuleExpression" || parent.type === "CatchClause" && !parentParent.finalizer || parent.type === "TSModuleDeclaration" || parent.type === "MatchStatementCase" || node.type === "StaticBlock")) {
       parts.push(hardline);
     }
   }
@@ -11153,6 +11251,8 @@ function printEstree(path, options2, print3, args) {
       return "?";
     case "ModuleExpression":
       return ["module ", print3("body")];
+    case "VoidPattern":
+      return "void";
     case "InterpreterDirective":
     // Printed as comment
     default:
@@ -11504,6 +11604,159 @@ function printTypeScriptMappedType(path, options2, print3) {
   );
 }
 
+// src/language-js/print/match.js
+function printMatch(path, options2, print3) {
+  const { node } = path;
+  return [
+    group(["match (", indent([softline, print3("argument")]), softline, ")"]),
+    " {",
+    node.cases.length > 0 ? indent([
+      hardline,
+      join(
+        hardline,
+        path.map(
+          ({ node: node2, isLast }) => [
+            print3(),
+            !isLast && isNextLineEmpty2(node2, options2) ? hardline : ""
+          ],
+          "cases"
+        )
+      )
+    ]) : "",
+    hardline,
+    "}"
+  ];
+}
+function printMatchCase(path, options2, print3) {
+  const { node } = path;
+  const comment = hasComment(node, CommentCheckFlags.Dangling) ? [" ", printDanglingComments(path, options2)] : [];
+  const body = node.type === "MatchStatementCase" ? [" ", print3("body")] : indent([line, print3("body"), ","]);
+  return [
+    print3("pattern"),
+    node.guard ? group([indent([line, "if (", print3("guard"), ")"])]) : "",
+    group([" =>", comment, body])
+  ];
+}
+function printMatchPattern(path, options2, print3) {
+  const { node } = path;
+  switch (node.type) {
+    case "MatchOrPattern":
+      return printMatchOrPattern(path, options2, print3);
+    case "MatchAsPattern":
+      return [print3("pattern"), " as ", print3("target")];
+    case "MatchWildcardPattern":
+      return ["_"];
+    case "MatchLiteralPattern":
+      return print3("literal");
+    case "MatchUnaryPattern":
+      return [node.operator, print3("argument")];
+    case "MatchIdentifierPattern":
+      return print3("id");
+    case "MatchMemberPattern": {
+      const property = node.property.type === "Identifier" ? [".", print3("property")] : ["[", indent([softline, print3("property")]), softline, "]"];
+      return group([print3("base"), property]);
+    }
+    case "MatchBindingPattern":
+      return [node.kind, " ", print3("id")];
+    case "MatchObjectPattern": {
+      const properties = path.map(print3, "properties");
+      if (node.rest) {
+        properties.push(print3("rest"));
+      }
+      return group([
+        "{",
+        indent([softline, join([",", line], properties)]),
+        node.rest ? "" : ifBreak(","),
+        softline,
+        "}"
+      ]);
+    }
+    case "MatchArrayPattern": {
+      const elements = path.map(print3, "elements");
+      if (node.rest) {
+        elements.push(print3("rest"));
+      }
+      return group([
+        "[",
+        indent([softline, join([",", line], elements)]),
+        node.rest ? "" : ifBreak(","),
+        softline,
+        "]"
+      ]);
+    }
+    case "MatchObjectPatternProperty":
+      if (node.shorthand) {
+        return print3("pattern");
+      }
+      return group([print3("key"), ":", indent([line, print3("pattern")])]);
+    case "MatchRestPattern": {
+      const parts = ["..."];
+      if (node.argument) {
+        parts.push(print3("argument"));
+      }
+      return parts;
+    }
+  }
+}
+var isSimpleMatchPattern = create_type_check_function_default([
+  "MatchWildcardPattern",
+  "MatchLiteralPattern",
+  "MatchUnaryPattern",
+  "MatchIdentifierPattern"
+]);
+function shouldHugMatchOrPattern(node) {
+  const { patterns } = node;
+  if (patterns.some((node2) => hasComment(node2))) {
+    return false;
+  }
+  const objectPattern = patterns.find(
+    (node2) => node2.type === "MatchObjectPattern"
+  );
+  if (!objectPattern) {
+    return false;
+  }
+  return patterns.every(
+    (node2) => node2 === objectPattern || isSimpleMatchPattern(node2)
+  );
+}
+function shouldHugMatchPattern(node) {
+  if (isSimpleMatchPattern(node) || node.type === "MatchObjectPattern") {
+    return true;
+  }
+  if (node.type === "MatchOrPattern") {
+    return shouldHugMatchOrPattern(node);
+  }
+  return false;
+}
+function printMatchOrPattern(path, options2, print3) {
+  const { node } = path;
+  const { parent } = path;
+  const shouldIndent = parent.type !== "MatchStatementCase" && parent.type !== "MatchExpressionCase" && parent.type !== "MatchArrayPattern" && parent.type !== "MatchObjectPatternProperty" && !hasLeadingOwnLineComment(options2.originalText, node);
+  const shouldHug = shouldHugMatchPattern(node);
+  const printed = path.map((patternPath) => {
+    let printedPattern = print3();
+    if (!shouldHug) {
+      printedPattern = align(2, printedPattern);
+    }
+    return printComments(patternPath, printedPattern, options2);
+  }, "patterns");
+  if (shouldHug) {
+    return join(" | ", printed);
+  }
+  const code = [ifBreak(["| "]), join([line, "| "], printed)];
+  if (needs_parens_default(path, options2)) {
+    return group([indent([ifBreak([softline]), code]), softline]);
+  }
+  if (parent.type === "MatchArrayPattern" && parent.elements.length > 1) {
+    return group([
+      indent([ifBreak(["(", softline]), code]),
+      softline,
+      ifBreak(")")
+    ]);
+  }
+  return group(shouldIndent ? indent(code) : code);
+}
+
 // src/language-js/print/flow.js
 function printFlow(path, options2, print3) {
   const { node } = path;
@@ -11738,6 +11991,25 @@ function printFlow(path, options2, print3) {
     case "AsConstExpression":
     case "SatisfiesExpression":
       return printBinaryCastExpression(path, options2, print3);
+    case "MatchExpression":
+    case "MatchStatement":
+      return printMatch(path, options2, print3);
+    case "MatchExpressionCase":
+    case "MatchStatementCase":
+      return printMatchCase(path, options2, print3);
+    case "MatchOrPattern":
+    case "MatchAsPattern":
+    case "MatchWildcardPattern":
+    case "MatchLiteralPattern":
+    case "MatchUnaryPattern":
+    case "MatchIdentifierPattern":
+    case "MatchMemberPattern":
+    case "MatchBindingPattern":
+    case "MatchObjectPattern":
+    case "MatchObjectPatternProperty":
+    case "MatchRestPattern":
+    case "MatchArrayPattern":
+      return printMatchPattern(path, options2, print3);
   }
 }
 
@@ -12395,9 +12667,9 @@ var languages_evaluate_default = [
       ".tsx"
     ],
     "tmScope": "source.tsx",
-    "aceMode": "javascript",
+    "aceMode": "tsx",
     "codemirrorMode": "jsx",
-    "codemirrorMimeType": "text/jsx",
+    "codemirrorMimeType": "text/typescript-jsx",
     "group": "TypeScript",
     "parsers": [
       "oxc-ts"
