@@ -638,7 +638,7 @@ Author: Sindre Sorhus <sindresorhus@gmail.com> (https://sindresorhus.com)
 
 ----------------------------------------
 
-## ansi-truncate@v1.2.0
+## ansi-truncate@v1.3.0
 
 > A tiny function for truncating a string that may contain ANSI escape sequences.
 
@@ -1455,7 +1455,7 @@ Author: James Halliday <mail@substack.net> (http://substack.net)
 
 ----------------------------------------
 
-## fast-string-truncated-width@v1.2.1
+## fast-string-truncated-width@v2.0.1
 
 > A fast function for calculating where a string should be truncated, given an optional width limit and an ellipsis string.
 
@@ -1485,7 +1485,7 @@ License: MIT
 
 ----------------------------------------
 
-## fast-string-width@v1.1.0
+## fast-string-width@v2.0.0
 
 > A fast function for calculating the visual width of a string once printed to the terminal.
 
@@ -3012,7 +3012,7 @@ License: MIT
 
 ----------------------------------------
 
-## keyv@v5.4.0
+## keyv@v5.5.0
 
 > Simple key-value storage with support for multiple backends
 
@@ -4355,7 +4355,7 @@ Author: Sindre Sorhus <sindresorhus@gmail.com> (https://sindresorhus.com)
 
 ----------------------------------------
 
-## tiny-bin@v1.11.1
+## tiny-bin@v1.11.2
 
 > A library for building tiny and beautiful command line apps.
 
@@ -4623,7 +4623,7 @@ License: MIT
 
 ----------------------------------------
 
-## tiny-truncate@v1.0.3
+## tiny-truncate@v1.0.4
 
 > A tiny function for truncating a string which may containg ANSI escapes, with automatic terminal width detection.
 
