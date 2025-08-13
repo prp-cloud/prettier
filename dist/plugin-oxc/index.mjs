@@ -694,7 +694,9 @@ var visitor_keys_evaluate_default = {
   "DeclareOpaqueType": [
     "id",
     "typeParameters",
-    "supertype"
+    "supertype",
+    "lowerBound",
+    "upperBound"
   ],
   "DeclareVariable": [
     "id"
@@ -784,7 +786,9 @@ var visitor_keys_evaluate_default = {
     "id",
     "typeParameters",
     "supertype",
-    "impltype"
+    "impltype",
+    "lowerBound",
+    "upperBound"
   ],
   "QualifiedTypeIdentifier": [
     "qualification",
@@ -8477,6 +8481,20 @@ function printOpaqueType(path, options2, print3) {
   ];
   if (node.supertype) {
     parts.push(": ", print3("supertype"));
+  }
+  if (node.lowerBound || node.upperBound) {
+    const lowerAndUpperBoundParts = [];
+    if (node.lowerBound) {
+      lowerAndUpperBoundParts.push(
+        indent([line, "super ", print3("lowerBound")])
+      );
+    }
+    if (node.upperBound) {
+      lowerAndUpperBoundParts.push(
+        indent([line, "extends ", print3("upperBound")])
+      );
+    }
+    parts.push(group(lowerAndUpperBoundParts));
   }
   if (node.impltype) {
     parts.push(" = ", print3("impltype"));
