@@ -23,6 +23,7 @@
       "default": "./dist/prettier/index.mjs"
     },
     "./*": "./dist/prettier/*",
+    "./package.json": "./package.json",
     "./doc": {
       "types": "./dist/prettier/doc.d.ts",
       "require": "./dist/prettier/doc.js",
