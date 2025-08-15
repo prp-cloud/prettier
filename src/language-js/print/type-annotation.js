@@ -141,40 +141,68 @@ function printTypeAlias(path, options, print) {
 // `TSIntersectionType` and `IntersectionTypeAnnotation`
 function printIntersectionType(path, options, print) {
   let wasIndented = false;
-  return group(
-    path.map(({ isFirst, previous, node, index }) => {
-      const doc = print();
-      if (isFirst) {
-        return doc;
-      }
+  const printed = path.map(({ isFirst, previous, node, index }) => {
+    const doc = print();
+    if (isFirst) {
+      return doc;
+    }
 
-      const currentIsObjectType = isObjectType(node);
-      const previousIsObjectType = isObjectType(previous);
+    const currentIsObjectType = false; // isObjectType(node);
+    const previousIsObjectType = false; // isObjectType(previous);
 
-      // If both are objects, don't indent
-      if (previousIsObjectType && currentIsObjectType) {
-        return [" & ", wasIndented ? indent(doc) : doc];
-      }
+    // If both are objects, don't indent
+    if (previousIsObjectType && currentIsObjectType) {
+      return [" & ", wasIndented ? indent(doc) : doc];
+    }
 
       if (
-        // If no object is involved, go to the next line if it breaks
+    // If no object is involved, go to the next line if it breaks
         (!previousIsObjectType && !currentIsObjectType) ||
         hasLeadingOwnLineComment(options.originalText, node)
       ) {
-        if (options.experimentalOperatorPosition === "start") {
+      if (options.experimentalOperatorPosition === "start") {
           return indent([line, "& ", doc]);
         }
-        return indent([" &", line, doc]);
-      }
+        return /*indent(*/ [" &", line, doc] /*)*/;
+    }
 
-      // If you go from object to non-object or vis-versa, then inline it
-      if (index > 1) {
-        wasIndented = true;
-      }
+    // If you go from object to non-object or vis-versa, then inline it
+    if (index > 1) {
+      wasIndented = true;
+    }
 
-      return [" & ", index > 1 ? indent(doc) : doc];
-    }, "types"),
-  );
+    return [" & ", index > 1 ? indent(doc) : doc];
+  }, "types");
+  const { node, parent } = path;
+  const shouldIndent =
+    parent.type !== "TypeParameterInstantiation" &&
+    (parent.type !== "TSConditionalType" || !options.experimentalTernaries) &&
+    (parent.type !== "ConditionalTypeAnnotation" ||
+      !options.experimentalTernaries) &&
+    parent.type !== "TSTypeParameterInstantiation" &&
+    parent.type !== "GenericTypeAnnotation" &&
+    parent.type !== "TSTypeReference" &&
+    parent.type !== "TSTypeAssertion" &&
+    parent.type !== "TupleTypeAnnotation" &&
+    parent.type !== "TSTupleType" &&
+    !(
+      parent.type === "FunctionTypeParam" &&
+      !parent.name &&
+      path.grandparent.this !== parent
+    ) &&
+    !(
+      (parent.type === "TypeAlias" ||
+        parent.type === "VariableDeclarator" ||
+        parent.type === "TSTypeAliasDeclaration") &&
+      hasLeadingOwnLineComment(options.originalText, node)
+    );
+  const shouldAddStartLine =
+    shouldIndent && !hasLeadingOwnLineComment(options.originalText, node);
+  const code = [ifBreak([shouldAddStartLine ? line : ""]), printed];
+  if (pathNeedsParens(path, options)) {
+    return group([indent(code), softline]);
+  }
+  return group(shouldIndent ? indent(code) : code);
 }
 
 // `TSUnionType` and `UnionTypeAnnotation`
@@ -216,7 +244,7 @@ function printUnionType(path, options, print) {
   //   a: string
   // } | null | void
   // should be inlined and not be printed in the multi-line variant
-  const shouldHug = shouldHugType(node);
+  const shouldHug = false; /*shouldHugType(node)*/
 
   // We want to align the children but without its comment, so it looks like
   // | child1
@@ -238,8 +266,8 @@ function printUnionType(path, options, print) {
     shouldIndent && !hasLeadingOwnLineComment(options.originalText, node);
 
   const code = [
-    ifBreak([shouldAddStartLine ? line : "", "| "]),
-    join([line, "| "], printed),
+    ifBreak([shouldAddStartLine ? line : ""]),
+    join([" |", line], printed),
   ];
 
   if (pathNeedsParens(path, options)) {
