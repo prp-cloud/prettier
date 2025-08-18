@@ -33,7 +33,6 @@ const publishConfig = {
 async function buildPrettierPackageJson({ packageConfig, file }) {
   const { distDirectory, files } = packageConfig;
   const packageJson = await readJson(path.join(PROJECT_ROOT, file.input));
-
   const overrides = {
     main: "./index.cjs",
     exports: {
@@ -106,9 +105,12 @@ async function buildPrettierPackageJson({ packageConfig, file }) {
             Object.entries(val).map(([key, val]) => [key, adjustPaths(val)]),
           );
 
+  const rootPackageJson = Object.assign(packageJson, adjustPaths(overrides));
+  // Needed for Prettier integration in Svelte VSCode plugin
+  rootPackageJson.exports["./package.json"] = "./package.json";
   await Promise.all(
     Object.entries({
-      [PROJECT_ROOT]: Object.assign(packageJson, adjustPaths(overrides)),
+      [PROJECT_ROOT]: rootPackageJson,
       [distDirectory]: { type: "commonjs", version: packageJson.version },
     }).map(([dir, content]) =>
       writeJson(path.join(dir, file.output.file), content),

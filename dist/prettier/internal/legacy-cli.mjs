@@ -1810,8 +1810,8 @@ import fs6 from "fs";
 import path11 from "path";
 
 // node_modules/flat-cache/dist/index.js
-import path10 from "path";
 import fs5 from "fs";
+import path10 from "path";
 
 // node_modules/hookified/dist/node/index.js
 var i = class {
@@ -1977,69 +1977,6 @@ var l = class extends i {
 // node_modules/cacheable/dist/index.js
 import * as crypto from "crypto";
 var structuredClone = globalThis.structuredClone ?? ((value) => JSON.parse(JSON.stringify(value)));
-var shorthandToMilliseconds = (shorthand) => {
-  let milliseconds;
-  if (shorthand === void 0) {
-    return void 0;
-  }
-  if (typeof shorthand === "number") {
-    milliseconds = shorthand;
-  } else if (typeof shorthand === "string") {
-    shorthand = shorthand.trim();
-    if (Number.isNaN(Number(shorthand))) {
-      const match = /^([\d.]+)\s*(ms|s|m|h|hr|d)$/i.exec(shorthand);
-      if (!match) {
-        throw new Error(`Unsupported time format: "${shorthand}". Use 'ms', 's', 'm', 'h', 'hr', or 'd'.`);
-      }
-      const [, value, unit] = match;
-      const numericValue = Number.parseFloat(value);
-      const unitLower = unit.toLowerCase();
-      switch (unitLower) {
-        case "ms": {
-          milliseconds = numericValue;
-          break;
-        }
-        case "s": {
-          milliseconds = numericValue * 1e3;
-          break;
-        }
-        case "m": {
-          milliseconds = numericValue * 1e3 * 60;
-          break;
-        }
-        case "h": {
-          milliseconds = numericValue * 1e3 * 60 * 60;
-          break;
-        }
-        case "hr": {
-          milliseconds = numericValue * 1e3 * 60 * 60;
-          break;
-        }
-        case "d": {
-          milliseconds = numericValue * 1e3 * 60 * 60 * 24;
-          break;
-        }
-        /* c8 ignore next 3 */
-        default: {
-          milliseconds = Number(shorthand);
-        }
-      }
-    } else {
-      milliseconds = Number(shorthand);
-    }
-  } else {
-    throw new TypeError("Time must be a string or a number.");
-  }
-  return milliseconds;
-};
-var shorthandToTime = (shorthand, fromDate) => {
-  fromDate ??= /* @__PURE__ */ new Date();
-  const milliseconds = shorthandToMilliseconds(shorthand);
-  if (milliseconds === void 0) {
-    return fromDate.getTime();
-  }
-  return fromDate.getTime() + milliseconds;
-};
 function hash(object2, algorithm = "sha256") {
   const objectString = JSON.stringify(object2);
   if (!crypto.getHashes().includes(algorithm)) {
@@ -2069,36 +2006,7 @@ function djb2Hash(string_, min = 0, max = 10) {
   const range = max - min + 1;
   return min + Math.abs(hash2) % range;
 }
-function wrapSync(function_, options) {
-  const { ttl, keyPrefix, cache } = options;
-  return function(...arguments_) {
-    let cacheKey = createWrapKey(function_, arguments_, keyPrefix);
-    if (options.createKey) {
-      cacheKey = options.createKey(function_, arguments_, options);
-    }
-    let value = cache.get(cacheKey);
-    if (value === void 0) {
-      try {
-        value = function_(...arguments_);
-        cache.set(cacheKey, value, ttl);
-      } catch (error) {
-        cache.emit("error", error);
-        if (options.cacheErrors) {
-          cache.set(cacheKey, error, ttl);
-        }
-      }
-    }
-    return value;
-  };
-}
-function createWrapKey(function_, arguments_, keyPrefix) {
-  if (!keyPrefix) {
-    return `${function_.name}::${hash(arguments_)}`;
-  }
-  return `${keyPrefix}::${function_.name}::${hash(arguments_)}`;
-}
 var ListNode = class {
-  // eslint-disable-next-line @typescript-eslint/parameter-properties
   value;
   prev = void 0;
   next = void 0;
@@ -2168,6 +2076,99 @@ var DoublyLinkedList = class {
     return this.nodesMap.size;
   }
 };
+var shorthandToMilliseconds = (shorthand) => {
+  let milliseconds;
+  if (shorthand === void 0) {
+    return void 0;
+  }
+  if (typeof shorthand === "number") {
+    milliseconds = shorthand;
+  } else if (typeof shorthand === "string") {
+    shorthand = shorthand.trim();
+    if (Number.isNaN(Number(shorthand))) {
+      const match = /^([\d.]+)\s*(ms|s|m|h|hr|d)$/i.exec(shorthand);
+      if (!match) {
+        throw new Error(
+          `Unsupported time format: "${shorthand}". Use 'ms', 's', 'm', 'h', 'hr', or 'd'.`
+        );
+      }
+      const [, value, unit] = match;
+      const numericValue = Number.parseFloat(value);
+      const unitLower = unit.toLowerCase();
+      switch (unitLower) {
+        case "ms": {
+          milliseconds = numericValue;
+          break;
+        }
+        case "s": {
+          milliseconds = numericValue * 1e3;
+          break;
+        }
+        case "m": {
+          milliseconds = numericValue * 1e3 * 60;
+          break;
+        }
+        case "h": {
+          milliseconds = numericValue * 1e3 * 60 * 60;
+          break;
+        }
+        case "hr": {
+          milliseconds = numericValue * 1e3 * 60 * 60;
+          break;
+        }
+        case "d": {
+          milliseconds = numericValue * 1e3 * 60 * 60 * 24;
+          break;
+        }
+        /* c8 ignore next 3 */
+        default: {
+          milliseconds = Number(shorthand);
+        }
+      }
+    } else {
+      milliseconds = Number(shorthand);
+    }
+  } else {
+    throw new TypeError("Time must be a string or a number.");
+  }
+  return milliseconds;
+};
+var shorthandToTime = (shorthand, fromDate) => {
+  fromDate ??= /* @__PURE__ */ new Date();
+  const milliseconds = shorthandToMilliseconds(shorthand);
+  if (milliseconds === void 0) {
+    return fromDate.getTime();
+  }
+  return fromDate.getTime() + milliseconds;
+};
+function wrapSync(function_, options) {
+  const { ttl, keyPrefix, cache } = options;
+  return (...arguments_) => {
+    let cacheKey = createWrapKey(function_, arguments_, keyPrefix);
+    if (options.createKey) {
+      cacheKey = options.createKey(function_, arguments_, options);
+    }
+    let value = cache.get(cacheKey);
+    if (value === void 0) {
+      try {
+        value = function_(...arguments_);
+        cache.set(cacheKey, value, ttl);
+      } catch (error) {
+        cache.emit("error", error);
+        if (options.cacheErrors) {
+          cache.set(cacheKey, error, ttl);
+        }
+      }
+    }
+    return value;
+  };
+}
+function createWrapKey(function_, arguments_, keyPrefix) {
+  if (!keyPrefix) {
+    return `${function_.name}::${hash(arguments_)}`;
+  }
+  return `${keyPrefix}::${function_.name}::${hash(arguments_)}`;
+}
 var defaultStoreHashSize = 16;
 var maximumMapSize = 16777216;
 var CacheableMemory = class extends l {
@@ -2175,7 +2176,10 @@ var CacheableMemory = class extends l {
   _storeHashSize = defaultStoreHashSize;
   _storeHashAlgorithm = "djb2Hash";
   // Default is djb2Hash
-  _store = Array.from({ length: this._storeHashSize }, () => /* @__PURE__ */ new Map());
+  _store = Array.from(
+    { length: this._storeHashSize },
+    () => /* @__PURE__ */ new Map()
+  );
   _ttl;
   // Turned off by default
   _useClone = true;
@@ -2203,7 +2207,12 @@ var CacheableMemory = class extends l {
     }
     if (options?.lruSize) {
       if (options.lruSize > maximumMapSize) {
-        this.emit("error", new Error(`LRU size cannot be larger than ${maximumMapSize} due to Map limitations.`));
+        this.emit(
+          "error",
+          new Error(
+            `LRU size cannot be larger than ${maximumMapSize} due to Map limitations.`
+          )
+        );
       } else {
         this._lruSize = options.lruSize;
       }
@@ -2214,7 +2223,10 @@ var CacheableMemory = class extends l {
     if (options?.storeHashAlgorithm) {
       this._storeHashAlgorithm = options.storeHashAlgorithm;
     }
-    this._store = Array.from({ length: this._storeHashSize }, () => /* @__PURE__ */ new Map());
+    this._store = Array.from(
+      { length: this._storeHashSize },
+      () => /* @__PURE__ */ new Map()
+    );
     this.startIntervalCheck();
   }
   /**
@@ -2258,7 +2270,12 @@ var CacheableMemory = class extends l {
    */
   set lruSize(value) {
     if (value > maximumMapSize) {
-      this.emit("error", new Error(`LRU size cannot be larger than ${maximumMapSize} due to Map limitations.`));
+      this.emit(
+        "error",
+        new Error(
+          `LRU size cannot be larger than ${maximumMapSize} due to Map limitations.`
+        )
+      );
       return;
     }
     this._lruSize = value;
@@ -2309,7 +2326,10 @@ var CacheableMemory = class extends l {
       return;
     }
     this._storeHashSize = value;
-    this._store = Array.from({ length: this._storeHashSize }, () => /* @__PURE__ */ new Map());
+    this._store = Array.from(
+      { length: this._storeHashSize },
+      () => /* @__PURE__ */ new Map()
+    );
   }
   /**
    * Gets the store hash algorithm
@@ -2330,7 +2350,7 @@ var CacheableMemory = class extends l {
    * @returns {IterableIterator<string>} - The keys
    */
   get keys() {
-    const keys2 = new Array();
+    const keys2 = [];
     for (const store of this._store) {
       for (const key of store.keys()) {
         const item = store.get(key);
@@ -2348,7 +2368,7 @@ var CacheableMemory = class extends l {
    * @returns {IterableIterator<CacheableStoreItem>} - The items
    */
   get items() {
-    const items = new Array();
+    const items = [];
     for (const store of this._store) {
       for (const item of store.values()) {
         if (this.hasExpired(item)) {
@@ -2394,7 +2414,7 @@ var CacheableMemory = class extends l {
    * @returns {T[]} - The values of the keys
    */
   getMany(keys2) {
-    const result = new Array();
+    const result = [];
     for (const key of keys2) {
       result.push(this.get(key));
     }
@@ -2424,7 +2444,7 @@ var CacheableMemory = class extends l {
    * @returns {CacheableStoreItem[]} - The raw values of the keys
    */
   getManyRaw(keys2) {
-    const result = new Array();
+    const result = [];
     for (const key of keys2) {
       result.push(this.getRaw(key));
     }
@@ -2475,10 +2495,7 @@ var CacheableMemory = class extends l {
       }
     }
     const item = { key, value, expires };
-    store.set(
-      key,
-      item
-    );
+    store.set(key, item);
   }
   /**
    * Sets the values of the keys
@@ -2505,7 +2522,7 @@ var CacheableMemory = class extends l {
    * @returns {boolean[]} - If true, the key exists. If false, the key does not exist.
    */
   hasMany(keys2) {
-    const result = new Array();
+    const result = [];
     for (const key of keys2) {
       const item = this.get(key);
       result.push(Boolean(item));
@@ -2531,7 +2548,7 @@ var CacheableMemory = class extends l {
    * @returns {T[]} - The values of the keys
    */
   takeMany(keys2) {
-    const result = new Array();
+    const result = [];
     for (const key of keys2) {
       result.push(this.take(key));
     }
@@ -2561,7 +2578,10 @@ var CacheableMemory = class extends l {
    * @returns {void}
    */
   clear() {
-    this._store = Array.from({ length: this._storeHashSize }, () => /* @__PURE__ */ new Map());
+    this._store = Array.from(
+      { length: this._storeHashSize },
+      () => /* @__PURE__ */ new Map()
+    );
     this._lru = new DoublyLinkedList();
   }
   /**
@@ -2908,7 +2928,9 @@ var FlatCache = class extends l {
    */
   load(cacheId, cacheDir) {
     try {
-      const filePath = path10.resolve(`${cacheDir ?? this._cacheDir}/${cacheId ?? this._cacheId}`);
+      const filePath = path10.resolve(
+        `${cacheDir ?? this._cacheDir}/${cacheId ?? this._cacheId}`
+      );
       this.loadFile(filePath);
       this.emit(
         "load"
@@ -2928,7 +2950,9 @@ var FlatCache = class extends l {
       const data = fs5.readFileSync(pathToFile, "utf8");
       const items = this._parse(data);
       for (const key of Object.keys(items)) {
-        this._cache.set(items[key].key, items[key].value, { expire: items[key].expires });
+        this._cache.set(items[key].key, items[key].value, {
+          expire: items[key].expires
+        });
       }
       this._changesSinceLastSave = true;
     }
@@ -2948,7 +2972,9 @@ var FlatCache = class extends l {
       readStream.on("end", () => {
         const items = this._parse(streamData);
         for (const key of Object.keys(items)) {
-          this._cache.set(items[key].key, items[key].value, { expire: items[key].expires });
+          this._cache.set(items[key].key, items[key].value, {
+            expire: items[key].expires
+          });
         }
         this._changesSinceLastSave = true;
         onEnd();
@@ -3018,6 +3044,7 @@ var FlatCache = class extends l {
    * @param key {string} the key to set
    * @param value {object} the value of the key. Could be any object that can be serialized with JSON.stringify
    */
+  // biome-ignore lint/suspicious/noExplicitAny: type format
   setKey(key, value, ttl) {
     this.set(key, value, ttl);
   }
@@ -3028,6 +3055,7 @@ var FlatCache = class extends l {
    * @param value {object} the value of the key. Could be any object that can be serialized with JSON.stringify
    * @param [ttl] {number} the time to live in milliseconds
    */
+  // biome-ignore lint/suspicious/noExplicitAny: type format
   set(key, value, ttl) {
     this._cache.set(key, value, ttl);
     this._changesSinceLastSave = true;
@@ -3051,11 +3079,11 @@ var FlatCache = class extends l {
     this.emit("delete", key);
   }
   /**
-  * (Legacy) Return the value of the provided key. This method will be deprecated in the future
-  * @method getKey<T>
-  * @param key {String} the name of the key to retrieve
-  * @returns {*} at T the value from the key
-  */
+   * (Legacy) Return the value of the provided key. This method will be deprecated in the future
+   * @method getKey<T>
+   * @param key {String} the name of the key to retrieve
+   * @returns {*} at T the value from the key
+   */
   getKey(key) {
     return this.get(key);
   }
@@ -3676,10 +3704,9 @@ import readline from "readline";
 // node_modules/ansi-regex/index.js
 function ansiRegex({ onlyFirst = false } = {}) {
   const ST = "(?:\\u0007|\\u001B\\u005C|\\u009C)";
-  const pattern = [
-    `[\\u001B\\u009B][[\\]()#;?]*(?:(?:(?:(?:;[-a-zA-Z\\d\\/#&.:=?%@~_]+)*|[a-zA-Z\\d]+(?:;[-a-zA-Z\\d\\/#&.:=?%@~_]*)*)?${ST})`,
-    "(?:(?:\\d{1,4}(?:;\\d{0,4})*)?[\\dA-PR-TZcf-nq-uy=><~]))"
-  ].join("|");
+  const osc = `(?:\\u001B\\][\\s\\S]*?${ST})`;
+  const csi = "[\\u001B\\u009B][[\\]()#;?]*(?:\\d{1,4}(?:[;:]\\d{0,4})*)?[\\dA-PR-TZcf-nq-uy=><~]";
+  const pattern = `${osc}|${csi}`;
   return new RegExp(pattern, onlyFirst ? void 0 : "g");
 }
 

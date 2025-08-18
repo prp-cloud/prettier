@@ -619,7 +619,7 @@ License: MIT
 
 ----------------------------------------
 
-## ansi-regex@v6.1.0
+## ansi-regex@v6.2.0
 
 > Regular expression for matching ANSI escape codes
 
@@ -789,7 +789,7 @@ Contributors:
 
 ----------------------------------------
 
-## cacheable@v1.10.3
+## cacheable@v1.10.4
 
 > High Performance Layer 1 / Layer 2 Caching with Keyv Storage
 
@@ -1739,7 +1739,7 @@ Author: Sindre Sorhus <sindresorhus@gmail.com> (https://sindresorhus.com)
 
 ----------------------------------------
 
-## flat-cache@v6.1.12
+## flat-cache@v6.1.13
 
 > A simple key/value storage using files to persist the data
 

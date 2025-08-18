@@ -1,6 +1,6 @@
 {
   "name": "prettier",
-  "version": "3.7.0-37b2a40fa",
+  "version": "3.7.0-c60166f25",
   "description": "Prettier is an opinionated code formatter",
   "bin": "./dist/prettier/bin/prettier.cjs",
   "repository": "prettier/prettier",
@@ -23,7 +23,6 @@
       "default": "./dist/prettier/index.mjs"
     },
     "./*": "./dist/prettier/*",
-    "./package.json": "./package.json",
     "./doc": {
       "types": "./dist/prettier/doc.d.ts",
       "require": "./dist/prettier/doc.js",
@@ -135,7 +134,8 @@
     "./esm/parser-html.mjs": "./dist/prettier/plugins/html.mjs",
     "./parser-yaml": "./dist/prettier/plugins/yaml.js",
     "./parser-yaml.js": "./dist/prettier/plugins/yaml.js",
-    "./esm/parser-yaml.mjs": "./dist/prettier/plugins/yaml.mjs"
+    "./esm/parser-yaml.mjs": "./dist/prettier/plugins/yaml.mjs",
+    "./package.json": "./package.json"
   },
   "engines": {
     "node": ">=18"
