@@ -3,7 +3,7 @@
 The published Prettier artifact additionally contains code with the following licenses:
 MIT, ISC, BSD-3-Clause, BSD-2-Clause, and Apache-2.0.
 
-## @angular/compiler@v20.1.2
+## @angular/compiler@v20.2.1
 
 > Angular - the compiler library
 
@@ -1540,7 +1540,7 @@ Author: Matteo Collina <hello@matteocollina.com>
 
 ----------------------------------------
 
-## file-entry-cache@v10.1.3
+## file-entry-cache@v10.1.4
 
 > A lightweight cache for file metadata, ideal for processes that work on a specific set of files and only need to reprocess files that have changed since the last run
 

@@ -3347,7 +3347,6 @@ var FileEntryCache = class {
    * @param  {Buffer} buffer   buffer to calculate hash on
    * @return {String}          content hash digest
    */
-  // eslint-disable-next-line @typescript-eslint/no-restricted-types
   getHash(buffer) {
     return crypto2.createHash(this._hashAlgorithm).update(buffer).digest("hex");
   }
@@ -3381,17 +3380,17 @@ var FileEntryCache = class {
     return !path11.isAbsolute(filePath);
   }
   /**
-  * Delete the cache file from the disk
-  * @method deleteCacheFile
-  * @return {boolean}       true if the file was deleted, false otherwise
-  */
+   * Delete the cache file from the disk
+   * @method deleteCacheFile
+   * @return {boolean}       true if the file was deleted, false otherwise
+   */
   deleteCacheFile() {
     return this._cache.removeCacheFile();
   }
   /**
-  * Remove the cache from the file and clear the memory cache
-  * @method destroy
-  */
+   * Remove the cache from the file and clear the memory cache
+   * @method destroy
+   */
   destroy() {
     this._cache.destroy();
   }
@@ -3402,10 +3401,14 @@ var FileEntryCache = class {
    */
   removeEntry(filePath, options) {
     if (this.isRelativePath(filePath)) {
-      filePath = this.getAbsolutePath(filePath, { currentWorkingDirectory: options?.currentWorkingDirectory });
+      filePath = this.getAbsolutePath(filePath, {
+        currentWorkingDirectory: options?.currentWorkingDirectory
+      });
       this._cache.removeKey(this.createFileKey(filePath));
     }
-    const key = this.createFileKey(filePath, { currentWorkingDirectory: options?.currentWorkingDirectory });
+    const key = this.createFileKey(filePath, {
+      currentWorkingDirectory: options?.currentWorkingDirectory
+    });
     this._cache.removeKey(key);
   }
   /**
@@ -3443,7 +3446,6 @@ var FileEntryCache = class {
    * @param options - The options for getting the file descriptor
    * @returns The file descriptor
    */
-  // eslint-disable-next-line complexity
   getFileDescriptor(filePath, options) {
     let fstat;
     const result = {
@@ -3452,7 +3454,9 @@ var FileEntryCache = class {
       meta: {}
     };
     result.meta = this._cache.getKey(result.key) ?? {};
-    filePath = this.getAbsolutePath(filePath, { currentWorkingDirectory: options?.currentWorkingDirectory });
+    filePath = this.getAbsolutePath(filePath, {
+      currentWorkingDirectory: options?.currentWorkingDirectory
+    });
     const useCheckSumValue = options?.useCheckSum ?? this._useCheckSum;
     const useModifiedTimeValue = options?.useModifiedTime ?? this._useModifiedTime;
     try {
@@ -3506,7 +3510,7 @@ var FileEntryCache = class {
    * @returns The file descriptors
    */
   normalizeEntries(files) {
-    const result = new Array();
+    const result = [];
     if (files) {
       for (const file of files) {
         const fileDescriptor = this.getFileDescriptor(file);
@@ -3554,7 +3558,7 @@ var FileEntryCache = class {
    * @returns {string[]} The updated files
    */
   getUpdatedFiles(files) {
-    const result = new Array();
+    const result = [];
     const fileDescriptors = this.normalizeEntries(files);
     for (const fileDescriptor of fileDescriptors) {
       if (fileDescriptor.changed) {
@@ -3570,7 +3574,7 @@ var FileEntryCache = class {
    * @returns {FileDescriptor[]} The not found files
    */
   getFileDescriptorsByPath(filePath) {
-    const result = new Array();
+    const result = [];
     const keys2 = this._cache.keys();
     for (const key of keys2) {
       const absolutePath = this.getAbsolutePath(filePath);
