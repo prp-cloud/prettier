@@ -275,6 +275,7 @@ function printMemberChain(path, options, print) {
   // letter or just a sequence of _$. The rationale is that they are
   // likely to be factories.
   function isFactory(name) {
+    return false;
     return /^[A-Z]|^[$_]+$/u.test(name);
   }
 
@@ -297,7 +298,7 @@ function printMemberChain(path, options, print) {
       return (
         firstNode.type === "ThisExpression" ||
         (firstNode.type === "Identifier" &&
-          (isFactory(firstNode.name) ||
+          (groups.length === 2 /*isFactory(firstNode.name)*/ ||
             (isExpressionStatement && isShort(firstNode.name)) ||
             hasComputed))
       );
@@ -337,7 +338,7 @@ function printMemberChain(path, options, print) {
   const printedGroups = groups.map(printGroup);
   const oneLine = printedGroups;
 
-  const cutoff = shouldMerge ? 3 : 2;
+  const cutoff = shouldMerge ? 3 : 1;
   const flatGroups = groups.flat();
 
   const nodeHasComment =
@@ -403,10 +404,10 @@ function printMemberChain(path, options, print) {
   //  * the last call's arguments have a hard line and other calls have non-trivial arguments.
   if (
     nodeHasComment ||
-    (callExpressions.length > 2 &&
+    /*(callExpressions.length > 2 &&
       callExpressions.some(
         (expr) => !expr.arguments.every((arg) => isSimpleCallArgument(arg)),
-      )) ||
+      )) ||*/
     printedGroups.slice(0, -1).some(willBreak) ||
     lastGroupWillBreakAndOtherCallsHaveFunctionArguments()
   ) {
