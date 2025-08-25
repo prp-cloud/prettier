@@ -589,7 +589,7 @@ Author: Ika <ikatyang@gmail.com> (https://github.com/ikatyang)
 
 ----------------------------------------
 
-## ansi-purge@v1.0.1
+## ansi-purge@v1.1.0
 
 > A tiny function for deleting ANSI escape sequences from a string.
 
@@ -638,7 +638,7 @@ Author: Sindre Sorhus <sindresorhus@gmail.com> (https://sindresorhus.com)
 
 ----------------------------------------
 
-## ansi-truncate@v1.3.0
+## ansi-truncate@v1.4.0
 
 > A tiny function for truncating a string that may contain ANSI escape sequences.
 
@@ -1455,7 +1455,7 @@ Author: James Halliday <mail@substack.net> (http://substack.net)
 
 ----------------------------------------
 
-## fast-string-truncated-width@v2.0.1
+## fast-string-truncated-width@v3.0.1
 
 > A fast function for calculating where a string should be truncated, given an optional width limit and an ellipsis string.
 
@@ -1485,7 +1485,7 @@ License: MIT
 
 ----------------------------------------
 
-## fast-string-width@v2.0.0
+## fast-string-width@v3.0.1
 
 > A fast function for calculating the visual width of a string once printed to the terminal.
 
@@ -2030,7 +2030,7 @@ Repository: <https://github.com/graphql/graphql-js.git>
 
 ----------------------------------------
 
-## hookified@v1.11.0
+## hookified@v1.12.0
 
 > Event Emitting and Middleware Hooks
 
@@ -2913,7 +2913,7 @@ Contributors:
 
 ----------------------------------------
 
-## json-sorted-stringify@v1.0.1
+## json-sorted-stringify@v1.0.2
 
 > Alternative JSON.stringify function with sorted keys, so the output is stable.
 
@@ -4355,7 +4355,7 @@ Author: Sindre Sorhus <sindresorhus@gmail.com> (https://sindresorhus.com)
 
 ----------------------------------------
 
-## tiny-bin@v1.11.2
+## tiny-bin@v1.11.3
 
 > A library for building tiny and beautiful command line apps.
 
@@ -4623,7 +4623,7 @@ License: MIT
 
 ----------------------------------------
 
-## tiny-truncate@v1.0.4
+## tiny-truncate@v1.0.5
 
 > A tiny function for truncating a string which may containg ANSI escapes, with automatic terminal width detection.
 

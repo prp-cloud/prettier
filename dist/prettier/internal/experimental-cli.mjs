@@ -876,7 +876,7 @@ var ANSI_RE, CONTROL_RE, CJKT_WIDE_RE, TAB_RE, EMOJI_RE, LATIN_RE, MODIFIER_RE, 
 var init_dist7 = __esm({
   "node_modules/fast-string-truncated-width/dist/index.js"() {
     init_utils5();
-    ANSI_RE = /[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/y;
+    ANSI_RE = /[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]|\u001b\]8;[^;]*;.*?(?:\u0007|\u001b\u005c)/y;
     CONTROL_RE = /[\x00-\x08\x0A-\x1F\x7F-\x9F]{1,1000}/y;
     CJKT_WIDE_RE = /(?:(?![\uFF61-\uFF9F\uFF00-\uFFEF])[\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Hangul}\p{Script=Tangut}]){1,1000}/yu;
     TAB_RE = /\t{1,1000}/y;
@@ -888,13 +888,13 @@ var init_dist7 = __esm({
       const LIMIT = truncationOptions.limit ?? Infinity;
       const ELLIPSIS2 = truncationOptions.ellipsis ?? "";
       const ELLIPSIS_WIDTH2 = truncationOptions?.ellipsisWidth ?? (ELLIPSIS2 ? getStringTruncatedWidth(ELLIPSIS2, NO_TRUNCATION, widthOptions).width : 0);
-      const ANSI_WIDTH = widthOptions.ansiWidth ?? 0;
+      const ANSI_WIDTH = 0;
       const CONTROL_WIDTH = widthOptions.controlWidth ?? 0;
       const TAB_WIDTH = widthOptions.tabWidth ?? 8;
       const EMOJI_WIDTH = widthOptions.emojiWidth ?? 2;
-      const FULL_WIDTH_WIDTH = widthOptions.fullWidthWidth ?? 2;
+      const FULL_WIDTH_WIDTH = 2;
       const REGULAR_WIDTH = widthOptions.regularWidth ?? 1;
-      const WIDE_WIDTH = widthOptions.wideWidth ?? 2;
+      const WIDE_WIDTH = widthOptions.wideWidth ?? FULL_WIDTH_WIDTH;
       const PARSE_BLOCKS = [
         [LATIN_RE, REGULAR_WIDTH],
         [ANSI_RE, ANSI_WIDTH],
@@ -1012,7 +1012,7 @@ var init_addon = __esm({
 var ANSI_RE2;
 var init_constants3 = __esm({
   "node_modules/ansi-purge/dist/constants.js"() {
-    ANSI_RE2 = /([\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><])/g;
+    ANSI_RE2 = /([\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]|\u001b\]8;[^;]*;.*?(?:\u0007|\u001b\u005c))/g;
   }
 });
 
@@ -2127,7 +2127,7 @@ var init_constants_evaluate = __esm({
       "angular",
       "lwc"
     ];
-    PRETTIER_VERSION = "3.7.0-90bef37e1";
+    PRETTIER_VERSION = "3.7.0-a48bd900c";
   }
 });
 
@@ -11681,13 +11681,15 @@ var init_constants5 = __esm({
 });
 
 // node_modules/ansi-truncate/dist/constants.js
-var ANSI_RE3, ELLIPSIS, ELLIPSIS_WIDTH, RESET;
+var ANSI_STANDARD_RE, ANSI_LINK_RE, ELLIPSIS, ELLIPSIS_WIDTH, RESET_STANDARD, RESET_LINK;
 var init_constants6 = __esm({
   "node_modules/ansi-truncate/dist/constants.js"() {
-    ANSI_RE3 = /[\x1B\x9B]/;
+    ANSI_STANDARD_RE = /[\x1B\x9B]/;
+    ANSI_LINK_RE = /\x1B\]8;/;
     ELLIPSIS = "\u2026";
     ELLIPSIS_WIDTH = 1;
-    RESET = "\x1B[0m";
+    RESET_STANDARD = "\x1B[0m";
+    RESET_LINK = "\x1B]8;;\x07";
   }
 });
 
@@ -11697,6 +11699,8 @@ var init_dist38 = __esm({
   "node_modules/ansi-truncate/dist/index.js"() {
     init_dist7();
     init_constants6();
+    init_constants6();
+    init_constants6();
     truncate = (input, width, options) => {
       const limit = width;
       const ellipsis = options?.ellipsis ?? ELLIPSIS;
@@ -11705,8 +11709,9 @@ var init_dist38 = __esm({
       if (!truncated)
         return input;
       const slice = input.slice(0, index);
-      const resettable = ANSI_RE3.test(slice);
-      return `${slice}${ellipsed ? ellipsis : ""}${resettable ? RESET : ""}`;
+      const isStandardResettable = ANSI_STANDARD_RE.test(slice);
+      const isLinkResettable = ANSI_LINK_RE.test(slice);
+      return `${slice}${ellipsed ? ellipsis : ""}${isStandardResettable ? RESET_STANDARD : ""}${isLinkResettable ? RESET_LINK : ""}`;
     };
     dist_default33 = truncate;
   }
