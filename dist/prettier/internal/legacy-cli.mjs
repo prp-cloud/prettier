@@ -278,7 +278,7 @@ var require_fast_json_stable_stringify = __commonJS({
       if (!opts) opts = {};
       if (typeof opts === "function") opts = { cmp: opts };
       var cycles = typeof opts.cycles === "boolean" ? opts.cycles : false;
-      var cmp = opts.cmp && /* @__PURE__ */ function(f) {
+      var cmp = opts.cmp && /* @__PURE__ */ (function(f) {
         return function(node) {
           return function(a, b) {
             var aobj = { key: a, value: node[a] };
@@ -286,9 +286,9 @@ var require_fast_json_stable_stringify = __commonJS({
             return f(aobj, bobj);
           };
         };
-      }(opts.cmp);
+      })(opts.cmp);
       var seen = [];
-      return function stringify5(node) {
+      return (function stringify5(node) {
         if (node && node.toJSON && typeof node.toJSON === "function") {
           node = node.toJSON();
         }
@@ -321,7 +321,7 @@ var require_fast_json_stable_stringify = __commonJS({
         }
         seen.splice(seenIndex, 1);
         return "{" + out + "}";
-      }(data);
+      })(data);
     };
   }
 });

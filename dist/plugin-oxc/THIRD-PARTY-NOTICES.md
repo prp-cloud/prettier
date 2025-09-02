@@ -3,7 +3,7 @@
 The published @prettier/plugin-oxc artifact additionally contains code with the following licenses:
 MIT.
 
-## emoji-regex@v10.4.0
+## emoji-regex@v10.5.0
 
 > A regular expression to match all Emoji-only symbols as per the Unicode Standard.
 
@@ -54,7 +54,7 @@ Author: Sindre Sorhus <sindresorhus@gmail.com> (https://sindresorhus.com)
 
 ----------------------------------------
 
-## get-east-asian-width@v1.3.0
+## get-east-asian-width@v1.3.1
 
 > Determine the East Asian Width of a Unicode character
 
@@ -153,7 +153,7 @@ Repository: <https://github.com/jestjs/jest.git>
 
 ----------------------------------------
 
-## prettier@v3.7.0-8c2f612e1
+## prettier@v3.7.0-ec5a19794
 
 > Prettier is an opinionated code formatter
 

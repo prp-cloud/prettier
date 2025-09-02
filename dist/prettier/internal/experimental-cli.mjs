@@ -2127,7 +2127,7 @@ var init_constants_evaluate = __esm({
       "angular",
       "lwc"
     ];
-    PRETTIER_VERSION = "3.7.0-8c2f612e1";
+    PRETTIER_VERSION = "3.7.0-ec5a19794";
   }
 });
 
@@ -2213,9 +2213,9 @@ function hideStackFrames(wrappedFunction) {
 }
 function getMessage(key2, parameters, self) {
   const message = messages.get(key2);
-  assert(message !== void 0, "expected `message` to be found");
+  assert.ok(message !== void 0, "expected `message` to be found");
   if (typeof message === "function") {
-    assert(
+    assert.ok(
       message.length <= parameters.length,
       // Default options do not count.
       `Code: ${key2}; The provided arguments length (${parameters.length}) does not match the required ones (${message.length}).`
@@ -2225,7 +2225,7 @@ function getMessage(key2, parameters, self) {
   const regex2 = /%[dfijoOs]/g;
   let expectedLength = 0;
   while (regex2.exec(message) !== null) expectedLength++;
-  assert(
+  assert.ok(
     expectedLength === parameters.length,
     `Code: ${key2}; The provided arguments length (${parameters.length}) does not match the required ones (${expectedLength}).`
   );
@@ -2280,7 +2280,7 @@ var init_errors = __esm({
        * @param {unknown} actual
        */
       (name, expected, actual) => {
-        assert(typeof name === "string", "'name' must be a string");
+        assert.ok(typeof name === "string", "'name' must be a string");
         if (!Array.isArray(expected)) {
           expected = [expected];
         }
@@ -2296,14 +2296,14 @@ var init_errors = __esm({
         const instances = [];
         const other = [];
         for (const value of expected) {
-          assert(
+          assert.ok(
             typeof value === "string",
             "All expected entries have to be of type string"
           );
           if (kTypes.has(value)) {
             types2.push(value.toLowerCase());
           } else if (classRegExp.exec(value) === null) {
-            assert(
+            assert.ok(
               value !== "object",
               'The value "object" should be written as "Object"'
             );
@@ -2379,7 +2379,7 @@ var init_errors = __esm({
       (packagePath, key2, target, isImport = false, base = void 0) => {
         const relatedError = typeof target === "string" && !isImport && target.length > 0 && !target.startsWith("./");
         if (key2 === ".") {
-          assert(isImport === false);
+          assert.ok(isImport === false);
           return `Invalid "exports" main target ${JSON.stringify(target)} defined in the package config ${packagePath}package.json${base ? ` imported from ${base}` : ""}${relatedError ? '; targets must start with "./"' : ""}`;
         }
         return `Invalid "${isImport ? "imports" : "exports"}" target ${JSON.stringify(
@@ -2688,11 +2688,41 @@ var init_get_format = __esm({
   }
 });
 
+// node_modules/import-meta-resolve/lib/utils.js
+function getDefaultConditions() {
+  return DEFAULT_CONDITIONS;
+}
+function getDefaultConditionsSet() {
+  return DEFAULT_CONDITIONS_SET;
+}
+function getConditionsSet(conditions) {
+  if (conditions !== void 0 && conditions !== getDefaultConditions()) {
+    if (!Array.isArray(conditions)) {
+      throw new ERR_INVALID_ARG_VALUE(
+        "conditions",
+        conditions,
+        "expected an array"
+      );
+    }
+    return new Set(conditions);
+  }
+  return getDefaultConditionsSet();
+}
+var ERR_INVALID_ARG_VALUE, DEFAULT_CONDITIONS, DEFAULT_CONDITIONS_SET;
+var init_utils7 = __esm({
+  "node_modules/import-meta-resolve/lib/utils.js"() {
+    init_errors();
+    ({ ERR_INVALID_ARG_VALUE } = codes);
+    DEFAULT_CONDITIONS = Object.freeze(["node", "import"]);
+    DEFAULT_CONDITIONS_SET = new Set(DEFAULT_CONDITIONS);
+  }
+});
+
 // node_modules/import-meta-resolve/lib/resolve.js
 import assert2 from "assert";
 import { statSync, realpathSync } from "fs";
 import process9 from "process";
-import { URL as URL2, fileURLToPath as fileURLToPath3, pathToFileURL } from "url";
+import { fileURLToPath as fileURLToPath3, pathToFileURL } from "url";
 import path5 from "path";
 import { builtinModules } from "module";
 function emitInvalidSegmentDeprecation(target, request, match2, packageJsonUrl, internal, base, isTarget) {
@@ -2714,7 +2744,7 @@ function emitLegacyIndexDeprecation(url3, packageJsonUrl, base, main) {
   const format2 = defaultGetFormatWithoutErrors(url3, { parentURL: base.href });
   if (format2 !== "module") return;
   const urlPath = fileURLToPath3(url3.href);
-  const packagePath = fileURLToPath3(new URL2(".", packageJsonUrl));
+  const packagePath = fileURLToPath3(new URL(".", packageJsonUrl));
   const basePath = fileURLToPath3(base);
   if (!main) {
     process9.emitWarning(
@@ -2750,7 +2780,7 @@ function fileExists(url3) {
 function legacyMainResolve(packageJsonUrl, packageConfig, base) {
   let guess;
   if (packageConfig.main !== void 0) {
-    guess = new URL2(packageConfig.main, packageJsonUrl);
+    guess = new URL(packageConfig.main, packageJsonUrl);
     if (fileExists(guess)) return guess;
     const tries2 = [
       `./${packageConfig.main}.js`,
@@ -2762,7 +2792,7 @@ function legacyMainResolve(packageJsonUrl, packageConfig, base) {
     ];
     let i2 = -1;
     while (++i2 < tries2.length) {
-      guess = new URL2(tries2[i2], packageJsonUrl);
+      guess = new URL(tries2[i2], packageJsonUrl);
       if (fileExists(guess)) break;
       guess = void 0;
     }
@@ -2779,7 +2809,7 @@ function legacyMainResolve(packageJsonUrl, packageConfig, base) {
   const tries = ["./index.js", "./index.json", "./index.node"];
   let i = -1;
   while (++i < tries.length) {
-    guess = new URL2(tries[i], packageJsonUrl);
+    guess = new URL(tries[i], packageJsonUrl);
     if (fileExists(guess)) break;
     guess = void 0;
   }
@@ -2788,7 +2818,7 @@ function legacyMainResolve(packageJsonUrl, packageConfig, base) {
     return guess;
   }
   throw new ERR_MODULE_NOT_FOUND(
-    fileURLToPath3(new URL2(".", packageJsonUrl)),
+    fileURLToPath3(new URL(".", packageJsonUrl)),
     fileURLToPath3(base)
   );
 }
@@ -2841,13 +2871,13 @@ function finalizeResolution(resolved, base, preserveSymlinks) {
 function importNotDefined(specifier, packageJsonUrl, base) {
   return new ERR_PACKAGE_IMPORT_NOT_DEFINED(
     specifier,
-    packageJsonUrl && fileURLToPath3(new URL2(".", packageJsonUrl)),
+    packageJsonUrl && fileURLToPath3(new URL(".", packageJsonUrl)),
     fileURLToPath3(base)
   );
 }
 function exportsNotFound(subpath, packageJsonUrl, base) {
   return new ERR_PACKAGE_PATH_NOT_EXPORTED(
-    fileURLToPath3(new URL2(".", packageJsonUrl)),
+    fileURLToPath3(new URL(".", packageJsonUrl)),
     subpath,
     base && fileURLToPath3(base)
   );
@@ -2863,7 +2893,7 @@ function throwInvalidSubpath(request, match2, packageJsonUrl, internal, base) {
 function invalidPackageTarget(subpath, target, packageJsonUrl, internal, base) {
   target = typeof target === "object" && target !== null ? JSON.stringify(target, null, "") : `${target}`;
   return new ERR_INVALID_PACKAGE_TARGET(
-    fileURLToPath3(new URL2(".", packageJsonUrl)),
+    fileURLToPath3(new URL(".", packageJsonUrl)),
     subpath,
     target,
     internal,
@@ -2877,7 +2907,7 @@ function resolvePackageTargetString(target, subpath, match2, packageJsonUrl, bas
     if (internal && !target.startsWith("../") && !target.startsWith("/")) {
       let isURL = false;
       try {
-        new URL2(target);
+        new URL(target);
         isURL = true;
       } catch {
       }
@@ -2915,9 +2945,9 @@ function resolvePackageTargetString(target, subpath, match2, packageJsonUrl, bas
       throw invalidPackageTarget(match2, target, packageJsonUrl, internal, base);
     }
   }
-  const resolved = new URL2(target, packageJsonUrl);
+  const resolved = new URL(target, packageJsonUrl);
   const resolvedPath = resolved.pathname;
-  const packagePath = new URL2(".", packageJsonUrl).pathname;
+  const packagePath = new URL(".", packageJsonUrl).pathname;
   if (!resolvedPath.startsWith(packagePath))
     throw invalidPackageTarget(match2, target, packageJsonUrl, internal, base);
   if (subpath === "") return resolved;
@@ -2945,7 +2975,7 @@ function resolvePackageTargetString(target, subpath, match2, packageJsonUrl, bas
     }
   }
   if (pattern) {
-    return new URL2(
+    return new URL(
       RegExpPrototypeSymbolReplace.call(
         patternRegEx,
         resolved.href,
@@ -2953,7 +2983,7 @@ function resolvePackageTargetString(target, subpath, match2, packageJsonUrl, bas
       )
     );
   }
-  return new URL2(subpath, resolved);
+  return new URL(subpath, resolved);
 }
 function isArrayIndex(key2) {
   const keyNumber = Number(key2);
@@ -3278,7 +3308,7 @@ function parsePackageName(specifier, base) {
 }
 function packageResolve(specifier, base, conditions) {
   if (builtinModules.includes(specifier)) {
-    return new URL2("node:" + specifier);
+    return new URL("node:" + specifier);
   }
   const { packageName, packageSubpath, isScoped } = parsePackageName(
     specifier,
@@ -3297,7 +3327,7 @@ function packageResolve(specifier, base, conditions) {
       );
     }
   }
-  let packageJsonUrl = new URL2(
+  let packageJsonUrl = new URL(
     "./node_modules/" + packageName + "/package.json",
     base
   );
@@ -3307,7 +3337,7 @@ function packageResolve(specifier, base, conditions) {
     const stat = tryStatSync(packageJsonPath.slice(0, -13));
     if (!stat || !stat.isDirectory()) {
       lastPath = packageJsonPath;
-      packageJsonUrl = new URL2(
+      packageJsonUrl = new URL(
         (isScoped ? "../../../../node_modules/" : "../../../node_modules/") + packageName + "/package.json",
         packageJsonUrl
       );
@@ -3327,7 +3357,7 @@ function packageResolve(specifier, base, conditions) {
     if (packageSubpath === ".") {
       return legacyMainResolve(packageJsonUrl, packageConfig2, base);
     }
-    return new URL2(packageSubpath, packageJsonUrl);
+    return new URL(packageSubpath, packageJsonUrl);
   } while (packageJsonPath.length !== lastPath.length);
   throw new ERR_MODULE_NOT_FOUND(packageName, fileURLToPath3(base), false);
 }
@@ -3346,13 +3376,16 @@ function shouldBeTreatedAsRelativeOrAbsolutePath(specifier) {
   return isRelativeSpecifier(specifier);
 }
 function moduleResolve(specifier, base, conditions, preserveSymlinks) {
+  if (conditions === void 0) {
+    conditions = getConditionsSet();
+  }
   const protocol = base.protocol;
   const isData = protocol === "data:";
   const isRemote = isData || protocol === "http:" || protocol === "https:";
   let resolved;
   if (shouldBeTreatedAsRelativeOrAbsolutePath(specifier)) {
     try {
-      resolved = new URL2(specifier, base);
+      resolved = new URL(specifier, base);
     } catch (error_) {
       const error = new ERR_UNSUPPORTED_RESOLVE_REQUEST(specifier, base);
       error.cause = error_;
@@ -3362,7 +3395,7 @@ function moduleResolve(specifier, base, conditions, preserveSymlinks) {
     resolved = packageImportsResolve(specifier, base, conditions);
   } else {
     try {
-      resolved = new URL2(specifier);
+      resolved = new URL(specifier);
     } catch (error_) {
       if (isRemote && !builtinModules.includes(specifier)) {
         const error = new ERR_UNSUPPORTED_RESOLVE_REQUEST(specifier, base);
@@ -3372,7 +3405,7 @@ function moduleResolve(specifier, base, conditions, preserveSymlinks) {
       resolved = packageResolve(specifier, base, conditions);
     }
   }
-  assert2(resolved !== void 0, "expected to be defined");
+  assert2.ok(resolved !== void 0, "expected to be defined");
   if (resolved.protocol !== "file:") {
     return resolved;
   }
@@ -3384,6 +3417,7 @@ var init_resolve = __esm({
     init_get_format();
     init_errors();
     init_package_json_reader();
+    init_utils7();
     RegExpPrototypeSymbolReplace = RegExp.prototype[Symbol.replace];
     ({
       ERR_NETWORK_IMPORT_DISALLOWED,
@@ -3460,7 +3494,7 @@ var init_dist15 = __esm({
 
 // node_modules/promise-make-naked/dist/utils.js
 var noop;
-var init_utils7 = __esm({
+var init_utils8 = __esm({
   "node_modules/promise-make-naked/dist/utils.js"() {
     noop = () => {
     };
@@ -3471,7 +3505,7 @@ var init_utils7 = __esm({
 var makeNakedPromise, dist_default15;
 var init_dist16 = __esm({
   "node_modules/promise-make-naked/dist/index.js"() {
-    init_utils7();
+    init_utils8();
     makeNakedPromise = () => {
       let resolve4 = noop;
       let reject = noop;
@@ -3538,7 +3572,7 @@ var init_constants4 = __esm({
 
 // node_modules/tiny-readdir/dist/utils.js
 var castArray3, isFunction;
-var init_utils8 = __esm({
+var init_utils9 = __esm({
   "node_modules/tiny-readdir/dist/utils.js"() {
     castArray3 = (value) => {
       return Array.isArray(value) ? value : [value];
@@ -3557,7 +3591,7 @@ var init_dist18 = __esm({
   "node_modules/tiny-readdir/dist/index.js"() {
     init_dist17();
     init_constants4();
-    init_utils8();
+    init_utils9();
     readdir = (rootPath, options) => {
       const followSymlinks = options?.followSymlinks ?? false;
       const maxDepth = options?.depth ?? Infinity;
@@ -3730,7 +3764,7 @@ var init_dist18 = __esm({
 
 // node_modules/grammex/dist/utils.js
 var isArray2, isFunction2, isFunctionNullary, isFunctionStrictlyNullaryOrUnary, isNumber, isObject, isRegExp, isRegExpCapturing, isRegExpStatic, isString, isUndefined3, memoize2;
-var init_utils9 = __esm({
+var init_utils10 = __esm({
   "node_modules/grammex/dist/utils.js"() {
     isArray2 = (value) => {
       return Array.isArray(value);
@@ -3793,7 +3827,7 @@ var init_utils9 = __esm({
 var parse, match, chars, regex, regexCapturing, regexNonCapturing, string, repeat, optional, star, and, or, backtrackable, handleable, memoizable, lazy, resolve;
 var init_dist19 = __esm({
   "node_modules/grammex/dist/index.js"() {
-    init_utils9();
+    init_utils10();
     parse = (input, rule, options = {}) => {
       const state = { cache: {}, input, index: 0, indexBacktrackMax: 0, options, output: [] };
       const matched = resolve(rule)(state);
@@ -4091,7 +4125,7 @@ var init_dist19 = __esm({
 
 // node_modules/zeptomatch/dist/utils.js
 var identity2, makeParser, memoize3;
-var init_utils10 = __esm({
+var init_utils11 = __esm({
   "node_modules/zeptomatch/dist/utils.js"() {
     init_dist19();
     identity2 = (value) => {
@@ -4156,7 +4190,7 @@ var init_grammar = __esm({
   "node_modules/zeptomatch/dist/convert/grammar.js"() {
     init_dist19();
     init_range();
-    init_utils10();
+    init_utils11();
     init_parser();
     Escaped = match(/\\./, identity2);
     Escape = match(/[$.*+?^(){}[\]\|]/, (char) => `\\${char}`);
@@ -4206,7 +4240,7 @@ var init_grammar = __esm({
 var parser, parser_default;
 var init_parser = __esm({
   "node_modules/zeptomatch/dist/convert/parser.js"() {
-    init_utils10();
+    init_utils11();
     init_grammar();
     parser = makeParser(grammar_default);
     parser_default = parser;
@@ -4218,7 +4252,7 @@ var Escaped2, Passthrough2, StarStarStar, StarStarNoLeft, StarStarNoRight, Gramm
 var init_grammar2 = __esm({
   "node_modules/zeptomatch/dist/normalize/grammar.js"() {
     init_dist19();
-    init_utils10();
+    init_utils11();
     Escaped2 = match(/\\./, identity2);
     Passthrough2 = match(/./, identity2);
     StarStarStar = match(/\*\*\*+/, "*");
@@ -4233,7 +4267,7 @@ var init_grammar2 = __esm({
 var parser2, parser_default2;
 var init_parser2 = __esm({
   "node_modules/zeptomatch/dist/normalize/parser.js"() {
-    init_utils10();
+    init_utils11();
     init_grammar2();
     parser2 = makeParser(grammar_default2);
     parser_default2 = parser2;
@@ -4246,7 +4280,7 @@ var init_dist20 = __esm({
   "node_modules/zeptomatch/dist/index.js"() {
     init_parser();
     init_parser2();
-    init_utils10();
+    init_utils11();
     zeptomatch = (glob, path17) => {
       if (Array.isArray(glob)) {
         const res = glob.map(zeptomatch.compile);
@@ -4362,7 +4396,7 @@ var init_dist23 = __esm({
 // node_modules/tiny-readdir-glob/dist/utils.js
 import path7 from "path";
 var castArray4, globExplode, globsExplode, globCompile, globsCompile, globsPartition, ignoreCompile, intersection, isPathSep, isString2, uniq2, uniqFlat, uniqMergeConcat;
-var init_utils11 = __esm({
+var init_utils12 = __esm({
   "node_modules/tiny-readdir-glob/dist/utils.js"() {
     init_dist20();
     init_dist21();
@@ -4516,7 +4550,7 @@ var readdirGlob, dist_default21;
 var init_dist24 = __esm({
   "node_modules/tiny-readdir-glob/dist/index.js"() {
     init_dist18();
-    init_utils11();
+    init_utils12();
     readdirGlob = async (glob, options) => {
       const [globsPositive, globsNegative] = globsPartition(castArray4(glob));
       const cwd = options?.cwd ?? process10.cwd();
@@ -5193,7 +5227,7 @@ function zipObjectUnless(keys, values, unless) {
   return map2;
 }
 var getPlugin, getStdin, normalizePathSeparatorsToPosix;
-var init_utils12 = __esm({
+var init_utils13 = __esm({
   "node_modules/@prettier/cli/dist/utils.js"() {
     init_dist2();
     init_dist13();
@@ -5545,7 +5579,7 @@ import path10 from "path";
 var Cache, cache_default;
 var init_cache = __esm({
   "node_modules/@prettier/cli/dist/cache.js"() {
-    init_utils12();
+    init_utils13();
     Cache = class {
       constructor(version, rootPath, options, logger) {
         this.version = sha1hex(version);
@@ -5645,7 +5679,7 @@ var init_cache = __esm({
 
 // node_modules/ini-simple-parser/dist/utils.js
 var inferBoolean, inferNull, inferNumber, inferString, isString4, stripComments;
-var init_utils13 = __esm({
+var init_utils14 = __esm({
   "node_modules/ini-simple-parser/dist/utils.js"() {
     inferBoolean = (value) => {
       if (!isString4(value) || !value.length)
@@ -5706,7 +5740,7 @@ var init_utils13 = __esm({
 var parse2, dist_default24;
 var init_dist27 = __esm({
   "node_modules/ini-simple-parser/dist/index.js"() {
-    init_utils13();
+    init_utils14();
     parse2 = (input, options = {}) => {
       const COMMENT1 = 35;
       const COMMENT2 = 59;
@@ -5770,7 +5804,7 @@ var init_dist27 = __esm({
 
 // node_modules/tiny-editorconfig/dist/utils.js
 var isBoolean3, isInteger2, isObject3, isObjectEmpty, isString5, isUndefined5;
-var init_utils14 = __esm({
+var init_utils15 = __esm({
   "node_modules/tiny-editorconfig/dist/utils.js"() {
     isBoolean3 = (value) => {
       return typeof value === "boolean";
@@ -5802,7 +5836,7 @@ var init_utils14 = __esm({
 var CHARSETS, END_OF_LINES, INDENT_STYLES, isCharset, isEndOfLine, isIndentStyle, cast, cast_default;
 var init_cast = __esm({
   "node_modules/tiny-editorconfig/dist/cast.js"() {
-    init_utils14();
+    init_utils15();
     CHARSETS = /* @__PURE__ */ new Set(["latin1", "utf-8", "utf-8-bom", "utf-16be", "utf-16le"]);
     END_OF_LINES = /* @__PURE__ */ new Set(["cr", "lf", "crlf"]);
     INDENT_STYLES = /* @__PURE__ */ new Set(["space", "tab"]);
@@ -5929,7 +5963,7 @@ var init_range2 = __esm({
 
 // node_modules/tiny-editorconfig/node_modules/zeptomatch/dist/utils.js
 var identity4, makeParser2, memoize4;
-var init_utils15 = __esm({
+var init_utils16 = __esm({
   "node_modules/tiny-editorconfig/node_modules/zeptomatch/dist/utils.js"() {
     init_dist19();
     identity4 = (value) => {
@@ -5956,7 +5990,7 @@ var init_grammar3 = __esm({
     init_dist19();
     init_parser3();
     init_range2();
-    init_utils15();
+    init_utils16();
     FastPathAll = match(/^\*\*\/\*$/, ".*");
     FastPathSimple = match(/^\*\*\/(\*)?([ a-zA-Z0-9._-]+)$/, (_, $1, $2) => `.*${$1 ? "" : "(?:^|/)"}${$2.replaceAll(".", "\\.")}`);
     FastPathSimples = match(/^\*\*\/(\*)?([ a-zA-Z0-9._-]*)\{([ a-zA-Z0-9._-]+(?:,[ a-zA-Z0-9._-]+)*)\}$/, (_, $1, $2, $3) => `.*${$1 ? "" : "(?:^|/)"}${$2.replaceAll(".", "\\.")}(?:${$3.replaceAll(",", "|").replaceAll(".", "\\.")})`);
@@ -6008,7 +6042,7 @@ var parser3, parser_default3;
 var init_parser3 = __esm({
   "node_modules/tiny-editorconfig/node_modules/zeptomatch/dist/convert/parser.js"() {
     init_grammar3();
-    init_utils15();
+    init_utils16();
     parser3 = makeParser2(grammar_default3);
     parser_default3 = parser3;
   }
@@ -6019,7 +6053,7 @@ var Escaped4, Passthrough4, StarStarStar2, StarStarNoLeft2, StarStarNoRight2, Gr
 var init_grammar4 = __esm({
   "node_modules/tiny-editorconfig/node_modules/zeptomatch/dist/normalize/grammar.js"() {
     init_dist19();
-    init_utils15();
+    init_utils16();
     Escaped4 = match(/\\./, identity4);
     Passthrough4 = match(/./, identity4);
     StarStarStar2 = match(/\*\*\*+/, "*");
@@ -6035,7 +6069,7 @@ var parser4, parser_default4;
 var init_parser4 = __esm({
   "node_modules/tiny-editorconfig/node_modules/zeptomatch/dist/normalize/parser.js"() {
     init_grammar4();
-    init_utils15();
+    init_utils16();
     parser4 = makeParser2(grammar_default4);
     parser_default4 = parser4;
   }
@@ -6071,7 +6105,7 @@ var init_dist28 = __esm({
 var extend, extend_default;
 var init_extend = __esm({
   "node_modules/tiny-editorconfig/dist/extend.js"() {
-    init_utils14();
+    init_utils15();
     extend = (target, source2) => {
       for (const prop in source2) {
         if (prop === "overrides")
@@ -6170,7 +6204,7 @@ var init_config_editorconfig = __esm({
   "node_modules/@prettier/cli/dist/config_editorconfig.js"() {
     init_dist29();
     init_known();
-    init_utils12();
+    init_utils13();
     getEditorConfig = dist_default13((folderPath, filesNames) => {
       for (let i = 0, l = filesNames.length; i < l; i++) {
         const fileName = filesNames[i];
@@ -6506,7 +6540,7 @@ var init_config_ignore = __esm({
   "node_modules/@prettier/cli/dist/config_ignore.js"() {
     init_dist31();
     init_known();
-    init_utils12();
+    init_utils13();
     getIgnoreContent = (folderPath, fileName) => {
       const filePath = fastJoinedPath(folderPath, fileName);
       if (!known_default.hasFilePath(filePath))
@@ -10379,7 +10413,7 @@ function chooseScalarStyle(string2, singleLineOnly, indentPerLevel, lineWidth, t
   return quotingType === QUOTING_TYPE_DOUBLE ? STYLE_DOUBLE : STYLE_SINGLE;
 }
 function writeScalar(state, string2, level, iskey, inblock) {
-  state.dump = function() {
+  state.dump = (function() {
     if (string2.length === 0) {
       return state.quotingType === QUOTING_TYPE_DOUBLE ? '""' : "''";
     }
@@ -10417,7 +10451,7 @@ function writeScalar(state, string2, level, iskey, inblock) {
       default:
         throw new exception("impossible error: invalid scalar style");
     }
-  }();
+  })();
 }
 function blockHeader(string2, indentPerLevel) {
   var indentIndicator = needIndentIndicator(string2) ? String(indentPerLevel) : "";
@@ -10431,12 +10465,12 @@ function dropEndingNewline(string2) {
 }
 function foldString(string2, width) {
   var lineRe = /(\n+)([^\n]*)/g;
-  var result = function() {
+  var result = (function() {
     var nextLF = string2.indexOf("\n");
     nextLF = nextLF !== -1 ? nextLF : string2.length;
     lineRe.lastIndex = nextLF;
     return foldLine(string2.slice(0, nextLF), width);
-  }();
+  })();
   var prevMoreIndented = string2[0] === "\n" || string2[0] === " ";
   var moreIndented;
   var match2;
@@ -11211,8 +11245,8 @@ var init_config_prettier = __esm({
   "node_modules/@prettier/cli/dist/config_prettier.js"() {
     init_dist20();
     init_known();
-    init_utils12();
-    init_utils12();
+    init_utils13();
+    init_utils13();
     Loaders = {
       auto: (filePath) => {
         const basename = path13.basename(filePath);
@@ -11467,7 +11501,7 @@ var init_scheduler = __esm({
 
 // node_modules/pioppo/dist/utils.js
 var isTransportMultiple;
-var init_utils16 = __esm({
+var init_utils17 = __esm({
   "node_modules/pioppo/dist/utils.js"() {
     isTransportMultiple = (transport) => {
       return "error" in transport && "warn" in transport && "info" in transport && "debug" in transport;
@@ -11481,7 +11515,7 @@ var init_dist35 = __esm({
   "node_modules/pioppo/dist/index.js"() {
     init_node2();
     init_scheduler();
-    init_utils16();
+    init_utils17();
     Pioppo = class {
       /* CONSTRUCTOR */
       constructor(options = {}) {
@@ -11732,7 +11766,7 @@ var init_dist39 = __esm({
 
 // node_modules/tiny-spinner/dist/utils.js
 var isTTY, writeLine;
-var init_utils17 = __esm({
+var init_utils18 = __esm({
   "node_modules/tiny-spinner/dist/utils.js"() {
     init_dist39();
     isTTY = () => {
@@ -11762,7 +11796,7 @@ var init_dist40 = __esm({
     init_dist4();
     init_dist37();
     init_constants5();
-    init_utils17();
+    init_utils18();
     Spinner = class {
       constructor() {
         this.iteration = 0;
@@ -11833,7 +11867,7 @@ var init_logger2 = __esm({
     init_dist12();
     init_dist40();
     init_logger_transports();
-    init_utils12();
+    init_utils13();
     Logger2 = class {
       constructor(level, stream) {
         this.levels = ["debug", "log", "warn", "error", "silent"];
@@ -12464,7 +12498,7 @@ function makeCached(options, cache3, prettier) {
 var init_prettier_cached = __esm({
   "node_modules/@prettier/cli/dist/prettier_cached.js"() {
     init_dist42();
-    init_utils12();
+    init_utils13();
   }
 });
 
@@ -12480,7 +12514,7 @@ var init_node3 = __esm({
 
 // node_modules/isotimer/dist/utils.js
 var sanitizeMs;
-var init_utils18 = __esm({
+var init_utils19 = __esm({
   "node_modules/isotimer/dist/utils.js"() {
     sanitizeMs = (ms) => {
       return Math.max(0, Math.min(ms, 2147483647));
@@ -12493,7 +12527,7 @@ import { setInterval as setInterval2, clearInterval as clearInterval2 } from "ti
 var cache2, set2, clear, unref;
 var init_interval = __esm({
   "node_modules/isotimer/dist/node/interval.js"() {
-    init_utils18();
+    init_utils19();
     cache2 = /* @__PURE__ */ new Map();
     set2 = (callback, ms = 0, ...args) => {
       ms = sanitizeMs(ms);
@@ -12997,7 +13031,7 @@ function makeParallel(options) {
 var init_prettier_parallel = __esm({
   "node_modules/@prettier/cli/dist/prettier_parallel.js"() {
     init_dist43();
-    init_utils12();
+    init_utils13();
   }
 });
 
@@ -13033,7 +13067,7 @@ function makeLazy(options) {
 }
 var init_prettier_lazy = __esm({
   "node_modules/@prettier/cli/dist/prettier_lazy.js"() {
-    init_utils12();
+    init_utils13();
   }
 });
 
@@ -13263,8 +13297,8 @@ var init_dist44 = __esm({
     init_known();
     init_logger2();
     init_prettier();
-    init_utils12();
-    init_utils12();
+    init_utils13();
+    init_utils13();
   }
 });
 
@@ -13284,8 +13318,8 @@ var to_kebab_case_default = toKebabCase;
 // node_modules/@prettier/cli/dist/bin.js
 init_dist12();
 init_constants_evaluate();
-init_utils12();
-init_utils12();
+init_utils13();
+init_utils13();
 var makeBin = () => {
   return dist_default11("prettier", "An opinionated code formatter").autoExit(true).autoUpdateNotifier(false).colors(true).package("prettier", PRETTIER_VERSION).usage(`${dist_default4.cyan("prettier")} ${dist_default4.yellow("[file/dir/glob...]")} ${dist_default4.green("[options]")}`).usage(`${dist_default4.cyan("prettier")} ${dist_default4.yellow('"src/**/*.js"')} ${dist_default4.green("--check")}`).usage(`${dist_default4.cyan("prettier")} ${dist_default4.yellow('"src/**/*.js"')} ${dist_default4.green("-l")} ${dist_default4.green("--no-cache")}`).usage(`${dist_default4.cyan("prettier")} ${dist_default4.yellow('"src/**/*.js"')} ${dist_default4.green("--write")} ${dist_default4.green("--no-parallel")}`).usage(`${dist_default4.cyan("prettier")} ${dist_default4.yellow("./path/to/target/file.js")} ${dist_default4.green("--cache-location")} ${dist_default4.blue("./path/to/cache/file.json")}`).option("--check, -c", "Check if the given files are formatted, print a human-friendly summary (see also --list-different)", {
     section: "Output",

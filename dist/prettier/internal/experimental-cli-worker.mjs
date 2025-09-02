@@ -509,7 +509,7 @@ var dist_default3 = once;
 import assert2 from "assert";
 import { statSync, realpathSync } from "fs";
 import process5 from "process";
-import { URL as URL2, fileURLToPath as fileURLToPath3, pathToFileURL } from "url";
+import { fileURLToPath as fileURLToPath3, pathToFileURL } from "url";
 import path4 from "path";
 import { builtinModules } from "module";
 
@@ -554,7 +554,7 @@ codes.ERR_INVALID_ARG_TYPE = createError(
    * @param {unknown} actual
    */
   (name, expected, actual) => {
-    assert(typeof name === "string", "'name' must be a string");
+    assert.ok(typeof name === "string", "'name' must be a string");
     if (!Array.isArray(expected)) {
       expected = [expected];
     }
@@ -570,14 +570,14 @@ codes.ERR_INVALID_ARG_TYPE = createError(
     const instances = [];
     const other = [];
     for (const value of expected) {
-      assert(
+      assert.ok(
         typeof value === "string",
         "All expected entries have to be of type string"
       );
       if (kTypes.has(value)) {
         types.push(value.toLowerCase());
       } else if (classRegExp.exec(value) === null) {
-        assert(
+        assert.ok(
           value !== "object",
           'The value "object" should be written as "Object"'
         );
@@ -653,7 +653,7 @@ codes.ERR_INVALID_PACKAGE_TARGET = createError(
   (packagePath, key, target, isImport = false, base = void 0) => {
     const relatedError = typeof target === "string" && !isImport && target.length > 0 && !target.startsWith("./");
     if (key === ".") {
-      assert(isImport === false);
+      assert.ok(isImport === false);
       return `Invalid "exports" main target ${JSON.stringify(target)} defined in the package config ${packagePath}package.json${base ? ` imported from ${base}` : ""}${relatedError ? '; targets must start with "./"' : ""}`;
     }
     return `Invalid "${isImport ? "imports" : "exports"}" target ${JSON.stringify(
@@ -818,9 +818,9 @@ var captureLargerStackTrace = hideStackFrames(
 );
 function getMessage(key, parameters, self) {
   const message = messages.get(key);
-  assert(message !== void 0, "expected `message` to be found");
+  assert.ok(message !== void 0, "expected `message` to be found");
   if (typeof message === "function") {
-    assert(
+    assert.ok(
       message.length <= parameters.length,
       // Default options do not count.
       `Code: ${key}; The provided arguments length (${parameters.length}) does not match the required ones (${message.length}).`
@@ -830,7 +830,7 @@ function getMessage(key, parameters, self) {
   const regex2 = /%[dfijoOs]/g;
   let expectedLength = 0;
   while (regex2.exec(message) !== null) expectedLength++;
-  assert(
+  assert.ok(
     expectedLength === parameters.length,
     `Code: ${key}; The provided arguments length (${parameters.length}) does not match the required ones (${expectedLength}).`
   );
@@ -1038,6 +1038,30 @@ function defaultGetFormatWithoutErrors(url2, context) {
   return protocolHandlers[protocol](url2, context, true) || null;
 }
 
+// node_modules/import-meta-resolve/lib/utils.js
+var { ERR_INVALID_ARG_VALUE } = codes;
+var DEFAULT_CONDITIONS = Object.freeze(["node", "import"]);
+var DEFAULT_CONDITIONS_SET = new Set(DEFAULT_CONDITIONS);
+function getDefaultConditions() {
+  return DEFAULT_CONDITIONS;
+}
+function getDefaultConditionsSet() {
+  return DEFAULT_CONDITIONS_SET;
+}
+function getConditionsSet(conditions) {
+  if (conditions !== void 0 && conditions !== getDefaultConditions()) {
+    if (!Array.isArray(conditions)) {
+      throw new ERR_INVALID_ARG_VALUE(
+        "conditions",
+        conditions,
+        "expected an array"
+      );
+    }
+    return new Set(conditions);
+  }
+  return getDefaultConditionsSet();
+}
+
 // node_modules/import-meta-resolve/lib/resolve.js
 var RegExpPrototypeSymbolReplace = RegExp.prototype[Symbol.replace];
 var {
@@ -1078,7 +1102,7 @@ function emitLegacyIndexDeprecation(url2, packageJsonUrl, base, main) {
   const format3 = defaultGetFormatWithoutErrors(url2, { parentURL: base.href });
   if (format3 !== "module") return;
   const urlPath = fileURLToPath3(url2.href);
-  const packagePath = fileURLToPath3(new URL2(".", packageJsonUrl));
+  const packagePath = fileURLToPath3(new URL(".", packageJsonUrl));
   const basePath = fileURLToPath3(base);
   if (!main) {
     process5.emitWarning(
@@ -1114,7 +1138,7 @@ function fileExists(url2) {
 function legacyMainResolve(packageJsonUrl, packageConfig, base) {
   let guess;
   if (packageConfig.main !== void 0) {
-    guess = new URL2(packageConfig.main, packageJsonUrl);
+    guess = new URL(packageConfig.main, packageJsonUrl);
     if (fileExists(guess)) return guess;
     const tries2 = [
       `./${packageConfig.main}.js`,
@@ -1126,7 +1150,7 @@ function legacyMainResolve(packageJsonUrl, packageConfig, base) {
     ];
     let i2 = -1;
     while (++i2 < tries2.length) {
-      guess = new URL2(tries2[i2], packageJsonUrl);
+      guess = new URL(tries2[i2], packageJsonUrl);
       if (fileExists(guess)) break;
       guess = void 0;
     }
@@ -1143,7 +1167,7 @@ function legacyMainResolve(packageJsonUrl, packageConfig, base) {
   const tries = ["./index.js", "./index.json", "./index.node"];
   let i = -1;
   while (++i < tries.length) {
-    guess = new URL2(tries[i], packageJsonUrl);
+    guess = new URL(tries[i], packageJsonUrl);
     if (fileExists(guess)) break;
     guess = void 0;
   }
@@ -1152,7 +1176,7 @@ function legacyMainResolve(packageJsonUrl, packageConfig, base) {
     return guess;
   }
   throw new ERR_MODULE_NOT_FOUND(
-    fileURLToPath3(new URL2(".", packageJsonUrl)),
+    fileURLToPath3(new URL(".", packageJsonUrl)),
     fileURLToPath3(base)
   );
 }
@@ -1205,13 +1229,13 @@ function finalizeResolution(resolved, base, preserveSymlinks) {
 function importNotDefined(specifier, packageJsonUrl, base) {
   return new ERR_PACKAGE_IMPORT_NOT_DEFINED(
     specifier,
-    packageJsonUrl && fileURLToPath3(new URL2(".", packageJsonUrl)),
+    packageJsonUrl && fileURLToPath3(new URL(".", packageJsonUrl)),
     fileURLToPath3(base)
   );
 }
 function exportsNotFound(subpath, packageJsonUrl, base) {
   return new ERR_PACKAGE_PATH_NOT_EXPORTED(
-    fileURLToPath3(new URL2(".", packageJsonUrl)),
+    fileURLToPath3(new URL(".", packageJsonUrl)),
     subpath,
     base && fileURLToPath3(base)
   );
@@ -1227,7 +1251,7 @@ function throwInvalidSubpath(request, match2, packageJsonUrl, internal, base) {
 function invalidPackageTarget(subpath, target, packageJsonUrl, internal, base) {
   target = typeof target === "object" && target !== null ? JSON.stringify(target, null, "") : `${target}`;
   return new ERR_INVALID_PACKAGE_TARGET(
-    fileURLToPath3(new URL2(".", packageJsonUrl)),
+    fileURLToPath3(new URL(".", packageJsonUrl)),
     subpath,
     target,
     internal,
@@ -1241,7 +1265,7 @@ function resolvePackageTargetString(target, subpath, match2, packageJsonUrl, bas
     if (internal && !target.startsWith("../") && !target.startsWith("/")) {
       let isURL = false;
       try {
-        new URL2(target);
+        new URL(target);
         isURL = true;
       } catch {
       }
@@ -1279,9 +1303,9 @@ function resolvePackageTargetString(target, subpath, match2, packageJsonUrl, bas
       throw invalidPackageTarget(match2, target, packageJsonUrl, internal, base);
     }
   }
-  const resolved = new URL2(target, packageJsonUrl);
+  const resolved = new URL(target, packageJsonUrl);
   const resolvedPath = resolved.pathname;
-  const packagePath = new URL2(".", packageJsonUrl).pathname;
+  const packagePath = new URL(".", packageJsonUrl).pathname;
   if (!resolvedPath.startsWith(packagePath))
     throw invalidPackageTarget(match2, target, packageJsonUrl, internal, base);
   if (subpath === "") return resolved;
@@ -1309,7 +1333,7 @@ function resolvePackageTargetString(target, subpath, match2, packageJsonUrl, bas
     }
   }
   if (pattern) {
-    return new URL2(
+    return new URL(
       RegExpPrototypeSymbolReplace.call(
         patternRegEx,
         resolved.href,
@@ -1317,7 +1341,7 @@ function resolvePackageTargetString(target, subpath, match2, packageJsonUrl, bas
       )
     );
   }
-  return new URL2(subpath, resolved);
+  return new URL(subpath, resolved);
 }
 function isArrayIndex(key) {
   const keyNumber = Number(key);
@@ -1642,7 +1666,7 @@ function parsePackageName(specifier, base) {
 }
 function packageResolve(specifier, base, conditions) {
   if (builtinModules.includes(specifier)) {
-    return new URL2("node:" + specifier);
+    return new URL("node:" + specifier);
   }
   const { packageName, packageSubpath, isScoped } = parsePackageName(
     specifier,
@@ -1661,7 +1685,7 @@ function packageResolve(specifier, base, conditions) {
       );
     }
   }
-  let packageJsonUrl = new URL2(
+  let packageJsonUrl = new URL(
     "./node_modules/" + packageName + "/package.json",
     base
   );
@@ -1671,7 +1695,7 @@ function packageResolve(specifier, base, conditions) {
     const stat = tryStatSync(packageJsonPath.slice(0, -13));
     if (!stat || !stat.isDirectory()) {
       lastPath = packageJsonPath;
-      packageJsonUrl = new URL2(
+      packageJsonUrl = new URL(
         (isScoped ? "../../../../node_modules/" : "../../../node_modules/") + packageName + "/package.json",
         packageJsonUrl
       );
@@ -1691,7 +1715,7 @@ function packageResolve(specifier, base, conditions) {
     if (packageSubpath === ".") {
       return legacyMainResolve(packageJsonUrl, packageConfig2, base);
     }
-    return new URL2(packageSubpath, packageJsonUrl);
+    return new URL(packageSubpath, packageJsonUrl);
   } while (packageJsonPath.length !== lastPath.length);
   throw new ERR_MODULE_NOT_FOUND(packageName, fileURLToPath3(base), false);
 }
@@ -1710,13 +1734,16 @@ function shouldBeTreatedAsRelativeOrAbsolutePath(specifier) {
   return isRelativeSpecifier(specifier);
 }
 function moduleResolve(specifier, base, conditions, preserveSymlinks) {
+  if (conditions === void 0) {
+    conditions = getConditionsSet();
+  }
   const protocol = base.protocol;
   const isData = protocol === "data:";
   const isRemote = isData || protocol === "http:" || protocol === "https:";
   let resolved;
   if (shouldBeTreatedAsRelativeOrAbsolutePath(specifier)) {
     try {
-      resolved = new URL2(specifier, base);
+      resolved = new URL(specifier, base);
     } catch (error_) {
       const error = new ERR_UNSUPPORTED_RESOLVE_REQUEST(specifier, base);
       error.cause = error_;
@@ -1726,7 +1753,7 @@ function moduleResolve(specifier, base, conditions, preserveSymlinks) {
     resolved = packageImportsResolve(specifier, base, conditions);
   } else {
     try {
-      resolved = new URL2(specifier);
+      resolved = new URL(specifier);
     } catch (error_) {
       if (isRemote && !builtinModules.includes(specifier)) {
         const error = new ERR_UNSUPPORTED_RESOLVE_REQUEST(specifier, base);
@@ -1736,7 +1763,7 @@ function moduleResolve(specifier, base, conditions, preserveSymlinks) {
       resolved = packageResolve(specifier, base, conditions);
     }
   }
-  assert2(resolved !== void 0, "expected to be defined");
+  assert2.ok(resolved !== void 0, "expected to be defined");
   if (resolved.protocol !== "file:") {
     return resolved;
   }

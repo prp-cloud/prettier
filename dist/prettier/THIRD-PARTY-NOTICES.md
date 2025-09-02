@@ -399,7 +399,7 @@ Author: Alex Bell <alex@bellandwhistle.net>
 
 ----------------------------------------
 
-## @typescript-eslint/types@v8.39.1
+## @typescript-eslint/types@v8.41.0
 
 > Types for the TypeScript-ESTree AST spec
 
@@ -431,7 +431,7 @@ Repository: <https://github.com/typescript-eslint/typescript-eslint.git>
 
 ----------------------------------------
 
-## @typescript-eslint/typescript-estree@v8.39.1
+## @typescript-eslint/typescript-estree@v8.41.0
 
 > A parser that converts TypeScript source code into an ESTree compatible form
 
@@ -1239,7 +1239,7 @@ Contributors:
 
 ----------------------------------------
 
-## emoji-regex@v10.4.0
+## emoji-regex@v10.5.0
 
 > A regular expression to match all Emoji-only symbols as per the Unicode Standard.
 
@@ -1902,7 +1902,7 @@ License: MIT
 
 ----------------------------------------
 
-## get-east-asian-width@v1.3.0
+## get-east-asian-width@v1.3.1
 
 > Determine the East Asian Width of a Unicode character
 
@@ -2093,7 +2093,7 @@ Author: kael
 
 ----------------------------------------
 
-## import-meta-resolve@v4.1.0
+## import-meta-resolve@v4.2.0
 
 > Resolve things like Node.js — ponyfill for `import.meta.resolve`
 
@@ -2104,7 +2104,7 @@ Contributors:
 
 > (The MIT License)
 >
-> Copyright (c) 2021 Titus Wormer <mailto:tituswormer@gmail.com>
+> Copyright (c) Titus Wormer <mailto:tituswormer@gmail.com>
 >
 > Permission is hereby granted, free of charge, to any person obtaining
 > a copy of this software and associated documentation files (the
