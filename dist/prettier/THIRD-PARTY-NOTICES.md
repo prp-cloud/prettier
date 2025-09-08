@@ -4307,7 +4307,7 @@ License: MIT
 
 ----------------------------------------
 
-## strip-ansi@v7.1.0
+## strip-ansi@v7.1.2
 
 > Strip ANSI escape codes from a string
 
