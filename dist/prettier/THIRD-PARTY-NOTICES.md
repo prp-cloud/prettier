@@ -102,7 +102,7 @@ Author: The Babel Team (https://babel.dev/team)
 
 ----------------------------------------
 
-## @babel/parser@v7.28.3
+## @babel/parser@v7.28.4
 
 > A JavaScript parser
 
@@ -399,7 +399,7 @@ Author: Alex Bell <alex@bellandwhistle.net>
 
 ----------------------------------------
 
-## @typescript-eslint/types@v8.41.0
+## @typescript-eslint/types@v8.42.0
 
 > Types for the TypeScript-ESTree AST spec
 
@@ -431,7 +431,7 @@ Repository: <https://github.com/typescript-eslint/typescript-eslint.git>
 
 ----------------------------------------
 
-## @typescript-eslint/typescript-estree@v8.41.0
+## @typescript-eslint/typescript-estree@v8.42.0
 
 > A parser that converts TypeScript source code into an ESTree compatible form
 
@@ -619,11 +619,13 @@ License: MIT
 
 ----------------------------------------
 
-## ansi-regex@v6.2.0
+## ansi-regex@v6.2.1
 
 > Regular expression for matching ANSI escape codes
 
 License: MIT  
+Homepage: <https://github.com/chalk/ansi-regex#readme>  
+Repository: <git+https://github.com/chalk/ansi-regex.git>  
 Author: Sindre Sorhus <sindresorhus@gmail.com> (https://sindresorhus.com)  
 
 > MIT License
