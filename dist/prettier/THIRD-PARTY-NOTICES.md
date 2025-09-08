@@ -619,13 +619,11 @@ License: MIT
 
 ----------------------------------------
 
-## ansi-regex@v6.2.1
+## ansi-regex@v6.2.2
 
 > Regular expression for matching ANSI escape codes
 
 License: MIT  
-Homepage: <https://github.com/chalk/ansi-regex#readme>  
-Repository: <git+https://github.com/chalk/ansi-regex.git>  
 Author: Sindre Sorhus <sindresorhus@gmail.com> (https://sindresorhus.com)  
 
 > MIT License
