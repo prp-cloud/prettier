@@ -399,7 +399,7 @@ Author: Alex Bell <alex@bellandwhistle.net>
 
 ----------------------------------------
 
-## @typescript-eslint/types@v8.42.0
+## @typescript-eslint/types@v8.43.0
 
 > Types for the TypeScript-ESTree AST spec
 
@@ -431,7 +431,7 @@ Repository: <https://github.com/typescript-eslint/typescript-eslint.git>
 
 ----------------------------------------
 
-## @typescript-eslint/typescript-estree@v8.42.0
+## @typescript-eslint/typescript-estree@v8.43.0
 
 > A parser that converts TypeScript source code into an ESTree compatible form
 
