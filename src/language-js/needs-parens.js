@@ -753,7 +753,9 @@ function needsParens(path, options) {
       return (
         (key === "callee" && parent.type === "CallExpression") ||
         (key === "test" && parent.type === "ConditionalExpression") ||
-        (parent.type === "ExpressionStatement" &&
+        (["ArrowFunctionExpression", "ExpressionStatement"].includes(
+          parent.type,
+        ) &&
           node.left.type === "ObjectPattern") ||
         (key === "object" && parent.type === "MemberExpression") ||
         [

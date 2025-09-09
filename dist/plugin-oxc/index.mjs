@@ -5933,7 +5933,9 @@ function needsParens(path, options2) {
       }
       return key === "object" && isMemberExpression(parent) && isNumericLiteral(node);
     case "AssignmentExpression":
-      return key === "callee" && parent.type === "CallExpression" || key === "test" && parent.type === "ConditionalExpression" || parent.type === "ExpressionStatement" && node.left.type === "ObjectPattern" || key === "object" && parent.type === "MemberExpression" || [
+      return key === "callee" && parent.type === "CallExpression" || key === "test" && parent.type === "ConditionalExpression" || ["ArrowFunctionExpression", "ExpressionStatement"].includes(
+        parent.type
+      ) && node.left.type === "ObjectPattern" || key === "object" && parent.type === "MemberExpression" || [
         "AwaitExpression",
         "BinaryExpression",
         "LogicalExpression",
