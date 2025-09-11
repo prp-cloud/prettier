@@ -1,3 +1,5 @@
+import { inspect } from "node:util";
+
 import {
   breakParent,
   conditionalGroup,
@@ -418,7 +420,7 @@ function printMemberChain(path, options, print) {
       // that means that the parent group has already been broken
       // naturally
       willBreak(oneLine) || shouldHaveEmptyLineBeforeIndent ? breakParent : "",
-      conditionalGroup([oneLine, expanded]),
+      group(expanded),
     ];
   }
 
