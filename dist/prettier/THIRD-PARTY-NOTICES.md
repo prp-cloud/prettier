@@ -226,7 +226,7 @@ Repository: <git+https://github.com/handlebars-lang/handlebars-parser.git>
 
 ----------------------------------------
 
-## @keyv/serialize@v1.1.0
+## @keyv/serialize@v1.1.1
 
 > Serialization for Keyv
 
@@ -3012,7 +3012,7 @@ License: MIT
 
 ----------------------------------------
 
-## keyv@v5.5.0
+## keyv@v5.5.1
 
 > Simple key-value storage with support for multiple backends
 
