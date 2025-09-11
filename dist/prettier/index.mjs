@@ -14559,7 +14559,7 @@ function isFullWidth(x) {
   return x === 12288 || x >= 65281 && x <= 65376 || x >= 65504 && x <= 65510;
 }
 function isWide(x) {
-  return x >= 4352 && x <= 4447 || x === 8986 || x === 8987 || x === 9001 || x === 9002 || x >= 9193 && x <= 9196 || x === 9200 || x === 9203 || x === 9725 || x === 9726 || x === 9748 || x === 9749 || x >= 9776 && x <= 9783 || x >= 9800 && x <= 9811 || x === 9855 || x >= 9866 && x <= 9871 || x === 9875 || x === 9889 || x === 9898 || x === 9899 || x === 9917 || x === 9918 || x === 9924 || x === 9925 || x === 9934 || x === 9940 || x === 9962 || x === 9970 || x === 9971 || x === 9973 || x === 9978 || x === 9981 || x === 9989 || x === 9994 || x === 9995 || x === 10024 || x === 10060 || x === 10062 || x >= 10067 && x <= 10069 || x === 10071 || x >= 10133 && x <= 10135 || x === 10160 || x === 10175 || x === 11035 || x === 11036 || x === 11088 || x === 11093 || x >= 11904 && x <= 11929 || x >= 11931 && x <= 12019 || x >= 12032 && x <= 12245 || x >= 12272 && x <= 12287 || x >= 12289 && x <= 12350 || x >= 12353 && x <= 12438 || x >= 12441 && x <= 12543 || x >= 12549 && x <= 12591 || x >= 12593 && x <= 12686 || x >= 12688 && x <= 12773 || x >= 12783 && x <= 12830 || x >= 12832 && x <= 12871 || x >= 12880 && x <= 42124 || x >= 42128 && x <= 42182 || x >= 43360 && x <= 43388 || x >= 44032 && x <= 55203 || x >= 63744 && x <= 64255 || x >= 65040 && x <= 65049 || x >= 65072 && x <= 65106 || x >= 65108 && x <= 65126 || x >= 65128 && x <= 65131 || x >= 94176 && x <= 94180 || x === 94192 || x === 94193 || x >= 94208 && x <= 100343 || x >= 100352 && x <= 101589 || x >= 101631 && x <= 101640 || x >= 110576 && x <= 110579 || x >= 110581 && x <= 110587 || x === 110589 || x === 110590 || x >= 110592 && x <= 110882 || x === 110898 || x >= 110928 && x <= 110930 || x === 110933 || x >= 110948 && x <= 110951 || x >= 110960 && x <= 111355 || x >= 119552 && x <= 119638 || x >= 119648 && x <= 119670 || x === 126980 || x === 127183 || x === 127374 || x >= 127377 && x <= 127386 || x >= 127488 && x <= 127490 || x >= 127504 && x <= 127547 || x >= 127552 && x <= 127560 || x === 127568 || x === 127569 || x >= 127584 && x <= 127589 || x >= 127744 && x <= 127776 || x >= 127789 && x <= 127797 || x >= 127799 && x <= 127868 || x >= 127870 && x <= 127891 || x >= 127904 && x <= 127946 || x >= 127951 && x <= 127955 || x >= 127968 && x <= 127984 || x === 127988 || x >= 127992 && x <= 128062 || x === 128064 || x >= 128066 && x <= 128252 || x >= 128255 && x <= 128317 || x >= 128331 && x <= 128334 || x >= 128336 && x <= 128359 || x === 128378 || x === 128405 || x === 128406 || x === 128420 || x >= 128507 && x <= 128591 || x >= 128640 && x <= 128709 || x === 128716 || x >= 128720 && x <= 128722 || x >= 128725 && x <= 128727 || x >= 128732 && x <= 128735 || x === 128747 || x === 128748 || x >= 128756 && x <= 128764 || x >= 128992 && x <= 129003 || x === 129008 || x >= 129292 && x <= 129338 || x >= 129340 && x <= 129349 || x >= 129351 && x <= 129535 || x >= 129648 && x <= 129660 || x >= 129664 && x <= 129673 || x >= 129679 && x <= 129734 || x >= 129742 && x <= 129756 || x >= 129759 && x <= 129769 || x >= 129776 && x <= 129784 || x >= 131072 && x <= 196605 || x >= 196608 && x <= 262141;
+  return x >= 4352 && x <= 4447 || x === 8986 || x === 8987 || x === 9001 || x === 9002 || x >= 9193 && x <= 9196 || x === 9200 || x === 9203 || x === 9725 || x === 9726 || x === 9748 || x === 9749 || x >= 9776 && x <= 9783 || x >= 9800 && x <= 9811 || x === 9855 || x >= 9866 && x <= 9871 || x === 9875 || x === 9889 || x === 9898 || x === 9899 || x === 9917 || x === 9918 || x === 9924 || x === 9925 || x === 9934 || x === 9940 || x === 9962 || x === 9970 || x === 9971 || x === 9973 || x === 9978 || x === 9981 || x === 9989 || x === 9994 || x === 9995 || x === 10024 || x === 10060 || x === 10062 || x >= 10067 && x <= 10069 || x === 10071 || x >= 10133 && x <= 10135 || x === 10160 || x === 10175 || x === 11035 || x === 11036 || x === 11088 || x === 11093 || x >= 11904 && x <= 11929 || x >= 11931 && x <= 12019 || x >= 12032 && x <= 12245 || x >= 12272 && x <= 12287 || x >= 12289 && x <= 12350 || x >= 12353 && x <= 12438 || x >= 12441 && x <= 12543 || x >= 12549 && x <= 12591 || x >= 12593 && x <= 12686 || x >= 12688 && x <= 12773 || x >= 12783 && x <= 12830 || x >= 12832 && x <= 12871 || x >= 12880 && x <= 42124 || x >= 42128 && x <= 42182 || x >= 43360 && x <= 43388 || x >= 44032 && x <= 55203 || x >= 63744 && x <= 64255 || x >= 65040 && x <= 65049 || x >= 65072 && x <= 65106 || x >= 65108 && x <= 65126 || x >= 65128 && x <= 65131 || x >= 94176 && x <= 94180 || x >= 94192 && x <= 94198 || x >= 94208 && x <= 101589 || x >= 101631 && x <= 101662 || x >= 101760 && x <= 101874 || x >= 110576 && x <= 110579 || x >= 110581 && x <= 110587 || x === 110589 || x === 110590 || x >= 110592 && x <= 110882 || x === 110898 || x >= 110928 && x <= 110930 || x === 110933 || x >= 110948 && x <= 110951 || x >= 110960 && x <= 111355 || x >= 119552 && x <= 119638 || x >= 119648 && x <= 119670 || x === 126980 || x === 127183 || x === 127374 || x >= 127377 && x <= 127386 || x >= 127488 && x <= 127490 || x >= 127504 && x <= 127547 || x >= 127552 && x <= 127560 || x === 127568 || x === 127569 || x >= 127584 && x <= 127589 || x >= 127744 && x <= 127776 || x >= 127789 && x <= 127797 || x >= 127799 && x <= 127868 || x >= 127870 && x <= 127891 || x >= 127904 && x <= 127946 || x >= 127951 && x <= 127955 || x >= 127968 && x <= 127984 || x === 127988 || x >= 127992 && x <= 128062 || x === 128064 || x >= 128066 && x <= 128252 || x >= 128255 && x <= 128317 || x >= 128331 && x <= 128334 || x >= 128336 && x <= 128359 || x === 128378 || x === 128405 || x === 128406 || x === 128420 || x >= 128507 && x <= 128591 || x >= 128640 && x <= 128709 || x === 128716 || x >= 128720 && x <= 128722 || x >= 128725 && x <= 128728 || x >= 128732 && x <= 128735 || x === 128747 || x === 128748 || x >= 128756 && x <= 128764 || x >= 128992 && x <= 129003 || x === 129008 || x >= 129292 && x <= 129338 || x >= 129340 && x <= 129349 || x >= 129351 && x <= 129535 || x >= 129648 && x <= 129660 || x >= 129664 && x <= 129674 || x >= 129678 && x <= 129734 || x === 129736 || x >= 129741 && x <= 129756 || x >= 129759 && x <= 129770 || x >= 129775 && x <= 129784 || x >= 131072 && x <= 196605 || x >= 196608 && x <= 262141;
 }
 
 // src/utils/get-string-width.js
@@ -17560,12 +17560,12 @@ var languages_evaluate_default = [
   {
     "name": "CSS",
     "type": "markup",
+    "aceMode": "css",
     "extensions": [
       ".css",
       ".wxss"
     ],
     "tmScope": "source.css",
-    "aceMode": "css",
     "codemirrorMode": "css",
     "codemirrorMimeType": "text/css",
     "parsers": [
@@ -17579,12 +17579,12 @@ var languages_evaluate_default = [
   {
     "name": "PostCSS",
     "type": "markup",
+    "aceMode": "text",
     "extensions": [
       ".pcss",
       ".postcss"
     ],
     "tmScope": "source.postcss",
-    "aceMode": "text",
     "group": "CSS",
     "parsers": [
       "css"
@@ -17597,11 +17597,11 @@ var languages_evaluate_default = [
   {
     "name": "Less",
     "type": "markup",
+    "aceMode": "less",
     "extensions": [
       ".less"
     ],
     "tmScope": "source.css.less",
-    "aceMode": "less",
     "aliases": [
       "less-css"
     ],
@@ -17618,11 +17618,11 @@ var languages_evaluate_default = [
   {
     "name": "SCSS",
     "type": "markup",
+    "aceMode": "scss",
     "extensions": [
       ".scss"
     ],
     "tmScope": "source.css.scss",
-    "aceMode": "scss",
     "codemirrorMode": "css",
     "codemirrorMimeType": "text/x-scss",
     "parsers": [
@@ -17711,13 +17711,13 @@ var languages_evaluate_default2 = [
   {
     "name": "GraphQL",
     "type": "data",
+    "aceMode": "graphqlschema",
     "extensions": [
       ".graphql",
       ".gql",
       ".graphqls"
     ],
     "tmScope": "source.graphql",
-    "aceMode": "graphqlschema",
     "parsers": [
       "graphql"
     ],
@@ -17739,12 +17739,12 @@ var languages_evaluate_default3 = [
   {
     "name": "Handlebars",
     "type": "markup",
+    "aceMode": "handlebars",
     "extensions": [
       ".handlebars",
       ".hbs"
     ],
     "tmScope": "text.html.handlebars",
-    "aceMode": "handlebars",
     "aliases": [
       "hbs",
       "htmlbars"
@@ -17764,11 +17764,11 @@ var languages_evaluate_default4 = [
   {
     "name": "Angular",
     "type": "markup",
+    "aceMode": "html",
     "extensions": [
       ".component.html"
     ],
     "tmScope": "text.html.basic",
-    "aceMode": "html",
     "aliases": [
       "xhtml"
     ],
@@ -17786,6 +17786,7 @@ var languages_evaluate_default4 = [
   {
     "name": "HTML",
     "type": "markup",
+    "aceMode": "html",
     "extensions": [
       ".html",
       ".hta",
@@ -17796,7 +17797,6 @@ var languages_evaluate_default4 = [
       ".xhtml"
     ],
     "tmScope": "text.html.basic",
-    "aceMode": "html",
     "aliases": [
       "xhtml"
     ],
@@ -17813,9 +17813,9 @@ var languages_evaluate_default4 = [
   {
     "name": "Lightning Web Components",
     "type": "markup",
+    "aceMode": "html",
     "extensions": [],
     "tmScope": "text.html.basic",
-    "aceMode": "html",
     "aliases": [
       "xhtml"
     ],
@@ -17833,11 +17833,11 @@ var languages_evaluate_default4 = [
   {
     "name": "MJML",
     "type": "markup",
+    "aceMode": "html",
     "extensions": [
       ".mjml"
     ],
     "tmScope": "text.mjml.basic",
-    "aceMode": "html",
     "aliases": [
       "MJML",
       "mjml"
@@ -17856,11 +17856,11 @@ var languages_evaluate_default4 = [
   {
     "name": "Vue",
     "type": "markup",
+    "aceMode": "vue",
     "extensions": [
       ".vue"
     ],
     "tmScope": "source.vue",
-    "aceMode": "vue",
     "codemirrorMode": "vue",
     "codemirrorMimeType": "text/x-vue",
     "parsers": [
@@ -17912,6 +17912,7 @@ var languages_evaluate_default5 = [
   {
     "name": "JavaScript",
     "type": "programming",
+    "aceMode": "javascript",
     "extensions": [
       ".js",
       "._js",
@@ -17940,8 +17941,12 @@ var languages_evaluate_default5 = [
       ".end.frag",
       ".wxs"
     ],
+    "filenames": [
+      "Jakefile",
+      "start.frag",
+      "end.frag"
+    ],
     "tmScope": "source.js",
-    "aceMode": "javascript",
     "aliases": [
       "js",
       "node"
@@ -17960,11 +17965,6 @@ var languages_evaluate_default5 = [
       "v8",
       "v8-shell",
       "zx"
-    ],
-    "filenames": [
-      "Jakefile",
-      "start.frag",
-      "end.frag"
     ],
     "parsers": [
       "babel",
@@ -17985,11 +17985,12 @@ var languages_evaluate_default5 = [
   {
     "name": "Flow",
     "type": "programming",
+    "aceMode": "javascript",
     "extensions": [
       ".js.flow"
     ],
+    "filenames": [],
     "tmScope": "source.js",
-    "aceMode": "javascript",
     "aliases": [],
     "codemirrorMode": "javascript",
     "codemirrorMimeType": "text/javascript",
@@ -18005,7 +18006,6 @@ var languages_evaluate_default5 = [
       "v8",
       "v8-shell"
     ],
-    "filenames": [],
     "parsers": [
       "flow",
       "babel-flow"
@@ -18018,16 +18018,16 @@ var languages_evaluate_default5 = [
   {
     "name": "JSX",
     "type": "programming",
+    "aceMode": "javascript",
     "extensions": [
       ".jsx"
     ],
+    "filenames": void 0,
     "tmScope": "source.js.jsx",
-    "aceMode": "javascript",
     "aliases": void 0,
     "codemirrorMode": "jsx",
     "codemirrorMimeType": "text/jsx",
     "interpreters": void 0,
-    "filenames": void 0,
     "parsers": [
       "babel",
       "babel-flow",
@@ -18046,13 +18046,13 @@ var languages_evaluate_default5 = [
   {
     "name": "TypeScript",
     "type": "programming",
+    "aceMode": "typescript",
     "extensions": [
       ".ts",
       ".cts",
       ".mts"
     ],
     "tmScope": "source.ts",
-    "aceMode": "typescript",
     "aliases": [
       "ts"
     ],
@@ -18076,11 +18076,11 @@ var languages_evaluate_default5 = [
   {
     "name": "TSX",
     "type": "programming",
+    "aceMode": "tsx",
     "extensions": [
       ".tsx"
     ],
     "tmScope": "source.tsx",
-    "aceMode": "tsx",
     "codemirrorMode": "jsx",
     "codemirrorMimeType": "text/typescript-jsx",
     "group": "TypeScript",
@@ -18206,11 +18206,16 @@ var languages_evaluate_default6 = [
   {
     "name": "JSON.stringify",
     "type": "data",
+    "aceMode": "json",
     "extensions": [
       ".importmap"
     ],
+    "filenames": [
+      "package.json",
+      "package-lock.json",
+      "composer.json"
+    ],
     "tmScope": "source.json",
-    "aceMode": "json",
     "aliases": [
       "geojson",
       "jsonl",
@@ -18219,11 +18224,6 @@ var languages_evaluate_default6 = [
     ],
     "codemirrorMode": "javascript",
     "codemirrorMimeType": "application/json",
-    "filenames": [
-      "package.json",
-      "package-lock.json",
-      "composer.json"
-    ],
     "parsers": [
       "json-stringify"
     ],
@@ -18235,6 +18235,7 @@ var languages_evaluate_default6 = [
   {
     "name": "JSON",
     "type": "data",
+    "aceMode": "json",
     "extensions": [
       ".json",
       ".4DForm",
@@ -18257,16 +18258,6 @@ var languages_evaluate_default6 = [
       ".yy",
       ".yyp"
     ],
-    "tmScope": "source.json",
-    "aceMode": "json",
-    "aliases": [
-      "geojson",
-      "jsonl",
-      "sarif",
-      "topojson"
-    ],
-    "codemirrorMode": "javascript",
-    "codemirrorMimeType": "application/json",
     "filenames": [
       ".all-contributorsrc",
       ".arcconfig",
@@ -18284,6 +18275,15 @@ var languages_evaluate_default6 = [
       ".jslintrc",
       ".swcrc"
     ],
+    "tmScope": "source.json",
+    "aliases": [
+      "geojson",
+      "jsonl",
+      "sarif",
+      "topojson"
+    ],
+    "codemirrorMode": "javascript",
+    "codemirrorMimeType": "application/json",
     "parsers": [
       "json"
     ],
@@ -18295,6 +18295,7 @@ var languages_evaluate_default6 = [
   {
     "name": "JSON with Comments",
     "type": "data",
+    "aceMode": "javascript",
     "extensions": [
       ".jsonc",
       ".code-snippets",
@@ -18314,15 +18315,14 @@ var languages_evaluate_default6 = [
       ".sublime_metrics",
       ".sublime_session"
     ],
+    "filenames": [],
     "tmScope": "source.json.comments",
-    "aceMode": "javascript",
     "aliases": [
       "jsonc"
     ],
     "codemirrorMode": "javascript",
     "codemirrorMimeType": "text/javascript",
     "group": "JSON",
-    "filenames": [],
     "parsers": [
       "jsonc"
     ],
@@ -18334,11 +18334,11 @@ var languages_evaluate_default6 = [
   {
     "name": "JSON5",
     "type": "data",
+    "aceMode": "json5",
     "extensions": [
       ".json5"
     ],
     "tmScope": "source.js",
-    "aceMode": "json5",
     "codemirrorMode": "javascript",
     "codemirrorMimeType": "application/json",
     "parsers": [
@@ -18356,6 +18356,7 @@ var languages_evaluate_default7 = [
   {
     "name": "Markdown",
     "type": "prose",
+    "aceMode": "markdown",
     "extensions": [
       ".md",
       ".livemd",
@@ -18369,18 +18370,17 @@ var languages_evaluate_default7 = [
       ".scd",
       ".workbook"
     ],
+    "filenames": [
+      "contents.lr",
+      "README"
+    ],
     "tmScope": "text.md",
-    "aceMode": "markdown",
     "aliases": [
       "md",
       "pandoc"
     ],
     "codemirrorMode": "gfm",
     "codemirrorMimeType": "text/x-gfm",
-    "filenames": [
-      "contents.lr",
-      "README"
-    ],
     "wrap": true,
     "parsers": [
       "markdown"
@@ -18393,18 +18393,18 @@ var languages_evaluate_default7 = [
   {
     "name": "MDX",
     "type": "prose",
+    "aceMode": "markdown",
     "extensions": [
       ".mdx"
     ],
+    "filenames": [],
     "tmScope": "text.md",
-    "aceMode": "markdown",
     "aliases": [
       "md",
       "pandoc"
     ],
     "codemirrorMode": "gfm",
     "codemirrorMimeType": "text/x-gfm",
-    "filenames": [],
     "wrap": true,
     "parsers": [
       "mdx"
@@ -18428,6 +18428,7 @@ var languages_evaluate_default8 = [
   {
     "name": "YAML",
     "type": "data",
+    "aceMode": "yaml",
     "extensions": [
       ".yml",
       ".mir",
@@ -18440,13 +18441,6 @@ var languages_evaluate_default8 = [
       ".yaml.sed",
       ".yml.mysql"
     ],
-    "tmScope": "source.yaml",
-    "aceMode": "yaml",
-    "aliases": [
-      "yml"
-    ],
-    "codemirrorMode": "yaml",
-    "codemirrorMimeType": "text/x-yaml",
     "filenames": [
       ".clang-format",
       ".clang-tidy",
@@ -18459,6 +18453,12 @@ var languages_evaluate_default8 = [
       ".stylelintrc",
       ".lintstagedrc"
     ],
+    "tmScope": "source.yaml",
+    "aliases": [
+      "yml"
+    ],
+    "codemirrorMode": "yaml",
+    "codemirrorMimeType": "text/x-yaml",
     "parsers": [
       "yaml"
     ],
@@ -18764,7 +18764,7 @@ var get_file_info_default = getFileInfo;
 import * as doc from "./doc.mjs";
 
 // src/main/version.evaluate.js
-var version_evaluate_default = "3.7.0-78bf36e7b";
+var version_evaluate_default = "3.7.0-fbd46bb30";
 
 // src/utils/public.js
 var public_exports = {};

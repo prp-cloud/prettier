@@ -1104,7 +1104,7 @@ Contributors:
 
 ----------------------------------------
 
-## deno-path-from-file-url@v0.0.3
+## deno-path-from-file-url@v0.0.4
 
 > Convert file URLs to paths.
 
@@ -1902,7 +1902,7 @@ License: MIT
 
 ----------------------------------------
 
-## get-east-asian-width@v1.3.1
+## get-east-asian-width@v1.4.0
 
 > Determine the East Asian Width of a Unicode character
 

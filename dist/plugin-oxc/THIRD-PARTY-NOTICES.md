@@ -54,7 +54,7 @@ Author: Sindre Sorhus <sindresorhus@gmail.com> (https://sindresorhus.com)
 
 ----------------------------------------
 
-## get-east-asian-width@v1.3.1
+## get-east-asian-width@v1.4.0
 
 > Determine the East Asian Width of a Unicode character
 
@@ -153,7 +153,7 @@ Repository: <https://github.com/jestjs/jest.git>
 
 ----------------------------------------
 
-## prettier@v3.7.0-78bf36e7b
+## prettier@v3.7.0-fbd46bb30
 
 > Prettier is an opinionated code formatter
 
