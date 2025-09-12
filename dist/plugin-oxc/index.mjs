@@ -7993,7 +7993,7 @@ function printCallExpression(path, options2, print3) {
     printCallee(path, print3),
     optional,
     printFunctionTypeParameters(path, options2, print3),
-    isNew && args.length === 0 && path.parent.type !== "MemberExpression" ? "" : call_arguments_default(path, options2, print3)
+    isNewExpression && args.length === 0 && path.parent.type !== "MemberExpression" ? "" : call_arguments_default(path, options2, print3)
   ];
   if (isDynamicImport || isCallExpression(node.callee)) {
     return group(contents);
