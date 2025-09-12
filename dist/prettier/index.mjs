@@ -9511,10 +9511,11 @@ var import_fast_glob = __toESM(require_out4(), 1);
 // node_modules/leven/index.js
 var array = [];
 var characterCodeCache = [];
-function leven(first, second) {
+function leven(first, second, options8) {
   if (first === second) {
     return 0;
   }
+  const maxDistance = options8?.maxDistance;
   const swap = first;
   if (first.length > second.length) {
     first = second;
@@ -9532,8 +9533,11 @@ function leven(first, second) {
   }
   firstLength -= start;
   secondLength -= start;
+  if (maxDistance !== void 0 && secondLength - firstLength > maxDistance) {
+    return maxDistance;
+  }
   if (firstLength === 0) {
-    return secondLength;
+    return maxDistance !== void 0 && secondLength > maxDistance ? maxDistance : secondLength;
   }
   let bCharacterCode;
   let result;
@@ -9554,8 +9558,72 @@ function leven(first, second) {
       temporary = array[index];
       result = array[index] = temporary > result ? temporary2 > result ? result + 1 : temporary2 : temporary2 > temporary ? temporary + 1 : temporary2;
     }
+    if (maxDistance !== void 0) {
+      let rowMinimum = result;
+      for (index = 0; index < firstLength; index++) {
+        if (array[index] < rowMinimum) {
+          rowMinimum = array[index];
+        }
+      }
+      if (rowMinimum > maxDistance) {
+        return maxDistance;
+      }
+    }
   }
-  return result;
+  array.length = firstLength;
+  characterCodeCache.length = firstLength;
+  return maxDistance !== void 0 && result > maxDistance ? maxDistance : result;
+}
+function closestMatch(target, candidates, options8) {
+  if (!Array.isArray(candidates) || candidates.length === 0) {
+    return void 0;
+  }
+  const userMax = options8?.maxDistance;
+  const targetLength = target.length;
+  for (const candidate of candidates) {
+    if (candidate === target) {
+      return candidate;
+    }
+  }
+  if (userMax === 0) {
+    return void 0;
+  }
+  let best;
+  let bestDist = Number.POSITIVE_INFINITY;
+  const seen = /* @__PURE__ */ new Set();
+  for (const candidate of candidates) {
+    if (seen.has(candidate)) {
+      continue;
+    }
+    seen.add(candidate);
+    const lengthDiff = Math.abs(candidate.length - targetLength);
+    if (lengthDiff >= bestDist) {
+      continue;
+    }
+    if (userMax !== void 0 && lengthDiff > userMax) {
+      continue;
+    }
+    const cap = Number.isFinite(bestDist) ? userMax === void 0 ? bestDist : Math.min(bestDist, userMax) : userMax;
+    const distance = cap === void 0 ? leven(target, candidate) : leven(target, candidate, { maxDistance: cap });
+    if (userMax !== void 0 && distance > userMax) {
+      continue;
+    }
+    let actualD = distance;
+    if (cap !== void 0 && distance === cap && cap === userMax) {
+      actualD = leven(target, candidate);
+    }
+    if (actualD < bestDist) {
+      bestDist = actualD;
+      best = candidate;
+      if (bestDist === 0) {
+        break;
+      }
+    }
+  }
+  if (userMax !== void 0 && bestDist > userMax) {
+    return void 0;
+  }
+  return best;
 }
 
 // src/index.js
@@ -9641,7 +9709,7 @@ var levenUnknownHandler = (key2, value, { descriptor, logger, schemas }) => {
   const messages2 = [
     `Ignored unknown option ${import_picocolors3.default.yellow(descriptor.pair({ key: key2, value }))}.`
   ];
-  const suggestion = Object.keys(schemas).sort().find((knownKey) => leven(key2, knownKey) < 3);
+  const suggestion = closestMatch(key2, Object.keys(schemas), { maxDistance: 3 });
   if (suggestion) {
     messages2.push(`Did you mean ${import_picocolors3.default.blue(descriptor.key(suggestion))}?`);
   }
@@ -12298,20 +12366,20 @@ var CONFIG_FILE_NAMES = [
   "package.yaml",
   ".prettierrc",
   ".prettierrc.json",
-  ".prettierrc.yaml",
   ".prettierrc.yml",
+  ".prettierrc.yaml",
   ".prettierrc.json5",
   ".prettierrc.js",
-  ".prettierrc.ts",
-  ".prettierrc.mjs",
-  ".prettierrc.mts",
-  ".prettierrc.cjs",
-  ".prettierrc.cts",
   "prettier.config.js",
+  ".prettierrc.ts",
   "prettier.config.ts",
+  ".prettierrc.mjs",
   "prettier.config.mjs",
+  ".prettierrc.mts",
   "prettier.config.mts",
+  ".prettierrc.cjs",
   "prettier.config.cjs",
+  ".prettierrc.cts",
   "prettier.config.cts",
   ".prettierrc.toml"
 ];
@@ -16678,7 +16746,7 @@ var normalize_format_options_default = normalizeFormatOptions;
 var import_code_frame2 = __toESM(require_lib2(), 1);
 async function parse5(originalText, options8) {
   const parser = await resolveParser(options8);
-  const text = parser.preprocess ? parser.preprocess(originalText, options8) : originalText;
+  const text = parser.preprocess ? await parser.preprocess(originalText, options8) : originalText;
   options8.originalText = text;
   let ast;
   try {
@@ -18764,7 +18832,7 @@ var get_file_info_default = getFileInfo;
 import * as doc from "./doc.mjs";
 
 // src/main/version.evaluate.js
-var version_evaluate_default = "3.7.0-d06771cb9";
+var version_evaluate_default = "3.7.0-f5aa12a9e";
 
 // src/utils/public.js
 var public_exports = {};
@@ -19052,7 +19120,7 @@ var sharedWithCli = {
   fastGlob: import_fast_glob.default,
   createTwoFilesPatch,
   picocolors: import_picocolors4.default,
-  leven,
+  closetLevenshteinMatch: closestMatch,
   utils: {
     omit: object_omit_default,
     createMockable: create_mockable_default

@@ -3596,8 +3596,8 @@ function label(label2, contents) {
 }
 
 // src/language-js/print/comment.js
-function printComment(commentPath, options2) {
-  const comment = commentPath.node;
+function printComment(path, options2) {
+  const comment = path.node;
   if (is_line_comment_default(comment)) {
     return options2.originalText.slice(locStart(comment), locEnd(comment)).trimEnd();
   }
@@ -6051,6 +6051,8 @@ function needsParens(path, options2) {
         case "TSTypeAssertion":
         case "MatchExpressionCase":
           return true;
+        case "TSInstantiationExpression":
+          return key === "expression";
         case "ConditionalExpression":
           return key === "test";
         default:
@@ -7229,13 +7231,14 @@ function printBinaryishExpressions(path, options2, print3, isNested, isInsidePar
     parts.push(group(print3("left")));
   }
   const shouldInline = shouldInlineLogicalExpression(node);
-  const lineBeforeOperator = (node.operator === "|>" || node.type === "NGPipeExpression" || isVueFilterSequenceExpression(path, options2)) && !hasLeadingOwnLineComment(options2.originalText, node.right);
+  const rightNodeToCheckComments = node.right.type === "ChainExpression" ? node.right.expression : node.right;
+  const lineBeforeOperator = (node.operator === "|>" || node.type === "NGPipeExpression" || isVueFilterSequenceExpression(path, options2)) && !hasLeadingOwnLineComment(options2.originalText, rightNodeToCheckComments);
   const hasTypeCastComment = hasComment(
-    node.right,
+    rightNodeToCheckComments,
     CommentCheckFlags.Leading,
     is_type_cast_comment_default
   );
-  const commentBeforeOperator = !hasTypeCastComment && hasLeadingOwnLineComment(options2.originalText, node.right);
+  const commentBeforeOperator = !hasTypeCastComment && hasLeadingOwnLineComment(options2.originalText, rightNodeToCheckComments);
   const operator = node.type === "NGPipeExpression" ? "|" : node.operator;
   const rightSuffix = node.type === "NGPipeExpression" && node.arguments.length > 0 ? group(
     indent([
@@ -7251,7 +7254,7 @@ function printBinaryishExpressions(path, options2, print3, isNested, isInsidePar
   if (shouldInline) {
     right = [
       operator,
-      hasLeadingOwnLineComment(options2.originalText, node.right) ? indent([line, print3("right"), rightSuffix]) : [" ", print3("right"), rightSuffix]
+      hasLeadingOwnLineComment(options2.originalText, rightNodeToCheckComments) ? indent([line, print3("right"), rightSuffix]) : [" ", print3("right"), rightSuffix]
     ];
   } else {
     const isHackPipeline = operator === "|>" && path.root.extra?.__isUsingHackPipeline;
@@ -7485,15 +7488,6 @@ function printCallArguments(path, options2, print3) {
     }
     printedArguments.push(argDoc);
   });
-  if ((node.type === "TSImportType" || node.type === "ImportExpression") && args.length === 1 && !hasComment(args[0])) {
-    let source = args[0];
-    if (node.type === "TSImportType" && source.type === "TSLiteralType") {
-      source = source.literal;
-    }
-    if (isStringLiteral(source)) {
-      return group(["(", printedArguments, ")"]);
-    }
-  }
   const maybeTrailingComma = (
     // Angular does not allow trailing comma
     !options2.parser.startsWith("__ng_") && // Dynamic imports cannot have trailing commas
@@ -7958,12 +7952,12 @@ var member_chain_default = printMemberChain;
 // src/language-js/print/call-expression.js
 function printCallExpression(path, options2, print3) {
   const { node } = path;
-  const isNew = node.type === "NewExpression";
-  const isDynamicImport = node.type === "ImportExpression";
+  const isNewExpression = node.type === "NewExpression";
   const optional = printOptionalToken(path);
   const args = getCallArguments(node);
   const isTemplateLiteralSingleArg = args.length === 1 && isTemplateOnItsOwnLine(args[0], options2.originalText);
-  if (isTemplateLiteralSingleArg || // Dangling comments are not handled, all these special cases should have arguments #9668
+  if (isTemplateLiteralSingleArg || // Don't break simple `import()` with long module name
+  isSimpleModuleImport(path) || // Dangling comments are not handled, all these special cases should have arguments #9668
   // We want to keep CommonJS- and AMD-style require calls, and AMD-style
   // define calls, as a unit.
   // e.g. `define(["some/lib"], (lib) => {`
@@ -7976,7 +7970,7 @@ function printCallExpression(path, options2, print3) {
     });
     if (!(isTemplateLiteralSingleArg && printed[0].label?.embed)) {
       return [
-        isNew ? "new " : "",
+        isNewExpression ? "new " : "",
         printCallee(path, print3),
         optional,
         printFunctionTypeParameters(path, options2, print3),
@@ -7986,7 +7980,8 @@ function printCallExpression(path, options2, print3) {
       ];
     }
   }
-  if (!isDynamicImport && !isNew && isMemberish(node.callee) && !path.call(
+  const isDynamicImport = node.type === "ImportExpression" || node.type === "TSImportType";
+  if (!isDynamicImport && !isNewExpression && isMemberish(node.callee) && !path.call(
     (path2) => needs_parens_default(path2, options2),
     "callee",
     ...node.callee.type === "ChainExpression" ? ["expression"] : []
@@ -7994,7 +7989,7 @@ function printCallExpression(path, options2, print3) {
     return member_chain_default(path, options2, print3);
   }
   const contents = [
-    isNew ? "new " : "",
+    isNewExpression ? "new " : "",
     printCallee(path, print3),
     optional,
     printFunctionTypeParameters(path, options2, print3),
@@ -8007,10 +8002,28 @@ function printCallExpression(path, options2, print3) {
 }
 function printCallee(path, print3) {
   const { node } = path;
-  if (node.type === "ImportExpression") {
+  if (node.type === "ImportExpression" || node.type === "TSImportType") {
     return `import${node.phase ? `.${node.phase}` : ""}`;
   }
   return print3("callee");
+}
+function isSimpleModuleImport(path) {
+  const { node } = path;
+  if (!// `import("foo")`
+  (node.type === "ImportExpression" || // `type foo = import("foo")`
+  node.type === "TSImportType" || // `require("foo")`
+  node.type === "CallExpression" && !node.optional && node.callee.type === "Identifier" && node.callee.name === "require")) {
+    return false;
+  }
+  const args = getCallArguments(node);
+  if (args.length !== 1 || hasComment(args[0])) {
+    return false;
+  }
+  let source = args[0];
+  if (node.type === "TSImportType" && source.type === "TSLiteralType") {
+    source = source.literal;
+  }
+  return isStringLiteral(source);
 }
 function isCommonsJsOrAmdModuleDefinition(path) {
   const { node } = path;
@@ -8836,11 +8849,14 @@ function printAbstractToken({ node }) {
   return node.abstract || tsAbstractNodeTypes.has(node.type) ? "abstract " : "";
 }
 function printFunctionTypeParameters(path, options2, print3) {
-  const fun = path.node;
-  if (fun.typeArguments) {
+  const { node } = path;
+  if (node.type === "TSImportType") {
+    return "";
+  }
+  if (node.typeArguments) {
     return print3("typeArguments");
   }
-  if (fun.typeParameters) {
+  if (node.typeParameters) {
     return print3("typeParameters");
   }
   return "";
@@ -12171,8 +12187,7 @@ function printTypescript(path, options2, print3) {
       return [print3("expression"), "!"];
     case "TSImportType":
       return [
-        "import",
-        call_arguments_default(path, options2, print3),
+        printCallExpression(path, options2, print3),
         !node.qualifier ? "" : [".", print3("qualifier")],
         printTypeParameters(
           path,

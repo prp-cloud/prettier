@@ -3,7 +3,7 @@
 The published Prettier artifact additionally contains code with the following licenses:
 MIT, ISC, BSD-3-Clause, BSD-2-Clause, and Apache-2.0.
 
-## @angular/compiler@v20.2.1
+## @angular/compiler@v20.3.0
 
 > Angular - the compiler library
 
@@ -1831,7 +1831,7 @@ Contributors:
 
 ----------------------------------------
 
-## flow-parser@v0.279.0
+## flow-parser@v0.281.0
 
 > JavaScript parser written in OCaml. Produces ESTree AST
 
@@ -3046,7 +3046,7 @@ Author: Jared Wray <me@jaredwray.com> (http://jaredwray.com)
 
 ----------------------------------------
 
-## leven@v4.0.0
+## leven@v4.1.0
 
 > Measure the difference between two strings using the Levenshtein distance algorithm
 
@@ -5349,7 +5349,7 @@ Contributors:
 
 ----------------------------------------
 
-## vnopts@v2.0.2
+## vnopts@v2.0.3
 
 > validate and normalize options
 

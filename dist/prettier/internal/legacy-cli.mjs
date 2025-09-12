@@ -1002,7 +1002,7 @@ var {
   fastGlob,
   createTwoFilesPatch,
   picocolors,
-  leven
+  closetLevenshteinMatch
 } = sharedWithCli;
 
 // src/cli/options/get-context-options.js
@@ -1308,7 +1308,9 @@ var FlagSchema = class extends vnopts.ChoiceSchema {
   }
   preprocess(value, utils) {
     if (typeof value === "string" && value.length > 0 && !this.#flags.includes(value)) {
-      const suggestion = this.#flags.find((flag) => leven(flag, value) < 3);
+      const suggestion = closetLevenshteinMatch(value, this.#flags, {
+        maxDistance: 3
+      });
       if (suggestion) {
         utils.logger.warn(
           [
