@@ -12,7 +12,7 @@ var __getOwnPropNames = Object.getOwnPropertyNames;
 var __getProtoOf = Object.getPrototypeOf;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
 var __require = /* @__PURE__ */ ((x) => typeof require !== "undefined" ? require : typeof Proxy !== "undefined" ? new Proxy(x, {
-  get: (a, b) => (typeof require !== "undefined" ? require : a)[b]
+  get: (a3, b) => (typeof require !== "undefined" ? require : a3)[b]
 }) : x)(function(x) {
   if (typeof require !== "undefined") return require.apply(this, arguments);
   throw Error('Dynamic require of "' + x + '" is not supported');
@@ -43,7 +43,7 @@ var require_dashify = __commonJS({
     "use strict";
     module.exports = (str, options) => {
       if (typeof str !== "string") throw new TypeError("expected a string");
-      return str.trim().replace(/([a-z])([A-Z])/g, "$1-$2").replace(/\W/g, (m) => /[À-ž]/.test(m) ? m : "-").replace(/^-+|-+$/g, "").replace(/-{2,}/g, (m) => options && options.condense ? "-" : m).toLowerCase();
+      return str.trim().replace(/([a-z])([A-Z])/g, "$1-$2").replace(/\W/g, (m2) => /[À-ž]/.test(m2) ? m2 : "-").replace(/^-+|-+$/g, "").replace(/-{2,}/g, (m2) => options && options.condense ? "-" : m2).toLowerCase();
     };
   }
 });
@@ -53,12 +53,12 @@ var require_minimist = __commonJS({
   "node_modules/minimist/index.js"(exports, module) {
     "use strict";
     function hasKey(obj, keys2) {
-      var o2 = obj;
+      var o3 = obj;
       keys2.slice(0, -1).forEach(function(key2) {
-        o2 = o2[key2] || {};
+        o3 = o3[key2] || {};
       });
       var key = keys2[keys2.length - 1];
-      return key in o2;
+      return key in o3;
     }
     function isNumber(x) {
       if (typeof x === "number") {
@@ -108,8 +108,8 @@ var require_minimist = __commonJS({
       [].concat(opts.string).filter(Boolean).forEach(function(key2) {
         flags.strings[key2] = true;
         if (aliases[key2]) {
-          [].concat(aliases[key2]).forEach(function(k) {
-            flags.strings[k] = true;
+          [].concat(aliases[key2]).forEach(function(k2) {
+            flags.strings[k2] = true;
           });
         }
       });
@@ -119,39 +119,39 @@ var require_minimist = __commonJS({
         return flags.allBools && /^--[^=]+$/.test(arg2) || flags.strings[key2] || flags.bools[key2] || aliases[key2];
       }
       function setKey(obj, keys2, value2) {
-        var o2 = obj;
+        var o3 = obj;
         for (var i2 = 0; i2 < keys2.length - 1; i2++) {
           var key2 = keys2[i2];
-          if (isConstructorOrProto(o2, key2)) {
+          if (isConstructorOrProto(o3, key2)) {
             return;
           }
-          if (o2[key2] === void 0) {
-            o2[key2] = {};
+          if (o3[key2] === void 0) {
+            o3[key2] = {};
           }
-          if (o2[key2] === Object.prototype || o2[key2] === Number.prototype || o2[key2] === String.prototype) {
-            o2[key2] = {};
+          if (o3[key2] === Object.prototype || o3[key2] === Number.prototype || o3[key2] === String.prototype) {
+            o3[key2] = {};
           }
-          if (o2[key2] === Array.prototype) {
-            o2[key2] = [];
+          if (o3[key2] === Array.prototype) {
+            o3[key2] = [];
           }
-          o2 = o2[key2];
+          o3 = o3[key2];
         }
         var lastKey = keys2[keys2.length - 1];
-        if (isConstructorOrProto(o2, lastKey)) {
+        if (isConstructorOrProto(o3, lastKey)) {
           return;
         }
-        if (o2 === Object.prototype || o2 === Number.prototype || o2 === String.prototype) {
-          o2 = {};
+        if (o3 === Object.prototype || o3 === Number.prototype || o3 === String.prototype) {
+          o3 = {};
         }
-        if (o2 === Array.prototype) {
-          o2 = [];
+        if (o3 === Array.prototype) {
+          o3 = [];
         }
-        if (o2[lastKey] === void 0 || flags.bools[lastKey] || typeof o2[lastKey] === "boolean") {
-          o2[lastKey] = value2;
-        } else if (Array.isArray(o2[lastKey])) {
-          o2[lastKey].push(value2);
+        if (o3[lastKey] === void 0 || flags.bools[lastKey] || typeof o3[lastKey] === "boolean") {
+          o3[lastKey] = value2;
+        } else if (Array.isArray(o3[lastKey])) {
+          o3[lastKey].push(value2);
         } else {
-          o2[lastKey] = [o2[lastKey], value2];
+          o3[lastKey] = [o3[lastKey], value2];
         }
       }
       function setArg(key2, val, arg2) {
@@ -179,9 +179,9 @@ var require_minimist = __commonJS({
         var key;
         var next;
         if (/^--.+=/.test(arg)) {
-          var m = arg.match(/^--([^=]+)=([\s\S]*)$/);
-          key = m[1];
-          var value = m[2];
+          var m2 = arg.match(/^--([^=]+)=([\s\S]*)$/);
+          key = m2[1];
+          var value = m2[2];
           if (flags.bools[key]) {
             value = value !== "false";
           }
@@ -250,19 +250,19 @@ var require_minimist = __commonJS({
           }
         }
       }
-      Object.keys(defaults).forEach(function(k) {
-        if (!hasKey(argv2, k.split("."))) {
-          setKey(argv2, k.split("."), defaults[k]);
-          (aliases[k] || []).forEach(function(x) {
-            setKey(argv2, x.split("."), defaults[k]);
+      Object.keys(defaults).forEach(function(k2) {
+        if (!hasKey(argv2, k2.split("."))) {
+          setKey(argv2, k2.split("."), defaults[k2]);
+          (aliases[k2] || []).forEach(function(x) {
+            setKey(argv2, x.split("."), defaults[k2]);
           });
         }
       });
       if (opts["--"]) {
         argv2["--"] = notFlags.slice();
       } else {
-        notFlags.forEach(function(k) {
-          argv2._.push(k);
+        notFlags.forEach(function(k2) {
+          argv2._.push(k2);
         });
       }
       return argv2;
@@ -278,12 +278,12 @@ var require_fast_json_stable_stringify = __commonJS({
       if (!opts) opts = {};
       if (typeof opts === "function") opts = { cmp: opts };
       var cycles = typeof opts.cycles === "boolean" ? opts.cycles : false;
-      var cmp = opts.cmp && /* @__PURE__ */ (function(f) {
+      var cmp = opts.cmp && /* @__PURE__ */ (function(f4) {
         return function(node) {
-          return function(a, b) {
-            var aobj = { key: a, value: node[a] };
+          return function(a3, b) {
+            var aobj = { key: a3, value: node[a3] };
             var bobj = { key: b, value: node[b] };
-            return f(aobj, bobj);
+            return f4(aobj, bobj);
           };
         };
       })(opts.cmp);
@@ -729,8 +729,8 @@ var require_ci_info = __commonJS({
     var vendors = require_vendors();
     var env3 = process.env;
     Object.defineProperty(exports, "_vendors", {
-      value: vendors.map(function(v) {
-        return v.constant;
+      value: vendors.map(function(v2) {
+        return v2.constant;
       })
     });
     exports.name = null;
@@ -766,12 +766,12 @@ var require_ci_info = __commonJS({
         return env3[obj.env] && env3[obj.env].includes(obj.includes);
       }
       if ("any" in obj) {
-        return obj.any.some(function(k) {
-          return !!env3[k];
+        return obj.any.some(function(k2) {
+          return !!env3[k2];
         });
       }
-      return Object.keys(obj).every(function(k) {
-        return env3[k] === obj[k];
+      return Object.keys(obj).every(function(k2) {
+        return env3[k2] === obj[k2];
       });
     }
     function checkPR(vendor) {
@@ -1186,11 +1186,11 @@ import path from "path";
 
 // node_modules/sdbm/index.js
 function sdbm(string) {
-  let hash2 = 0;
+  let hash = 0;
   for (let i = 0; i < string.length; i++) {
-    hash2 = string.charCodeAt(i) + (hash2 << 6) + (hash2 << 16) - hash2;
+    hash = string.charCodeAt(i) + (hash << 6) + (hash << 16) - hash;
   }
-  return hash2 >>> 0;
+  return hash >>> 0;
 }
 
 // src/cli/utils.js
@@ -1647,7 +1647,7 @@ var errorMessages = {
   }
 };
 function sortPaths(paths) {
-  return paths.sort((a, b) => a.localeCompare(b));
+  return paths.sort((a3, b) => a3.localeCompare(b));
 }
 function escapePathForGlob(path13) {
   return string_replace_all_default(
@@ -1807,13 +1807,103 @@ var import_fast_json_stable_stringify2 = __toESM(require_fast_json_stable_string
 import fs7 from "fs";
 
 // node_modules/file-entry-cache/dist/index.js
-import crypto2 from "crypto";
+import crypto from "crypto";
 import fs6 from "fs";
 import path11 from "path";
 
 // node_modules/flat-cache/dist/index.js
 import fs5 from "fs";
 import path10 from "path";
+
+// node_modules/@cacheable/utils/dist/index.js
+import * as l from "crypto";
+var a = (t) => {
+  let e;
+  if (t !== void 0) {
+    if (typeof t == "number") e = t;
+    else if (typeof t == "string") if (t = t.trim(), Number.isNaN(Number(t))) {
+      let r = /^([\d.]+)\s*(ms|s|m|h|hr|d)$/i.exec(t);
+      if (!r) throw new Error(`Unsupported time format: "${t}". Use 'ms', 's', 'm', 'h', 'hr', or 'd'.`);
+      let [, i, s] = r, n = Number.parseFloat(i);
+      switch (s.toLowerCase()) {
+        case "ms": {
+          e = n;
+          break;
+        }
+        case "s": {
+          e = n * 1e3;
+          break;
+        }
+        case "m": {
+          e = n * 1e3 * 60;
+          break;
+        }
+        case "h": {
+          e = n * 1e3 * 60 * 60;
+          break;
+        }
+        case "hr": {
+          e = n * 1e3 * 60 * 60;
+          break;
+        }
+        case "d": {
+          e = n * 1e3 * 60 * 60 * 24;
+          break;
+        }
+        default:
+          e = Number(t);
+      }
+    } else e = Number(t);
+    else throw new TypeError("Time must be a string or a number.");
+    return e;
+  }
+};
+var g = (t, e) => {
+  e ??= /* @__PURE__ */ new Date();
+  let r = a(t);
+  return r === void 0 ? e.getTime() : e.getTime() + r;
+};
+var f = ((s) => (s.SHA256 = "sha256", s.SHA512 = "sha512", s.MD5 = "md5", s.DJB2 = "djb2", s))(f || {});
+function d(t, e = { algorithm: "sha256", serialize: JSON.stringify }) {
+  e?.algorithm || (e.algorithm = "sha256"), e?.serialize || (e.serialize = JSON.stringify);
+  let r = e.serialize(t);
+  if (e?.algorithm === "djb2") return w(r);
+  if (!l.getHashes().includes(e.algorithm)) throw new Error(`Unsupported hash algorithm: '${e?.algorithm}'`);
+  let i = l.createHash(e.algorithm);
+  return i.update(r), i.digest("hex");
+}
+function k(t, e = { min: 0, max: 10, algorithm: "sha256", serialize: JSON.stringify }) {
+  let r = e?.min ?? 0, i = e?.max ?? 10;
+  if (r >= i) throw new Error(`Invalid range: min (${r}) must be less than max (${i})`);
+  e?.algorithm || (e.algorithm = "sha256"), e?.serialize || (e.serialize = JSON.stringify);
+  let s = d(t, e), n = Number.parseInt(s, 16), o3 = i - r + 1, c2 = r + n % o3;
+  return c2 < r ? r : c2 > i ? i : c2;
+}
+function w(t) {
+  let e = 5381;
+  for (let r = 0; r < t.length; r++) e = e * 33 ^ t.charCodeAt(r);
+  return e.toString();
+}
+
+// node_modules/@cacheable/memoize/dist/index.js
+function d2(n, t) {
+  let { ttl: e, keyPrefix: a3, cache: r, serialize: c2 } = t;
+  return (...s) => {
+    let i = u(n, s, { keyPrefix: a3, serialize: c2 });
+    t.createKey && (i = t.createKey(n, s, t));
+    let y = r.get(i);
+    if (y === void 0) try {
+      y = n(...s), r.set(i, y, e);
+    } catch (o3) {
+      r.emit("error", o3), t.cacheErrors && r.set(i, o3, e);
+    }
+    return y;
+  };
+}
+function u(n, t, e) {
+  let { keyPrefix: a3, serialize: r } = e || {};
+  return a3 ? `${a3}::${n.name}::${d(t, { serialize: r })}` : `${n.name}::${d(t, { serialize: r })}`;
+}
 
 // node_modules/hookified/dist/node/index.js
 var o = class {
@@ -1906,7 +1996,7 @@ var o = class {
     return e;
   }
 };
-var l = class extends o {
+var l2 = class extends o {
   _hooks;
   _throwHookErrors = false;
   constructor(e) {
@@ -1982,768 +2072,265 @@ var l = class extends o {
   }
 };
 
-// node_modules/cacheable/dist/index.js
-import * as crypto from "crypto";
-var structuredClone = globalThis.structuredClone ?? ((value) => JSON.parse(JSON.stringify(value)));
-function hash(object2, algorithm = "sha256") {
-  const objectString = JSON.stringify(object2);
-  if (!crypto.getHashes().includes(algorithm)) {
-    throw new Error(`Unsupported hash algorithm: '${algorithm}'`);
-  }
-  const hasher = crypto.createHash(algorithm);
-  hasher.update(objectString);
-  return hasher.digest("hex");
-}
-function hashToNumber(object2, min = 0, max = 10, algorithm = "sha256") {
-  const objectString = JSON.stringify(object2);
-  if (!crypto.getHashes().includes(algorithm)) {
-    throw new Error(`Unsupported hash algorithm: '${algorithm}'`);
-  }
-  const hasher = crypto.createHash(algorithm);
-  hasher.update(objectString);
-  const hashHex = hasher.digest("hex");
-  const hashNumber = Number.parseInt(hashHex, 16);
-  const range = max - min + 1;
-  return min + hashNumber % range;
-}
-function djb2Hash(string_, min = 0, max = 10) {
-  let hash2 = 5381;
-  for (let i = 0; i < string_.length; i++) {
-    hash2 = hash2 * 33 ^ string_.charCodeAt(i);
-  }
-  const range = max - min + 1;
-  return min + Math.abs(hash2) % range;
-}
-var ListNode = class {
+// node_modules/@cacheable/memory/dist/index.js
+var c = class {
   value;
   prev = void 0;
   next = void 0;
-  constructor(value) {
-    this.value = value;
+  constructor(e) {
+    this.value = e;
   }
 };
-var DoublyLinkedList = class {
+var o2 = class {
   head = void 0;
   tail = void 0;
   nodesMap = /* @__PURE__ */ new Map();
-  // Add a new node to the front (most recently used)
-  addToFront(value) {
-    const newNode = new ListNode(value);
-    if (this.head) {
-      newNode.next = this.head;
-      this.head.prev = newNode;
-      this.head = newNode;
-    } else {
-      this.head = this.tail = newNode;
-    }
-    this.nodesMap.set(value, newNode);
+  addToFront(e) {
+    let t = new c(e);
+    this.head ? (t.next = this.head, this.head.prev = t, this.head = t) : this.head = this.tail = t, this.nodesMap.set(e, t);
   }
-  // Move an existing node to the front (most recently used)
-  moveToFront(value) {
-    const node = this.nodesMap.get(value);
-    if (!node || this.head === node) {
-      return;
-    }
-    if (node.prev) {
-      node.prev.next = node.next;
-    }
-    if (node.next) {
-      node.next.prev = node.prev;
-    }
-    if (node === this.tail) {
-      this.tail = node.prev;
-    }
-    node.prev = void 0;
-    node.next = this.head;
-    if (this.head) {
-      this.head.prev = node;
-    }
-    this.head = node;
-    this.tail ??= node;
+  moveToFront(e) {
+    let t = this.nodesMap.get(e);
+    !t || this.head === t || (t.prev && (t.prev.next = t.next), t.next && (t.next.prev = t.prev), t === this.tail && (this.tail = t.prev), t.prev = void 0, t.next = this.head, this.head && (this.head.prev = t), this.head = t, this.tail ??= t);
   }
-  // Get the oldest node (tail)
   getOldest() {
     return this.tail ? this.tail.value : void 0;
   }
-  // Remove the oldest node (tail)
   removeOldest() {
-    if (!this.tail) {
-      return void 0;
-    }
-    const oldValue = this.tail.value;
-    if (this.tail.prev) {
-      this.tail = this.tail.prev;
-      this.tail.next = void 0;
-    } else {
-      this.head = this.tail = void 0;
-    }
-    this.nodesMap.delete(oldValue);
-    return oldValue;
+    if (!this.tail) return;
+    let e = this.tail.value;
+    return this.tail.prev ? (this.tail = this.tail.prev, this.tail.next = void 0) : this.head = this.tail = void 0, this.nodesMap.delete(e), e;
   }
   get size() {
     return this.nodesMap.size;
   }
 };
-var shorthandToMilliseconds = (shorthand) => {
-  let milliseconds;
-  if (shorthand === void 0) {
-    return void 0;
-  }
-  if (typeof shorthand === "number") {
-    milliseconds = shorthand;
-  } else if (typeof shorthand === "string") {
-    shorthand = shorthand.trim();
-    if (Number.isNaN(Number(shorthand))) {
-      const match = /^([\d.]+)\s*(ms|s|m|h|hr|d)$/i.exec(shorthand);
-      if (!match) {
-        throw new Error(
-          `Unsupported time format: "${shorthand}". Use 'ms', 's', 'm', 'h', 'hr', or 'd'.`
-        );
-      }
-      const [, value, unit] = match;
-      const numericValue = Number.parseFloat(value);
-      const unitLower = unit.toLowerCase();
-      switch (unitLower) {
-        case "ms": {
-          milliseconds = numericValue;
-          break;
-        }
-        case "s": {
-          milliseconds = numericValue * 1e3;
-          break;
-        }
-        case "m": {
-          milliseconds = numericValue * 1e3 * 60;
-          break;
-        }
-        case "h": {
-          milliseconds = numericValue * 1e3 * 60 * 60;
-          break;
-        }
-        case "hr": {
-          milliseconds = numericValue * 1e3 * 60 * 60;
-          break;
-        }
-        case "d": {
-          milliseconds = numericValue * 1e3 * 60 * 60 * 24;
-          break;
-        }
-        /* c8 ignore next 3 */
-        default: {
-          milliseconds = Number(shorthand);
-        }
-      }
-    } else {
-      milliseconds = Number(shorthand);
-    }
-  } else {
-    throw new TypeError("Time must be a string or a number.");
-  }
-  return milliseconds;
-};
-var shorthandToTime = (shorthand, fromDate) => {
-  fromDate ??= /* @__PURE__ */ new Date();
-  const milliseconds = shorthandToMilliseconds(shorthand);
-  if (milliseconds === void 0) {
-    return fromDate.getTime();
-  }
-  return fromDate.getTime() + milliseconds;
-};
-function wrapSync(function_, options) {
-  const { ttl, keyPrefix, cache } = options;
-  return (...arguments_) => {
-    let cacheKey = createWrapKey(function_, arguments_, keyPrefix);
-    if (options.createKey) {
-      cacheKey = options.createKey(function_, arguments_, options);
-    }
-    let value = cache.get(cacheKey);
-    if (value === void 0) {
-      try {
-        value = function_(...arguments_);
-        cache.set(cacheKey, value, ttl);
-      } catch (error) {
-        cache.emit("error", error);
-        if (options.cacheErrors) {
-          cache.set(cacheKey, error, ttl);
-        }
-      }
-    }
-    return value;
-  };
-}
-function createWrapKey(function_, arguments_, keyPrefix) {
-  if (!keyPrefix) {
-    return `${function_.name}::${hash(arguments_)}`;
-  }
-  return `${keyPrefix}::${function_.name}::${hash(arguments_)}`;
-}
-var defaultStoreHashSize = 16;
-var maximumMapSize = 16777216;
-var CacheableMemory = class extends l {
-  _lru = new DoublyLinkedList();
-  _storeHashSize = defaultStoreHashSize;
-  _storeHashAlgorithm = "djb2Hash";
-  // Default is djb2Hash
-  _store = Array.from(
-    { length: this._storeHashSize },
-    () => /* @__PURE__ */ new Map()
-  );
+var v = 16;
+var u2 = 16777216;
+var a2 = class extends l2 {
+  _lru = new o2();
+  _storeHashSize = v;
+  _storeHashAlgorithm = f.DJB2;
+  _store = Array.from({ length: this._storeHashSize }, () => /* @__PURE__ */ new Map());
   _ttl;
-  // Turned off by default
   _useClone = true;
-  // Turned on by default
   _lruSize = 0;
-  // Turned off by default
   _checkInterval = 0;
-  // Turned off by default
   _interval = 0;
-  // Turned off by default
-  /**
-   * @constructor
-   * @param {CacheableMemoryOptions} [options] - The options for the CacheableMemory
-   */
-  constructor(options) {
-    super();
-    if (options?.ttl) {
-      this.setTtl(options.ttl);
-    }
-    if (options?.useClone !== void 0) {
-      this._useClone = options.useClone;
-    }
-    if (options?.storeHashSize && options.storeHashSize > 0) {
-      this._storeHashSize = options.storeHashSize;
-    }
-    if (options?.lruSize) {
-      if (options.lruSize > maximumMapSize) {
-        this.emit(
-          "error",
-          new Error(
-            `LRU size cannot be larger than ${maximumMapSize} due to Map limitations.`
-          )
-        );
-      } else {
-        this._lruSize = options.lruSize;
-      }
-    }
-    if (options?.checkInterval) {
-      this._checkInterval = options.checkInterval;
-    }
-    if (options?.storeHashAlgorithm) {
-      this._storeHashAlgorithm = options.storeHashAlgorithm;
-    }
-    this._store = Array.from(
-      { length: this._storeHashSize },
-      () => /* @__PURE__ */ new Map()
-    );
-    this.startIntervalCheck();
+  constructor(e) {
+    super(), e?.ttl && this.setTtl(e.ttl), e?.useClone !== void 0 && (this._useClone = e.useClone), e?.storeHashSize && e.storeHashSize > 0 && (this._storeHashSize = e.storeHashSize), e?.lruSize && (e.lruSize > u2 ? this.emit("error", new Error(`LRU size cannot be larger than ${u2} due to Map limitations.`)) : this._lruSize = e.lruSize), e?.checkInterval && (this._checkInterval = e.checkInterval), e?.storeHashAlgorithm && (this._storeHashAlgorithm = e.storeHashAlgorithm), this._store = Array.from({ length: this._storeHashSize }, () => /* @__PURE__ */ new Map()), this.startIntervalCheck();
   }
-  /**
-   * Gets the time-to-live
-   * @returns {number|string|undefined} - The time-to-live in miliseconds or a human-readable format. If undefined, it will not have a time-to-live.
-   */
   get ttl() {
     return this._ttl;
   }
-  /**
-   * Sets the time-to-live
-   * @param {number|string|undefined} value - The time-to-live in miliseconds or a human-readable format (example '1s' = 1 second, '1h' = 1 hour). If undefined, it will not have a time-to-live.
-   */
-  set ttl(value) {
-    this.setTtl(value);
+  set ttl(e) {
+    this.setTtl(e);
   }
-  /**
-   * Gets whether to use clone
-   * @returns {boolean} - If true, it will clone the value before returning it. If false, it will return the value directly. Default is true.
-   */
   get useClone() {
     return this._useClone;
   }
-  /**
-   * Sets whether to use clone
-   * @param {boolean} value - If true, it will clone the value before returning it. If false, it will return the value directly. Default is true.
-   */
-  set useClone(value) {
-    this._useClone = value;
+  set useClone(e) {
+    this._useClone = e;
   }
-  /**
-   * Gets the size of the LRU cache
-   * @returns {number} - The size of the LRU cache. If set to 0, it will not use LRU cache. Default is 0. If you are using LRU then the limit is based on Map() size 17mm.
-   */
   get lruSize() {
     return this._lruSize;
   }
-  /**
-   * Sets the size of the LRU cache
-   * @param {number} value - The size of the LRU cache. If set to 0, it will not use LRU cache. Default is 0. If you are using LRU then the limit is based on Map() size 17mm.
-   */
-  set lruSize(value) {
-    if (value > maximumMapSize) {
-      this.emit(
-        "error",
-        new Error(
-          `LRU size cannot be larger than ${maximumMapSize} due to Map limitations.`
-        )
-      );
+  set lruSize(e) {
+    if (e > u2) {
+      this.emit("error", new Error(`LRU size cannot be larger than ${u2} due to Map limitations.`));
       return;
     }
-    this._lruSize = value;
-    if (this._lruSize === 0) {
-      this._lru = new DoublyLinkedList();
+    if (this._lruSize = e, this._lruSize === 0) {
+      this._lru = new o2();
       return;
     }
     this.lruResize();
   }
-  /**
-   * Gets the check interval
-   * @returns {number} - The interval to check for expired items. If set to 0, it will not check for expired items. Default is 0.
-   */
   get checkInterval() {
     return this._checkInterval;
   }
-  /**
-   * Sets the check interval
-   * @param {number} value - The interval to check for expired items. If set to 0, it will not check for expired items. Default is 0.
-   */
-  set checkInterval(value) {
-    this._checkInterval = value;
+  set checkInterval(e) {
+    this._checkInterval = e;
   }
-  /**
-   * Gets the size of the cache
-   * @returns {number} - The size of the cache
-   */
   get size() {
-    let size = 0;
-    for (const store of this._store) {
-      size += store.size;
-    }
-    return size;
+    let e = 0;
+    for (let t of this._store) e += t.size;
+    return e;
   }
-  /**
-   * Gets the number of hash stores
-   * @returns {number} - The number of hash stores
-   */
   get storeHashSize() {
     return this._storeHashSize;
   }
-  /**
-   * Sets the number of hash stores. This will recreate the store and all data will be cleared
-   * @param {number} value - The number of hash stores
-   */
-  set storeHashSize(value) {
-    if (value === this._storeHashSize) {
-      return;
-    }
-    this._storeHashSize = value;
-    this._store = Array.from(
-      { length: this._storeHashSize },
-      () => /* @__PURE__ */ new Map()
-    );
+  set storeHashSize(e) {
+    e !== this._storeHashSize && (this._storeHashSize = e, this._store = Array.from({ length: this._storeHashSize }, () => /* @__PURE__ */ new Map()));
   }
-  /**
-   * Gets the store hash algorithm
-   * @returns {StoreHashAlgorithm | StoreHashAlgorithmFunction} - The store hash algorithm
-   */
   get storeHashAlgorithm() {
     return this._storeHashAlgorithm;
   }
-  /**
-   * Sets the store hash algorithm. This will recreate the store and all data will be cleared
-   * @param {StoreHashAlgorithm | StoreHashAlgorithmFunction} value - The store hash algorithm
-   */
-  set storeHashAlgorithm(value) {
-    this._storeHashAlgorithm = value;
+  set storeHashAlgorithm(e) {
+    this._storeHashAlgorithm = e;
   }
-  /**
-   * Gets the keys
-   * @returns {IterableIterator<string>} - The keys
-   */
   get keys() {
-    const keys2 = [];
-    for (const store of this._store) {
-      for (const key of store.keys()) {
-        const item = store.get(key);
-        if (item && this.hasExpired(item)) {
-          store.delete(key);
-          continue;
-        }
-        keys2.push(key);
+    let e = [];
+    for (let t of this._store) for (let r of t.keys()) {
+      let i = t.get(r);
+      if (i && this.hasExpired(i)) {
+        t.delete(r);
+        continue;
       }
+      e.push(r);
     }
-    return keys2.values();
+    return e.values();
   }
-  /**
-   * Gets the items
-   * @returns {IterableIterator<CacheableStoreItem>} - The items
-   */
   get items() {
-    const items = [];
-    for (const store of this._store) {
-      for (const item of store.values()) {
-        if (this.hasExpired(item)) {
-          store.delete(item.key);
-          continue;
-        }
-        items.push(item);
+    let e = [];
+    for (let t of this._store) for (let r of t.values()) {
+      if (this.hasExpired(r)) {
+        t.delete(r.key);
+        continue;
       }
+      e.push(r);
     }
-    return items.values();
+    return e.values();
   }
-  /**
-   * Gets the store
-   * @returns {Array<Map<string, CacheableStoreItem>>} - The store
-   */
   get store() {
     return this._store;
   }
-  /**
-   * Gets the value of the key
-   * @param {string} key - The key to get the value
-   * @returns {T | undefined} - The value of the key
-   */
-  get(key) {
-    const store = this.getStore(key);
-    const item = store.get(key);
-    if (!item) {
-      return void 0;
-    }
-    if (item.expires && Date.now() > item.expires) {
-      store.delete(key);
-      return void 0;
-    }
-    this.lruMoveToFront(key);
-    if (!this._useClone) {
-      return item.value;
-    }
-    return this.clone(item.value);
-  }
-  /**
-   * Gets the values of the keys
-   * @param {string[]} keys - The keys to get the values
-   * @returns {T[]} - The values of the keys
-   */
-  getMany(keys2) {
-    const result = [];
-    for (const key of keys2) {
-      result.push(this.get(key));
-    }
-    return result;
-  }
-  /**
-   * Gets the raw value of the key
-   * @param {string} key - The key to get the value
-   * @returns {CacheableStoreItem | undefined} - The raw value of the key
-   */
-  getRaw(key) {
-    const store = this.getStore(key);
-    const item = store.get(key);
-    if (!item) {
-      return void 0;
-    }
-    if (item.expires && item.expires && Date.now() > item.expires) {
-      store.delete(key);
-      return void 0;
-    }
-    this.lruMoveToFront(key);
-    return item;
-  }
-  /**
-   * Gets the raw values of the keys
-   * @param {string[]} keys - The keys to get the values
-   * @returns {CacheableStoreItem[]} - The raw values of the keys
-   */
-  getManyRaw(keys2) {
-    const result = [];
-    for (const key of keys2) {
-      result.push(this.getRaw(key));
-    }
-    return result;
-  }
-  /**
-   * Sets the value of the key
-   * @param {string} key - The key to set the value
-   * @param {any} value - The value to set
-   * @param {number|string|SetOptions} [ttl] - Time to Live - If you set a number it is miliseconds, if you set a string it is a human-readable.
-   * If you want to set expire directly you can do that by setting the expire property in the SetOptions.
-   * If you set undefined, it will use the default time-to-live. If both are undefined then it will not have a time-to-live.
-   * @returns {void}
-   */
-  set(key, value, ttl) {
-    const store = this.getStore(key);
-    let expires;
-    if (ttl !== void 0 || this._ttl !== void 0) {
-      if (typeof ttl === "object") {
-        if (ttl.expire) {
-          expires = typeof ttl.expire === "number" ? ttl.expire : ttl.expire.getTime();
-        }
-        if (ttl.ttl) {
-          const finalTtl = shorthandToTime(ttl.ttl);
-          if (finalTtl !== void 0) {
-            expires = finalTtl;
-          }
-        }
-      } else {
-        const finalTtl = shorthandToTime(ttl ?? this._ttl);
-        if (finalTtl !== void 0) {
-          expires = finalTtl;
-        }
+  get(e) {
+    let t = this.getStore(e), r = t.get(e);
+    if (r) {
+      if (r.expires && Date.now() > r.expires) {
+        t.delete(e);
+        return;
       }
+      return this.lruMoveToFront(e), this._useClone ? this.clone(r.value) : r.value;
+    }
+  }
+  getMany(e) {
+    let t = [];
+    for (let r of e) t.push(this.get(r));
+    return t;
+  }
+  getRaw(e) {
+    let t = this.getStore(e), r = t.get(e);
+    if (r) {
+      if (r.expires && r.expires && Date.now() > r.expires) {
+        t.delete(e);
+        return;
+      }
+      return this.lruMoveToFront(e), r;
+    }
+  }
+  getManyRaw(e) {
+    let t = [];
+    for (let r of e) t.push(this.getRaw(r));
+    return t;
+  }
+  set(e, t, r) {
+    let i = this.getStore(e), h;
+    if (r !== void 0 || this._ttl !== void 0) if (typeof r == "object") {
+      if (r.expire && (h = typeof r.expire == "number" ? r.expire : r.expire.getTime()), r.ttl) {
+        let n = g(r.ttl);
+        n !== void 0 && (h = n);
+      }
+    } else {
+      let n = g(r ?? this._ttl);
+      n !== void 0 && (h = n);
     }
     if (this._lruSize > 0) {
-      if (store.has(key)) {
-        this.lruMoveToFront(key);
-      } else {
-        this.lruAddToFront(key);
-        if (this._lru.size > this._lruSize) {
-          const oldestKey = this._lru.getOldest();
-          if (oldestKey) {
-            this._lru.removeOldest();
-            this.delete(oldestKey);
-          }
-        }
+      if (i.has(e)) this.lruMoveToFront(e);
+      else if (this.lruAddToFront(e), this._lru.size > this._lruSize) {
+        let n = this._lru.getOldest();
+        n && (this._lru.removeOldest(), this.delete(n));
       }
     }
-    const item = { key, value, expires };
-    store.set(key, item);
+    let p = { key: e, value: t, expires: h };
+    i.set(e, p);
   }
-  /**
-   * Sets the values of the keys
-   * @param {CacheableItem[]} items - The items to set
-   * @returns {void}
-   */
-  setMany(items) {
-    for (const item of items) {
-      this.set(item.key, item.value, item.ttl);
+  setMany(e) {
+    for (let t of e) this.set(t.key, t.value, t.ttl);
+  }
+  has(e) {
+    return !!this.get(e);
+  }
+  hasMany(e) {
+    let t = [];
+    for (let r of e) {
+      let i = this.get(r);
+      t.push(!!i);
     }
+    return t;
   }
-  /**
-   * Checks if the key exists
-   * @param {string} key - The key to check
-   * @returns {boolean} - If true, the key exists. If false, the key does not exist.
-   */
-  has(key) {
-    const item = this.get(key);
-    return Boolean(item);
+  take(e) {
+    let t = this.get(e);
+    if (t) return this.delete(e), t;
   }
-  /**
-   * @function hasMany
-   * @param {string[]} keys - The keys to check
-   * @returns {boolean[]} - If true, the key exists. If false, the key does not exist.
-   */
-  hasMany(keys2) {
-    const result = [];
-    for (const key of keys2) {
-      const item = this.get(key);
-      result.push(Boolean(item));
-    }
-    return result;
+  takeMany(e) {
+    let t = [];
+    for (let r of e) t.push(this.take(r));
+    return t;
   }
-  /**
-   * Take will get the key and delete the entry from cache
-   * @param {string} key - The key to take
-   * @returns {T | undefined} - The value of the key
-   */
-  take(key) {
-    const item = this.get(key);
-    if (!item) {
-      return void 0;
-    }
-    this.delete(key);
-    return item;
+  delete(e) {
+    this.getStore(e).delete(e);
   }
-  /**
-   * TakeMany will get the keys and delete the entries from cache
-   * @param {string[]} keys - The keys to take
-   * @returns {T[]} - The values of the keys
-   */
-  takeMany(keys2) {
-    const result = [];
-    for (const key of keys2) {
-      result.push(this.take(key));
-    }
-    return result;
+  deleteMany(e) {
+    for (let t of e) this.delete(t);
   }
-  /**
-   * Delete the key
-   * @param {string} key - The key to delete
-   * @returns {void}
-   */
-  delete(key) {
-    const store = this.getStore(key);
-    store.delete(key);
-  }
-  /**
-   * Delete the keys
-   * @param {string[]} keys - The keys to delete
-   * @returns {void}
-   */
-  deleteMany(keys2) {
-    for (const key of keys2) {
-      this.delete(key);
-    }
-  }
-  /**
-   * Clear the cache
-   * @returns {void}
-   */
   clear() {
-    this._store = Array.from(
-      { length: this._storeHashSize },
-      () => /* @__PURE__ */ new Map()
-    );
-    this._lru = new DoublyLinkedList();
+    this._store = Array.from({ length: this._storeHashSize }, () => /* @__PURE__ */ new Map()), this._lru = new o2();
   }
-  /**
-   * Get the store based on the key (internal use)
-   * @param {string} key - The key to get the store
-   * @returns {CacheableHashStore} - The store
-   */
-  getStore(key) {
-    const hash2 = this.getKeyStoreHash(key);
-    this._store[hash2] ||= /* @__PURE__ */ new Map();
-    return this._store[hash2];
+  getStore(e) {
+    let t = this.getKeyStoreHash(e);
+    return this._store[t] ||= /* @__PURE__ */ new Map(), this._store[t];
   }
-  /**
-   * Hash the key for which store to go to (internal use)
-   * @param {string} key - The key to hash
-   * Available algorithms are: SHA256, SHA1, MD5, and djb2Hash.
-   * @returns {number} - The hashed key as a number
-   */
-  getKeyStoreHash(key) {
-    if (this._store.length === 1) {
-      return 0;
-    }
-    if (this._storeHashAlgorithm === "djb2Hash") {
-      return djb2Hash(key, 0, this._storeHashSize);
-    }
-    if (typeof this._storeHashAlgorithm === "function") {
-      return this._storeHashAlgorithm(key, this._storeHashSize);
-    }
-    return hashToNumber(key, 0, this._storeHashSize, this._storeHashAlgorithm);
+  getKeyStoreHash(e) {
+    if (this._store.length === 1) return 0;
+    if (typeof this._storeHashAlgorithm == "function") return this._storeHashAlgorithm(e, this._storeHashSize);
+    let t = this._storeHashSize - 1;
+    return k(e, { min: 0, max: t, algorithm: this._storeHashAlgorithm });
   }
-  /**
-   * Clone the value. This is for internal use
-   * @param {any} value - The value to clone
-   * @returns {any} - The cloned value
-   */
-  clone(value) {
-    if (this.isPrimitive(value)) {
-      return value;
-    }
-    return structuredClone(value);
+  clone(e) {
+    return this.isPrimitive(e) ? e : structuredClone(e);
   }
-  /**
-   * Add to the front of the LRU cache. This is for internal use
-   * @param {string} key - The key to add to the front
-   * @returns {void}
-   */
-  lruAddToFront(key) {
-    if (this._lruSize === 0) {
-      return;
-    }
-    this._lru.addToFront(key);
+  lruAddToFront(e) {
+    this._lruSize !== 0 && this._lru.addToFront(e);
   }
-  /**
-   * Move to the front of the LRU cache. This is for internal use
-   * @param {string} key - The key to move to the front
-   * @returns {void}
-   */
-  lruMoveToFront(key) {
-    if (this._lruSize === 0) {
-      return;
-    }
-    this._lru.moveToFront(key);
+  lruMoveToFront(e) {
+    this._lruSize !== 0 && this._lru.moveToFront(e);
   }
-  /**
-   * Resize the LRU cache. This is for internal use.
-   * @returns {void}
-   */
   lruResize() {
-    while (this._lru.size > this._lruSize) {
-      const oldestKey = this._lru.getOldest();
-      if (oldestKey) {
-        this._lru.removeOldest();
-        this.delete(oldestKey);
-      }
+    for (; this._lru.size > this._lruSize; ) {
+      let e = this._lru.getOldest();
+      e && (this._lru.removeOldest(), this.delete(e));
     }
   }
-  /**
-   * Check for expiration. This is for internal use
-   * @returns {void}
-   */
   checkExpiration() {
-    for (const store of this._store) {
-      for (const item of store.values()) {
-        if (item.expires && Date.now() > item.expires) {
-          store.delete(item.key);
-        }
-      }
-    }
+    for (let e of this._store) for (let t of e.values()) t.expires && Date.now() > t.expires && e.delete(t.key);
   }
-  /**
-   * Start the interval check. This is for internal use
-   * @returns {void}
-   */
   startIntervalCheck() {
-    if (this._checkInterval > 0) {
-      if (this._interval) {
-        clearInterval(this._interval);
-      }
-      this._interval = setInterval(() => {
-        this.checkExpiration();
-      }, this._checkInterval).unref();
-    }
+    this._checkInterval > 0 && (this._interval && clearInterval(this._interval), this._interval = setInterval(() => {
+      this.checkExpiration();
+    }, this._checkInterval).unref());
   }
-  /**
-   * Stop the interval check. This is for internal use
-   * @returns {void}
-   */
   stopIntervalCheck() {
-    if (this._interval) {
-      clearInterval(this._interval);
-    }
-    this._interval = 0;
-    this._checkInterval = 0;
+    this._interval && clearInterval(this._interval), this._interval = 0, this._checkInterval = 0;
   }
-  /**
-   * Wrap the function for caching
-   * @param {Function} function_ - The function to wrap
-   * @param {Object} [options] - The options to wrap
-   * @returns {Function} - The wrapped function
-   */
-  wrap(function_, options) {
-    const wrapOptions = {
-      ttl: options?.ttl ?? this._ttl,
-      keyPrefix: options?.keyPrefix,
-      cache: this
-    };
-    return wrapSync(function_, wrapOptions);
+  wrap(e, t) {
+    let r = { ttl: t?.ttl ?? this._ttl, keyPrefix: t?.keyPrefix, createKey: t?.createKey, cache: this };
+    return d2(e, r);
   }
-  isPrimitive(value) {
-    const result = false;
-    if (value === null || value === void 0) {
-      return true;
-    }
-    if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") {
-      return true;
-    }
-    return result;
+  isPrimitive(e) {
+    return e == null || typeof e == "string" || typeof e == "number" || typeof e == "boolean";
   }
-  setTtl(ttl) {
-    if (typeof ttl === "string" || ttl === void 0) {
-      this._ttl = ttl;
-    } else if (ttl > 0) {
-      this._ttl = ttl;
-    } else {
-      this._ttl = void 0;
-    }
+  setTtl(e) {
+    typeof e == "string" || e === void 0 ? this._ttl = e : e > 0 ? this._ttl = e : this._ttl = void 0;
   }
-  hasExpired(item) {
-    if (item.expires && Date.now() > item.expires) {
-      return true;
-    }
-    return false;
+  hasExpired(e) {
+    return !!(e.expires && Date.now() > e.expires);
   }
 };
+
+// node_modules/cacheable/dist/index.js
+var structuredClone2 = globalThis.structuredClone ?? ((value) => JSON.parse(JSON.stringify(value)));
 
 // node_modules/flatted/esm/index.js
 var { parse: $parse, stringify: $stringify } = JSON;
@@ -2758,22 +2345,22 @@ var Primitives = (_2, value) => typeof value === primitive ? new Primitive(value
 var revive = (input, parsed, output, $) => {
   const lazy = [];
   for (let ke = keys(output), { length } = ke, y = 0; y < length; y++) {
-    const k = ke[y];
-    const value = output[k];
+    const k2 = ke[y];
+    const value = output[k2];
     if (value instanceof Primitive) {
       const tmp = input[value];
       if (typeof tmp === object && !parsed.has(tmp)) {
         parsed.add(tmp);
-        output[k] = ignore;
-        lazy.push({ k, a: [input, parsed, tmp, $] });
+        output[k2] = ignore;
+        lazy.push({ k: k2, a: [input, parsed, tmp, $] });
       } else
-        output[k] = $.call(output, k, tmp);
-    } else if (output[k] !== ignore)
-      output[k] = $.call(output, k, value);
+        output[k2] = $.call(output, k2, tmp);
+    } else if (output[k2] !== ignore)
+      output[k2] = $.call(output, k2, value);
   }
   for (let { length } = lazy, i = 0; i < length; i++) {
-    const { k, a } = lazy[i];
-    output[k] = $.call(output, k, revive.apply(null, a));
+    const { k: k2, a: a3 } = lazy[i];
+    output[k2] = $.call(output, k2, revive.apply(null, a3));
   }
   return output;
 };
@@ -2790,7 +2377,7 @@ var parse = (text, reviver) => {
   return $.call({ "": tmp }, "", tmp);
 };
 var stringify2 = (value, replacer, space) => {
-  const $ = replacer && typeof replacer === object ? (k, v) => k === "" || -1 < replacer.indexOf(k) ? v : void 0 : replacer || noop;
+  const $ = replacer && typeof replacer === object ? (k2, v2) => k2 === "" || -1 < replacer.indexOf(k2) ? v2 : void 0 : replacer || noop;
   const known = /* @__PURE__ */ new Map();
   const input = [];
   const output = [];
@@ -2818,8 +2405,8 @@ var stringify2 = (value, replacer, space) => {
 };
 
 // node_modules/flat-cache/dist/index.js
-var FlatCache = class extends l {
-  _cache = new CacheableMemory();
+var FlatCache = class extends l2 {
+  _cache = new a2();
   _cacheDir = ".cache";
   _cacheId = "cache1";
   _persistInterval = 0;
@@ -2830,7 +2417,7 @@ var FlatCache = class extends l {
   constructor(options) {
     super();
     if (options) {
-      this._cache = new CacheableMemory({
+      this._cache = new a2({
         ttl: options.ttl,
         useClone: options.useClone,
         lruSize: options.lruSize,
@@ -3015,10 +2602,11 @@ var FlatCache = class extends l {
     return result;
   }
   /**
-   * Returns an array with all the items in the cache { key, value, ttl }
+   * Returns an array with all the items in the cache { key, value, expires }
    * @method items
    * @returns {Array}
    */
+  // biome-ignore lint/suspicious/noExplicitAny: cache items can store any value
   get items() {
     return [...this._cache.items];
   }
@@ -3350,7 +2938,7 @@ var FileEntryCache = class {
    * @return {String}          content hash digest
    */
   getHash(buffer) {
-    return crypto2.createHash(this._hashAlgorithm).update(buffer).digest("hex");
+    return crypto.createHash(this._hashAlgorithm).update(buffer).digest("hex");
   }
   /**
    * Create the key for the file path used for caching.
@@ -3628,11 +3216,11 @@ function getHashOfOptions(options) {
   if (optionsHashCache.has(options)) {
     return optionsHashCache.get(options);
   }
-  const hash2 = createHash(
+  const hash = createHash(
     `${prettierVersion}_${nodeVersion}_${(0, import_fast_json_stable_stringify2.default)(options)}`
   );
-  optionsHashCache.set(options, hash2);
-  return hash2;
+  optionsHashCache.set(options, hash);
+  return hash;
 }
 function getMetadataFromFileDescriptor(fileDescriptor) {
   return fileDescriptor.meta;
@@ -3910,16 +3498,16 @@ function wcwidth(ucs, opts) {
 }
 function wcswidth(str, opts) {
   let h;
-  let l2;
+  let l4;
   let s = 0;
   let n;
   if (typeof str !== "string") return wcwidth(str, opts);
   for (let i = 0; i < str.length; i++) {
     h = str.charCodeAt(i);
     if (h >= 55296 && h <= 56319) {
-      l2 = str.charCodeAt(++i);
-      if (l2 >= 56320 && l2 <= 57343) {
-        h = (h - 55296) * 1024 + (l2 - 56320) + 65536;
+      l4 = str.charCodeAt(++i);
+      if (l4 >= 56320 && l4 <= 57343) {
+        h = (h - 55296) * 1024 + (l4 - 56320) + 65536;
       } else {
         i--;
       }
@@ -4079,8 +3667,8 @@ async function getOptionsForFile(context, filepath) {
 var get_options_for_file_default = getOptionsForFile;
 
 // src/cli/format.js
-function diff(a, b) {
-  return createTwoFilesPatch("", "", a, b, "", "", { context: 2 });
+function diff(a3, b) {
+  return createTwoFilesPatch("", "", a3, b, "", "", { context: 2 });
 }
 var DebugError = class extends Error {
   name = "DebugError";
@@ -4513,7 +4101,7 @@ var logger_default = createLogger;
 // src/cli/print-support-info.js
 var import_fast_json_stable_stringify3 = __toESM(require_fast_json_stable_stringify(), 1);
 import { format as format4, getSupportInfo as getSupportInfo2 } from "../index.mjs";
-var sortByName = (array) => array.sort((a, b) => a.name.localeCompare(b.name));
+var sortByName = (array) => array.sort((a3, b) => a3.name.localeCompare(b.name));
 async function printSupportInfo() {
   const { languages, options } = await getSupportInfo2();
   const supportInfo = {

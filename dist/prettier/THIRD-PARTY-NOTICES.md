@@ -133,6 +133,96 @@ Author: The Babel Team (https://babel.dev/team)
 
 ----------------------------------------
 
+## @cacheable/memoize@v2.0.1
+
+> Memoization utilities for cacheable
+
+License: MIT  
+Repository: <git+https://github.com/jaredwray/cacheable.git>  
+Author: Jared Wray <me@jaredwray.com>  
+
+> MIT License & © Jared Wray 
+>
+> Permission is hereby granted, free of charge, to any person obtaining a copy
+> of this software and associated documentation files (the "Software"), to
+> deal in the Software without restriction, including without limitation the
+> rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+> sell copies of the Software, and to permit persons to whom the Software is
+> furnished to do so, subject to the following conditions:
+>
+> The above copyright notice and this permission notice shall be included in
+> all copies or substantial portions of the Software.
+>
+> THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+> IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+> FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+> AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+> LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+> FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+> DEALINGS IN THE SOFTWARE.
+
+----------------------------------------
+
+## @cacheable/memory@v2.0.1
+
+> High Performance In-Memory Cache for Node.js
+
+License: MIT  
+Repository: <git+https://github.com/jaredwray/cacheable.git>  
+Author: Jared Wray <me@jaredwray.com>  
+
+> MIT License & © Jared Wray 
+>
+> Permission is hereby granted, free of charge, to any person obtaining a copy
+> of this software and associated documentation files (the "Software"), to
+> deal in the Software without restriction, including without limitation the
+> rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+> sell copies of the Software, and to permit persons to whom the Software is
+> furnished to do so, subject to the following conditions:
+>
+> The above copyright notice and this permission notice shall be included in
+> all copies or substantial portions of the Software.
+>
+> THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+> IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+> FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+> AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+> LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+> FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+> DEALINGS IN THE SOFTWARE.
+
+----------------------------------------
+
+## @cacheable/utils@v2.0.1
+
+> Cacheable Utilities for Caching Libraries
+
+License: MIT  
+Repository: <git+https://github.com/jaredwray/cacheable.git>  
+Author: Jared Wray <me@jaredwray.com>  
+
+> MIT License & © Jared Wray 
+>
+> Permission is hereby granted, free of charge, to any person obtaining a copy
+> of this software and associated documentation files (the "Software"), to
+> deal in the Software without restriction, including without limitation the
+> rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+> sell copies of the Software, and to permit persons to whom the Software is
+> furnished to do so, subject to the following conditions:
+>
+> The above copyright notice and this permission notice shall be included in
+> all copies or substantial portions of the Software.
+>
+> THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+> IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+> FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+> AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+> LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+> FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+> DEALINGS IN THE SOFTWARE.
+
+----------------------------------------
+
 ## @glimmer/syntax@v0.95.0
 
 License: MIT  
@@ -789,7 +879,7 @@ Contributors:
 
 ----------------------------------------
 
-## cacheable@v1.10.4
+## cacheable@v2.0.1
 
 > High Performance Layer 1 / Layer 2 Caching with Keyv Storage
 
@@ -1739,7 +1829,7 @@ Author: Sindre Sorhus <sindresorhus@gmail.com> (https://sindresorhus.com)
 
 ----------------------------------------
 
-## flat-cache@v6.1.13
+## flat-cache@v6.1.14
 
 > A simple key/value storage using files to persist the data
 
@@ -3012,7 +3102,7 @@ License: MIT
 
 ----------------------------------------
 
-## keyv@v5.5.1
+## keyv@v5.5.2
 
 > Simple key-value storage with support for multiple backends
 
