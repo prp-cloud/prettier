@@ -401,6 +401,14 @@ var init_get_east_asian_width = __esm({
   }
 });
 
+// src/utils/narrow-emojis.evaluate.js
+var narrow_emojis_evaluate_default;
+var init_narrow_emojis_evaluate = __esm({
+  "src/utils/narrow-emojis.evaluate.js"() {
+    narrow_emojis_evaluate_default = "\xA9\xAE\u203C\u2049\u2122\u2139\u2194\u2195\u2196\u2197\u2198\u2199\u21A9\u21AA\u2328\u23CF\u23F1\u23F2\u23F8\u23F9\u23FA\u25AA\u25AB\u25B6\u25C0\u25FB\u25FC\u2600\u2601\u2602\u2603\u2604\u260E\u2611\u2618\u261D\u2620\u2622\u2623\u2626\u262A\u262E\u262F\u2638\u2639\u263A\u2640\u2642\u265F\u2660\u2663\u2665\u2666\u2668\u267B\u267E\u2692\u2694\u2695\u2696\u2697\u2699\u269B\u269C\u26A0\u26A7\u26B0\u26B1\u26C8\u26CF\u26D1\u26D3\u26E9\u26F1\u26F7\u26F8\u26F9\u2702\u2708\u2709\u270C\u270D\u270F\u2712\u2714\u2716\u271D\u2721\u2733\u2734\u2744\u2747\u2763\u2764\u27A1\u2934\u2935\u2B05\u2B06\u2B07";
+  }
+});
+
 // src/utils/get-string-width.js
 function getStringWidth(text) {
   if (!text) {
@@ -409,7 +417,10 @@ function getStringWidth(text) {
   if (!notAsciiRegex.test(text)) {
     return text.length;
   }
-  text = text.replace(emoji_regex_default(), "  ");
+  text = text.replace(
+    emoji_regex_default(),
+    (match) => narrowEmojisSet.has(match) ? " " : "  "
+  );
   let width = 0;
   for (const character of text) {
     const codePoint = character.codePointAt(0);
@@ -419,16 +430,21 @@ function getStringWidth(text) {
     if (codePoint >= 768 && codePoint <= 879) {
       continue;
     }
+    if (codePoint >= 65024 && codePoint <= 65039) {
+      continue;
+    }
     width += isFullWidth(codePoint) || isWide(codePoint) ? 2 : 1;
   }
   return width;
 }
-var notAsciiRegex, get_string_width_default;
+var notAsciiRegex, narrowEmojisSet, get_string_width_default;
 var init_get_string_width = __esm({
   "src/utils/get-string-width.js"() {
     init_emoji_regex();
     init_get_east_asian_width();
+    init_narrow_emojis_evaluate();
     notAsciiRegex = /[^\x20-\x7F]/u;
+    narrowEmojisSet = new Set(narrow_emojis_evaluate_default);
     get_string_width_default = getStringWidth;
   }
 });
@@ -611,7 +627,7 @@ __export(version_evaluate_exports, {
 var version_evaluate_default;
 var init_version_evaluate = __esm({
   "src/main/version.evaluate.js"() {
-    version_evaluate_default = "3.7.0-579179748";
+    version_evaluate_default = "3.7.0-b8d6d431d";
   }
 });
 

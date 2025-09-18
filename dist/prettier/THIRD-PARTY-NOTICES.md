@@ -4107,7 +4107,7 @@ Author: Feross Aboukhadijeh <feross@feross.org> (https://feross.org)
 
 ----------------------------------------
 
-## sdbm@v2.0.0
+## sdbm@v3.0.0
 
 > SDBM non-cryptographic hash function
 

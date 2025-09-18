@@ -1185,13 +1185,33 @@ import fs from "fs/promises";
 import path from "path";
 
 // node_modules/sdbm/index.js
-function sdbm(string) {
-  let hash = 0;
-  for (let i = 0; i < string.length; i++) {
-    hash = string.charCodeAt(i) + (hash << 6) + (hash << 16) - hash;
+var textEncoder = new TextEncoder();
+function sdbmHash(input, options) {
+  if (typeof input === "string") {
+    if (options?.bytes) {
+      input = textEncoder.encode(input);
+    } else {
+      let hash2 = 0n;
+      for (let index = 0; index < input.length; index++) {
+        hash2 = BigInt(input.charCodeAt(index)) + (hash2 << 6n) + (hash2 << 16n) - hash2;
+      }
+      return hash2;
+    }
+  } else if (!(input instanceof Uint8Array)) {
+    throw new TypeError("Expected a string or Uint8Array");
   }
-  return hash >>> 0;
+  let hash = 0n;
+  for (const byte of input) {
+    hash = BigInt(byte) + (hash << 6n) + (hash << 16n) - hash;
+  }
+  return hash;
 }
+function sdbm(input, options) {
+  return Number(BigInt.asUintN(32, sdbmHash(input, options)));
+}
+sdbm.bigint = function(input, options) {
+  return BigInt.asUintN(64, sdbmHash(input, options));
+};
 
 // src/cli/utils.js
 import { __internal as sharedWithCli2 } from "../index.mjs";
