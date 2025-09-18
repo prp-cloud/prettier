@@ -218,7 +218,7 @@ function printJsxElementInternal(path, options, print) {
   for (const [i, child] of children.entries()) {
     // There are a number of situations where we need to ensure we display
     // whitespace as `{" "}` when outputting this element over multiple lines.
-    if (child === jsxWhitespace) {
+    /*if (child === jsxWhitespace) {
       if (i === 1 && isEmptyDoc(children[i - 1])) {
         if (children.length === 2) {
           // Solitary whitespace
@@ -237,7 +237,7 @@ function printJsxElementInternal(path, options, print) {
         multilineChildren.push([multilineChildren.pop(), rawJsxWhitespace]);
         continue;
       }
-    }
+    }*/
 
     // Note that children always satisfy the rule of fill() content.
     // - printJsxChildren always returns valid fill() content
@@ -506,7 +506,7 @@ function maybeWrapJsxElementInParens(path, elem, options) {
   }
 
   const shouldBreak = shouldBreakJsxElement(path);
-  const needsParens = pathNeedsParens(path, options);
+  const needsParens = parent.type !== "ReturnStatement";
 
   return group(
     [
@@ -590,16 +590,15 @@ function printJsxExpressionContainer(path, options, print) {
         (node.type === "AwaitExpression" &&
           (shouldInline(node.argument, node) ||
             node.argument.type === "JSXElement")) ||
-        isCallExpression(node) ||
+        //isCallExpression(node) ||
         (node.type === "ChainExpression" &&
           isCallExpression(node.expression)) ||
         node.type === "FunctionExpression" ||
         node.type === "TemplateLiteral" ||
         node.type === "TaggedTemplateExpression" ||
-        node.type === "DoExpression" ||
+        node.type === "DoExpression")); /* ||
         (isJsxElement(parent) &&
-          (node.type === "ConditionalExpression" || isBinaryish(node)))));
-
+          (node.type === "ConditionalExpression" || isBinaryish(node)))*/
   if (shouldInline(node.expression, path.parent)) {
     return group(["{", print("expression"), lineSuffixBoundary, "}"]);
   }
@@ -607,7 +606,11 @@ function printJsxExpressionContainer(path, options, print) {
   return group([
     "{",
     indent([softline, print("expression")]),
-    softline,
+    isJsxElement(path.parent) &&
+    isBinaryish(node.expression) &&
+    isJsxElement(node.expression.right)
+      ? []
+      : softline,
     lineSuffixBoundary,
     "}",
   ]);
