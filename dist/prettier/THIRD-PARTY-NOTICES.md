@@ -133,7 +133,7 @@ Author: The Babel Team (https://babel.dev/team)
 
 ----------------------------------------
 
-## @cacheable/memoize@v2.0.1
+## @cacheable/memoize@v2.0.2
 
 > Memoization utilities for cacheable
 
@@ -163,7 +163,7 @@ Author: Jared Wray <me@jaredwray.com>
 
 ----------------------------------------
 
-## @cacheable/memory@v2.0.1
+## @cacheable/memory@v2.0.2
 
 > High Performance In-Memory Cache for Node.js
 
@@ -193,7 +193,7 @@ Author: Jared Wray <me@jaredwray.com>
 
 ----------------------------------------
 
-## @cacheable/utils@v2.0.1
+## @cacheable/utils@v2.0.2
 
 > Cacheable Utilities for Caching Libraries
 
@@ -879,7 +879,7 @@ Contributors:
 
 ----------------------------------------
 
-## cacheable@v2.0.1
+## cacheable@v2.0.2
 
 > High Performance Layer 1 / Layer 2 Caching with Keyv Storage
 
