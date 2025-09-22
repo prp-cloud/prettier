@@ -2120,7 +2120,7 @@ Repository: <https://github.com/graphql/graphql-js.git>
 
 ----------------------------------------
 
-## hookified@v1.12.0
+## hookified@v1.12.1
 
 > Event Emitting and Middleware Hooks
 

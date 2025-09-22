@@ -12,7 +12,7 @@ var __getOwnPropNames = Object.getOwnPropertyNames;
 var __getProtoOf = Object.getPrototypeOf;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
 var __require = /* @__PURE__ */ ((x) => typeof require !== "undefined" ? require : typeof Proxy !== "undefined" ? new Proxy(x, {
-  get: (a3, b) => (typeof require !== "undefined" ? require : a3)[b]
+  get: (a4, b) => (typeof require !== "undefined" ? require : a4)[b]
 }) : x)(function(x) {
   if (typeof require !== "undefined") return require.apply(this, arguments);
   throw Error('Dynamic require of "' + x + '" is not supported');
@@ -53,12 +53,12 @@ var require_minimist = __commonJS({
   "node_modules/minimist/index.js"(exports, module) {
     "use strict";
     function hasKey(obj, keys2) {
-      var o3 = obj;
+      var o2 = obj;
       keys2.slice(0, -1).forEach(function(key2) {
-        o3 = o3[key2] || {};
+        o2 = o2[key2] || {};
       });
       var key = keys2[keys2.length - 1];
-      return key in o3;
+      return key in o2;
     }
     function isNumber(x) {
       if (typeof x === "number") {
@@ -119,39 +119,39 @@ var require_minimist = __commonJS({
         return flags.allBools && /^--[^=]+$/.test(arg2) || flags.strings[key2] || flags.bools[key2] || aliases[key2];
       }
       function setKey(obj, keys2, value2) {
-        var o3 = obj;
-        for (var i2 = 0; i2 < keys2.length - 1; i2++) {
-          var key2 = keys2[i2];
-          if (isConstructorOrProto(o3, key2)) {
+        var o2 = obj;
+        for (var i3 = 0; i3 < keys2.length - 1; i3++) {
+          var key2 = keys2[i3];
+          if (isConstructorOrProto(o2, key2)) {
             return;
           }
-          if (o3[key2] === void 0) {
-            o3[key2] = {};
+          if (o2[key2] === void 0) {
+            o2[key2] = {};
           }
-          if (o3[key2] === Object.prototype || o3[key2] === Number.prototype || o3[key2] === String.prototype) {
-            o3[key2] = {};
+          if (o2[key2] === Object.prototype || o2[key2] === Number.prototype || o2[key2] === String.prototype) {
+            o2[key2] = {};
           }
-          if (o3[key2] === Array.prototype) {
-            o3[key2] = [];
+          if (o2[key2] === Array.prototype) {
+            o2[key2] = [];
           }
-          o3 = o3[key2];
+          o2 = o2[key2];
         }
         var lastKey = keys2[keys2.length - 1];
-        if (isConstructorOrProto(o3, lastKey)) {
+        if (isConstructorOrProto(o2, lastKey)) {
           return;
         }
-        if (o3 === Object.prototype || o3 === Number.prototype || o3 === String.prototype) {
-          o3 = {};
+        if (o2 === Object.prototype || o2 === Number.prototype || o2 === String.prototype) {
+          o2 = {};
         }
-        if (o3 === Array.prototype) {
-          o3 = [];
+        if (o2 === Array.prototype) {
+          o2 = [];
         }
-        if (o3[lastKey] === void 0 || flags.bools[lastKey] || typeof o3[lastKey] === "boolean") {
-          o3[lastKey] = value2;
-        } else if (Array.isArray(o3[lastKey])) {
-          o3[lastKey].push(value2);
+        if (o2[lastKey] === void 0 || flags.bools[lastKey] || typeof o2[lastKey] === "boolean") {
+          o2[lastKey] = value2;
+        } else if (Array.isArray(o2[lastKey])) {
+          o2[lastKey].push(value2);
         } else {
-          o3[lastKey] = [o3[lastKey], value2];
+          o2[lastKey] = [o2[lastKey], value2];
         }
       }
       function setArg(key2, val, arg2) {
@@ -174,8 +174,8 @@ var require_minimist = __commonJS({
         notFlags = args.slice(args.indexOf("--") + 1);
         args = args.slice(0, args.indexOf("--"));
       }
-      for (var i = 0; i < args.length; i++) {
-        var arg = args[i];
+      for (var i2 = 0; i2 < args.length; i2++) {
+        var arg = args[i2];
         var key;
         var next;
         if (/^--.+=/.test(arg)) {
@@ -191,13 +191,13 @@ var require_minimist = __commonJS({
           setArg(key, false, arg);
         } else if (/^--.+/.test(arg)) {
           key = arg.match(/^--(.+)/)[1];
-          next = args[i + 1];
+          next = args[i2 + 1];
           if (next !== void 0 && !/^(-|--)[^-]/.test(next) && !flags.bools[key] && !flags.allBools && (aliases[key] ? !aliasIsBoolean(key) : true)) {
             setArg(key, next, arg);
-            i += 1;
+            i2 += 1;
           } else if (/^(true|false)$/.test(next)) {
             setArg(key, next === "true", arg);
-            i += 1;
+            i2 += 1;
           } else {
             setArg(key, flags.strings[key] ? "" : true, arg);
           }
@@ -230,12 +230,12 @@ var require_minimist = __commonJS({
           }
           key = arg.slice(-1)[0];
           if (!broken && key !== "-") {
-            if (args[i + 1] && !/^(-|--)[^-]/.test(args[i + 1]) && !flags.bools[key] && (aliases[key] ? !aliasIsBoolean(key) : true)) {
-              setArg(key, args[i + 1], arg);
-              i += 1;
-            } else if (args[i + 1] && /^(true|false)$/.test(args[i + 1])) {
-              setArg(key, args[i + 1] === "true", arg);
-              i += 1;
+            if (args[i2 + 1] && !/^(-|--)[^-]/.test(args[i2 + 1]) && !flags.bools[key] && (aliases[key] ? !aliasIsBoolean(key) : true)) {
+              setArg(key, args[i2 + 1], arg);
+              i2 += 1;
+            } else if (args[i2 + 1] && /^(true|false)$/.test(args[i2 + 1])) {
+              setArg(key, args[i2 + 1] === "true", arg);
+              i2 += 1;
             } else {
               setArg(key, flags.strings[key] ? "" : true, arg);
             }
@@ -245,7 +245,7 @@ var require_minimist = __commonJS({
             argv2._.push(flags.strings._ || !isNumber(arg) ? arg : Number(arg));
           }
           if (opts.stopEarly) {
-            argv2._.push.apply(argv2._, args.slice(i + 1));
+            argv2._.push.apply(argv2._, args.slice(i2 + 1));
             break;
           }
         }
@@ -280,8 +280,8 @@ var require_fast_json_stable_stringify = __commonJS({
       var cycles = typeof opts.cycles === "boolean" ? opts.cycles : false;
       var cmp = opts.cmp && /* @__PURE__ */ (function(f4) {
         return function(node) {
-          return function(a3, b) {
-            var aobj = { key: a3, value: node[a3] };
+          return function(a4, b) {
+            var aobj = { key: a4, value: node[a4] };
             var bobj = { key: b, value: node[b] };
             return f4(aobj, bobj);
           };
@@ -295,12 +295,12 @@ var require_fast_json_stable_stringify = __commonJS({
         if (node === void 0) return;
         if (typeof node == "number") return isFinite(node) ? "" + node : "null";
         if (typeof node !== "object") return JSON.stringify(node);
-        var i, out;
+        var i2, out;
         if (Array.isArray(node)) {
           out = "[";
-          for (i = 0; i < node.length; i++) {
-            if (i) out += ",";
-            out += stringify5(node[i]) || "null";
+          for (i2 = 0; i2 < node.length; i2++) {
+            if (i2) out += ",";
+            out += stringify5(node[i2]) || "null";
           }
           return out + "]";
         }
@@ -312,8 +312,8 @@ var require_fast_json_stable_stringify = __commonJS({
         var seenIndex = seen.push(node) - 1;
         var keys2 = Object.keys(node).sort(cmp && cmp(node));
         out = "";
-        for (i = 0; i < keys2.length; i++) {
-          var key = keys2[i];
+        for (i2 = 0; i2 < keys2.length; i2++) {
+          var key = keys2[i2];
           var value = stringify5(node[key]);
           if (!value) continue;
           if (out) out += ",";
@@ -345,9 +345,9 @@ var require_common_path_prefix = __commonJS({
       let endOfPrefix = parts.length;
       for (const path13 of remaining) {
         const compare = path13.split(sep);
-        for (let i = 0; i < endOfPrefix; i++) {
-          if (compare[i] !== parts[i]) {
-            endOfPrefix = i;
+        for (let i2 = 0; i2 < endOfPrefix; i2++) {
+          if (compare[i2] !== parts[i2]) {
+            endOfPrefix = i2;
           }
         }
         if (endOfPrefix === 0) return "";
@@ -1667,7 +1667,7 @@ var errorMessages = {
   }
 };
 function sortPaths(paths) {
-  return paths.sort((a3, b) => a3.localeCompare(b));
+  return paths.sort((a4, b) => a4.localeCompare(b));
 }
 function escapePathForGlob(path13) {
   return string_replace_all_default(
@@ -1844,7 +1844,7 @@ var a = (t) => {
     else if (typeof t == "string") if (t = t.trim(), Number.isNaN(Number(t))) {
       let r = /^([\d.]+)\s*(ms|s|m|h|hr|d)$/i.exec(t);
       if (!r) throw new Error(`Unsupported time format: "${t}". Use 'ms', 's', 'm', 'h', 'hr', or 'd'.`);
-      let [, i, s] = r, n = Number.parseFloat(i);
+      let [, i2, s] = r, n = Number.parseFloat(i2);
       switch (s.toLowerCase()) {
         case "ms": {
           e = n;
@@ -1889,15 +1889,15 @@ function d(t, e = { algorithm: "sha256", serialize: JSON.stringify }) {
   let r = e.serialize(t);
   if (e?.algorithm === "djb2") return w(r);
   if (!l.getHashes().includes(e.algorithm)) throw new Error(`Unsupported hash algorithm: '${e?.algorithm}'`);
-  let i = l.createHash(e.algorithm);
-  return i.update(r), i.digest("hex");
+  let i2 = l.createHash(e.algorithm);
+  return i2.update(r), i2.digest("hex");
 }
 function k(t, e = { min: 0, max: 10, algorithm: "sha256", serialize: JSON.stringify }) {
-  let r = e?.min ?? 0, i = e?.max ?? 10;
-  if (r >= i) throw new Error(`Invalid range: min (${r}) must be less than max (${i})`);
+  let r = e?.min ?? 0, i2 = e?.max ?? 10;
+  if (r >= i2) throw new Error(`Invalid range: min (${r}) must be less than max (${i2})`);
   e?.algorithm || (e.algorithm = "sha256"), e?.serialize || (e.serialize = JSON.stringify);
-  let s = d(t, e), n = Number.parseInt(s, 16), o3 = i - r + 1, c2 = r + n % o3;
-  return c2 < r ? r : c2 > i ? i : c2;
+  let s = d(t, e), n = Number.parseInt(s, 16), o2 = i2 - r + 1, c2 = r + n % o2;
+  return c2 < r ? r : c2 > i2 ? i2 : c2;
 }
 function w(t) {
   let e = 5381;
@@ -1907,26 +1907,26 @@ function w(t) {
 
 // node_modules/@cacheable/memoize/dist/index.js
 function d2(n, t) {
-  let { ttl: e, keyPrefix: a3, cache: r, serialize: c2 } = t;
+  let { ttl: e, keyPrefix: a4, cache: r, serialize: c2 } = t;
   return (...s) => {
-    let i = u(n, s, { keyPrefix: a3, serialize: c2 });
-    t.createKey && (i = t.createKey(n, s, t));
-    let y = r.get(i);
+    let i2 = u(n, s, { keyPrefix: a4, serialize: c2 });
+    t.createKey && (i2 = t.createKey(n, s, t));
+    let y = r.get(i2);
     if (y === void 0) try {
-      y = n(...s), r.set(i, y, e);
-    } catch (o3) {
-      r.emit("error", o3), t.cacheErrors && r.set(i, o3, e);
+      y = n(...s), r.set(i2, y, e);
+    } catch (o2) {
+      r.emit("error", o2), t.cacheErrors && r.set(i2, o2, e);
     }
     return y;
   };
 }
 function u(n, t, e) {
-  let { keyPrefix: a3, serialize: r } = e || {};
-  return a3 ? `${a3}::${n.name}::${d(t, { serialize: r })}` : `${n.name}::${d(t, { serialize: r })}`;
+  let { keyPrefix: a4, serialize: r } = e || {};
+  return a4 ? `${a4}::${n.name}::${d(t, { serialize: r })}` : `${n.name}::${d(t, { serialize: r })}`;
 }
 
 // node_modules/hookified/dist/node/index.js
-var o = class {
+var i = class {
   _eventListeners;
   _maxListeners;
   _logger;
@@ -1993,10 +1993,10 @@ var o = class {
   }
   emit(e, ...t) {
     let r = false, s = this._eventListeners.get(e);
-    if (s && s.length > 0) for (let n of s) n(...t), r = true;
+    if (s && s.length > 0) for (let o2 of s) o2(...t), r = true;
     if (e === "error") {
-      let n = t[0] instanceof Error ? t[0] : new Error(`${t[0]}`);
-      if (this._throwOnEmitError && !r) throw n;
+      let o2 = t[0] instanceof Error ? t[0] : new Error(`${t[0]}`);
+      if (this._throwOnEmitError && !r) throw o2;
     }
     return r;
   }
@@ -2016,11 +2016,14 @@ var o = class {
     return e;
   }
 };
-var l2 = class extends o {
+var a2 = class extends i {
   _hooks;
   _throwHookErrors = false;
+  _enforceBeforeAfter = false;
+  _deprecatedHooks;
+  _allowDeprecated = true;
   constructor(e) {
-    super({ logger: e?.logger }), this._hooks = /* @__PURE__ */ new Map(), e?.throwHookErrors !== void 0 && (this._throwHookErrors = e.throwHookErrors);
+    super({ logger: e?.logger }), this._hooks = /* @__PURE__ */ new Map(), this._deprecatedHooks = e?.deprecatedHooks ? new Map(e.deprecatedHooks) : /* @__PURE__ */ new Map(), e?.throwHookErrors !== void 0 && (this._throwHookErrors = e.throwHookErrors), e?.enforceBeforeAfter !== void 0 && (this._enforceBeforeAfter = e.enforceBeforeAfter), e?.allowDeprecated !== void 0 && (this._allowDeprecated = e.allowDeprecated);
   }
   get hooks() {
     return this._hooks;
@@ -2031,7 +2034,39 @@ var l2 = class extends o {
   set throwHookErrors(e) {
     this._throwHookErrors = e;
   }
+  get enforceBeforeAfter() {
+    return this._enforceBeforeAfter;
+  }
+  set enforceBeforeAfter(e) {
+    this._enforceBeforeAfter = e;
+  }
+  get deprecatedHooks() {
+    return this._deprecatedHooks;
+  }
+  set deprecatedHooks(e) {
+    this._deprecatedHooks = e;
+  }
+  get allowDeprecated() {
+    return this._allowDeprecated;
+  }
+  set allowDeprecated(e) {
+    this._allowDeprecated = e;
+  }
+  validateHookName(e) {
+    if (this._enforceBeforeAfter) {
+      let t = e.trim().toLocaleLowerCase();
+      if (!t.startsWith("before") && !t.startsWith("after")) throw new Error(`Hook event "${e}" must start with "before" or "after" when enforceBeforeAfter is enabled`);
+    }
+  }
+  checkDeprecatedHook(e) {
+    if (this._deprecatedHooks.has(e)) {
+      let t = this._deprecatedHooks.get(e), r = `Hook "${e}" is deprecated${t ? `: ${t}` : ""}`;
+      return this.emit("warn", { hook: e, message: r }), this.logger?.warn && this.logger.warn(r), this._allowDeprecated;
+    }
+    return true;
+  }
   onHook(e, t) {
+    if (this.validateHookName(e), !this.checkDeprecatedHook(e)) return;
     let r = this._hooks.get(e);
     r ? r.push(t) : this._hooks.set(e, [t]);
   }
@@ -2045,18 +2080,22 @@ var l2 = class extends o {
     for (let t of e) this.onHook(t.event, t.handler);
   }
   prependHook(e, t) {
+    if (this.validateHookName(e), !this.checkDeprecatedHook(e)) return;
     let r = this._hooks.get(e);
     r ? r.unshift(t) : this._hooks.set(e, [t]);
   }
   prependOnceHook(e, t) {
+    if (this.validateHookName(e), !this.checkDeprecatedHook(e)) return;
     let r = async (...s) => (this.removeHook(e, r), t(...s));
     this.prependHook(e, r);
   }
   onceHook(e, t) {
+    if (this.validateHookName(e), !this.checkDeprecatedHook(e)) return;
     let r = async (...s) => (this.removeHook(e, r), t(...s));
     this.onHook(e, r);
   }
   removeHook(e, t) {
+    if (this.validateHookName(e), !this.checkDeprecatedHook(e)) return;
     let r = this._hooks.get(e);
     if (r) {
       let s = r.indexOf(t);
@@ -2067,12 +2106,13 @@ var l2 = class extends o {
     for (let t of e) this.removeHook(t.event, t.handler);
   }
   async hook(e, ...t) {
+    if (this.validateHookName(e), !this.checkDeprecatedHook(e)) return;
     let r = this._hooks.get(e);
     if (r) for (let s of r) try {
       await s(...t);
-    } catch (n) {
-      let i = `${e}: ${n.message}`;
-      if (this.emit("error", new Error(i)), this.logger && this.logger.error(i), this._throwHookErrors) throw new Error(i);
+    } catch (o2) {
+      let n = `${e}: ${o2.message}`;
+      if (this.emit("error", new Error(n)), this.logger && this.logger.error(n), this._throwHookErrors) throw new Error(n);
     }
   }
   async beforeHook(e, ...t) {
@@ -2085,7 +2125,7 @@ var l2 = class extends o {
     await this.hook(e, ...t);
   }
   getHooks(e) {
-    return this._hooks.get(e);
+    if (this.validateHookName(e), !!this.checkDeprecatedHook(e)) return this._hooks.get(e);
   }
   clearHooks() {
     this._hooks.clear();
@@ -2101,7 +2141,7 @@ var c = class {
     this.value = e;
   }
 };
-var o2 = class {
+var o = class {
   head = void 0;
   tail = void 0;
   nodesMap = /* @__PURE__ */ new Map();
@@ -2127,8 +2167,8 @@ var o2 = class {
 };
 var v = 16;
 var u2 = 16777216;
-var a2 = class extends l2 {
-  _lru = new o2();
+var a3 = class extends a2 {
+  _lru = new o();
   _storeHashSize = v;
   _storeHashAlgorithm = f.DJB2;
   _store = Array.from({ length: this._storeHashSize }, () => /* @__PURE__ */ new Map());
@@ -2161,7 +2201,7 @@ var a2 = class extends l2 {
       return;
     }
     if (this._lruSize = e, this._lruSize === 0) {
-      this._lru = new o2();
+      this._lru = new o();
       return;
     }
     this.lruResize();
@@ -2192,8 +2232,8 @@ var a2 = class extends l2 {
   get keys() {
     let e = [];
     for (let t of this._store) for (let r of t.keys()) {
-      let i = t.get(r);
-      if (i && this.hasExpired(i)) {
+      let i2 = t.get(r);
+      if (i2 && this.hasExpired(i2)) {
         t.delete(r);
         continue;
       }
@@ -2246,7 +2286,7 @@ var a2 = class extends l2 {
     return t;
   }
   set(e, t, r) {
-    let i = this.getStore(e), h;
+    let i2 = this.getStore(e), h;
     if (r !== void 0 || this._ttl !== void 0) if (typeof r == "object") {
       if (r.expire && (h = typeof r.expire == "number" ? r.expire : r.expire.getTime()), r.ttl) {
         let n = g(r.ttl);
@@ -2257,14 +2297,14 @@ var a2 = class extends l2 {
       n !== void 0 && (h = n);
     }
     if (this._lruSize > 0) {
-      if (i.has(e)) this.lruMoveToFront(e);
+      if (i2.has(e)) this.lruMoveToFront(e);
       else if (this.lruAddToFront(e), this._lru.size > this._lruSize) {
         let n = this._lru.getOldest();
         n && (this._lru.removeOldest(), this.delete(n));
       }
     }
     let p = { key: e, value: t, expires: h };
-    i.set(e, p);
+    i2.set(e, p);
   }
   setMany(e) {
     for (let t of e) this.set(t.key, t.value, t.ttl);
@@ -2275,8 +2315,8 @@ var a2 = class extends l2 {
   hasMany(e) {
     let t = [];
     for (let r of e) {
-      let i = this.get(r);
-      t.push(!!i);
+      let i2 = this.get(r);
+      t.push(!!i2);
     }
     return t;
   }
@@ -2296,7 +2336,7 @@ var a2 = class extends l2 {
     for (let t of e) this.delete(t);
   }
   clear() {
-    this._store = Array.from({ length: this._storeHashSize }, () => /* @__PURE__ */ new Map()), this._lru = new o2();
+    this._store = Array.from({ length: this._storeHashSize }, () => /* @__PURE__ */ new Map()), this._lru = new o();
   }
   getStore(e) {
     let t = this.getKeyStoreHash(e);
@@ -2378,9 +2418,9 @@ var revive = (input, parsed, output, $) => {
     } else if (output[k2] !== ignore)
       output[k2] = $.call(output, k2, value);
   }
-  for (let { length } = lazy, i = 0; i < length; i++) {
-    const { k: k2, a: a3 } = lazy[i];
-    output[k2] = $.call(output, k2, revive.apply(null, a3));
+  for (let { length } = lazy, i2 = 0; i2 < length; i2++) {
+    const { k: k2, a: a4 } = lazy[i2];
+    output[k2] = $.call(output, k2, revive.apply(null, a4));
   }
   return output;
 };
@@ -2401,11 +2441,11 @@ var stringify2 = (value, replacer, space) => {
   const known = /* @__PURE__ */ new Map();
   const input = [];
   const output = [];
-  let i = +set(known, input, $.call({ "": value }, "", value));
-  let firstRun = !i;
-  while (i < input.length) {
+  let i2 = +set(known, input, $.call({ "": value }, "", value));
+  let firstRun = !i2;
+  while (i2 < input.length) {
     firstRun = true;
-    output[i] = $stringify(input[i++], replace, space);
+    output[i2] = $stringify(input[i2++], replace, space);
   }
   return "[" + output.join(",") + "]";
   function replace(key, value2) {
@@ -2425,8 +2465,8 @@ var stringify2 = (value, replacer, space) => {
 };
 
 // node_modules/flat-cache/dist/index.js
-var FlatCache = class extends l2 {
-  _cache = new a2();
+var FlatCache = class extends a2 {
+  _cache = new a3();
   _cacheDir = ".cache";
   _cacheId = "cache1";
   _persistInterval = 0;
@@ -2437,7 +2477,7 @@ var FlatCache = class extends l2 {
   constructor(options) {
     super();
     if (options) {
-      this._cache = new a2({
+      this._cache = new a3({
         ttl: options.ttl,
         useClone: options.useClone,
         lruSize: options.lruSize,
@@ -3518,18 +3558,18 @@ function wcwidth(ucs, opts) {
 }
 function wcswidth(str, opts) {
   let h;
-  let l4;
+  let l3;
   let s = 0;
   let n;
   if (typeof str !== "string") return wcwidth(str, opts);
-  for (let i = 0; i < str.length; i++) {
-    h = str.charCodeAt(i);
+  for (let i2 = 0; i2 < str.length; i2++) {
+    h = str.charCodeAt(i2);
     if (h >= 55296 && h <= 56319) {
-      l4 = str.charCodeAt(++i);
-      if (l4 >= 56320 && l4 <= 57343) {
-        h = (h - 55296) * 1024 + (l4 - 56320) + 65536;
+      l3 = str.charCodeAt(++i2);
+      if (l3 >= 56320 && l3 <= 57343) {
+        h = (h - 55296) * 1024 + (l3 - 56320) + 65536;
       } else {
-        i--;
+        i2--;
       }
     }
     n = wcwidth(h, opts);
@@ -3687,8 +3727,8 @@ async function getOptionsForFile(context, filepath) {
 var get_options_for_file_default = getOptionsForFile;
 
 // src/cli/format.js
-function diff(a3, b) {
-  return createTwoFilesPatch("", "", a3, b, "", "", { context: 2 });
+function diff(a4, b) {
+  return createTwoFilesPatch("", "", a4, b, "", "", { context: 2 });
 }
 var DebugError = class extends Error {
   name = "DebugError";
@@ -3817,7 +3857,7 @@ async function format3(context, input, opt) {
       `'${performanceTestFlag.name}' found, running formatWithCursor ${repeat} times.`
     );
     const start = mockable_default.getTimestamp();
-    for (let i = 0; i < repeat; ++i) {
+    for (let i2 = 0; i2 < repeat; ++i2) {
       await prettier.formatWithCursor(input, opt);
     }
     const averageMs = (mockable_default.getTimestamp() - start) / repeat;
@@ -4121,7 +4161,7 @@ var logger_default = createLogger;
 // src/cli/print-support-info.js
 var import_fast_json_stable_stringify3 = __toESM(require_fast_json_stable_stringify(), 1);
 import { format as format4, getSupportInfo as getSupportInfo2 } from "../index.mjs";
-var sortByName = (array) => array.sort((a3, b) => a3.name.localeCompare(b.name));
+var sortByName = (array) => array.sort((a4, b) => a4.name.localeCompare(b.name));
 async function printSupportInfo() {
   const { languages, options } = await getSupportInfo2();
   const supportInfo = {
