@@ -3,7 +3,7 @@
 The published Prettier artifact additionally contains code with the following licenses:
 MIT, ISC, BSD-3-Clause, BSD-2-Clause, and Apache-2.0.
 
-## @angular/compiler@v20.3.0
+## @angular/compiler@v20.3.1
 
 > Angular - the compiler library
 
@@ -489,7 +489,7 @@ Author: Alex Bell <alex@bellandwhistle.net>
 
 ----------------------------------------
 
-## @typescript-eslint/types@v8.43.0
+## @typescript-eslint/types@v8.44.0
 
 > Types for the TypeScript-ESTree AST spec
 
@@ -521,7 +521,7 @@ Repository: <https://github.com/typescript-eslint/typescript-eslint.git>
 
 ----------------------------------------
 
-## @typescript-eslint/typescript-estree@v8.43.0
+## @typescript-eslint/typescript-estree@v8.44.0
 
 > A parser that converts TypeScript source code into an ESTree compatible form
 

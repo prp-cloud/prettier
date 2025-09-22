@@ -18842,7 +18842,7 @@ var get_file_info_default = getFileInfo;
 import * as doc from "./doc.mjs";
 
 // src/main/version.evaluate.js
-var version_evaluate_default = "3.7.0-4014fdc7e";
+var version_evaluate_default = "3.7.0-86476ddce";
 
 // src/utils/public.js
 var public_exports = {};

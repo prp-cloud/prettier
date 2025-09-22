@@ -2133,6 +2133,7 @@ var a2 = class extends i {
 };
 
 // node_modules/@cacheable/memory/dist/index.js
+var structuredClone = globalThis.structuredClone ?? ((value) => JSON.parse(JSON.stringify(value)));
 var c = class {
   value;
   prev = void 0;
@@ -2388,9 +2389,6 @@ var a3 = class extends a2 {
     return !!(e.expires && Date.now() > e.expires);
   }
 };
-
-// node_modules/cacheable/dist/index.js
-var structuredClone2 = globalThis.structuredClone ?? ((value) => JSON.parse(JSON.stringify(value)));
 
 // node_modules/flatted/esm/index.js
 var { parse: $parse, stringify: $stringify } = JSON;
