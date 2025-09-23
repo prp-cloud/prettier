@@ -9953,7 +9953,7 @@ function isVueEventBindingMemberExpression(node) {
 
 // src/language-js/print/semicolon.js
 function shouldPrintLeadingSemicolon(path, options2) {
-  if (options2.semi || isSingleJsxExpressionStatementInMarkdown(path, options2) || isSingleVueEventBindingExpressionStatement(path, options2)) {
+  if (options2.semi || isSingleJsxExpressionStatementInMarkdown(path, options2) || isSingleVueEventBindingExpressionStatement(path, options2) || isSingleHtmlEventHandlerExpressionStatement(path, options2)) {
     return false;
   }
   const { node, key, parent } = path;
@@ -10012,26 +10012,38 @@ function expressionNeedsASIProtection(path, options2) {
     ...getLeftSidePathName(node)
   );
 }
-function isSingleJsxExpressionStatementInMarkdown({ node, parent }, options2) {
-  return (options2.parentParser === "markdown" || options2.parentParser === "mdx") && node.type === "ExpressionStatement" && isJsxElement(node.expression) && parent.type === "Program" && parent.body.length === 1;
+var isSingleExpressionStatement = ({ node, parent }) => node.type === "ExpressionStatement" && parent.type === "Program" && parent.body.length === 1 && // In non-Babel parser, directives are `ExpressionStatement`s
+(Array.isArray(parent.directives) && parent.directives.length === 0 || !parent.directives);
+function isSingleJsxExpressionStatementInMarkdown(path, options2) {
+  return (options2.parentParser === "markdown" || options2.parentParser === "mdx") && isSingleExpressionStatement(path) && isJsxElement(path.node.expression);
 }
-function isSingleVueEventBindingExpressionStatement({ node, parent }, options2) {
-  return (options2.parser === "__vue_event_binding" || options2.parser === "__vue_ts_event_binding") && node.type === "ExpressionStatement" && parent.type === "Program" && parent.body.length === 1;
+function isSingleHtmlEventHandlerExpressionStatement(path, options2) {
+  return options2.__isHtmlInlineEventHandler && isSingleExpressionStatement(path);
+}
+function isSingleVueEventBindingExpressionStatement(path, options2) {
+  return (options2.parser === "__vue_event_binding" || options2.parser === "__vue_ts_event_binding") && isSingleExpressionStatement(path);
 }
 
 // src/language-js/print/expression-statement.js
-function printExpressionStatement(path, options2, print3) {
-  const parts = [print3("expression")];
+function shouldPrintSemicolon(path, options2) {
   if (isSingleVueEventBindingExpressionStatement(path, options2)) {
     const expression = unwrapVueEventBindingTsNode(path.node.expression);
-    if (isVueEventBindingFunctionExpression(expression) || isVueEventBindingMemberExpression(expression)) {
-      parts.push(";");
-    }
-  } else if (isSingleJsxExpressionStatementInMarkdown(path, options2)) {
-  } else if (options2.semi) {
-    parts.push(";");
+    return isVueEventBindingFunctionExpression(expression) || isVueEventBindingMemberExpression(expression);
   }
-  return parts;
+  if (!options2.semi) {
+    return false;
+  }
+  if (
+    // Do not append semicolon after the only JSX element in a program
+    isSingleJsxExpressionStatementInMarkdown(path, options2) || // Do not append semicolon after the only HTML event binding expression in a program
+    isSingleHtmlEventHandlerExpressionStatement(path, options2)
+  ) {
+    return false;
+  }
+  return true;
+}
+function printExpressionStatement(path, options2, print3) {
+  return [print3("expression"), shouldPrintSemicolon(path, options2) ? ";" : ""];
 }
 
 // src/language-js/print/html-binding.js
