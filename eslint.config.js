@@ -150,6 +150,7 @@ export default [
           avoidEscape: true,
         },
       ],
+      "@stylistic/spaced-comment": "error",
 
       /* @typescript-eslint/eslint-plugin */
       "@typescript-eslint/prefer-ts-expect-error": "error",
@@ -429,6 +430,7 @@ export default [
           functions: ["hasComment", "getComments"],
         },
         "src/language-js/pragma.js",
+        "src/language-js/parse/angular.js",
         "src/language-js/parse/babel.js",
         "src/language-js/parse/meriyah.js",
         "src/language-js/parse/json.js",
