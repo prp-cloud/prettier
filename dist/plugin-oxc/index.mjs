@@ -2342,10 +2342,15 @@ function isNodeMatchesNameOrPath(node, nameOrPath) {
     if (index === 0) {
       return node.type === "Identifier" && node.name === name;
     }
-    if (node.type !== "MemberExpression" || node.optional || node.computed || node.property.type !== "Identifier" || node.property.name !== name) {
-      return false;
+    if (index === 1 && node.type === "MetaProperty" && node.property.type === "Identifier" && node.property.name === name) {
+      node = node.meta;
+      continue;
     }
-    node = node.object;
+    if (node.type === "MemberExpression" && !node.optional && !node.computed && node.property.type === "Identifier" && node.property.name === name) {
+      node = node.object;
+      continue;
+    }
+    return false;
   }
 }
 function isNodeMatches(node, nameOrPaths) {
@@ -7102,13 +7107,13 @@ function printJsx(path, options2, print3) {
       return printJsxOpeningClosingFragment(
         path,
         options2
-        /*, print*/
+        /* , print*/
       );
     case "JSXEmptyExpression":
       return printJsxEmptyExpression(
         path,
         options2
-        /*, print*/
+        /* , print*/
       );
     case "JSXText":
       throw new Error("JSXText should be handled by JSXElement");
@@ -7355,10 +7360,7 @@ function printAngular(path, options2, print3) {
   }
   switch (node.type) {
     case "NGRoot":
-      return [
-        print3("node"),
-        hasComment(node.node) ? " //" + getComments(node.node)[0].value.trimEnd() : ""
-      ];
+      return print3("node");
     case "NGPipeExpression":
       return printBinaryishExpression(path, options2, print3);
     case "NGChainedExpression":
@@ -8017,12 +8019,21 @@ function printCallee(path, print3) {
   }
   return print3("callee");
 }
+var moduleImportCallees = [
+  "require",
+  "require.resolve",
+  "require.resolve.paths",
+  "import.meta.resolve"
+];
 function isSimpleModuleImport(path) {
   const { node } = path;
   if (!// `import("foo")`
   (node.type === "ImportExpression" || // `type foo = import("foo")`
   node.type === "TSImportType" || // `require("foo")`
-  node.type === "CallExpression" && !node.optional && node.callee.type === "Identifier" && node.callee.name === "require")) {
+  // `require.resolve("foo")`
+  // `require.resolve.paths("foo")`
+  // `import.meta.resolve("foo")`
+  node.type === "CallExpression" && !node.optional && is_node_matches_default(node.callee, moduleImportCallees))) {
     return false;
   }
   const args = getCallArguments(node);
@@ -10445,11 +10456,7 @@ function printObject(path, options2, print3) {
     propsAndLoc,
     -1
   )?.node;
-  const canHaveTrailingSeparator = !(node.inexact || node.hasUnknownMembers || lastElem && (lastElem.type === "RestElement" || (lastElem.type === "TSPropertySignature" || lastElem.type === "TSCallSignatureDeclaration" || lastElem.type === "TSMethodSignature" || lastElem.type === "TSConstructSignatureDeclaration" || lastElem.type === "TSIndexSignature") && hasComment(lastElem, CommentCheckFlags.PrettierIgnore)) || // https://github.com/microsoft/TypeScript/issues/61916
-  path.match(
-    void 0,
-    (node2, key2) => node2.type === "TSImportType" && key2 === "options"
-  ));
+  const canHaveTrailingSeparator = !(node.inexact || node.hasUnknownMembers || lastElem && (lastElem.type === "RestElement" || (lastElem.type === "TSPropertySignature" || lastElem.type === "TSCallSignatureDeclaration" || lastElem.type === "TSMethodSignature" || lastElem.type === "TSConstructSignatureDeclaration" || lastElem.type === "TSIndexSignature") && hasComment(lastElem, CommentCheckFlags.PrettierIgnore)));
   let content;
   if (props.length === 0) {
     if (!hasComment(node, CommentCheckFlags.Dangling)) {
