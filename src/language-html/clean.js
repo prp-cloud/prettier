@@ -34,15 +34,47 @@ function clean(original, cloned) {
     original.type === "yaml" ||
     original.type === "toml"
   ) {
-    return null;
+    delete cloned.raw;
+    delete cloned.value;
   }
 
   if (original.type === "attribute") {
-    delete cloned.value;
+    const { fullName: name, value } = original;
+
+    if (
+      // HTML attributes
+      name === "style" ||
+      name === "class" ||
+      name === "srcset" ||
+      name.startsWith("on") ||
+      // Vue attributes
+      name.startsWith("@") ||
+      name.startsWith(":") ||
+      name.startsWith(".") ||
+      name.startsWith("#") ||
+      name.startsWith("v-") ||
+      name === "vars" ||
+      name === "setup" ||
+      name === "generic" ||
+      name === "slot-scope" ||
+      // Angular attributes
+      name.startsWith("(") ||
+      name.startsWith("[") ||
+      name.startsWith("*") ||
+      name.startsWith("bind") ||
+      name.startsWith("i18n") ||
+      name.startsWith("on-") ||
+      name.startsWith("ng-") ||
+      value?.includes("{{")
+    ) {
+      delete cloned.value;
+    } else if (value) {
+      cloned.value = value.replaceAll(/'|&quot;|&apos;/gu, '"');
+    }
   }
 
   if (original.type === "docType") {
-    delete cloned.value;
+    cloned.value = original.value.toLowerCase().replaceAll(/\s+/gu, " ");
   }
 
   if (
