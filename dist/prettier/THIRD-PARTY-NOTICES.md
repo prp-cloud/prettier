@@ -35,7 +35,7 @@ Author: angular
 
 ----------------------------------------
 
-## @babel/code-frame@v7.27.1
+## @babel/code-frame@v8.0.0-beta.2
 
 > Generate errors that contain a code frame that point to source locations.
 
@@ -69,7 +69,7 @@ Author: The Babel Team (https://babel.dev/team)
 
 ----------------------------------------
 
-## @babel/helper-validator-identifier@v7.27.1
+## @babel/helper-validator-identifier@v8.0.0-beta.2
 
 > Validate identifier/keywords name
 
@@ -102,7 +102,7 @@ Author: The Babel Team (https://babel.dev/team)
 
 ----------------------------------------
 
-## @babel/parser@v7.28.4
+## @babel/parser@v8.0.0-beta.2
 
 > A JavaScript parser
 
@@ -2968,16 +2968,16 @@ Repository: <https://github.com/jestjs/jest.git>
 
 ----------------------------------------
 
-## js-tokens@v4.0.0
+## js-tokens@v8.0.3
 
-> A regex that tokenizes JavaScript.
+> Tiny JavaScript tokenizer.
 
 License: MIT  
 Author: Simon Lydell  
 
 > The MIT License (MIT)
 >
-> Copyright (c) 2014, 2015, 2016, 2017, 2018 Simon Lydell
+> Copyright (c) 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024 Simon Lydell
 >
 > Permission is hereby granted, free of charge, to any person obtaining a copy
 > of this software and associated documentation files (the "Software"), to deal

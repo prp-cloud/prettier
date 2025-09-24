@@ -91,6 +91,11 @@
   };
   var at_default = at;
 
+  // src/utils/noop.js
+  var noop = () => {
+  };
+  var noop_default = noop;
+
   // node_modules/trim-newlines/index.js
   function trimNewlinesEnd(string) {
     let end = string.length;
@@ -502,9 +507,7 @@ Expected it to be ${EXPECTED_TYPE_VALUES}.`;
   }
 
   // src/document/utils/assert-doc.js
-  var noop = () => {
-  };
-  var assertDoc = true ? noop : function(doc) {
+  var assertDoc = true ? noop_default : function(doc) {
     traverse_doc_default(doc, (doc2) => {
       if (checked.has(doc2)) {
         return false;
@@ -514,7 +517,7 @@ Expected it to be ${EXPECTED_TYPE_VALUES}.`;
       }
     });
   };
-  var assertDocArray = true ? noop : function(docs, optional = false) {
+  var assertDocArray = true ? noop_default : function(docs, optional = false) {
     if (optional && !docs) {
       return;
     }
@@ -525,7 +528,7 @@ Expected it to be ${EXPECTED_TYPE_VALUES}.`;
       assertDoc(doc);
     }
   };
-  var assertDocFillParts = true ? noop : (
+  var assertDocFillParts = true ? noop_default : (
     /**
      * @param {Doc[]} parts
      */

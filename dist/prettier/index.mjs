@@ -113,7 +113,7 @@ var require_path = __commonJS({
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.convertPosixPathToPattern = exports.convertWindowsPathToPattern = exports.convertPathToPattern = exports.escapePosixPath = exports.escapeWindowsPath = exports.escape = exports.removeLeadingDotSegment = exports.makeAbsolute = exports.unixify = void 0;
     var os = __require("os");
-    var path14 = __require("path");
+    var path15 = __require("path");
     var IS_WINDOWS_PLATFORM = os.platform() === "win32";
     var LEADING_DOT_SEGMENT_CHARACTERS_COUNT = 2;
     var POSIX_UNESCAPED_GLOB_SYMBOLS_RE = /(\\?)([()*?[\]{|}]|^!|[!+@](?=\()|\\(?![!()*+?@[\]{|}]))/g;
@@ -125,7 +125,7 @@ var require_path = __commonJS({
     }
     exports.unixify = unixify;
     function makeAbsolute(cwd, filepath) {
-      return path14.resolve(cwd, filepath);
+      return path15.resolve(cwd, filepath);
     }
     exports.makeAbsolute = makeAbsolute;
     function removeLeadingDotSegment(entry) {
@@ -1422,7 +1422,7 @@ var require_braces = __commonJS({
 var require_constants2 = __commonJS({
   "node_modules/micromatch/node_modules/picomatch/lib/constants.js"(exports, module) {
     "use strict";
-    var path14 = __require("path");
+    var path15 = __require("path");
     var WIN_SLASH = "\\\\/";
     var WIN_NO_SLASH = `[^${WIN_SLASH}]`;
     var DOT_LITERAL = "\\.";
@@ -1592,7 +1592,7 @@ var require_constants2 = __commonJS({
       /* | */
       CHAR_ZERO_WIDTH_NOBREAK_SPACE: 65279,
       /* \uFEFF */
-      SEP: path14.sep,
+      SEP: path15.sep,
       /**
        * Create EXTGLOB_CHARS
        */
@@ -1619,7 +1619,7 @@ var require_constants2 = __commonJS({
 var require_utils2 = __commonJS({
   "node_modules/micromatch/node_modules/picomatch/lib/utils.js"(exports) {
     "use strict";
-    var path14 = __require("path");
+    var path15 = __require("path");
     var win32 = process.platform === "win32";
     var {
       REGEX_BACKSLASH,
@@ -1648,7 +1648,7 @@ var require_utils2 = __commonJS({
       if (options8 && typeof options8.windows === "boolean") {
         return options8.windows;
       }
-      return win32 === true || path14.sep === "\\";
+      return win32 === true || path15.sep === "\\";
     };
     exports.escapeLast = (input, char, lastIdx) => {
       const idx = input.lastIndexOf(char, lastIdx);
@@ -2783,7 +2783,7 @@ var require_parse2 = __commonJS({
 var require_picomatch = __commonJS({
   "node_modules/micromatch/node_modules/picomatch/lib/picomatch.js"(exports, module) {
     "use strict";
-    var path14 = __require("path");
+    var path15 = __require("path");
     var scan = require_scan();
     var parse7 = require_parse2();
     var utils = require_utils2();
@@ -2868,7 +2868,7 @@ var require_picomatch = __commonJS({
     };
     picomatch.matchBase = (input, glob, options8, posix = utils.isWindows(options8)) => {
       const regex = glob instanceof RegExp ? glob : picomatch.makeRe(glob, options8);
-      return regex.test(path14.basename(input));
+      return regex.test(path15.basename(input));
     };
     picomatch.isMatch = (str, patterns, options8) => picomatch(patterns, options8)(str);
     picomatch.parse = (pattern, options8) => {
@@ -3095,7 +3095,7 @@ var require_pattern = __commonJS({
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.isAbsolute = exports.partitionAbsoluteAndRelative = exports.removeDuplicateSlashes = exports.matchAny = exports.convertPatternsToRe = exports.makeRe = exports.getPatternParts = exports.expandBraceExpansion = exports.expandPatternsWithBraceExpansion = exports.isAffectDepthOfReadingPattern = exports.endsWithSlashGlobStar = exports.hasGlobStar = exports.getBaseDirectory = exports.isPatternRelatedToParentDirectory = exports.getPatternsOutsideCurrentDirectory = exports.getPatternsInsideCurrentDirectory = exports.getPositivePatterns = exports.getNegativePatterns = exports.isPositivePattern = exports.isNegativePattern = exports.convertToNegativePattern = exports.convertToPositivePattern = exports.isDynamicPattern = exports.isStaticPattern = void 0;
-    var path14 = __require("path");
+    var path15 = __require("path");
     var globParent = require_glob_parent();
     var micromatch2 = require_micromatch();
     var GLOBSTAR = "**";
@@ -3190,7 +3190,7 @@ var require_pattern = __commonJS({
     }
     exports.endsWithSlashGlobStar = endsWithSlashGlobStar;
     function isAffectDepthOfReadingPattern(pattern) {
-      const basename = path14.basename(pattern);
+      const basename = path15.basename(pattern);
       return endsWithSlashGlobStar(pattern) || isStaticPattern(basename);
     }
     exports.isAffectDepthOfReadingPattern = isAffectDepthOfReadingPattern;
@@ -3248,7 +3248,7 @@ var require_pattern = __commonJS({
     }
     exports.partitionAbsoluteAndRelative = partitionAbsoluteAndRelative;
     function isAbsolute(pattern) {
-      return path14.isAbsolute(pattern);
+      return path15.isAbsolute(pattern);
     }
     exports.isAbsolute = isAbsolute;
   }
@@ -3425,8 +3425,8 @@ var require_utils3 = __commonJS({
     exports.errno = errno;
     var fs4 = require_fs();
     exports.fs = fs4;
-    var path14 = require_path();
-    exports.path = path14;
+    var path15 = require_path();
+    exports.path = path15;
     var pattern = require_pattern();
     exports.pattern = pattern;
     var stream = require_stream();
@@ -3538,8 +3538,8 @@ var require_async = __commonJS({
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.read = void 0;
-    function read3(path14, settings, callback) {
-      settings.fs.lstat(path14, (lstatError, lstat2) => {
+    function read3(path15, settings, callback) {
+      settings.fs.lstat(path15, (lstatError, lstat2) => {
         if (lstatError !== null) {
           callFailureCallback(callback, lstatError);
           return;
@@ -3548,7 +3548,7 @@ var require_async = __commonJS({
           callSuccessCallback(callback, lstat2);
           return;
         }
-        settings.fs.stat(path14, (statError, stat2) => {
+        settings.fs.stat(path15, (statError, stat2) => {
           if (statError !== null) {
             if (settings.throwErrorOnBrokenSymbolicLink) {
               callFailureCallback(callback, statError);
@@ -3580,13 +3580,13 @@ var require_sync = __commonJS({
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.read = void 0;
-    function read3(path14, settings) {
-      const lstat2 = settings.fs.lstatSync(path14);
+    function read3(path15, settings) {
+      const lstat2 = settings.fs.lstatSync(path15);
       if (!lstat2.isSymbolicLink() || !settings.followSymbolicLink) {
         return lstat2;
       }
       try {
-        const stat2 = settings.fs.statSync(path14);
+        const stat2 = settings.fs.statSync(path15);
         if (settings.markSymbolicLink) {
           stat2.isSymbolicLink = () => true;
         }
@@ -3657,17 +3657,17 @@ var require_out = __commonJS({
     var sync = require_sync();
     var settings_1 = require_settings();
     exports.Settings = settings_1.default;
-    function stat2(path14, optionsOrSettingsOrCallback, callback) {
+    function stat2(path15, optionsOrSettingsOrCallback, callback) {
       if (typeof optionsOrSettingsOrCallback === "function") {
-        async.read(path14, getSettings(), optionsOrSettingsOrCallback);
+        async.read(path15, getSettings(), optionsOrSettingsOrCallback);
         return;
       }
-      async.read(path14, getSettings(optionsOrSettingsOrCallback), callback);
+      async.read(path15, getSettings(optionsOrSettingsOrCallback), callback);
     }
     exports.stat = stat2;
-    function statSync2(path14, optionsOrSettings) {
+    function statSync2(path15, optionsOrSettings) {
       const settings = getSettings(optionsOrSettings);
-      return sync.read(path14, settings);
+      return sync.read(path15, settings);
     }
     exports.statSync = statSync2;
     function getSettings(settingsOrOptions = {}) {
@@ -3883,16 +3883,16 @@ var require_async2 = __commonJS({
           return;
         }
         const tasks = names.map((name) => {
-          const path14 = common.joinPathSegments(directory, name, settings.pathSegmentSeparator);
+          const path15 = common.joinPathSegments(directory, name, settings.pathSegmentSeparator);
           return (done) => {
-            fsStat.stat(path14, settings.fsStatSettings, (error, stats) => {
+            fsStat.stat(path15, settings.fsStatSettings, (error, stats) => {
               if (error !== null) {
                 done(error);
                 return;
               }
               const entry = {
                 name,
-                path: path14,
+                path: path15,
                 dirent: utils.fs.createDirentFromStats(name, stats)
               };
               if (settings.stats) {
@@ -4010,7 +4010,7 @@ var require_settings2 = __commonJS({
   "node_modules/@nodelib/fs.scandir/out/settings.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var path14 = __require("path");
+    var path15 = __require("path");
     var fsStat = require_out();
     var fs4 = require_fs4();
     var Settings = class {
@@ -4018,7 +4018,7 @@ var require_settings2 = __commonJS({
         this._options = _options;
         this.followSymbolicLinks = this._getValue(this._options.followSymbolicLinks, false);
         this.fs = fs4.createFileSystemAdapter(this._options.fs);
-        this.pathSegmentSeparator = this._getValue(this._options.pathSegmentSeparator, path14.sep);
+        this.pathSegmentSeparator = this._getValue(this._options.pathSegmentSeparator, path15.sep);
         this.stats = this._getValue(this._options.stats, false);
         this.throwErrorOnBrokenSymbolicLink = this._getValue(this._options.throwErrorOnBrokenSymbolicLink, true);
         this.fsStatSettings = new fsStat.Settings({
@@ -4045,17 +4045,17 @@ var require_out2 = __commonJS({
     var sync = require_sync2();
     var settings_1 = require_settings2();
     exports.Settings = settings_1.default;
-    function scandir(path14, optionsOrSettingsOrCallback, callback) {
+    function scandir(path15, optionsOrSettingsOrCallback, callback) {
       if (typeof optionsOrSettingsOrCallback === "function") {
-        async.read(path14, getSettings(), optionsOrSettingsOrCallback);
+        async.read(path15, getSettings(), optionsOrSettingsOrCallback);
         return;
       }
-      async.read(path14, getSettings(optionsOrSettingsOrCallback), callback);
+      async.read(path15, getSettings(optionsOrSettingsOrCallback), callback);
     }
     exports.scandir = scandir;
-    function scandirSync(path14, optionsOrSettings) {
+    function scandirSync(path15, optionsOrSettings) {
       const settings = getSettings(optionsOrSettings);
-      return sync.read(path14, settings);
+      return sync.read(path15, settings);
     }
     exports.scandirSync = scandirSync;
     function getSettings(settingsOrOptions = {}) {
@@ -4679,7 +4679,7 @@ var require_settings3 = __commonJS({
   "node_modules/@nodelib/fs.walk/out/settings.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var path14 = __require("path");
+    var path15 = __require("path");
     var fsScandir = require_out2();
     var Settings = class {
       constructor(_options = {}) {
@@ -4689,7 +4689,7 @@ var require_settings3 = __commonJS({
         this.deepFilter = this._getValue(this._options.deepFilter, null);
         this.entryFilter = this._getValue(this._options.entryFilter, null);
         this.errorFilter = this._getValue(this._options.errorFilter, null);
-        this.pathSegmentSeparator = this._getValue(this._options.pathSegmentSeparator, path14.sep);
+        this.pathSegmentSeparator = this._getValue(this._options.pathSegmentSeparator, path15.sep);
         this.fsScandirSettings = new fsScandir.Settings({
           followSymbolicLinks: this._options.followSymbolicLinks,
           fs: this._options.fs,
@@ -4751,7 +4751,7 @@ var require_reader2 = __commonJS({
   "node_modules/fast-glob/out/readers/reader.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var path14 = __require("path");
+    var path15 = __require("path");
     var fsStat = require_out();
     var utils = require_utils3();
     var Reader = class {
@@ -4764,7 +4764,7 @@ var require_reader2 = __commonJS({
         });
       }
       _getFullEntryPath(filepath) {
-        return path14.resolve(this._settings.cwd, filepath);
+        return path15.resolve(this._settings.cwd, filepath);
       }
       _makeEntry(stats, pattern) {
         const entry = {
@@ -5180,7 +5180,7 @@ var require_provider = __commonJS({
   "node_modules/fast-glob/out/providers/provider.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var path14 = __require("path");
+    var path15 = __require("path");
     var deep_1 = require_deep();
     var entry_1 = require_entry();
     var error_1 = require_error();
@@ -5194,7 +5194,7 @@ var require_provider = __commonJS({
         this.entryTransformer = new entry_2.default(this._settings);
       }
       _getRootDirectory(task) {
-        return path14.resolve(this._settings.cwd, task.base);
+        return path15.resolve(this._settings.cwd, task.base);
       }
       _getReaderOptions(task) {
         const basePath = task.base === "." ? "" : task.base;
@@ -5536,7 +5536,7 @@ var require_picocolors = __commonJS({
     var p = process || {};
     var argv = p.argv || [];
     var env = p.env || {};
-    var isColorSupported = !(!!env.NO_COLOR || argv.includes("--no-color")) && (!!env.FORCE_COLOR || argv.includes("--color") || p.platform === "win32" || (p.stdout || {}).isTTY && env.TERM !== "dumb" || !!env.CI);
+    var isColorSupported2 = !(!!env.NO_COLOR || argv.includes("--no-color")) && (!!env.FORCE_COLOR || argv.includes("--color") || p.platform === "win32" || (p.stdout || {}).isTTY && env.TERM !== "dumb" || !!env.CI);
     var formatter = (open, close, replace = open) => (input) => {
       let string = "" + input, index = string.indexOf(close, open.length);
       return ~index ? open + replaceClose(string, close, replace, index) + close : open + string + close;
@@ -5550,7 +5550,7 @@ var require_picocolors = __commonJS({
       } while (~index);
       return result + string.substring(cursor2);
     };
-    var createColors = (enabled = isColorSupported) => {
+    var createColors2 = (enabled = isColorSupported2) => {
       let f = enabled ? formatter : () => String;
       return {
         isColorSupported: enabled,
@@ -5597,8 +5597,8 @@ var require_picocolors = __commonJS({
         bgWhiteBright: f("\x1B[107m", "\x1B[49m")
       };
     };
-    module.exports = createColors();
-    module.exports.createColors = createColors;
+    module.exports = createColors2();
+    module.exports.createColors = createColors2;
   }
 });
 
@@ -6926,7 +6926,7 @@ var require_fnmatch = __commonJS({
     var cache3 = minimatch.cache = new LRU({ max: 100 });
     var GLOBSTAR = minimatch.GLOBSTAR = Minimatch.GLOBSTAR = {};
     var sigmund = require_sigmund();
-    var path14 = __require("path");
+    var path15 = __require("path");
     var qmark = "[^/]";
     var star = qmark + "*?";
     var twoStarDot = "(?:(?!(?:\\/|^)(?:\\.{1,2})($|\\/)).)*?";
@@ -7419,7 +7419,7 @@ var require_fnmatch = __commonJS({
         );
       }
       if (options8.matchBase && pattern.length === 1) {
-        file = path14.basename(file.join("/")).split("/");
+        file = path15.basename(file.join("/")).split("/");
       }
       if (options8.debug) {
         console.error("matchOne", file.length, pattern.length);
@@ -7849,7 +7849,7 @@ var require_src = __commonJS({
     };
     Object.defineProperty(exports, "__esModule", { value: true });
     var fs4 = __importStar(__require("fs"));
-    var path14 = __importStar(__require("path"));
+    var path15 = __importStar(__require("path"));
     var semver = {
       gte: require_gte()
     };
@@ -7873,8 +7873,8 @@ var require_src = __commonJS({
     function getConfigFileNames(filepath, options8) {
       var paths = [];
       do {
-        filepath = path14.dirname(filepath);
-        paths.push(path14.join(filepath, options8.config));
+        filepath = path15.dirname(filepath);
+        paths.push(path15.join(filepath, options8.config));
       } while (filepath !== options8.root);
       return paths;
     }
@@ -7897,7 +7897,7 @@ var require_src = __commonJS({
       return {
         config: options8.config || ".editorconfig",
         version: options8.version || package_json_1.default.version,
-        root: path14.resolve(options8.root || path14.parse(filepath).root)
+        root: path15.resolve(options8.root || path15.parse(filepath).root)
       };
     }
     function buildFullGlob(pathPrefix, glob) {
@@ -7911,7 +7911,7 @@ var require_src = __commonJS({
         default:
           break;
       }
-      return path14.join(pathPrefix, glob);
+      return path15.join(pathPrefix, glob);
     }
     function extendProps(props, options8) {
       if (props === void 0) {
@@ -7942,7 +7942,7 @@ var require_src = __commonJS({
     }
     function parseFromConfigs(configs, filepath, options8) {
       return processMatches(configs.reverse().reduce(function(matches, file) {
-        var pathPrefix = path14.dirname(file.name);
+        var pathPrefix = path15.dirname(file.name);
         file.contents.forEach(function(section) {
           var glob = section[0];
           var options22 = section[1];
@@ -8011,7 +8011,7 @@ var require_src = __commonJS({
       if (options8 === void 0) {
         options8 = {};
       }
-      var resolvedFilePath = path14.resolve(filepath);
+      var resolvedFilePath = path15.resolve(filepath);
       return [
         resolvedFilePath,
         processOptions(options8, resolvedFilePath)
@@ -8071,409 +8071,412 @@ var require_src = __commonJS({
 
 // node_modules/js-tokens/index.js
 var require_js_tokens = __commonJS({
-  "node_modules/js-tokens/index.js"(exports) {
-    Object.defineProperty(exports, "__esModule", {
-      value: true
-    });
-    exports.default = /((['"])(?:(?!\2|\\).|\\(?:\r\n|[\s\S]))*(\2)?|`(?:[^`\\$]|\\[\s\S]|\$(?!\{)|\$\{(?:[^{}]|\{[^}]*\}?)*\}?)*(`)?)|(\/\/.*)|(\/\*(?:[^*]|\*(?!\/))*(\*\/)?)|(\/(?!\*)(?:\[(?:(?![\]\\]).|\\.)*\]|(?![\/\]\\]).|\\.)+\/(?:(?!\s*(?:\b|[\u0080-\uFFFF$\\'"~({]|[+\-!](?!=)|\.?\d))|[gmiyus]{1,6}\b(?![\u0080-\uFFFF$\\]|\s*(?:[+\-*%&|^<>!=?({]|\/(?![\/*])))))|(0[xX][\da-fA-F]+|0[oO][0-7]+|0[bB][01]+|(?:\d*\.\d+|\d+\.?)(?:[eE][+-]?\d+)?)|((?!\d)(?:(?!\s)[$\w\u0080-\uFFFF]|\\u[\da-fA-F]{4}|\\u\{[\da-fA-F]+\})+)|(--|\+\+|&&|\|\||=>|\.{3}|(?:[+\-\/%&|^]|\*{1,2}|<{1,2}|>{1,3}|!=?|={1,2})=?|[?~.,:;[\](){}])|(\s+)|(^$|[\s\S])/g;
-    exports.matchToToken = function(match) {
-      var token2 = { type: "invalid", value: match[0], closed: void 0 };
-      if (match[1]) token2.type = "string", token2.closed = !!(match[3] || match[4]);
-      else if (match[5]) token2.type = "comment";
-      else if (match[6]) token2.type = "comment", token2.closed = !!match[7];
-      else if (match[8]) token2.type = "regex";
-      else if (match[9]) token2.type = "number";
-      else if (match[10]) token2.type = "name";
-      else if (match[11]) token2.type = "punctuator";
-      else if (match[12]) token2.type = "whitespace";
-      return token2;
-    };
-  }
-});
-
-// node_modules/@babel/helper-validator-identifier/lib/identifier.js
-var require_identifier = __commonJS({
-  "node_modules/@babel/helper-validator-identifier/lib/identifier.js"(exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", {
-      value: true
-    });
-    exports.isIdentifierChar = isIdentifierChar;
-    exports.isIdentifierName = isIdentifierName;
-    exports.isIdentifierStart = isIdentifierStart;
-    var nonASCIIidentifierStartChars = "\xAA\xB5\xBA\xC0-\xD6\xD8-\xF6\xF8-\u02C1\u02C6-\u02D1\u02E0-\u02E4\u02EC\u02EE\u0370-\u0374\u0376\u0377\u037A-\u037D\u037F\u0386\u0388-\u038A\u038C\u038E-\u03A1\u03A3-\u03F5\u03F7-\u0481\u048A-\u052F\u0531-\u0556\u0559\u0560-\u0588\u05D0-\u05EA\u05EF-\u05F2\u0620-\u064A\u066E\u066F\u0671-\u06D3\u06D5\u06E5\u06E6\u06EE\u06EF\u06FA-\u06FC\u06FF\u0710\u0712-\u072F\u074D-\u07A5\u07B1\u07CA-\u07EA\u07F4\u07F5\u07FA\u0800-\u0815\u081A\u0824\u0828\u0840-\u0858\u0860-\u086A\u0870-\u0887\u0889-\u088E\u08A0-\u08C9\u0904-\u0939\u093D\u0950\u0958-\u0961\u0971-\u0980\u0985-\u098C\u098F\u0990\u0993-\u09A8\u09AA-\u09B0\u09B2\u09B6-\u09B9\u09BD\u09CE\u09DC\u09DD\u09DF-\u09E1\u09F0\u09F1\u09FC\u0A05-\u0A0A\u0A0F\u0A10\u0A13-\u0A28\u0A2A-\u0A30\u0A32\u0A33\u0A35\u0A36\u0A38\u0A39\u0A59-\u0A5C\u0A5E\u0A72-\u0A74\u0A85-\u0A8D\u0A8F-\u0A91\u0A93-\u0AA8\u0AAA-\u0AB0\u0AB2\u0AB3\u0AB5-\u0AB9\u0ABD\u0AD0\u0AE0\u0AE1\u0AF9\u0B05-\u0B0C\u0B0F\u0B10\u0B13-\u0B28\u0B2A-\u0B30\u0B32\u0B33\u0B35-\u0B39\u0B3D\u0B5C\u0B5D\u0B5F-\u0B61\u0B71\u0B83\u0B85-\u0B8A\u0B8E-\u0B90\u0B92-\u0B95\u0B99\u0B9A\u0B9C\u0B9E\u0B9F\u0BA3\u0BA4\u0BA8-\u0BAA\u0BAE-\u0BB9\u0BD0\u0C05-\u0C0C\u0C0E-\u0C10\u0C12-\u0C28\u0C2A-\u0C39\u0C3D\u0C58-\u0C5A\u0C5D\u0C60\u0C61\u0C80\u0C85-\u0C8C\u0C8E-\u0C90\u0C92-\u0CA8\u0CAA-\u0CB3\u0CB5-\u0CB9\u0CBD\u0CDD\u0CDE\u0CE0\u0CE1\u0CF1\u0CF2\u0D04-\u0D0C\u0D0E-\u0D10\u0D12-\u0D3A\u0D3D\u0D4E\u0D54-\u0D56\u0D5F-\u0D61\u0D7A-\u0D7F\u0D85-\u0D96\u0D9A-\u0DB1\u0DB3-\u0DBB\u0DBD\u0DC0-\u0DC6\u0E01-\u0E30\u0E32\u0E33\u0E40-\u0E46\u0E81\u0E82\u0E84\u0E86-\u0E8A\u0E8C-\u0EA3\u0EA5\u0EA7-\u0EB0\u0EB2\u0EB3\u0EBD\u0EC0-\u0EC4\u0EC6\u0EDC-\u0EDF\u0F00\u0F40-\u0F47\u0F49-\u0F6C\u0F88-\u0F8C\u1000-\u102A\u103F\u1050-\u1055\u105A-\u105D\u1061\u1065\u1066\u106E-\u1070\u1075-\u1081\u108E\u10A0-\u10C5\u10C7\u10CD\u10D0-\u10FA\u10FC-\u1248\u124A-\u124D\u1250-\u1256\u1258\u125A-\u125D\u1260-\u1288\u128A-\u128D\u1290-\u12B0\u12B2-\u12B5\u12B8-\u12BE\u12C0\u12C2-\u12C5\u12C8-\u12D6\u12D8-\u1310\u1312-\u1315\u1318-\u135A\u1380-\u138F\u13A0-\u13F5\u13F8-\u13FD\u1401-\u166C\u166F-\u167F\u1681-\u169A\u16A0-\u16EA\u16EE-\u16F8\u1700-\u1711\u171F-\u1731\u1740-\u1751\u1760-\u176C\u176E-\u1770\u1780-\u17B3\u17D7\u17DC\u1820-\u1878\u1880-\u18A8\u18AA\u18B0-\u18F5\u1900-\u191E\u1950-\u196D\u1970-\u1974\u1980-\u19AB\u19B0-\u19C9\u1A00-\u1A16\u1A20-\u1A54\u1AA7\u1B05-\u1B33\u1B45-\u1B4C\u1B83-\u1BA0\u1BAE\u1BAF\u1BBA-\u1BE5\u1C00-\u1C23\u1C4D-\u1C4F\u1C5A-\u1C7D\u1C80-\u1C8A\u1C90-\u1CBA\u1CBD-\u1CBF\u1CE9-\u1CEC\u1CEE-\u1CF3\u1CF5\u1CF6\u1CFA\u1D00-\u1DBF\u1E00-\u1F15\u1F18-\u1F1D\u1F20-\u1F45\u1F48-\u1F4D\u1F50-\u1F57\u1F59\u1F5B\u1F5D\u1F5F-\u1F7D\u1F80-\u1FB4\u1FB6-\u1FBC\u1FBE\u1FC2-\u1FC4\u1FC6-\u1FCC\u1FD0-\u1FD3\u1FD6-\u1FDB\u1FE0-\u1FEC\u1FF2-\u1FF4\u1FF6-\u1FFC\u2071\u207F\u2090-\u209C\u2102\u2107\u210A-\u2113\u2115\u2118-\u211D\u2124\u2126\u2128\u212A-\u2139\u213C-\u213F\u2145-\u2149\u214E\u2160-\u2188\u2C00-\u2CE4\u2CEB-\u2CEE\u2CF2\u2CF3\u2D00-\u2D25\u2D27\u2D2D\u2D30-\u2D67\u2D6F\u2D80-\u2D96\u2DA0-\u2DA6\u2DA8-\u2DAE\u2DB0-\u2DB6\u2DB8-\u2DBE\u2DC0-\u2DC6\u2DC8-\u2DCE\u2DD0-\u2DD6\u2DD8-\u2DDE\u3005-\u3007\u3021-\u3029\u3031-\u3035\u3038-\u303C\u3041-\u3096\u309B-\u309F\u30A1-\u30FA\u30FC-\u30FF\u3105-\u312F\u3131-\u318E\u31A0-\u31BF\u31F0-\u31FF\u3400-\u4DBF\u4E00-\uA48C\uA4D0-\uA4FD\uA500-\uA60C\uA610-\uA61F\uA62A\uA62B\uA640-\uA66E\uA67F-\uA69D\uA6A0-\uA6EF\uA717-\uA71F\uA722-\uA788\uA78B-\uA7CD\uA7D0\uA7D1\uA7D3\uA7D5-\uA7DC\uA7F2-\uA801\uA803-\uA805\uA807-\uA80A\uA80C-\uA822\uA840-\uA873\uA882-\uA8B3\uA8F2-\uA8F7\uA8FB\uA8FD\uA8FE\uA90A-\uA925\uA930-\uA946\uA960-\uA97C\uA984-\uA9B2\uA9CF\uA9E0-\uA9E4\uA9E6-\uA9EF\uA9FA-\uA9FE\uAA00-\uAA28\uAA40-\uAA42\uAA44-\uAA4B\uAA60-\uAA76\uAA7A\uAA7E-\uAAAF\uAAB1\uAAB5\uAAB6\uAAB9-\uAABD\uAAC0\uAAC2\uAADB-\uAADD\uAAE0-\uAAEA\uAAF2-\uAAF4\uAB01-\uAB06\uAB09-\uAB0E\uAB11-\uAB16\uAB20-\uAB26\uAB28-\uAB2E\uAB30-\uAB5A\uAB5C-\uAB69\uAB70-\uABE2\uAC00-\uD7A3\uD7B0-\uD7C6\uD7CB-\uD7FB\uF900-\uFA6D\uFA70-\uFAD9\uFB00-\uFB06\uFB13-\uFB17\uFB1D\uFB1F-\uFB28\uFB2A-\uFB36\uFB38-\uFB3C\uFB3E\uFB40\uFB41\uFB43\uFB44\uFB46-\uFBB1\uFBD3-\uFD3D\uFD50-\uFD8F\uFD92-\uFDC7\uFDF0-\uFDFB\uFE70-\uFE74\uFE76-\uFEFC\uFF21-\uFF3A\uFF41-\uFF5A\uFF66-\uFFBE\uFFC2-\uFFC7\uFFCA-\uFFCF\uFFD2-\uFFD7\uFFDA-\uFFDC";
-    var nonASCIIidentifierChars = "\xB7\u0300-\u036F\u0387\u0483-\u0487\u0591-\u05BD\u05BF\u05C1\u05C2\u05C4\u05C5\u05C7\u0610-\u061A\u064B-\u0669\u0670\u06D6-\u06DC\u06DF-\u06E4\u06E7\u06E8\u06EA-\u06ED\u06F0-\u06F9\u0711\u0730-\u074A\u07A6-\u07B0\u07C0-\u07C9\u07EB-\u07F3\u07FD\u0816-\u0819\u081B-\u0823\u0825-\u0827\u0829-\u082D\u0859-\u085B\u0897-\u089F\u08CA-\u08E1\u08E3-\u0903\u093A-\u093C\u093E-\u094F\u0951-\u0957\u0962\u0963\u0966-\u096F\u0981-\u0983\u09BC\u09BE-\u09C4\u09C7\u09C8\u09CB-\u09CD\u09D7\u09E2\u09E3\u09E6-\u09EF\u09FE\u0A01-\u0A03\u0A3C\u0A3E-\u0A42\u0A47\u0A48\u0A4B-\u0A4D\u0A51\u0A66-\u0A71\u0A75\u0A81-\u0A83\u0ABC\u0ABE-\u0AC5\u0AC7-\u0AC9\u0ACB-\u0ACD\u0AE2\u0AE3\u0AE6-\u0AEF\u0AFA-\u0AFF\u0B01-\u0B03\u0B3C\u0B3E-\u0B44\u0B47\u0B48\u0B4B-\u0B4D\u0B55-\u0B57\u0B62\u0B63\u0B66-\u0B6F\u0B82\u0BBE-\u0BC2\u0BC6-\u0BC8\u0BCA-\u0BCD\u0BD7\u0BE6-\u0BEF\u0C00-\u0C04\u0C3C\u0C3E-\u0C44\u0C46-\u0C48\u0C4A-\u0C4D\u0C55\u0C56\u0C62\u0C63\u0C66-\u0C6F\u0C81-\u0C83\u0CBC\u0CBE-\u0CC4\u0CC6-\u0CC8\u0CCA-\u0CCD\u0CD5\u0CD6\u0CE2\u0CE3\u0CE6-\u0CEF\u0CF3\u0D00-\u0D03\u0D3B\u0D3C\u0D3E-\u0D44\u0D46-\u0D48\u0D4A-\u0D4D\u0D57\u0D62\u0D63\u0D66-\u0D6F\u0D81-\u0D83\u0DCA\u0DCF-\u0DD4\u0DD6\u0DD8-\u0DDF\u0DE6-\u0DEF\u0DF2\u0DF3\u0E31\u0E34-\u0E3A\u0E47-\u0E4E\u0E50-\u0E59\u0EB1\u0EB4-\u0EBC\u0EC8-\u0ECE\u0ED0-\u0ED9\u0F18\u0F19\u0F20-\u0F29\u0F35\u0F37\u0F39\u0F3E\u0F3F\u0F71-\u0F84\u0F86\u0F87\u0F8D-\u0F97\u0F99-\u0FBC\u0FC6\u102B-\u103E\u1040-\u1049\u1056-\u1059\u105E-\u1060\u1062-\u1064\u1067-\u106D\u1071-\u1074\u1082-\u108D\u108F-\u109D\u135D-\u135F\u1369-\u1371\u1712-\u1715\u1732-\u1734\u1752\u1753\u1772\u1773\u17B4-\u17D3\u17DD\u17E0-\u17E9\u180B-\u180D\u180F-\u1819\u18A9\u1920-\u192B\u1930-\u193B\u1946-\u194F\u19D0-\u19DA\u1A17-\u1A1B\u1A55-\u1A5E\u1A60-\u1A7C\u1A7F-\u1A89\u1A90-\u1A99\u1AB0-\u1ABD\u1ABF-\u1ACE\u1B00-\u1B04\u1B34-\u1B44\u1B50-\u1B59\u1B6B-\u1B73\u1B80-\u1B82\u1BA1-\u1BAD\u1BB0-\u1BB9\u1BE6-\u1BF3\u1C24-\u1C37\u1C40-\u1C49\u1C50-\u1C59\u1CD0-\u1CD2\u1CD4-\u1CE8\u1CED\u1CF4\u1CF7-\u1CF9\u1DC0-\u1DFF\u200C\u200D\u203F\u2040\u2054\u20D0-\u20DC\u20E1\u20E5-\u20F0\u2CEF-\u2CF1\u2D7F\u2DE0-\u2DFF\u302A-\u302F\u3099\u309A\u30FB\uA620-\uA629\uA66F\uA674-\uA67D\uA69E\uA69F\uA6F0\uA6F1\uA802\uA806\uA80B\uA823-\uA827\uA82C\uA880\uA881\uA8B4-\uA8C5\uA8D0-\uA8D9\uA8E0-\uA8F1\uA8FF-\uA909\uA926-\uA92D\uA947-\uA953\uA980-\uA983\uA9B3-\uA9C0\uA9D0-\uA9D9\uA9E5\uA9F0-\uA9F9\uAA29-\uAA36\uAA43\uAA4C\uAA4D\uAA50-\uAA59\uAA7B-\uAA7D\uAAB0\uAAB2-\uAAB4\uAAB7\uAAB8\uAABE\uAABF\uAAC1\uAAEB-\uAAEF\uAAF5\uAAF6\uABE3-\uABEA\uABEC\uABED\uABF0-\uABF9\uFB1E\uFE00-\uFE0F\uFE20-\uFE2F\uFE33\uFE34\uFE4D-\uFE4F\uFF10-\uFF19\uFF3F\uFF65";
-    var nonASCIIidentifierStart = new RegExp("[" + nonASCIIidentifierStartChars + "]");
-    var nonASCIIidentifier = new RegExp("[" + nonASCIIidentifierStartChars + nonASCIIidentifierChars + "]");
-    nonASCIIidentifierStartChars = nonASCIIidentifierChars = null;
-    var astralIdentifierStartCodes = [0, 11, 2, 25, 2, 18, 2, 1, 2, 14, 3, 13, 35, 122, 70, 52, 268, 28, 4, 48, 48, 31, 14, 29, 6, 37, 11, 29, 3, 35, 5, 7, 2, 4, 43, 157, 19, 35, 5, 35, 5, 39, 9, 51, 13, 10, 2, 14, 2, 6, 2, 1, 2, 10, 2, 14, 2, 6, 2, 1, 4, 51, 13, 310, 10, 21, 11, 7, 25, 5, 2, 41, 2, 8, 70, 5, 3, 0, 2, 43, 2, 1, 4, 0, 3, 22, 11, 22, 10, 30, 66, 18, 2, 1, 11, 21, 11, 25, 71, 55, 7, 1, 65, 0, 16, 3, 2, 2, 2, 28, 43, 28, 4, 28, 36, 7, 2, 27, 28, 53, 11, 21, 11, 18, 14, 17, 111, 72, 56, 50, 14, 50, 14, 35, 39, 27, 10, 22, 251, 41, 7, 1, 17, 2, 60, 28, 11, 0, 9, 21, 43, 17, 47, 20, 28, 22, 13, 52, 58, 1, 3, 0, 14, 44, 33, 24, 27, 35, 30, 0, 3, 0, 9, 34, 4, 0, 13, 47, 15, 3, 22, 0, 2, 0, 36, 17, 2, 24, 20, 1, 64, 6, 2, 0, 2, 3, 2, 14, 2, 9, 8, 46, 39, 7, 3, 1, 3, 21, 2, 6, 2, 1, 2, 4, 4, 0, 19, 0, 13, 4, 31, 9, 2, 0, 3, 0, 2, 37, 2, 0, 26, 0, 2, 0, 45, 52, 19, 3, 21, 2, 31, 47, 21, 1, 2, 0, 185, 46, 42, 3, 37, 47, 21, 0, 60, 42, 14, 0, 72, 26, 38, 6, 186, 43, 117, 63, 32, 7, 3, 0, 3, 7, 2, 1, 2, 23, 16, 0, 2, 0, 95, 7, 3, 38, 17, 0, 2, 0, 29, 0, 11, 39, 8, 0, 22, 0, 12, 45, 20, 0, 19, 72, 200, 32, 32, 8, 2, 36, 18, 0, 50, 29, 113, 6, 2, 1, 2, 37, 22, 0, 26, 5, 2, 1, 2, 31, 15, 0, 328, 18, 16, 0, 2, 12, 2, 33, 125, 0, 80, 921, 103, 110, 18, 195, 2637, 96, 16, 1071, 18, 5, 26, 3994, 6, 582, 6842, 29, 1763, 568, 8, 30, 18, 78, 18, 29, 19, 47, 17, 3, 32, 20, 6, 18, 433, 44, 212, 63, 129, 74, 6, 0, 67, 12, 65, 1, 2, 0, 29, 6135, 9, 1237, 42, 9, 8936, 3, 2, 6, 2, 1, 2, 290, 16, 0, 30, 2, 3, 0, 15, 3, 9, 395, 2309, 106, 6, 12, 4, 8, 8, 9, 5991, 84, 2, 70, 2, 1, 3, 0, 3, 1, 3, 3, 2, 11, 2, 0, 2, 6, 2, 64, 2, 3, 3, 7, 2, 6, 2, 27, 2, 3, 2, 4, 2, 0, 4, 6, 2, 339, 3, 24, 2, 24, 2, 30, 2, 24, 2, 30, 2, 24, 2, 30, 2, 24, 2, 30, 2, 24, 2, 7, 1845, 30, 7, 5, 262, 61, 147, 44, 11, 6, 17, 0, 322, 29, 19, 43, 485, 27, 229, 29, 3, 0, 496, 6, 2, 3, 2, 1, 2, 14, 2, 196, 60, 67, 8, 0, 1205, 3, 2, 26, 2, 1, 2, 0, 3, 0, 2, 9, 2, 3, 2, 0, 2, 0, 7, 0, 5, 0, 2, 0, 2, 0, 2, 2, 2, 1, 2, 0, 3, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 1, 2, 0, 3, 3, 2, 6, 2, 3, 2, 3, 2, 0, 2, 9, 2, 16, 6, 2, 2, 4, 2, 16, 4421, 42719, 33, 4153, 7, 221, 3, 5761, 15, 7472, 16, 621, 2467, 541, 1507, 4938, 6, 4191];
-    var astralIdentifierCodes = [509, 0, 227, 0, 150, 4, 294, 9, 1368, 2, 2, 1, 6, 3, 41, 2, 5, 0, 166, 1, 574, 3, 9, 9, 7, 9, 32, 4, 318, 1, 80, 3, 71, 10, 50, 3, 123, 2, 54, 14, 32, 10, 3, 1, 11, 3, 46, 10, 8, 0, 46, 9, 7, 2, 37, 13, 2, 9, 6, 1, 45, 0, 13, 2, 49, 13, 9, 3, 2, 11, 83, 11, 7, 0, 3, 0, 158, 11, 6, 9, 7, 3, 56, 1, 2, 6, 3, 1, 3, 2, 10, 0, 11, 1, 3, 6, 4, 4, 68, 8, 2, 0, 3, 0, 2, 3, 2, 4, 2, 0, 15, 1, 83, 17, 10, 9, 5, 0, 82, 19, 13, 9, 214, 6, 3, 8, 28, 1, 83, 16, 16, 9, 82, 12, 9, 9, 7, 19, 58, 14, 5, 9, 243, 14, 166, 9, 71, 5, 2, 1, 3, 3, 2, 0, 2, 1, 13, 9, 120, 6, 3, 6, 4, 0, 29, 9, 41, 6, 2, 3, 9, 0, 10, 10, 47, 15, 343, 9, 54, 7, 2, 7, 17, 9, 57, 21, 2, 13, 123, 5, 4, 0, 2, 1, 2, 6, 2, 0, 9, 9, 49, 4, 2, 1, 2, 4, 9, 9, 330, 3, 10, 1, 2, 0, 49, 6, 4, 4, 14, 10, 5350, 0, 7, 14, 11465, 27, 2343, 9, 87, 9, 39, 4, 60, 6, 26, 9, 535, 9, 470, 0, 2, 54, 8, 3, 82, 0, 12, 1, 19628, 1, 4178, 9, 519, 45, 3, 22, 543, 4, 4, 5, 9, 7, 3, 6, 31, 3, 149, 2, 1418, 49, 513, 54, 5, 49, 9, 0, 15, 0, 23, 4, 2, 14, 1361, 6, 2, 16, 3, 6, 2, 1, 2, 4, 101, 0, 161, 6, 10, 9, 357, 0, 62, 13, 499, 13, 245, 1, 2, 9, 726, 6, 110, 6, 6, 9, 4759, 9, 787719, 239];
-    function isInAstralSet(code, set) {
-      let pos2 = 65536;
-      for (let i = 0, length = set.length; i < length; i += 2) {
-        pos2 += set[i];
-        if (pos2 > code) return false;
-        pos2 += set[i + 1];
-        if (pos2 >= code) return true;
-      }
-      return false;
-    }
-    function isIdentifierStart(code) {
-      if (code < 65) return code === 36;
-      if (code <= 90) return true;
-      if (code < 97) return code === 95;
-      if (code <= 122) return true;
-      if (code <= 65535) {
-        return code >= 170 && nonASCIIidentifierStart.test(String.fromCharCode(code));
-      }
-      return isInAstralSet(code, astralIdentifierStartCodes);
-    }
-    function isIdentifierChar(code) {
-      if (code < 48) return code === 36;
-      if (code < 58) return true;
-      if (code < 65) return false;
-      if (code <= 90) return true;
-      if (code < 97) return code === 95;
-      if (code <= 122) return true;
-      if (code <= 65535) {
-        return code >= 170 && nonASCIIidentifier.test(String.fromCharCode(code));
-      }
-      return isInAstralSet(code, astralIdentifierStartCodes) || isInAstralSet(code, astralIdentifierCodes);
-    }
-    function isIdentifierName(name) {
-      let isFirst = true;
-      for (let i = 0; i < name.length; i++) {
-        let cp = name.charCodeAt(i);
-        if ((cp & 64512) === 55296 && i + 1 < name.length) {
-          const trail = name.charCodeAt(++i);
-          if ((trail & 64512) === 56320) {
-            cp = 65536 + ((cp & 1023) << 10) + (trail & 1023);
-          }
+  "node_modules/js-tokens/index.js"(exports, module) {
+    var Identifier;
+    var JSXIdentifier;
+    var JSXPunctuator;
+    var JSXString;
+    var JSXText;
+    var KeywordsWithExpressionAfter;
+    var KeywordsWithNoLineTerminatorAfter;
+    var LineTerminatorSequence;
+    var MultiLineComment;
+    var Newline;
+    var NumericLiteral;
+    var Punctuator;
+    var RegularExpressionLiteral;
+    var SingleLineComment;
+    var StringLiteral;
+    var Template;
+    var TokensNotPrecedingObjectLiteral;
+    var TokensPrecedingExpression;
+    var WhiteSpace;
+    var jsTokens2;
+    RegularExpressionLiteral = /\/(?![*\/])(?:\[(?:[^\]\\\n\r\u2028\u2029]+|\\.)*\]|[^\/\\\n\r\u2028\u2029]+|\\.)*(\/[$_\u200C\u200D\p{ID_Continue}]*|\\)?/yu;
+    Punctuator = /--|\+\+|=>|\.{3}|\??\.(?!\d)|(?:&&|\|\||\?\?|[+\-%&|^]|\*{1,2}|<{1,2}|>{1,3}|!=?|={1,2}|\/(?![\/*]))=?|[?~,:;[\](){}]/y;
+    Identifier = /(\x23?)(?=[$_\p{ID_Start}\\])(?:[$_\u200C\u200D\p{ID_Continue}]+|\\u[\da-fA-F]{4}|\\u\{[\da-fA-F]+\})+/yu;
+    StringLiteral = /(['"])(?:[^'"\\\n\r]+|(?!\1)['"]|\\(?:\r\n|[^]))*(\1)?/y;
+    NumericLiteral = /(?:0[xX][\da-fA-F](?:_?[\da-fA-F])*|0[oO][0-7](?:_?[0-7])*|0[bB][01](?:_?[01])*)n?|0n|[1-9](?:_?\d)*n|(?:(?:0(?!\d)|0\d*[89]\d*|[1-9](?:_?\d)*)(?:\.(?:\d(?:_?\d)*)?)?|\.\d(?:_?\d)*)(?:[eE][+-]?\d(?:_?\d)*)?|0[0-7]+/y;
+    Template = /[`}](?:[^`\\$]+|\\[^]|\$(?!\{))*(`|\$\{)?/y;
+    WhiteSpace = /[\t\v\f\ufeff\p{Zs}]+/yu;
+    LineTerminatorSequence = /\r?\n|[\r\u2028\u2029]/y;
+    MultiLineComment = /\/\*(?:[^*]+|\*(?!\/))*(\*\/)?/y;
+    SingleLineComment = /\/\/.*/y;
+    JSXPunctuator = /[<>.:={}]|\/(?![\/*])/y;
+    JSXIdentifier = /[$_\p{ID_Start}][$_\u200C\u200D\p{ID_Continue}-]*/yu;
+    JSXString = /(['"])(?:[^'"]+|(?!\1)['"])*(\1)?/y;
+    JSXText = /[^<>{}]+/y;
+    TokensPrecedingExpression = /^(?:[\/+-]|\.{3}|\?(?:InterpolationIn(?:JSX|Template)|NoLineTerminatorHere|NonExpressionParenEnd|UnaryIncDec))?$|[{}([,;<>=*%&|^!~?:]$/;
+    TokensNotPrecedingObjectLiteral = /^(?:=>|[;\]){}]|else|\?(?:NoLineTerminatorHere|NonExpressionParenEnd))?$/;
+    KeywordsWithExpressionAfter = /^(?:await|case|default|delete|do|else|instanceof|new|return|throw|typeof|void|yield)$/;
+    KeywordsWithNoLineTerminatorAfter = /^(?:return|throw|yield)$/;
+    Newline = RegExp(LineTerminatorSequence.source);
+    module.exports = jsTokens2 = function* (input, { jsx = false } = {}) {
+      var braces, firstCodePoint, isExpression, lastIndex, lastSignificantToken, length, match, mode, nextLastIndex, nextLastSignificantToken, parenNesting, postfixIncDec, punctuator, stack2;
+      ({ length } = input);
+      lastIndex = 0;
+      lastSignificantToken = "";
+      stack2 = [
+        { tag: "JS" }
+      ];
+      braces = [];
+      parenNesting = 0;
+      postfixIncDec = false;
+      while (lastIndex < length) {
+        mode = stack2[stack2.length - 1];
+        switch (mode.tag) {
+          case "JS":
+          case "JSNonExpressionParen":
+          case "InterpolationInTemplate":
+          case "InterpolationInJSX":
+            if (input[lastIndex] === "/" && (TokensPrecedingExpression.test(lastSignificantToken) || KeywordsWithExpressionAfter.test(lastSignificantToken))) {
+              RegularExpressionLiteral.lastIndex = lastIndex;
+              if (match = RegularExpressionLiteral.exec(input)) {
+                lastIndex = RegularExpressionLiteral.lastIndex;
+                lastSignificantToken = match[0];
+                postfixIncDec = true;
+                yield {
+                  type: "RegularExpressionLiteral",
+                  value: match[0],
+                  closed: match[1] !== void 0 && match[1] !== "\\"
+                };
+                continue;
+              }
+            }
+            Punctuator.lastIndex = lastIndex;
+            if (match = Punctuator.exec(input)) {
+              punctuator = match[0];
+              nextLastIndex = Punctuator.lastIndex;
+              nextLastSignificantToken = punctuator;
+              switch (punctuator) {
+                case "(":
+                  if (lastSignificantToken === "?NonExpressionParenKeyword") {
+                    stack2.push({
+                      tag: "JSNonExpressionParen",
+                      nesting: parenNesting
+                    });
+                  }
+                  parenNesting++;
+                  postfixIncDec = false;
+                  break;
+                case ")":
+                  parenNesting--;
+                  postfixIncDec = true;
+                  if (mode.tag === "JSNonExpressionParen" && parenNesting === mode.nesting) {
+                    stack2.pop();
+                    nextLastSignificantToken = "?NonExpressionParenEnd";
+                    postfixIncDec = false;
+                  }
+                  break;
+                case "{":
+                  Punctuator.lastIndex = 0;
+                  isExpression = !TokensNotPrecedingObjectLiteral.test(lastSignificantToken) && (TokensPrecedingExpression.test(lastSignificantToken) || KeywordsWithExpressionAfter.test(lastSignificantToken));
+                  braces.push(isExpression);
+                  postfixIncDec = false;
+                  break;
+                case "}":
+                  switch (mode.tag) {
+                    case "InterpolationInTemplate":
+                      if (braces.length === mode.nesting) {
+                        Template.lastIndex = lastIndex;
+                        match = Template.exec(input);
+                        lastIndex = Template.lastIndex;
+                        lastSignificantToken = match[0];
+                        if (match[1] === "${") {
+                          lastSignificantToken = "?InterpolationInTemplate";
+                          postfixIncDec = false;
+                          yield {
+                            type: "TemplateMiddle",
+                            value: match[0]
+                          };
+                        } else {
+                          stack2.pop();
+                          postfixIncDec = true;
+                          yield {
+                            type: "TemplateTail",
+                            value: match[0],
+                            closed: match[1] === "`"
+                          };
+                        }
+                        continue;
+                      }
+                      break;
+                    case "InterpolationInJSX":
+                      if (braces.length === mode.nesting) {
+                        stack2.pop();
+                        lastIndex += 1;
+                        lastSignificantToken = "}";
+                        yield {
+                          type: "JSXPunctuator",
+                          value: "}"
+                        };
+                        continue;
+                      }
+                  }
+                  postfixIncDec = braces.pop();
+                  nextLastSignificantToken = postfixIncDec ? "?ExpressionBraceEnd" : "}";
+                  break;
+                case "]":
+                  postfixIncDec = true;
+                  break;
+                case "++":
+                case "--":
+                  nextLastSignificantToken = postfixIncDec ? "?PostfixIncDec" : "?UnaryIncDec";
+                  break;
+                case "<":
+                  if (jsx && (TokensPrecedingExpression.test(lastSignificantToken) || KeywordsWithExpressionAfter.test(lastSignificantToken))) {
+                    stack2.push({ tag: "JSXTag" });
+                    lastIndex += 1;
+                    lastSignificantToken = "<";
+                    yield {
+                      type: "JSXPunctuator",
+                      value: punctuator
+                    };
+                    continue;
+                  }
+                  postfixIncDec = false;
+                  break;
+                default:
+                  postfixIncDec = false;
+              }
+              lastIndex = nextLastIndex;
+              lastSignificantToken = nextLastSignificantToken;
+              yield {
+                type: "Punctuator",
+                value: punctuator
+              };
+              continue;
+            }
+            Identifier.lastIndex = lastIndex;
+            if (match = Identifier.exec(input)) {
+              lastIndex = Identifier.lastIndex;
+              nextLastSignificantToken = match[0];
+              switch (match[0]) {
+                case "for":
+                case "if":
+                case "while":
+                case "with":
+                  if (lastSignificantToken !== "." && lastSignificantToken !== "?.") {
+                    nextLastSignificantToken = "?NonExpressionParenKeyword";
+                  }
+              }
+              lastSignificantToken = nextLastSignificantToken;
+              postfixIncDec = !KeywordsWithExpressionAfter.test(match[0]);
+              yield {
+                type: match[1] === "#" ? "PrivateIdentifier" : "IdentifierName",
+                value: match[0]
+              };
+              continue;
+            }
+            StringLiteral.lastIndex = lastIndex;
+            if (match = StringLiteral.exec(input)) {
+              lastIndex = StringLiteral.lastIndex;
+              lastSignificantToken = match[0];
+              postfixIncDec = true;
+              yield {
+                type: "StringLiteral",
+                value: match[0],
+                closed: match[2] !== void 0
+              };
+              continue;
+            }
+            NumericLiteral.lastIndex = lastIndex;
+            if (match = NumericLiteral.exec(input)) {
+              lastIndex = NumericLiteral.lastIndex;
+              lastSignificantToken = match[0];
+              postfixIncDec = true;
+              yield {
+                type: "NumericLiteral",
+                value: match[0]
+              };
+              continue;
+            }
+            Template.lastIndex = lastIndex;
+            if (match = Template.exec(input)) {
+              lastIndex = Template.lastIndex;
+              lastSignificantToken = match[0];
+              if (match[1] === "${") {
+                lastSignificantToken = "?InterpolationInTemplate";
+                stack2.push({
+                  tag: "InterpolationInTemplate",
+                  nesting: braces.length
+                });
+                postfixIncDec = false;
+                yield {
+                  type: "TemplateHead",
+                  value: match[0]
+                };
+              } else {
+                postfixIncDec = true;
+                yield {
+                  type: "NoSubstitutionTemplate",
+                  value: match[0],
+                  closed: match[1] === "`"
+                };
+              }
+              continue;
+            }
+            break;
+          case "JSXTag":
+          case "JSXTagEnd":
+            JSXPunctuator.lastIndex = lastIndex;
+            if (match = JSXPunctuator.exec(input)) {
+              lastIndex = JSXPunctuator.lastIndex;
+              nextLastSignificantToken = match[0];
+              switch (match[0]) {
+                case "<":
+                  stack2.push({ tag: "JSXTag" });
+                  break;
+                case ">":
+                  stack2.pop();
+                  if (lastSignificantToken === "/" || mode.tag === "JSXTagEnd") {
+                    nextLastSignificantToken = "?JSX";
+                    postfixIncDec = true;
+                  } else {
+                    stack2.push({ tag: "JSXChildren" });
+                  }
+                  break;
+                case "{":
+                  stack2.push({
+                    tag: "InterpolationInJSX",
+                    nesting: braces.length
+                  });
+                  nextLastSignificantToken = "?InterpolationInJSX";
+                  postfixIncDec = false;
+                  break;
+                case "/":
+                  if (lastSignificantToken === "<") {
+                    stack2.pop();
+                    if (stack2[stack2.length - 1].tag === "JSXChildren") {
+                      stack2.pop();
+                    }
+                    stack2.push({ tag: "JSXTagEnd" });
+                  }
+              }
+              lastSignificantToken = nextLastSignificantToken;
+              yield {
+                type: "JSXPunctuator",
+                value: match[0]
+              };
+              continue;
+            }
+            JSXIdentifier.lastIndex = lastIndex;
+            if (match = JSXIdentifier.exec(input)) {
+              lastIndex = JSXIdentifier.lastIndex;
+              lastSignificantToken = match[0];
+              yield {
+                type: "JSXIdentifier",
+                value: match[0]
+              };
+              continue;
+            }
+            JSXString.lastIndex = lastIndex;
+            if (match = JSXString.exec(input)) {
+              lastIndex = JSXString.lastIndex;
+              lastSignificantToken = match[0];
+              yield {
+                type: "JSXString",
+                value: match[0],
+                closed: match[2] !== void 0
+              };
+              continue;
+            }
+            break;
+          case "JSXChildren":
+            JSXText.lastIndex = lastIndex;
+            if (match = JSXText.exec(input)) {
+              lastIndex = JSXText.lastIndex;
+              lastSignificantToken = match[0];
+              yield {
+                type: "JSXText",
+                value: match[0]
+              };
+              continue;
+            }
+            switch (input[lastIndex]) {
+              case "<":
+                stack2.push({ tag: "JSXTag" });
+                lastIndex++;
+                lastSignificantToken = "<";
+                yield {
+                  type: "JSXPunctuator",
+                  value: "<"
+                };
+                continue;
+              case "{":
+                stack2.push({
+                  tag: "InterpolationInJSX",
+                  nesting: braces.length
+                });
+                lastIndex++;
+                lastSignificantToken = "?InterpolationInJSX";
+                postfixIncDec = false;
+                yield {
+                  type: "JSXPunctuator",
+                  value: "{"
+                };
+                continue;
+            }
         }
-        if (isFirst) {
-          isFirst = false;
-          if (!isIdentifierStart(cp)) {
-            return false;
-          }
-        } else if (!isIdentifierChar(cp)) {
-          return false;
-        }
-      }
-      return !isFirst;
-    }
-  }
-});
-
-// node_modules/@babel/helper-validator-identifier/lib/keyword.js
-var require_keyword = __commonJS({
-  "node_modules/@babel/helper-validator-identifier/lib/keyword.js"(exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", {
-      value: true
-    });
-    exports.isKeyword = isKeyword;
-    exports.isReservedWord = isReservedWord;
-    exports.isStrictBindOnlyReservedWord = isStrictBindOnlyReservedWord;
-    exports.isStrictBindReservedWord = isStrictBindReservedWord;
-    exports.isStrictReservedWord = isStrictReservedWord;
-    var reservedWords = {
-      keyword: ["break", "case", "catch", "continue", "debugger", "default", "do", "else", "finally", "for", "function", "if", "return", "switch", "throw", "try", "var", "const", "while", "with", "new", "this", "super", "class", "extends", "export", "import", "null", "true", "false", "in", "instanceof", "typeof", "void", "delete"],
-      strict: ["implements", "interface", "let", "package", "private", "protected", "public", "static", "yield"],
-      strictBind: ["eval", "arguments"]
-    };
-    var keywords = new Set(reservedWords.keyword);
-    var reservedWordsStrictSet = new Set(reservedWords.strict);
-    var reservedWordsStrictBindSet = new Set(reservedWords.strictBind);
-    function isReservedWord(word, inModule) {
-      return inModule && word === "await" || word === "enum";
-    }
-    function isStrictReservedWord(word, inModule) {
-      return isReservedWord(word, inModule) || reservedWordsStrictSet.has(word);
-    }
-    function isStrictBindOnlyReservedWord(word) {
-      return reservedWordsStrictBindSet.has(word);
-    }
-    function isStrictBindReservedWord(word, inModule) {
-      return isStrictReservedWord(word, inModule) || isStrictBindOnlyReservedWord(word);
-    }
-    function isKeyword(word) {
-      return keywords.has(word);
-    }
-  }
-});
-
-// node_modules/@babel/helper-validator-identifier/lib/index.js
-var require_lib = __commonJS({
-  "node_modules/@babel/helper-validator-identifier/lib/index.js"(exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", {
-      value: true
-    });
-    Object.defineProperty(exports, "isIdentifierChar", {
-      enumerable: true,
-      get: function() {
-        return _identifier.isIdentifierChar;
-      }
-    });
-    Object.defineProperty(exports, "isIdentifierName", {
-      enumerable: true,
-      get: function() {
-        return _identifier.isIdentifierName;
-      }
-    });
-    Object.defineProperty(exports, "isIdentifierStart", {
-      enumerable: true,
-      get: function() {
-        return _identifier.isIdentifierStart;
-      }
-    });
-    Object.defineProperty(exports, "isKeyword", {
-      enumerable: true,
-      get: function() {
-        return _keyword.isKeyword;
-      }
-    });
-    Object.defineProperty(exports, "isReservedWord", {
-      enumerable: true,
-      get: function() {
-        return _keyword.isReservedWord;
-      }
-    });
-    Object.defineProperty(exports, "isStrictBindOnlyReservedWord", {
-      enumerable: true,
-      get: function() {
-        return _keyword.isStrictBindOnlyReservedWord;
-      }
-    });
-    Object.defineProperty(exports, "isStrictBindReservedWord", {
-      enumerable: true,
-      get: function() {
-        return _keyword.isStrictBindReservedWord;
-      }
-    });
-    Object.defineProperty(exports, "isStrictReservedWord", {
-      enumerable: true,
-      get: function() {
-        return _keyword.isStrictReservedWord;
-      }
-    });
-    var _identifier = require_identifier();
-    var _keyword = require_keyword();
-  }
-});
-
-// node_modules/@babel/code-frame/lib/index.js
-var require_lib2 = __commonJS({
-  "node_modules/@babel/code-frame/lib/index.js"(exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    var picocolors5 = require_picocolors();
-    var jsTokens = require_js_tokens();
-    var helperValidatorIdentifier = require_lib();
-    function isColorSupported() {
-      return typeof process === "object" && (process.env.FORCE_COLOR === "0" || process.env.FORCE_COLOR === "false") ? false : picocolors5.isColorSupported;
-    }
-    var compose = (f, g) => (v) => f(g(v));
-    function buildDefs(colors) {
-      return {
-        keyword: colors.cyan,
-        capitalized: colors.yellow,
-        jsxIdentifier: colors.yellow,
-        punctuator: colors.yellow,
-        number: colors.magenta,
-        string: colors.green,
-        regex: colors.magenta,
-        comment: colors.gray,
-        invalid: compose(compose(colors.white, colors.bgRed), colors.bold),
-        gutter: colors.gray,
-        marker: compose(colors.red, colors.bold),
-        message: compose(colors.red, colors.bold),
-        reset: colors.reset
-      };
-    }
-    var defsOn = buildDefs(picocolors5.createColors(true));
-    var defsOff = buildDefs(picocolors5.createColors(false));
-    function getDefs(enabled) {
-      return enabled ? defsOn : defsOff;
-    }
-    var sometimesKeywords = /* @__PURE__ */ new Set(["as", "async", "from", "get", "of", "set"]);
-    var NEWLINE$1 = /\r\n|[\n\r\u2028\u2029]/;
-    var BRACKET = /^[()[\]{}]$/;
-    var tokenize2;
-    {
-      const JSX_TAG = /^[a-z][\w-]*$/i;
-      const getTokenType = function(token2, offset, text) {
-        if (token2.type === "name") {
-          if (helperValidatorIdentifier.isKeyword(token2.value) || helperValidatorIdentifier.isStrictReservedWord(token2.value, true) || sometimesKeywords.has(token2.value)) {
-            return "keyword";
-          }
-          if (JSX_TAG.test(token2.value) && (text[offset - 1] === "<" || text.slice(offset - 2, offset) === "</")) {
-            return "jsxIdentifier";
-          }
-          if (token2.value[0] !== token2.value[0].toLowerCase()) {
-            return "capitalized";
-          }
-        }
-        if (token2.type === "punctuator" && BRACKET.test(token2.value)) {
-          return "bracket";
-        }
-        if (token2.type === "invalid" && (token2.value === "@" || token2.value === "#")) {
-          return "punctuator";
-        }
-        return token2.type;
-      };
-      tokenize2 = function* (text) {
-        let match;
-        while (match = jsTokens.default.exec(text)) {
-          const token2 = jsTokens.matchToToken(match);
+        WhiteSpace.lastIndex = lastIndex;
+        if (match = WhiteSpace.exec(input)) {
+          lastIndex = WhiteSpace.lastIndex;
           yield {
-            type: getTokenType(token2, match.index, text),
-            value: token2.value
+            type: "WhiteSpace",
+            value: match[0]
           };
+          continue;
         }
-      };
-    }
-    function highlight(text) {
-      if (text === "") return "";
-      const defs = getDefs(true);
-      let highlighted = "";
-      for (const {
-        type,
-        value
-      } of tokenize2(text)) {
-        if (type in defs) {
-          highlighted += value.split(NEWLINE$1).map((str) => defs[type](str)).join("\n");
-        } else {
-          highlighted += value;
-        }
-      }
-      return highlighted;
-    }
-    var deprecationWarningShown = false;
-    var NEWLINE = /\r\n|[\n\r\u2028\u2029]/;
-    function getMarkerLines(loc, source2, opts) {
-      const startLoc = Object.assign({
-        column: 0,
-        line: -1
-      }, loc.start);
-      const endLoc = Object.assign({}, startLoc, loc.end);
-      const {
-        linesAbove = 2,
-        linesBelow = 3
-      } = opts || {};
-      const startLine = startLoc.line;
-      const startColumn = startLoc.column;
-      const endLine = endLoc.line;
-      const endColumn = endLoc.column;
-      let start = Math.max(startLine - (linesAbove + 1), 0);
-      let end = Math.min(source2.length, endLine + linesBelow);
-      if (startLine === -1) {
-        start = 0;
-      }
-      if (endLine === -1) {
-        end = source2.length;
-      }
-      const lineDiff2 = endLine - startLine;
-      const markerLines = {};
-      if (lineDiff2) {
-        for (let i = 0; i <= lineDiff2; i++) {
-          const lineNumber = i + startLine;
-          if (!startColumn) {
-            markerLines[lineNumber] = true;
-          } else if (i === 0) {
-            const sourceLength = source2[lineNumber - 1].length;
-            markerLines[lineNumber] = [startColumn, sourceLength - startColumn + 1];
-          } else if (i === lineDiff2) {
-            markerLines[lineNumber] = [0, endColumn];
-          } else {
-            const sourceLength = source2[lineNumber - i].length;
-            markerLines[lineNumber] = [0, sourceLength];
+        LineTerminatorSequence.lastIndex = lastIndex;
+        if (match = LineTerminatorSequence.exec(input)) {
+          lastIndex = LineTerminatorSequence.lastIndex;
+          postfixIncDec = false;
+          if (KeywordsWithNoLineTerminatorAfter.test(lastSignificantToken)) {
+            lastSignificantToken = "?NoLineTerminatorHere";
           }
+          yield {
+            type: "LineTerminatorSequence",
+            value: match[0]
+          };
+          continue;
         }
-      } else {
-        if (startColumn === endColumn) {
-          if (startColumn) {
-            markerLines[startLine] = [startColumn, 0];
-          } else {
-            markerLines[startLine] = true;
-          }
-        } else {
-          markerLines[startLine] = [startColumn, endColumn - startColumn];
-        }
-      }
-      return {
-        start,
-        end,
-        markerLines
-      };
-    }
-    function codeFrameColumns3(rawLines, loc, opts = {}) {
-      const shouldHighlight = opts.forceColor || isColorSupported() && opts.highlightCode;
-      const defs = getDefs(shouldHighlight);
-      const lines = rawLines.split(NEWLINE);
-      const {
-        start,
-        end,
-        markerLines
-      } = getMarkerLines(loc, lines, opts);
-      const hasColumns = loc.start && typeof loc.start.column === "number";
-      const numberMaxWidth = String(end).length;
-      const highlightedLines = shouldHighlight ? highlight(rawLines) : rawLines;
-      let frame = highlightedLines.split(NEWLINE, end).slice(start, end).map((line3, index2) => {
-        const number = start + 1 + index2;
-        const paddedNumber = ` ${number}`.slice(-numberMaxWidth);
-        const gutter = ` ${paddedNumber} |`;
-        const hasMarker = markerLines[number];
-        const lastMarkerLine = !markerLines[number + 1];
-        if (hasMarker) {
-          let markerLine = "";
-          if (Array.isArray(hasMarker)) {
-            const markerSpacing = line3.slice(0, Math.max(hasMarker[0] - 1, 0)).replace(/[^\t]/g, " ");
-            const numberOfMarkers = hasMarker[1] || 1;
-            markerLine = ["\n ", defs.gutter(gutter.replace(/\d/g, " ")), " ", markerSpacing, defs.marker("^").repeat(numberOfMarkers)].join("");
-            if (lastMarkerLine && opts.message) {
-              markerLine += " " + defs.message(opts.message);
+        MultiLineComment.lastIndex = lastIndex;
+        if (match = MultiLineComment.exec(input)) {
+          lastIndex = MultiLineComment.lastIndex;
+          if (Newline.test(match[0])) {
+            postfixIncDec = false;
+            if (KeywordsWithNoLineTerminatorAfter.test(lastSignificantToken)) {
+              lastSignificantToken = "?NoLineTerminatorHere";
             }
           }
-          return [defs.marker(">"), defs.gutter(gutter), line3.length > 0 ? ` ${line3}` : "", markerLine].join("");
-        } else {
-          return ` ${defs.gutter(gutter)}${line3.length > 0 ? ` ${line3}` : ""}`;
+          yield {
+            type: "MultiLineComment",
+            value: match[0],
+            closed: match[1] !== void 0
+          };
+          continue;
         }
-      }).join("\n");
-      if (opts.message && !hasColumns) {
-        frame = `${" ".repeat(numberMaxWidth + 1)}${opts.message}
-${frame}`;
-      }
-      if (shouldHighlight) {
-        return defs.reset(frame);
-      } else {
-        return frame;
-      }
-    }
-    function index(rawLines, lineNumber, colNumber, opts = {}) {
-      if (!deprecationWarningShown) {
-        deprecationWarningShown = true;
-        const message = "Passing lineNumber and colNumber is deprecated to @babel/code-frame. Please use `codeFrameColumns`.";
-        if (process.emitWarning) {
-          process.emitWarning(message, "DeprecationWarning");
-        } else {
-          const deprecationError = new Error(message);
-          deprecationError.name = "DeprecationWarning";
-          console.warn(new Error(message));
+        SingleLineComment.lastIndex = lastIndex;
+        if (match = SingleLineComment.exec(input)) {
+          lastIndex = SingleLineComment.lastIndex;
+          postfixIncDec = false;
+          yield {
+            type: "SingleLineComment",
+            value: match[0]
+          };
+          continue;
         }
+        firstCodePoint = String.fromCodePoint(input.codePointAt(lastIndex));
+        lastIndex += firstCodePoint.length;
+        lastSignificantToken = firstCodePoint;
+        postfixIncDec = false;
+        yield {
+          type: mode.tag.startsWith("JSX") ? "JSXInvalid" : "Invalid",
+          value: firstCodePoint
+        };
       }
-      colNumber = Math.max(colNumber, 0);
-      const location = {
-        start: {
-          column: colNumber,
-          line: lineNumber
-        }
-      };
-      return codeFrameColumns3(rawLines, location, opts);
-    }
-    exports.codeFrameColumns = codeFrameColumns3;
-    exports.default = index;
-    exports.highlight = highlight;
+      return void 0;
+    };
   }
 });
 
@@ -8895,7 +8898,7 @@ var require_ignore = __commonJS({
       //   path matching.
       // - check `string` either `MODE_IGNORE` or `MODE_CHECK_IGNORE`
       // @returns {TestResult} true if a file is ignored
-      test(path14, checkUnignored, mode) {
+      test(path15, checkUnignored, mode) {
         let ignored = false;
         let unignored = false;
         let matchedRule;
@@ -8904,7 +8907,7 @@ var require_ignore = __commonJS({
           if (unignored === negative && ignored !== unignored || negative && !ignored && !unignored && !checkUnignored) {
             return;
           }
-          const matched = rule[mode].test(path14);
+          const matched = rule[mode].test(path15);
           if (!matched) {
             return;
           }
@@ -8925,17 +8928,17 @@ var require_ignore = __commonJS({
     var throwError = (message, Ctor) => {
       throw new Ctor(message);
     };
-    var checkPath = (path14, originalPath, doThrow) => {
-      if (!isString(path14)) {
+    var checkPath = (path15, originalPath, doThrow) => {
+      if (!isString(path15)) {
         return doThrow(
           `path must be a string, but got \`${originalPath}\``,
           TypeError
         );
       }
-      if (!path14) {
+      if (!path15) {
         return doThrow(`path must not be empty`, TypeError);
       }
-      if (checkPath.isNotRelative(path14)) {
+      if (checkPath.isNotRelative(path15)) {
         const r = "`path.relative()`d";
         return doThrow(
           `path should be a ${r} string, but got "${originalPath}"`,
@@ -8944,7 +8947,7 @@ var require_ignore = __commonJS({
       }
       return true;
     };
-    var isNotRelative = (path14) => REGEX_TEST_INVALID_PATH.test(path14);
+    var isNotRelative = (path15) => REGEX_TEST_INVALID_PATH.test(path15);
     checkPath.isNotRelative = isNotRelative;
     checkPath.convert = (p) => p;
     var Ignore = class {
@@ -8974,19 +8977,19 @@ var require_ignore = __commonJS({
       }
       // @returns {TestResult}
       _test(originalPath, cache3, checkUnignored, slices) {
-        const path14 = originalPath && checkPath.convert(originalPath);
+        const path15 = originalPath && checkPath.convert(originalPath);
         checkPath(
-          path14,
+          path15,
           originalPath,
           this._strictPathCheck ? throwError : RETURN_FALSE
         );
-        return this._t(path14, cache3, checkUnignored, slices);
+        return this._t(path15, cache3, checkUnignored, slices);
       }
-      checkIgnore(path14) {
-        if (!REGEX_TEST_TRAILING_SLASH.test(path14)) {
-          return this.test(path14);
+      checkIgnore(path15) {
+        if (!REGEX_TEST_TRAILING_SLASH.test(path15)) {
+          return this.test(path15);
         }
-        const slices = path14.split(SLASH).filter(Boolean);
+        const slices = path15.split(SLASH).filter(Boolean);
         slices.pop();
         if (slices.length) {
           const parent = this._t(
@@ -8999,18 +9002,18 @@ var require_ignore = __commonJS({
             return parent;
           }
         }
-        return this._rules.test(path14, false, MODE_CHECK_IGNORE);
+        return this._rules.test(path15, false, MODE_CHECK_IGNORE);
       }
-      _t(path14, cache3, checkUnignored, slices) {
-        if (path14 in cache3) {
-          return cache3[path14];
+      _t(path15, cache3, checkUnignored, slices) {
+        if (path15 in cache3) {
+          return cache3[path15];
         }
         if (!slices) {
-          slices = path14.split(SLASH).filter(Boolean);
+          slices = path15.split(SLASH).filter(Boolean);
         }
         slices.pop();
         if (!slices.length) {
-          return cache3[path14] = this._rules.test(path14, checkUnignored, MODE_IGNORE);
+          return cache3[path15] = this._rules.test(path15, checkUnignored, MODE_IGNORE);
         }
         const parent = this._t(
           slices.join(SLASH) + SLASH,
@@ -9018,29 +9021,29 @@ var require_ignore = __commonJS({
           checkUnignored,
           slices
         );
-        return cache3[path14] = parent.ignored ? parent : this._rules.test(path14, checkUnignored, MODE_IGNORE);
+        return cache3[path15] = parent.ignored ? parent : this._rules.test(path15, checkUnignored, MODE_IGNORE);
       }
-      ignores(path14) {
-        return this._test(path14, this._ignoreCache, false).ignored;
+      ignores(path15) {
+        return this._test(path15, this._ignoreCache, false).ignored;
       }
       createFilter() {
-        return (path14) => !this.ignores(path14);
+        return (path15) => !this.ignores(path15);
       }
       filter(paths) {
         return makeArray(paths).filter(this.createFilter());
       }
       // @returns {TestResult}
-      test(path14) {
-        return this._test(path14, this._testCache, true);
+      test(path15) {
+        return this._test(path15, this._testCache, true);
       }
     };
     var factory = (options8) => new Ignore(options8);
-    var isPathValid = (path14) => checkPath(path14 && checkPath.convert(path14), path14, RETURN_FALSE);
+    var isPathValid = (path15) => checkPath(path15 && checkPath.convert(path15), path15, RETURN_FALSE);
     var setupWindows = () => {
       const makePosix = (str) => /^\\\\\?\\/.test(str) || /["<>|\u0000-\u001F]+/u.test(str) ? str : str.replace(/\\/g, "/");
       checkPath.convert = makePosix;
       const REGEX_TEST_WINDOWS_PATH_ABSOLUTE = /^[a-z]:\//i;
-      checkPath.isNotRelative = (path14) => REGEX_TEST_WINDOWS_PATH_ABSOLUTE.test(path14) || isNotRelative(path14);
+      checkPath.isNotRelative = (path15) => REGEX_TEST_WINDOWS_PATH_ABSOLUTE.test(path15) || isNotRelative(path15);
     };
     if (
       // Detect `process` so that it can run in browsers.
@@ -9173,16 +9176,16 @@ var Diff = class {
       }
     }
   }
-  addToPath(path14, added, removed, oldPosInc, options8) {
-    const last = path14.lastComponent;
+  addToPath(path15, added, removed, oldPosInc, options8) {
+    const last = path15.lastComponent;
     if (last && !options8.oneChangePerToken && last.added === added && last.removed === removed) {
       return {
-        oldPos: path14.oldPos + oldPosInc,
+        oldPos: path15.oldPos + oldPosInc,
         lastComponent: { count: last.count + 1, added, removed, previousComponent: last.previousComponent }
       };
     } else {
       return {
-        oldPos: path14.oldPos + oldPosInc,
+        oldPos: path15.oldPos + oldPosInc,
         lastComponent: { count: 1, added, removed, previousComponent: last }
       };
     }
@@ -9627,7 +9630,7 @@ function closestMatch(target, candidates, options8) {
 }
 
 // src/index.js
-var import_picocolors4 = __toESM(require_picocolors(), 1);
+var import_picocolors5 = __toESM(require_picocolors(), 1);
 
 // node_modules/vnopts/lib/descriptors/api.js
 var apiDescriptor = {
@@ -10371,9 +10374,9 @@ async function findInDirectory(nameOrNames, { typeCheck, cwd, allowSymlinks = tr
     }
   }
 }
-async function safeStat(path14, allowSymlinks = true) {
+async function safeStat(path15, allowSymlinks = true) {
   try {
-    return await (allowSymlinks ? fs.stat : fs.lstat)(path14);
+    return await (allowSymlinks ? fs.stat : fs.lstat)(path15);
   } catch {
   }
 }
@@ -10486,54 +10489,45 @@ function clearFindProjectRootCache() {
 }
 
 // src/config/editorconfig/editorconfig-to-prettier.js
-function removeUnset(editorConfig) {
-  const result = {};
-  const keys = Object.keys(editorConfig);
-  for (let i = 0; i < keys.length; i++) {
-    const key2 = keys[i];
-    if (editorConfig[key2] === "unset") {
-      continue;
-    }
-    result[key2] = editorConfig[key2];
-  }
-  return result;
-}
+var isPositiveInteger = (value) => Number.isSafeInteger(value) && value > 0;
 function editorConfigToPrettier(editorConfig) {
   if (!editorConfig) {
-    return null;
-  }
-  editorConfig = removeUnset(editorConfig);
-  if (Object.keys(editorConfig).length === 0) {
-    return null;
+    return;
   }
   const result = {};
-  if (editorConfig.indent_style) {
-    result.useTabs = editorConfig.indent_style === "tab";
-  }
-  if (editorConfig.indent_size === "tab") {
+  const {
+    indent_style,
+    indent_size,
+    tab_width,
+    max_line_length,
+    quote_type,
+    end_of_line
+  } = editorConfig;
+  if (indent_style === "space") {
+    result.useTabs = false;
+  } else if (indent_style === "tab" || indent_size === "tab") {
     result.useTabs = true;
   }
-  if (result.useTabs && editorConfig.tab_width) {
-    result.tabWidth = editorConfig.tab_width;
-  } else if (editorConfig.indent_style === "space" && editorConfig.indent_size && editorConfig.indent_size !== "tab") {
-    result.tabWidth = editorConfig.indent_size;
-  } else if (editorConfig.tab_width !== void 0) {
-    result.tabWidth = editorConfig.tab_width;
+  if (result.useTabs === false && isPositiveInteger(indent_size)) {
+    result.tabWidth = indent_size;
+  } else if (isPositiveInteger(tab_width)) {
+    result.tabWidth = tab_width;
   }
-  if (editorConfig.max_line_length) {
-    if (editorConfig.max_line_length === "off") {
-      result.printWidth = Number.POSITIVE_INFINITY;
-    } else {
-      result.printWidth = editorConfig.max_line_length;
-    }
+  if (max_line_length === "off") {
+    result.printWidth = Number.POSITIVE_INFINITY;
+  } else if (isPositiveInteger(max_line_length)) {
+    result.printWidth = max_line_length;
   }
-  if (editorConfig.quote_type === "single") {
+  if (quote_type === "single") {
     result.singleQuote = true;
-  } else if (editorConfig.quote_type === "double") {
+  } else if (quote_type === "double") {
     result.singleQuote = false;
   }
-  if (["cr", "crlf", "lf"].includes(editorConfig.end_of_line)) {
-    result.endOfLine = editorConfig.end_of_line;
+  if (end_of_line === "lf" || end_of_line === "crlf" || end_of_line === "cr") {
+    result.endOfLine = end_of_line;
+  }
+  if (Object.keys(result).length === 0) {
+    return;
   }
   return result;
 }
@@ -11437,8 +11431,269 @@ function syntaxError(message) {
 }
 var dist_default = { parse: parse2 };
 
-// node_modules/parse-json/index.js
-var import_code_frame = __toESM(require_lib2(), 1);
+// node_modules/@babel/code-frame/lib/index.js
+var import_picocolors4 = __toESM(require_picocolors(), 1);
+var import_js_tokens = __toESM(require_js_tokens(), 1);
+
+// node_modules/@babel/helper-validator-identifier/lib/index.js
+var nonASCIIidentifierStartChars = "\xAA\xB5\xBA\xC0-\xD6\xD8-\xF6\xF8-\u02C1\u02C6-\u02D1\u02E0-\u02E4\u02EC\u02EE\u0370-\u0374\u0376\u0377\u037A-\u037D\u037F\u0386\u0388-\u038A\u038C\u038E-\u03A1\u03A3-\u03F5\u03F7-\u0481\u048A-\u052F\u0531-\u0556\u0559\u0560-\u0588\u05D0-\u05EA\u05EF-\u05F2\u0620-\u064A\u066E\u066F\u0671-\u06D3\u06D5\u06E5\u06E6\u06EE\u06EF\u06FA-\u06FC\u06FF\u0710\u0712-\u072F\u074D-\u07A5\u07B1\u07CA-\u07EA\u07F4\u07F5\u07FA\u0800-\u0815\u081A\u0824\u0828\u0840-\u0858\u0860-\u086A\u0870-\u0887\u0889-\u088E\u08A0-\u08C9\u0904-\u0939\u093D\u0950\u0958-\u0961\u0971-\u0980\u0985-\u098C\u098F\u0990\u0993-\u09A8\u09AA-\u09B0\u09B2\u09B6-\u09B9\u09BD\u09CE\u09DC\u09DD\u09DF-\u09E1\u09F0\u09F1\u09FC\u0A05-\u0A0A\u0A0F\u0A10\u0A13-\u0A28\u0A2A-\u0A30\u0A32\u0A33\u0A35\u0A36\u0A38\u0A39\u0A59-\u0A5C\u0A5E\u0A72-\u0A74\u0A85-\u0A8D\u0A8F-\u0A91\u0A93-\u0AA8\u0AAA-\u0AB0\u0AB2\u0AB3\u0AB5-\u0AB9\u0ABD\u0AD0\u0AE0\u0AE1\u0AF9\u0B05-\u0B0C\u0B0F\u0B10\u0B13-\u0B28\u0B2A-\u0B30\u0B32\u0B33\u0B35-\u0B39\u0B3D\u0B5C\u0B5D\u0B5F-\u0B61\u0B71\u0B83\u0B85-\u0B8A\u0B8E-\u0B90\u0B92-\u0B95\u0B99\u0B9A\u0B9C\u0B9E\u0B9F\u0BA3\u0BA4\u0BA8-\u0BAA\u0BAE-\u0BB9\u0BD0\u0C05-\u0C0C\u0C0E-\u0C10\u0C12-\u0C28\u0C2A-\u0C39\u0C3D\u0C58-\u0C5A\u0C5D\u0C60\u0C61\u0C80\u0C85-\u0C8C\u0C8E-\u0C90\u0C92-\u0CA8\u0CAA-\u0CB3\u0CB5-\u0CB9\u0CBD\u0CDD\u0CDE\u0CE0\u0CE1\u0CF1\u0CF2\u0D04-\u0D0C\u0D0E-\u0D10\u0D12-\u0D3A\u0D3D\u0D4E\u0D54-\u0D56\u0D5F-\u0D61\u0D7A-\u0D7F\u0D85-\u0D96\u0D9A-\u0DB1\u0DB3-\u0DBB\u0DBD\u0DC0-\u0DC6\u0E01-\u0E30\u0E32\u0E33\u0E40-\u0E46\u0E81\u0E82\u0E84\u0E86-\u0E8A\u0E8C-\u0EA3\u0EA5\u0EA7-\u0EB0\u0EB2\u0EB3\u0EBD\u0EC0-\u0EC4\u0EC6\u0EDC-\u0EDF\u0F00\u0F40-\u0F47\u0F49-\u0F6C\u0F88-\u0F8C\u1000-\u102A\u103F\u1050-\u1055\u105A-\u105D\u1061\u1065\u1066\u106E-\u1070\u1075-\u1081\u108E\u10A0-\u10C5\u10C7\u10CD\u10D0-\u10FA\u10FC-\u1248\u124A-\u124D\u1250-\u1256\u1258\u125A-\u125D\u1260-\u1288\u128A-\u128D\u1290-\u12B0\u12B2-\u12B5\u12B8-\u12BE\u12C0\u12C2-\u12C5\u12C8-\u12D6\u12D8-\u1310\u1312-\u1315\u1318-\u135A\u1380-\u138F\u13A0-\u13F5\u13F8-\u13FD\u1401-\u166C\u166F-\u167F\u1681-\u169A\u16A0-\u16EA\u16EE-\u16F8\u1700-\u1711\u171F-\u1731\u1740-\u1751\u1760-\u176C\u176E-\u1770\u1780-\u17B3\u17D7\u17DC\u1820-\u1878\u1880-\u18A8\u18AA\u18B0-\u18F5\u1900-\u191E\u1950-\u196D\u1970-\u1974\u1980-\u19AB\u19B0-\u19C9\u1A00-\u1A16\u1A20-\u1A54\u1AA7\u1B05-\u1B33\u1B45-\u1B4C\u1B83-\u1BA0\u1BAE\u1BAF\u1BBA-\u1BE5\u1C00-\u1C23\u1C4D-\u1C4F\u1C5A-\u1C7D\u1C80-\u1C8A\u1C90-\u1CBA\u1CBD-\u1CBF\u1CE9-\u1CEC\u1CEE-\u1CF3\u1CF5\u1CF6\u1CFA\u1D00-\u1DBF\u1E00-\u1F15\u1F18-\u1F1D\u1F20-\u1F45\u1F48-\u1F4D\u1F50-\u1F57\u1F59\u1F5B\u1F5D\u1F5F-\u1F7D\u1F80-\u1FB4\u1FB6-\u1FBC\u1FBE\u1FC2-\u1FC4\u1FC6-\u1FCC\u1FD0-\u1FD3\u1FD6-\u1FDB\u1FE0-\u1FEC\u1FF2-\u1FF4\u1FF6-\u1FFC\u2071\u207F\u2090-\u209C\u2102\u2107\u210A-\u2113\u2115\u2118-\u211D\u2124\u2126\u2128\u212A-\u2139\u213C-\u213F\u2145-\u2149\u214E\u2160-\u2188\u2C00-\u2CE4\u2CEB-\u2CEE\u2CF2\u2CF3\u2D00-\u2D25\u2D27\u2D2D\u2D30-\u2D67\u2D6F\u2D80-\u2D96\u2DA0-\u2DA6\u2DA8-\u2DAE\u2DB0-\u2DB6\u2DB8-\u2DBE\u2DC0-\u2DC6\u2DC8-\u2DCE\u2DD0-\u2DD6\u2DD8-\u2DDE\u3005-\u3007\u3021-\u3029\u3031-\u3035\u3038-\u303C\u3041-\u3096\u309B-\u309F\u30A1-\u30FA\u30FC-\u30FF\u3105-\u312F\u3131-\u318E\u31A0-\u31BF\u31F0-\u31FF\u3400-\u4DBF\u4E00-\uA48C\uA4D0-\uA4FD\uA500-\uA60C\uA610-\uA61F\uA62A\uA62B\uA640-\uA66E\uA67F-\uA69D\uA6A0-\uA6EF\uA717-\uA71F\uA722-\uA788\uA78B-\uA7CD\uA7D0\uA7D1\uA7D3\uA7D5-\uA7DC\uA7F2-\uA801\uA803-\uA805\uA807-\uA80A\uA80C-\uA822\uA840-\uA873\uA882-\uA8B3\uA8F2-\uA8F7\uA8FB\uA8FD\uA8FE\uA90A-\uA925\uA930-\uA946\uA960-\uA97C\uA984-\uA9B2\uA9CF\uA9E0-\uA9E4\uA9E6-\uA9EF\uA9FA-\uA9FE\uAA00-\uAA28\uAA40-\uAA42\uAA44-\uAA4B\uAA60-\uAA76\uAA7A\uAA7E-\uAAAF\uAAB1\uAAB5\uAAB6\uAAB9-\uAABD\uAAC0\uAAC2\uAADB-\uAADD\uAAE0-\uAAEA\uAAF2-\uAAF4\uAB01-\uAB06\uAB09-\uAB0E\uAB11-\uAB16\uAB20-\uAB26\uAB28-\uAB2E\uAB30-\uAB5A\uAB5C-\uAB69\uAB70-\uABE2\uAC00-\uD7A3\uD7B0-\uD7C6\uD7CB-\uD7FB\uF900-\uFA6D\uFA70-\uFAD9\uFB00-\uFB06\uFB13-\uFB17\uFB1D\uFB1F-\uFB28\uFB2A-\uFB36\uFB38-\uFB3C\uFB3E\uFB40\uFB41\uFB43\uFB44\uFB46-\uFBB1\uFBD3-\uFD3D\uFD50-\uFD8F\uFD92-\uFDC7\uFDF0-\uFDFB\uFE70-\uFE74\uFE76-\uFEFC\uFF21-\uFF3A\uFF41-\uFF5A\uFF66-\uFFBE\uFFC2-\uFFC7\uFFCA-\uFFCF\uFFD2-\uFFD7\uFFDA-\uFFDC";
+var nonASCIIidentifierChars = "\xB7\u0300-\u036F\u0387\u0483-\u0487\u0591-\u05BD\u05BF\u05C1\u05C2\u05C4\u05C5\u05C7\u0610-\u061A\u064B-\u0669\u0670\u06D6-\u06DC\u06DF-\u06E4\u06E7\u06E8\u06EA-\u06ED\u06F0-\u06F9\u0711\u0730-\u074A\u07A6-\u07B0\u07C0-\u07C9\u07EB-\u07F3\u07FD\u0816-\u0819\u081B-\u0823\u0825-\u0827\u0829-\u082D\u0859-\u085B\u0897-\u089F\u08CA-\u08E1\u08E3-\u0903\u093A-\u093C\u093E-\u094F\u0951-\u0957\u0962\u0963\u0966-\u096F\u0981-\u0983\u09BC\u09BE-\u09C4\u09C7\u09C8\u09CB-\u09CD\u09D7\u09E2\u09E3\u09E6-\u09EF\u09FE\u0A01-\u0A03\u0A3C\u0A3E-\u0A42\u0A47\u0A48\u0A4B-\u0A4D\u0A51\u0A66-\u0A71\u0A75\u0A81-\u0A83\u0ABC\u0ABE-\u0AC5\u0AC7-\u0AC9\u0ACB-\u0ACD\u0AE2\u0AE3\u0AE6-\u0AEF\u0AFA-\u0AFF\u0B01-\u0B03\u0B3C\u0B3E-\u0B44\u0B47\u0B48\u0B4B-\u0B4D\u0B55-\u0B57\u0B62\u0B63\u0B66-\u0B6F\u0B82\u0BBE-\u0BC2\u0BC6-\u0BC8\u0BCA-\u0BCD\u0BD7\u0BE6-\u0BEF\u0C00-\u0C04\u0C3C\u0C3E-\u0C44\u0C46-\u0C48\u0C4A-\u0C4D\u0C55\u0C56\u0C62\u0C63\u0C66-\u0C6F\u0C81-\u0C83\u0CBC\u0CBE-\u0CC4\u0CC6-\u0CC8\u0CCA-\u0CCD\u0CD5\u0CD6\u0CE2\u0CE3\u0CE6-\u0CEF\u0CF3\u0D00-\u0D03\u0D3B\u0D3C\u0D3E-\u0D44\u0D46-\u0D48\u0D4A-\u0D4D\u0D57\u0D62\u0D63\u0D66-\u0D6F\u0D81-\u0D83\u0DCA\u0DCF-\u0DD4\u0DD6\u0DD8-\u0DDF\u0DE6-\u0DEF\u0DF2\u0DF3\u0E31\u0E34-\u0E3A\u0E47-\u0E4E\u0E50-\u0E59\u0EB1\u0EB4-\u0EBC\u0EC8-\u0ECE\u0ED0-\u0ED9\u0F18\u0F19\u0F20-\u0F29\u0F35\u0F37\u0F39\u0F3E\u0F3F\u0F71-\u0F84\u0F86\u0F87\u0F8D-\u0F97\u0F99-\u0FBC\u0FC6\u102B-\u103E\u1040-\u1049\u1056-\u1059\u105E-\u1060\u1062-\u1064\u1067-\u106D\u1071-\u1074\u1082-\u108D\u108F-\u109D\u135D-\u135F\u1369-\u1371\u1712-\u1715\u1732-\u1734\u1752\u1753\u1772\u1773\u17B4-\u17D3\u17DD\u17E0-\u17E9\u180B-\u180D\u180F-\u1819\u18A9\u1920-\u192B\u1930-\u193B\u1946-\u194F\u19D0-\u19DA\u1A17-\u1A1B\u1A55-\u1A5E\u1A60-\u1A7C\u1A7F-\u1A89\u1A90-\u1A99\u1AB0-\u1ABD\u1ABF-\u1ACE\u1B00-\u1B04\u1B34-\u1B44\u1B50-\u1B59\u1B6B-\u1B73\u1B80-\u1B82\u1BA1-\u1BAD\u1BB0-\u1BB9\u1BE6-\u1BF3\u1C24-\u1C37\u1C40-\u1C49\u1C50-\u1C59\u1CD0-\u1CD2\u1CD4-\u1CE8\u1CED\u1CF4\u1CF7-\u1CF9\u1DC0-\u1DFF\u200C\u200D\u203F\u2040\u2054\u20D0-\u20DC\u20E1\u20E5-\u20F0\u2CEF-\u2CF1\u2D7F\u2DE0-\u2DFF\u302A-\u302F\u3099\u309A\u30FB\uA620-\uA629\uA66F\uA674-\uA67D\uA69E\uA69F\uA6F0\uA6F1\uA802\uA806\uA80B\uA823-\uA827\uA82C\uA880\uA881\uA8B4-\uA8C5\uA8D0-\uA8D9\uA8E0-\uA8F1\uA8FF-\uA909\uA926-\uA92D\uA947-\uA953\uA980-\uA983\uA9B3-\uA9C0\uA9D0-\uA9D9\uA9E5\uA9F0-\uA9F9\uAA29-\uAA36\uAA43\uAA4C\uAA4D\uAA50-\uAA59\uAA7B-\uAA7D\uAAB0\uAAB2-\uAAB4\uAAB7\uAAB8\uAABE\uAABF\uAAC1\uAAEB-\uAAEF\uAAF5\uAAF6\uABE3-\uABEA\uABEC\uABED\uABF0-\uABF9\uFB1E\uFE00-\uFE0F\uFE20-\uFE2F\uFE33\uFE34\uFE4D-\uFE4F\uFF10-\uFF19\uFF3F\uFF65";
+var nonASCIIidentifierStart = new RegExp("[" + nonASCIIidentifierStartChars + "]");
+var nonASCIIidentifier = new RegExp("[" + nonASCIIidentifierStartChars + nonASCIIidentifierChars + "]");
+nonASCIIidentifierStartChars = nonASCIIidentifierChars = null;
+var reservedWords = {
+  keyword: ["break", "case", "catch", "continue", "debugger", "default", "do", "else", "finally", "for", "function", "if", "return", "switch", "throw", "try", "var", "const", "while", "with", "new", "this", "super", "class", "extends", "export", "import", "null", "true", "false", "in", "instanceof", "typeof", "void", "delete"],
+  strict: ["implements", "interface", "let", "package", "private", "protected", "public", "static", "yield"],
+  strictBind: ["eval", "arguments"]
+};
+var keywords = new Set(reservedWords.keyword);
+var reservedWordsStrictSet = new Set(reservedWords.strict);
+var reservedWordsStrictBindSet = new Set(reservedWords.strictBind);
+function isReservedWord(word, inModule) {
+  return inModule && word === "await" || word === "enum";
+}
+function isStrictReservedWord(word, inModule) {
+  return isReservedWord(word, inModule) || reservedWordsStrictSet.has(word);
+}
+function isKeyword(word) {
+  return keywords.has(word);
+}
+
+// node_modules/@babel/code-frame/lib/index.js
+function isColorSupported() {
+  return typeof process === "object" && (process.env.FORCE_COLOR === "0" || process.env.FORCE_COLOR === "false") ? false : import_picocolors4.default.isColorSupported;
+}
+var compose = (f, g) => (v) => f(g(v));
+function buildDefs(colors) {
+  return {
+    keyword: colors.cyan,
+    capitalized: colors.yellow,
+    jsxIdentifier: colors.yellow,
+    punctuator: colors.yellow,
+    number: colors.magenta,
+    string: colors.green,
+    regex: colors.magenta,
+    comment: colors.gray,
+    invalid: compose(compose(colors.white, colors.bgRed), colors.bold),
+    gutter: colors.gray,
+    marker: compose(colors.red, colors.bold),
+    message: compose(colors.red, colors.bold),
+    reset: colors.reset
+  };
+}
+var defsOn = buildDefs((0, import_picocolors4.createColors)(true));
+var defsOff = buildDefs((0, import_picocolors4.createColors)(false));
+function getDefs(enabled) {
+  return enabled ? defsOn : defsOff;
+}
+var sometimesKeywords = /* @__PURE__ */ new Set(["as", "async", "from", "get", "of", "set"]);
+var NEWLINE$1 = /\r\n|[\n\r\u2028\u2029]/;
+var BRACKET = /^[()[\]{}]$/;
+var tokenize2;
+{
+  const getTokenType = function(token2) {
+    if (token2.type === "IdentifierName") {
+      if (isKeyword(token2.value) || isStrictReservedWord(token2.value, true) || sometimesKeywords.has(token2.value)) {
+        return "keyword";
+      }
+      if (token2.value[0] !== token2.value[0].toLowerCase()) {
+        return "capitalized";
+      }
+    }
+    if (token2.type === "Punctuator" && BRACKET.test(token2.value)) {
+      return "uncolored";
+    }
+    if (token2.type === "Invalid" && token2.value === "@") {
+      return "punctuator";
+    }
+    switch (token2.type) {
+      case "NumericLiteral":
+        return "number";
+      case "StringLiteral":
+      case "JSXString":
+      case "NoSubstitutionTemplate":
+        return "string";
+      case "RegularExpressionLiteral":
+        return "regex";
+      case "Punctuator":
+      case "JSXPunctuator":
+        return "punctuator";
+      case "MultiLineComment":
+      case "SingleLineComment":
+        return "comment";
+      case "Invalid":
+      case "JSXInvalid":
+        return "invalid";
+      case "JSXIdentifier":
+        return "jsxIdentifier";
+      default:
+        return "uncolored";
+    }
+  };
+  tokenize2 = function* (text) {
+    for (const token2 of (0, import_js_tokens.default)(text, {
+      jsx: true
+    })) {
+      switch (token2.type) {
+        case "TemplateHead":
+          yield {
+            type: "string",
+            value: token2.value.slice(0, -2)
+          };
+          yield {
+            type: "punctuator",
+            value: "${"
+          };
+          break;
+        case "TemplateMiddle":
+          yield {
+            type: "punctuator",
+            value: "}"
+          };
+          yield {
+            type: "string",
+            value: token2.value.slice(1, -2)
+          };
+          yield {
+            type: "punctuator",
+            value: "${"
+          };
+          break;
+        case "TemplateTail":
+          yield {
+            type: "punctuator",
+            value: "}"
+          };
+          yield {
+            type: "string",
+            value: token2.value.slice(1)
+          };
+          break;
+        default:
+          yield {
+            type: getTokenType(token2),
+            value: token2.value
+          };
+      }
+    }
+  };
+}
+function highlight(text) {
+  if (text === "") return "";
+  const defs = getDefs(true);
+  let highlighted = "";
+  for (const {
+    type,
+    value
+  } of tokenize2(text)) {
+    if (type in defs) {
+      highlighted += value.split(NEWLINE$1).map((str) => defs[type](str)).join("\n");
+    } else {
+      highlighted += value;
+    }
+  }
+  return highlighted;
+}
+var NEWLINE = /\r\n|[\n\r\u2028\u2029]/;
+function getMarkerLines(loc, source2, opts) {
+  const startLoc = Object.assign({
+    column: 0,
+    line: -1
+  }, loc.start);
+  const endLoc = Object.assign({}, startLoc, loc.end);
+  const {
+    linesAbove = 2,
+    linesBelow = 3
+  } = opts || {};
+  const startLine = startLoc.line;
+  const startColumn = startLoc.column;
+  const endLine = endLoc.line;
+  const endColumn = endLoc.column;
+  let start = Math.max(startLine - (linesAbove + 1), 0);
+  let end = Math.min(source2.length, endLine + linesBelow);
+  if (startLine === -1) {
+    start = 0;
+  }
+  if (endLine === -1) {
+    end = source2.length;
+  }
+  const lineDiff2 = endLine - startLine;
+  const markerLines = {};
+  if (lineDiff2) {
+    for (let i = 0; i <= lineDiff2; i++) {
+      const lineNumber = i + startLine;
+      if (!startColumn) {
+        markerLines[lineNumber] = true;
+      } else if (i === 0) {
+        const sourceLength = source2[lineNumber - 1].length;
+        markerLines[lineNumber] = [startColumn, sourceLength - startColumn + 1];
+      } else if (i === lineDiff2) {
+        markerLines[lineNumber] = [0, endColumn];
+      } else {
+        const sourceLength = source2[lineNumber - i].length;
+        markerLines[lineNumber] = [0, sourceLength];
+      }
+    }
+  } else {
+    if (startColumn === endColumn) {
+      if (startColumn) {
+        markerLines[startLine] = [startColumn, 0];
+      } else {
+        markerLines[startLine] = true;
+      }
+    } else {
+      markerLines[startLine] = [startColumn, endColumn - startColumn];
+    }
+  }
+  return {
+    start,
+    end,
+    markerLines
+  };
+}
+function codeFrameColumns(rawLines, loc, opts = {}) {
+  const shouldHighlight = opts.forceColor || isColorSupported() && opts.highlightCode;
+  const defs = getDefs(shouldHighlight);
+  const lines = rawLines.split(NEWLINE);
+  const {
+    start,
+    end,
+    markerLines
+  } = getMarkerLines(loc, lines, opts);
+  const hasColumns = loc.start && typeof loc.start.column === "number";
+  const numberMaxWidth = String(end).length;
+  const highlightedLines = shouldHighlight ? highlight(rawLines) : rawLines;
+  let frame = highlightedLines.split(NEWLINE, end).slice(start, end).map((line3, index) => {
+    const number = start + 1 + index;
+    const paddedNumber = ` ${number}`.slice(-numberMaxWidth);
+    const gutter = ` ${paddedNumber} |`;
+    const hasMarker = markerLines[number];
+    const lastMarkerLine = !markerLines[number + 1];
+    if (hasMarker) {
+      let markerLine = "";
+      if (Array.isArray(hasMarker)) {
+        const markerSpacing = line3.slice(0, Math.max(hasMarker[0] - 1, 0)).replace(/[^\t]/g, " ");
+        const numberOfMarkers = hasMarker[1] || 1;
+        markerLine = ["\n ", defs.gutter(gutter.replace(/\d/g, " ")), " ", markerSpacing, defs.marker("^").repeat(numberOfMarkers)].join("");
+        if (lastMarkerLine && opts.message) {
+          markerLine += " " + defs.message(opts.message);
+        }
+      }
+      return [defs.marker(">"), defs.gutter(gutter), line3.length > 0 ? ` ${line3}` : "", markerLine].join("");
+    } else {
+      return ` ${defs.gutter(gutter)}${line3.length > 0 ? ` ${line3}` : ""}`;
+    }
+  }).join("\n");
+  if (opts.message && !hasColumns) {
+    frame = `${" ".repeat(numberMaxWidth + 1)}${opts.message}
+${frame}`;
+  }
+  if (shouldHighlight) {
+    return defs.reset(frame);
+  } else {
+    return frame;
+  }
+}
 
 // node_modules/index-to-position/index.js
 function getPosition(text, textIndex) {
@@ -11505,7 +11760,7 @@ ${codeFrame}
     if (!location) {
       return;
     }
-    return (0, import_code_frame.codeFrameColumns)(input, { start: location }, { highlightCode });
+    return codeFrameColumns(input, { start: location }, { highlightCode });
   }
   get codeFrame() {
     this.#codeFrame ??= this.#getCodeFrame(
@@ -12542,8 +12797,8 @@ codes.ERR_INVALID_PACKAGE_CONFIG = createError(
    * @param {string} [base]
    * @param {string} [message]
    */
-  (path14, base, message) => {
-    return `Invalid package config ${path14}${base ? ` while importing ${base}` : ""}${message ? `. ${message}` : ""}`;
+  (path15, base, message) => {
+    return `Invalid package config ${path15}${base ? ` while importing ${base}` : ""}${message ? `. ${message}` : ""}`;
   },
   Error
 );
@@ -12575,8 +12830,8 @@ codes.ERR_MODULE_NOT_FOUND = createError(
    * @param {string} base
    * @param {boolean} [exactUrl]
    */
-  (path14, base, exactUrl = false) => {
-    return `Cannot find ${exactUrl ? "module" : "package"} '${path14}' imported from ${base}`;
+  (path15, base, exactUrl = false) => {
+    return `Cannot find ${exactUrl ? "module" : "package"} '${path15}' imported from ${base}`;
   },
   Error
 );
@@ -12627,8 +12882,8 @@ codes.ERR_UNKNOWN_FILE_EXTENSION = createError(
    * @param {string} extension
    * @param {string} path
    */
-  (extension, path14) => {
-    return `Unknown file extension "${extension}" for ${path14}`;
+  (extension, path15) => {
+    return `Unknown file extension "${extension}" for ${path15}`;
   },
   TypeError
 );
@@ -13030,9 +13285,9 @@ Default "index" lookups for the main are deprecated for ES modules.`,
     );
   }
 }
-function tryStatSync(path14) {
+function tryStatSync(path15) {
   try {
-    return statSync(path14);
+    return statSync(path15);
   } catch {
   }
 }
@@ -14073,6 +14328,11 @@ var at = (isOptionalObject, object, index) => {
 };
 var at_default = at;
 
+// src/utils/noop.js
+var noop = () => {
+};
+var noop_default = noop;
+
 // node_modules/trim-newlines/index.js
 function trimNewlinesEnd(string) {
   let end = string.length;
@@ -14431,9 +14691,7 @@ function inheritLabel(doc2, fn) {
 }
 
 // src/document/utils/assert-doc.js
-var noop = () => {
-};
-var assertDoc = true ? noop : function(doc2) {
+var assertDoc = true ? noop_default : function(doc2) {
   traverse_doc_default(doc2, (doc3) => {
     if (checked.has(doc3)) {
       return false;
@@ -15379,8 +15637,8 @@ var AstPath = class {
   map(callback, ...names) {
     const result = [];
     this.each(
-      (path14, index, value) => {
-        result[index] = callback(path14, index, value);
+      (path15, index, value) => {
+        result[index] = callback(path15, index, value);
       },
       ...names
     );
@@ -15456,8 +15714,8 @@ var AstPath = class {
 };
 var ast_path_default = AstPath;
 
-// src/main/comments/attach.js
-import assert4 from "assert";
+// src/universal/assert.js
+import { equal, ok, strictEqual } from "assert";
 
 // src/utils/is-object.js
 function isObject(object) {
@@ -15850,8 +16108,8 @@ function breakTies(tiesToBreak, options8) {
       precedingNode: currentCommentPrecedingNode,
       followingNode: currentCommentFollowingNode
     } = tiesToBreak[indexOfFirstLeadingComment - 1];
-    assert4.strictEqual(currentCommentPrecedingNode, precedingNode);
-    assert4.strictEqual(currentCommentFollowingNode, followingNode);
+    strictEqual(currentCommentPrecedingNode, precedingNode);
+    strictEqual(currentCommentFollowingNode, followingNode);
     const gap = options8.originalText.slice(options8.locEnd(comment), gapEndPos);
     if (options8.printer.isGap?.(gap, options8) ?? /^[\s(]*$/u.test(gap)) {
       gapEndPos = options8.locStart(comment);
@@ -15895,14 +16153,14 @@ function isPreviousLineEmpty(text, startIndex) {
 var is_previous_line_empty_default = isPreviousLineEmpty;
 
 // src/main/comments/print.js
-function printComment(path14, options8) {
-  const comment = path14.node;
+function printComment(path15, options8) {
+  const comment = path15.node;
   comment.printed = true;
-  return options8.printer.printComment(path14, options8);
+  return options8.printer.printComment(path15, options8);
 }
-function printLeadingComment(path14, options8) {
-  const comment = path14.node;
-  const parts = [printComment(path14, options8)];
+function printLeadingComment(path15, options8) {
+  const comment = path15.node;
+  const parts = [printComment(path15, options8)];
   const { printer, originalText, locStart, locEnd } = options8;
   const isBlock = printer.isBlockComment?.(comment);
   if (isBlock) {
@@ -15922,9 +16180,9 @@ function printLeadingComment(path14, options8) {
   }
   return parts;
 }
-function printTrailingComment(path14, options8, previousComment) {
-  const comment = path14.node;
-  const printed = printComment(path14, options8);
+function printTrailingComment(path15, options8, previousComment) {
+  const comment = path15.node;
+  const printed = printComment(path15, options8);
   const { printer, originalText, locStart } = options8;
   const isBlock = printer.isBlockComment?.(comment);
   if (previousComment?.hasLineSuffix && !previousComment?.isBlock || has_newline_default(originalText, locStart(comment), { backwards: true })) {
@@ -15947,8 +16205,8 @@ function printTrailingComment(path14, options8, previousComment) {
   }
   return { doc: [" ", printed], isBlock, hasLineSuffix: false };
 }
-function printCommentsSeparately(path14, options8) {
-  const value = path14.node;
+function printCommentsSeparately(path15, options8) {
+  const value = path15.node;
   if (!value) {
     return {};
   }
@@ -15962,17 +16220,17 @@ function printCommentsSeparately(path14, options8) {
   const leadingParts = [];
   const trailingParts = [];
   let printedTrailingComment;
-  path14.each(() => {
-    const comment = path14.node;
+  path15.each(() => {
+    const comment = path15.node;
     if (ignored?.has(comment)) {
       return;
     }
     const { leading, trailing } = comment;
     if (leading) {
-      leadingParts.push(printLeadingComment(path14, options8));
+      leadingParts.push(printLeadingComment(path15, options8));
     } else if (trailing) {
       printedTrailingComment = printTrailingComment(
-        path14,
+        path15,
         options8,
         printedTrailingComment
       );
@@ -15981,8 +16239,8 @@ function printCommentsSeparately(path14, options8) {
   }, "comments");
   return { leading: leadingParts, trailing: trailingParts };
 }
-function printComments(path14, doc2, options8) {
-  const { leading, trailing } = printCommentsSeparately(path14, options8);
+function printComments(path15, doc2, options8) {
+  const { leading, trailing } = printCommentsSeparately(path15, options8);
   if (!leading && !trailing) {
     return doc2;
   }
@@ -16004,33 +16262,7 @@ function ensureAllCommentsPrinted(options8) {
 }
 
 // src/main/create-print-pre-check-function.js
-function createPrintPreCheckFunction(options8) {
-  if (true) {
-    return () => {
-    };
-  }
-  const getVisitorKeys = create_get_visitor_keys_function_default(
-    options8.printer.getVisitorKeys
-  );
-  return function(path14) {
-    if (path14.isRoot) {
-      return;
-    }
-    const { key: key2, parent } = path14;
-    const visitorKeys = getVisitorKeys(parent);
-    if (visitorKeys.includes(key2)) {
-      return;
-    }
-    throw Object.assign(new Error("Calling `print()` on non-node object."), {
-      parentNode: parent,
-      allowedProperties: visitorKeys,
-      printingProperty: key2,
-      printingValue: path14.node,
-      pathStack: path14.stack.length > 5 ? ["...", ...path14.stack.slice(-5)] : [...path14.stack]
-    });
-  };
-}
-var create_print_pre_check_function_default = createPrintPreCheckFunction;
+var create_print_pre_check_function_default = true ? () => noop_default : createPrintPreCheckFunction;
 
 // src/main/core-options.evaluate.js
 var core_options_evaluate_default = {
@@ -16369,6 +16601,9 @@ var arrayToReversed = (isOptionalObject, array2) => {
 };
 var array_to_reversed_default = arrayToReversed;
 
+// src/universal/index.js
+import path11 from "path";
+
 // src/utils/get-interpreter.js
 var import_n_readlines = __toESM(require_readlines(), 1);
 function getInterpreter(file) {
@@ -16393,12 +16628,17 @@ function getInterpreter(file) {
 }
 var get_interpreter_default = getInterpreter;
 
-// src/utils/universal-to-path.js
+// src/universal/index.js
 import { fileURLToPath as fileURLToPath5 } from "url";
-var universal_to_path_default = false ? fromFileUrl3 : fileURLToPath5;
+var getFileBasename = (file) => {
+  try {
+    return path11.basename(toPath(file));
+  } catch {
+    return "";
+  }
+};
 
 // src/utils/infer-parser.js
-var getFileBasename = (file) => String(file).split(/[/\\]/u).pop();
 function getLanguageByFileName(languages2, file) {
   if (!file) {
     return;
@@ -16416,7 +16656,7 @@ function getLanguageByLanguageName(languages2, languageName) {
   }
   return languages2.find(({ name }) => name.toLowerCase() === languageName) ?? languages2.find(({ aliases }) => aliases?.includes(languageName)) ?? languages2.find(({ extensions }) => extensions?.includes(`.${languageName}`));
 }
-function getLanguageByInterpreter(languages2, file) {
+function getLanguageByInterpreterNodejs(languages2, file) {
   if (!file || getFileBasename(file).includes(".")) {
     return;
   }
@@ -16434,13 +16674,14 @@ function getLanguageByInterpreter(languages2, file) {
     ({ interpreters }) => interpreters.includes(interpreter)
   );
 }
+var getLanguageByInterpreter = false ? void 0 : getLanguageByInterpreterNodejs;
 function getLanguageByIsSupported(languages2, file) {
   if (!file) {
     return;
   }
-  if (String(file).startsWith("file:")) {
+  if (isUrl(file)) {
     try {
-      file = universal_to_path_default(file);
+      file = fileURLToPath5(file);
     } catch {
       return;
     }
@@ -16461,7 +16702,7 @@ function inferParser(options8, fileInfo) {
       plugin.languages ?? []
     )
   );
-  const language = getLanguageByLanguageName(languages2, fileInfo.language) ?? getLanguageByFileName(languages2, fileInfo.physicalFile) ?? getLanguageByFileName(languages2, fileInfo.file) ?? getLanguageByIsSupported(languages2, fileInfo.physicalFile) ?? getLanguageByIsSupported(languages2, fileInfo.file) ?? getLanguageByInterpreter(languages2, fileInfo.physicalFile);
+  const language = getLanguageByLanguageName(languages2, fileInfo.language) ?? getLanguageByFileName(languages2, fileInfo.physicalFile) ?? getLanguageByFileName(languages2, fileInfo.file) ?? getLanguageByIsSupported(languages2, fileInfo.physicalFile) ?? getLanguageByIsSupported(languages2, fileInfo.file) ?? getLanguageByInterpreter?.(languages2, fileInfo.physicalFile);
   return language?.parsers[0];
 }
 var infer_parser_default = inferParser;
@@ -16753,7 +16994,6 @@ async function normalizeFormatOptions(options8, opts = {}) {
 var normalize_format_options_default = normalizeFormatOptions;
 
 // src/main/parse.js
-var import_code_frame2 = __toESM(require_lib2(), 1);
 async function parse5(originalText, options8) {
   const parser = await resolveParser(options8);
   const text = parser.preprocess ? await parser.preprocess(originalText, options8) : originalText;
@@ -16775,7 +17015,7 @@ async function parse5(originalText, options8) {
 function handleParseError(error, text) {
   const { loc } = error;
   if (loc) {
-    const codeFrame = (0, import_code_frame2.codeFrameColumns)(text, loc, { highlightCode: true });
+    const codeFrame = codeFrameColumns(text, loc, { highlightCode: true });
     error.message += "\n" + codeFrame;
     error.codeFrame = codeFrame;
     throw error;
@@ -16785,7 +17025,7 @@ function handleParseError(error, text) {
 var parse_default = parse5;
 
 // src/main/multiparser.js
-async function printEmbeddedLanguages(path14, genericPrint, options8, printAstToDoc2, embeds) {
+async function printEmbeddedLanguages(path15, genericPrint, options8, printAstToDoc2, embeds) {
   const {
     embeddedLanguageFormatting,
     printer: {
@@ -16807,11 +17047,11 @@ async function printEmbeddedLanguages(path14, genericPrint, options8, printAstTo
   );
   const embedCallResults = [];
   recurse();
-  const originalPathStack = path14.stack;
+  const originalPathStack = path15.stack;
   for (const { print, node, pathStack } of embedCallResults) {
     try {
-      path14.stack = pathStack;
-      const doc2 = await print(textToDocForEmbed, genericPrint, path14, options8);
+      path15.stack = pathStack;
+      const doc2 = await print(textToDocForEmbed, genericPrint, path15, options8);
       if (doc2) {
         embeds.set(node, doc2);
       }
@@ -16821,23 +17061,23 @@ async function printEmbeddedLanguages(path14, genericPrint, options8, printAstTo
       }
     }
   }
-  path14.stack = originalPathStack;
+  path15.stack = originalPathStack;
   function textToDocForEmbed(text, partialNextOptions) {
     return textToDoc(text, partialNextOptions, options8, printAstToDoc2);
   }
   function recurse() {
-    const { node } = path14;
-    if (node === null || typeof node !== "object" || hasPrettierIgnore(path14)) {
+    const { node } = path15;
+    if (node === null || typeof node !== "object" || hasPrettierIgnore(path15)) {
       return;
     }
     for (const key2 of getVisitorKeys(node)) {
       if (Array.isArray(node[key2])) {
-        path14.each(recurse, key2);
+        path15.each(recurse, key2);
       } else {
-        path14.call(recurse, key2);
+        path15.call(recurse, key2);
       }
     }
-    const result = embed(path14, options8);
+    const result = embed(path15, options8);
     if (!result) {
       return;
     }
@@ -16845,7 +17085,7 @@ async function printEmbeddedLanguages(path14, genericPrint, options8, printAstTo
       embedCallResults.push({
         print: result,
         node,
-        pathStack: [...path14.stack]
+        pathStack: [...path15.stack]
       });
       return;
     }
@@ -16877,7 +17117,7 @@ async function textToDoc(text, partialNextOptions, parentOptions, printAstToDoc2
 }
 
 // src/main/print-ignored.js
-function printIgnored(path14, options8) {
+function printIgnored(path15, options8) {
   const {
     originalText,
     [Symbol.for("comments")]: comments,
@@ -16885,7 +17125,7 @@ function printIgnored(path14, options8) {
     locEnd,
     [Symbol.for("printedComments")]: printedComments
   } = options8;
-  const { node } = path14;
+  const { node } = path15;
   const start = locStart(node);
   const end = locEnd(node);
   for (const comment of comments) {
@@ -16901,12 +17141,12 @@ var print_ignored_default = printIgnored;
 async function printAstToDoc(ast, options8) {
   ({ ast } = await prepareToPrint(ast, options8));
   const cache3 = /* @__PURE__ */ new Map();
-  const path14 = new ast_path_default(ast);
+  const path15 = new ast_path_default(ast);
   const ensurePrintingNode = create_print_pre_check_function_default(options8);
   const embeds = /* @__PURE__ */ new Map();
-  await printEmbeddedLanguages(path14, mainPrint, options8, printAstToDoc, embeds);
+  await printEmbeddedLanguages(path15, mainPrint, options8, printAstToDoc, embeds);
   const doc2 = await callPluginPrintFunction(
-    path14,
+    path15,
     options8,
     mainPrint,
     void 0,
@@ -16940,17 +17180,17 @@ async function printAstToDoc(ast, options8) {
   }
   return doc2;
   function mainPrint(selector, args) {
-    if (selector === void 0 || selector === path14) {
+    if (selector === void 0 || selector === path15) {
       return mainPrintInternal(args);
     }
     if (Array.isArray(selector)) {
-      return path14.call(() => mainPrintInternal(args), ...selector);
+      return path15.call(() => mainPrintInternal(args), ...selector);
     }
-    return path14.call(() => mainPrintInternal(args), selector);
+    return path15.call(() => mainPrintInternal(args), selector);
   }
   function mainPrintInternal(args) {
-    ensurePrintingNode(path14);
-    const value = path14.node;
+    ensurePrintingNode(path15);
+    const value = path15.node;
     if (value === void 0 || value === null) {
       return "";
     }
@@ -16958,23 +17198,23 @@ async function printAstToDoc(ast, options8) {
     if (shouldCache && cache3.has(value)) {
       return cache3.get(value);
     }
-    const doc3 = callPluginPrintFunction(path14, options8, mainPrint, args, embeds);
+    const doc3 = callPluginPrintFunction(path15, options8, mainPrint, args, embeds);
     if (shouldCache) {
       cache3.set(value, doc3);
     }
     return doc3;
   }
 }
-function callPluginPrintFunction(path14, options8, printPath, args, embeds) {
-  const { node } = path14;
+function callPluginPrintFunction(path15, options8, printPath, args, embeds) {
+  const { node } = path15;
   const { printer } = options8;
   let doc2;
-  if (printer.hasPrettierIgnore?.(path14)) {
-    doc2 = print_ignored_default(path14, options8);
+  if (printer.hasPrettierIgnore?.(path15)) {
+    doc2 = print_ignored_default(path15, options8);
   } else if (embeds.has(node)) {
     doc2 = embeds.get(node);
   } else {
-    doc2 = printer.print(path14, options8, printPath, args);
+    doc2 = printer.print(path15, options8, printPath, args);
   }
   switch (node) {
     case options8.cursorNode:
@@ -16987,8 +17227,8 @@ function callPluginPrintFunction(path14, options8, printPath, args, embeds) {
       doc2 = inheritLabel(doc2, (doc3) => [cursor, doc3]);
       break;
   }
-  if (printer.printComment && (!printer.willPrintOwnComments || !printer.willPrintOwnComments(path14, options8))) {
-    doc2 = printComments(path14, doc2, options8);
+  if (printer.printComment && (!printer.willPrintOwnComments || !printer.willPrintOwnComments(path15, options8))) {
+    doc2 = printComments(path15, doc2, options8);
   }
   return doc2;
 }
@@ -17116,7 +17356,6 @@ var arrayFindLastIndex = (isOptionalObject, array2, callback) => {
 var array_find_last_index_default = arrayFindLastIndex;
 
 // src/main/range-util.js
-import assert5 from "assert";
 var isJsonParser = ({ parser }) => parser === "json" || parser === "json5" || parser === "jsonc" || parser === "json-stringify";
 function findCommonAncestor(startNodeAndParents, endNodeAndParents) {
   const startNodeAndAncestors = [
@@ -17267,7 +17506,7 @@ function isSourceElement(opts, node, parentNode) {
 }
 function calculateRange(text, opts, ast) {
   let { rangeStart: start, rangeEnd: end, locStart, locEnd } = opts;
-  assert5.ok(end > start);
+  ok(end > start);
   const firstNonWhitespaceCharacterIndex = text.slice(start, end).search(/\S/u);
   const isAllWhitespace = firstNonWhitespaceCharacterIndex === -1;
   if (!isAllWhitespace) {
@@ -18689,13 +18928,13 @@ function loadBuiltinPlugins() {
 var load_builtin_plugins_default = loadBuiltinPlugins;
 
 // src/main/plugins/load-plugin.js
-import path12 from "path";
+import path13 from "path";
 import { pathToFileURL as pathToFileURL5 } from "url";
 
 // src/utils/import-from-directory.js
-import path11 from "path";
+import path12 from "path";
 function importFromDirectory(specifier, directory) {
-  return import_from_file_default(specifier, path11.join(directory, "noop.js"));
+  return import_from_file_default(specifier, path12.join(directory, "noop.js"));
 }
 var import_from_directory_default = importFromDirectory;
 
@@ -18704,11 +18943,11 @@ async function importPlugin(name, cwd) {
   if (isUrl(name)) {
     return import(name);
   }
-  if (path12.isAbsolute(name)) {
+  if (path13.isAbsolute(name)) {
     return import(pathToFileURL5(name).href);
   }
   try {
-    return await import(pathToFileURL5(path12.resolve(name)).href);
+    return await import(pathToFileURL5(path13.resolve(name)).href);
   } catch {
     return import_from_directory_default(name, cwd);
   }
@@ -18741,9 +18980,9 @@ var load_plugins_default = loadPlugins;
 
 // src/utils/ignore.js
 var import_ignore = __toESM(require_ignore(), 1);
-import path13 from "path";
+import path14 from "path";
 import url2 from "url";
-var slash = path13.sep === "\\" ? (filePath) => string_replace_all_default(
+var slash = path14.sep === "\\" ? (filePath) => string_replace_all_default(
   /* isOptionalObject */
   false,
   filePath,
@@ -18752,11 +18991,11 @@ var slash = path13.sep === "\\" ? (filePath) => string_replace_all_default(
 ) : (filePath) => filePath;
 function getRelativePath(file, ignoreFile) {
   const ignoreFilePath = toPath(ignoreFile);
-  const filePath = isUrl(file) ? url2.fileURLToPath(file) : path13.resolve(file);
-  return path13.relative(
+  const filePath = isUrl(file) ? url2.fileURLToPath(file) : path14.resolve(file);
+  return path14.relative(
     // If there's an ignore-path set, the filename must be relative to the
     // ignore path, not the current working directory.
-    ignoreFilePath ? path13.dirname(ignoreFilePath) : process.cwd(),
+    ignoreFilePath ? path14.dirname(ignoreFilePath) : process.cwd(),
     filePath
   );
 }
@@ -18842,7 +19081,7 @@ var get_file_info_default = getFileInfo;
 import * as doc from "./doc.mjs";
 
 // src/main/version.evaluate.js
-var version_evaluate_default = "3.7.0-82e57b781";
+var version_evaluate_default = "3.7.0-46638c8cc";
 
 // src/utils/public.js
 var public_exports = {};
@@ -19129,7 +19368,7 @@ var sharedWithCli = {
   },
   fastGlob: import_fast_glob.default,
   createTwoFilesPatch,
-  picocolors: import_picocolors4.default,
+  picocolors: import_picocolors5.default,
   closetLevenshteinMatch: closestMatch,
   utils: {
     omit: object_omit_default,

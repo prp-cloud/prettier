@@ -18,6 +18,7 @@
   "homepage": "https://github.com/prettier/prettier/tree/main/packages/plugin-oxc",
   "author": "fisker Cheung <lionkay@gmail.com>",
   "license": "MIT",
+  "sideEffects": false,
   "engines": {
     "node": ">=14"
   },

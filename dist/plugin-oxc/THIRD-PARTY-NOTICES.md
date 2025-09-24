@@ -153,7 +153,7 @@ Repository: <https://github.com/jestjs/jest.git>
 
 ----------------------------------------
 
-## prettier@v3.7.0-82e57b781
+## prettier@v3.7.0-46638c8cc
 
 > Prettier is an opinionated code formatter
 
