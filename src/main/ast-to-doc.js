@@ -51,6 +51,31 @@ async function printAstToDoc(ast, options) {
 
   ensureAllCommentsPrinted(options);
 
+	const findAndRemoveLastLinebreak = (doc) => {
+		const contents = doc.contents ?? doc;
+		if (Array.isArray(contents)) {
+			for (const [i, item] of [...contents.entries()].reverse()) {
+				if (
+					[item, [{ type: "line", hard: true }, { type: "break-parent" }]]
+						.map(JSON.stringify)
+						.reduce((a, b) => a === b)
+				) {
+					contents.splice(i, 1);
+					return true;
+				}
+				if (
+					(typeof item === "string" && item !== "") ||
+					(typeof item === "object" && findAndRemoveLastLinebreak(item))
+				) {
+					return true;
+				}
+			}
+		}
+	};
+
+	if (!/(?:^|\/)package(?:-lock)?\.json$/u.test(options.filepath)) {
+		findAndRemoveLastLinebreak(doc);
+	}
   if (options.cursorOffset >= 0) {
     if (options.nodeAfterCursor && !options.nodeBeforeCursor) {
       return [cursor, doc];

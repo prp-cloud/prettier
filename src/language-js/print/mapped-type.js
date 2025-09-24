@@ -99,7 +99,7 @@ function printTypeScriptMappedType(path, options, print) {
           node.typeAnnotation ? ": " : "",
           print("typeAnnotation"),
         ]),
-        options.semi ? ifBreak(";") : "",
+        /*options.semi ? ifBreak(";") :*/ "",
       ]),
       options.bracketSpacing ? line : softline,
       "}",

@@ -34,23 +34,8 @@ const publishConfig = {
 async function buildPrettierPackageJson({ packageConfig, file }) {
   const { distDirectory, files } = packageConfig;
   const packageJson = await readJson(path.join(PROJECT_ROOT, file.input));
-
-  const bin = files.find(
-    (file) =>
-      path.join(PROJECT_ROOT, packageJson.bin) ===
-      path.join(PROJECT_ROOT, file.input),
-  ).output.file;
-
   const overrides = {
-    bin: `./${bin}`,
     main: "./index.cjs",
-    engines: {
-      ...packageJson.engines,
-      // https://github.com/prettier/prettier/pull/13118#discussion_r922708068
-      // Don't delete, event it's the same in package.json
-      node: `>=${PRODUCTION_MINIMAL_NODE_JS_VERSION}`,
-    },
-    type: "commonjs",
     exports: {
       ".": {
         types: "./index.d.ts",
@@ -107,15 +92,30 @@ async function buildPrettierPackageJson({ packageConfig, file }) {
       ),
     },
     files: files.map(({ output: { file } }) => file).sort(),
-    scripts: {
-      prepublishOnly:
-        "node -e \"assert.equal(require('.').version, require('..').version)\"",
-    },
   };
 
-  await writeJson(
-    path.join(distDirectory, file.output.file),
-    Object.assign(pick(packageJson, keysToKeep), overrides),
+  const adjustPaths = (val) =>
+    typeof val === "string"
+      ? val.replace(
+          /^(\.\/)?/u,
+          `$&${distDirectory.replace(`${path.resolve(import.meta.dirname, "../..")}/`, "")}/`,
+        )
+      : Array.isArray(val)
+        ? val.map(adjustPaths)
+        : Object.fromEntries(
+            Object.entries(val).map(([key, val]) => [key, adjustPaths(val)]),
+          );
+
+  const rootPackageJson = Object.assign(packageJson, adjustPaths(overrides));
+  // Needed for Prettier integration in Svelte VSCode plugin
+  rootPackageJson.exports["./package.json"] = "./package.json";
+  await Promise.all(
+    Object.entries({
+      [PROJECT_ROOT]: rootPackageJson,
+      [distDirectory]: { type: "commonjs", version: packageJson.version },
+    }).map(([dir, content]) =>
+      writeJson(path.join(dir, file.output.file), content),
+    ),
   );
 }
 
@@ -137,7 +137,7 @@ async function buildPluginOxcPackageJson({ packageConfig, file }) {
     type: "commonjs",
     files: files.map(({ output: { file } }) => file).sort(),
     dependencies: {
-      "oxc-parser": projectPackageJson.dependencies["oxc-parser"],
+      "oxc-parser": projectPackageJson.devDependencies["oxc-parser"],
     },
     publishConfig,
   };

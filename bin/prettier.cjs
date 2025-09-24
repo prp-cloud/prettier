@@ -8,10 +8,10 @@ if (typeof nodeModule.enableCompileCache === "function") {
   nodeModule.enableCompileCache();
 }
 
-var pleaseUpgradeNode = require("please-upgrade-node");
+/*var pleaseUpgradeNode = require("please-upgrade-node");
 var packageJson = require("../package.json");
 
-pleaseUpgradeNode(packageJson);
+pleaseUpgradeNode(packageJson);*/
 
 var dynamicImport = new Function("module", "return import(module)");
 

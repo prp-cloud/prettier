@@ -74,8 +74,7 @@ function printObject(path, options, print) {
     (parent.type === "InterfaceDeclaration" ||
       parent.type === "DeclareInterface" ||
       parent.type === "DeclareClass");
-  const shouldBreak =
-    node.type === "TSInterfaceBody" ||
+  const shouldBreak = /*node.type === "TSInterfaceBody" ||
     isEnumBody ||
     isFlowInterfaceLikeBody ||
     (node.type === "ObjectPattern" &&
@@ -100,12 +99,12 @@ function printObject(path, options, print) {
         options.originalText,
         locStart(node),
         propsAndLoc[0].loc,
-      ));
+      ))*/ false;
 
   const separator = isFlowInterfaceLikeBody
     ? ";"
     : node.type === "TSInterfaceBody" || node.type === "TSTypeLiteral"
-      ? ifBreak(semi, ";")
+      ? ifBreak("", ",")
       : ",";
   const leftBrace = node.exact ? "{|" : "{";
   const rightBrace = node.exact ? "|}" : "}";

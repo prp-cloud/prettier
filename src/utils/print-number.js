@@ -9,8 +9,8 @@ function printNumber(rawNumber) {
       .replace(/^([+-]?[\d.]+e)(?:\+|(-))?0*(?=\d)/u, "$1$2")
       // Remove unnecessary scientific notation (1e0).
       .replace(/^([+-]?[\d.]+)e[+-]?0+$/u, "$1")
-      // Make sure numbers always start with a digit.
-      .replace(/^([+-])?\./u, "$10.")
+      // Make sure numbers never start with a zero.
+      .replace(/^([+-])?0?\./u, "$1.")
       // Remove extraneous trailing decimal zeroes.
       .replace(/(\.\d+?)0+(?=e|$)/u, "$1")
       // Remove trailing dot.
