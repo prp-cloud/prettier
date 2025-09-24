@@ -237,10 +237,7 @@ function printObject(path, options, print) {
 
 function shouldHugTheOnlyParameter(node, name) {
   return (
-    (name === "params" ||
-      name === "parameters" ||
-      name === "this" ||
-      name === "rest") &&
+    (name === "params" || name === "this" || name === "rest") &&
     shouldHugTheOnlyFunctionParameter(node)
   );
 }

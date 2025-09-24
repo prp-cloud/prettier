@@ -30,7 +30,6 @@ const parseOptions = {
   allowUndeclaredExports: true,
   errorRecovery: true,
   createParenthesizedExpressions: true,
-  createImportExpressions: true,
   attachComment: false,
   plugins: [
     // When adding a plugin, please add a test in `tests/format/js/babel-plugins`,
@@ -198,7 +197,6 @@ const allowedReasonCodes = new Set([
   "NonAbstractClassHasAbstractMethod",
   "OptionalTypeBeforeRequired",
   "PatternIsOptional",
-  "OptionalBindingPattern",
   "DeclareClassFieldHasInitializer",
   "TypeImportCannotSpecifyDefaultAndNamed",
 
